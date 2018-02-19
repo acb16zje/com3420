@@ -72,7 +72,7 @@ group :test do
   gem 'poltergeist'
   gem 'rspec-instafail', require: false
 
-  gem 'database_cleaner'
+
   gem 'launchy'
   gem 'simplecov'
 end
