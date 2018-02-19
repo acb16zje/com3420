@@ -1,0 +1,71 @@
+- content_for :title, "Home"
+
+%br/
+.container.is-fluid
+  .columns
+    .column
+      .card
+        .card-content.hero.is-small.is-light
+          .columns.hero-body
+            .column.has-text-centered
+              %br/
+              %span.icon.is-large>
+                %i.fas.fa-camera.fa-7x
+        %footer.card-footer
+          %p.card-footer-item
+            %span
+              View
+              = link_to root_path do
+                Cameras
+    .column
+      .card
+        .card-content.hero.is-small
+          .columns.hero-body
+            .column.has-text-centered
+              %br/
+              %span.icon.is-large>
+                %i.fas.fa-laptop.fa-7x
+        %footer.card-footer
+          %p.card-footer-item
+            %span
+              View
+              = link_to root_path do
+                Laptops
+    .column
+      .card
+        .card-content.hero.is-small.is-light
+          .columns.hero-body
+            .column.has-text-centered
+              %br/
+              %span.icon.is-large>
+                %i.fas.fa-wifi.fa-7x
+        %footer.card-footer
+          %p.card-footer-item
+            %span
+              View
+              = link_to root_path do
+                Sensors
+    .column
+      .card
+        .card-content.hero.is-small
+          .columns.hero-body
+            .column.has-text-centered
+              %br/
+              %span.icon.is-large>
+                %i.fas.fa-archive.fa-7x
+        %footer.card-footer
+          %p.card-footer-item
+            %span
+              View
+              = link_to root_path do
+                Miscellaneous
+  .columns
+    .column.is-half.is-offset-one-quarter
+      %br
+      %br
+      .field.has-addons
+        .control.is-expanded
+          %input.input{:type => "text"}/
+        .control
+          %a.button.is-info
+            Search

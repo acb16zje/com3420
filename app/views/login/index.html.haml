@@ -1,0 +1,90 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    = csrf_meta_tag
+
+    / Favicon
+    = render 'application/favicon'
+
+    %title Login - AMRC Asset Management System
+
+    / Bulma CSS, Google Open Sans font
+    = stylesheet_link_tag "https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    :css
+      html,body {
+        font-family: 'Open Sans', serif;
+        font-size: 14px;
+        font-weight: 300;
+      }
+      .hero.is-success {
+        background: #F2F6FA;
+      }
+      .hero .nav, .hero.is-success .nav {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .box {
+        margin-top: 5rem;
+      }
+      .avatar {
+        margin-top: -70px;
+        padding-bottom: 20px;
+      }
+      .avatar img {
+        padding: 5px;
+        background: #fff;
+        border-radius: 50%;
+        -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+        box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+      }
+      input {
+        font-weight: 300;
+      }
+      p {
+        font-weight: 700;
+      }
+      p.subtitle {
+        padding-top: 1rem;
+      }
+
+  %body
+    %section.hero.is-success.is-fullheight
+      .hero-body
+        .container.has-text-centered
+          .column.is-4.is-offset-4
+            %h3.title.has-text-grey Login
+            %p.subtitle.has-text-grey Please login to proceed.
+            .box
+              %figure.avatar
+                = image_tag("amrc.svg", width: "128")
+              %form
+                .field
+                  .control
+                    %input.input.is-large{:autofocus => "", :placeholder => "Your Email", :type => "email"}/
+                .field
+                  .control
+                    %input.input.is-large{:placeholder => "Your Password", :type => "password"}/
+                .field
+                  %label.checkbox
+                    %input{:type => "checkbox"}/
+                    Remember me
+                %a.button.is-block.is-info.is-large Login
+            %p.has-text-grey
+              %a{:href => "../"} Forgot Password
+               · 
+              %a{:href => "../"} Need Help?
+
+    = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
+    :javascript
+      (function() {
+        var burger = document.querySelector('.burger');
+        var menu = document.querySelector('#'+burger.dataset.target);
+        burger.addEventListener('click', function() {
+          burger.classList.toggle('is-active');
+          menu.classList.toggle('is-active');
+        });
+      })();

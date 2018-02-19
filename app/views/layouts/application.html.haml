@@ -1,0 +1,80 @@
+!!!
+%html.has-navbar-fixed-top{:lang => "en"}
+  %head
+    / Required meta tags
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "ZerJun Eng", :name => "author"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    = csrf_meta_tag
+
+    / Favicon
+    = render 'application/favicon'
+
+    / Bulma CSS, Pikaday, DataTable
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css"
+    = stylesheet_link_tag "https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+    = stylesheet_link_tag "style"
+
+    %title #{content_for(:title)} - AMRC Asset Management System
+
+  %body
+    %nav.navbar.is-fixed-top.is-light
+      .navbar-brand
+        = link_to root_path, class: "navbar-item" do
+          = image_tag("amrc.svg", width: "50")
+          %strong Asset Management
+        .navbar-burger.burger{"data-target" => "navbarExampleTransparentExample"}
+          %span
+          %span
+          %span
+      #navbarExampleTransparentExample.navbar-menu
+        .navbar-start
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              %p
+                Browse by <strong>Categories</strong>
+            .navbar-dropdown.is-boxed
+              = link_to root_path, class: "navbar-item" do
+                Cameras
+              = link_to root_path, class: "navbar-item" do
+                Laptops
+              = link_to root_path, class: "navbar-item" do
+                Sensors
+          = link_to assets_path, class: "navbar-item" do
+            Assets
+          = link_to root_path, class: "navbar-item" do
+            Asset Managers
+          = link_to root_path, class: "navbar-item" do
+            Accounts
+
+        .navbar-end
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              Create new
+              %span.icon
+                %i.fas.fa-plus
+            .navbar-dropdown.is-boxed.is-right
+              = link_to root_path, class: "navbar-item" do
+                Asset
+              = link_to root_path, class: "navbar-item" do
+                User
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              %span.icon
+                %i.fas.fa-user
+            .navbar-dropdown.is-boxed.is-right
+              = link_to root_path, class: "navbar-item" do
+                Settings
+              = link_to login_index_path, class: "navbar-item" do
+                Sign out
+    = yield
+
+    / jQuery, Moment JS, Pikaday, Font Awesome
+    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"
+    = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    = javascript_include_tag "script"
