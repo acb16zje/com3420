@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby '2.3.3'
+ruby '2.3.1'
 gem 'rails', '5.1.4'
 gem 'responders'
 gem 'activerecord-session_store', git: 'https://github.com/epigenesys/activerecord-session_store.git', branch: 'rails-5-generator'
