@@ -10,11 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180220172029) do
+ActiveRecord::Schema.define(version: 20180220181933) do
 
   create_table "assets", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "asset_name"
+    t.string "category"
+    t.string "owner"
+    t.string "condition"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

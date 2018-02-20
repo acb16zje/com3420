@@ -1,7 +1,10 @@
 = simple_form_for(@asset) do |f|
-  = f.error_notification
-
-  .form-inputs
-
-  .form-actions
-    = f.button :submit
+	.form-inputs
+	= f.error_notification
+	=f.input :asset_name
+	=f.input :category
+	=f.input :owner
+	=f.input :condition
+	
+	.form-actions
+	= f.button :submit
