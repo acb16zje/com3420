@@ -7,7 +7,15 @@
     = csrf_meta_tag
 
     / Favicon
-    = render 'application/favicon'
+    = favicon_link_tag 'favicon/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180'
+    = favicon_link_tag 'favicon/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png'
+    = favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
+    = favicon_link_tag 'favicon/site.webmanifest', rel: 'manifest'
+    = favicon_link_tag 'favicon/safari-pinned-tab.svg', rel: 'mask-icon', color: '#5bbad5'
+    = favicon_link_tag 'favicon/favicon.ico', rel: 'shortcut icon'
+    %meta{:content => "#da532c", :name => "msapplication-TileColor"}/
+    %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
+    %meta{:content => "#ffffff", :name => "theme-color"}/
 
     %title Login - AMRC Asset Management System
 
@@ -61,22 +69,22 @@
             .box
               %figure.avatar
                 = image_tag("amrc.svg", width: "128")
-              %form
+              = simple_form_for :f do |f|
                 .field
                   .control
-                    %input.input.is-large{:autofocus => "", :placeholder => "Your Email", :type => "email"}/
+                    %label.label Username
+                    = f.input :username, label: false, required: false, input_html: {class: 'input is-large', autofocus:''}
                 .field
                   .control
-                    %input.input.is-large{:placeholder => "Your Password", :type => "password"}/
-                .field
-                  %label.checkbox
-                    %input{:type => "checkbox"}/
-                    Remember me
-                %a.button.is-block.is-info.is-large Login
+                    %label.label Password
+                    = f.input :password, label: false, required: false, input_html: {class: 'input is-large', type: 'password'}
+                %br
+                .control
+                  = f.submit 'Sign in', class: 'button is-block is-success is-large is-fullwidth'
             %p.has-text-grey
-              %a{:href => "../"} Forgot Password
+              = link_to 'Forgot Password', login_index_path
                · 
-              %a{:href => "../"} Need Help?
+              = link_to 'Need Help?', login_index_path
 
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
     :javascript

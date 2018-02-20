@@ -9,7 +9,16 @@
     = csrf_meta_tag
 
     / Favicon
-    = render 'application/favicon'
+    = favicon_link_tag 'favicon/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180'
+    = favicon_link_tag 'favicon/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png'
+    = favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
+    = favicon_link_tag 'favicon/site.webmanifest', rel: 'manifest'
+    = favicon_link_tag 'favicon/safari-pinned-tab.svg', rel: 'mask-icon', color: '#5bbad5'
+    = favicon_link_tag 'favicon/favicon.ico', rel: 'shortcut icon'
+    %meta{:content => "#da532c", :name => "msapplication-TileColor"}/
+    %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
+    %meta{:content => "#ffffff", :name => "theme-color"}/
+
 
     / Bulma CSS, Pikaday, DataTable
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
@@ -36,18 +45,12 @@
               %p
                 Browse by <strong>Categories</strong>
             .navbar-dropdown.is-boxed
-              = link_to root_path, class: "navbar-item" do
-                Cameras
-              = link_to root_path, class: "navbar-item" do
-                Laptops
-              = link_to root_path, class: "navbar-item" do
-                Sensors
-          = link_to assets_path, class: "navbar-item" do
-            Assets
-          = link_to root_path, class: "navbar-item" do
-            Asset Managers
-          = link_to root_path, class: "navbar-item" do
-            Accounts
+              = link_to 'Cameras', root_path, class: "navbar-item"
+              = link_to 'Laptops', root_path, class: "navbar-item"
+              = link_to 'Sensors', root_path, class: "navbar-item"
+          = link_to 'Assets', assets_path, class: "navbar-item"
+          = link_to 'Asset Managers', root_path, class: "navbar-item"
+          = link_to 'Accounts', root_path, class: "navbar-item"
 
         .navbar-end
           .navbar-item.has-dropdown.is-hoverable
