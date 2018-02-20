@@ -1,5 +1,10 @@
 %h1 New user
 
-= render 'form'
+= simple_form_for(@user) do |f|
+	=f.input :email
+	=f.input :firstname
+	=f.input :surname
+	=f.button :submit
+	
 
-= link_to 'Back', users_path
+
