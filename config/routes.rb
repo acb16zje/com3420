@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :bookings
   devise_for :users
   resources :users
   match "/403", to: "errors#error_403", via: :all

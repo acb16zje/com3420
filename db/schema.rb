@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221173246) do
+ActiveRecord::Schema.define(version: 20180221180007) do
 
 # Could not dump table "assets" because of following StandardError
 #   Unknown type 'real' for column 'cost'
+
+  create_table "bookings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "serial"
+    t.string "manufacturer"
+    t.datetime "start"
+    t.datetime "end"
+    t.string "state"
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
