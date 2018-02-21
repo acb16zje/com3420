@@ -16,14 +16,7 @@
                     = f.input :firstname, label: false, required: false, placeholder: 'First Name', input_html: {class: 'input'}
                 .field
                   %p.control.is-expanded
-                    = f.input :lastname, label: false, required: false, placeholder: 'Last Name', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Username
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :username, label: false, required: false, placeholder: 'Username', input_html: {class: 'input'}
+                    = f.input :surname, label: false, required: false, placeholder: 'Last Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Password
@@ -73,11 +66,7 @@
                     %button.button.is-info
                       Create user
 
-= simple_form_for(@user) do |f|
-  =f.input :email
-  =f.input :firstname
-  =f.input :surname
-  =f.button :submit
+
 	
 
 
