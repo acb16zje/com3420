@@ -17,6 +17,8 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
+#  usertype               :string
+#  placeofwork            :string
 #
 # Indexes
 #
