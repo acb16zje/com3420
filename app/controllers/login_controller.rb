@@ -4,7 +4,7 @@ class LoginController < ApplicationController
   end
 
   def create
-    if false
+    if true
       redirect_to root_path
     end
   end
