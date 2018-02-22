@@ -10,9 +10,13 @@
 #  owner        :string
 #  condition    :string
 #  location     :string
-#  cost         :float
 #  serial       :string
 #  manufacturer :string
+#  user_id      :integer
+#
+# Indexes
+#
+#  index_assets_on_user_id  (user_id)
 #
 
 require 'rails_helper'

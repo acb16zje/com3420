@@ -9,8 +9,15 @@
         %th Image
         %th Type
         %th Owner
-        %th Contact
-        %th Normal
-        %th Location
+        %th Normal Location
         %th Condition
-        %th Peripheral
+        %th Peripherals
+    %tbody
+      - @assets.each do |asset|
+        %tr= asset.asset_name
+        %tr= ""
+        %tr= asset.category
+        %tr= asset.user_id
+        %tr= asset.location
+        %tr= asset.condition
+        %tr= ""
