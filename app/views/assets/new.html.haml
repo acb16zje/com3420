@@ -6,14 +6,14 @@
       .column.is-10.is-offset-1
         %h3.title Create asset
         .box
-          = simple_form_for(:f) do |f|
+          = simple_form_for(@asset) do |f|
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Owner
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :owner, ['June Smith', 'Jane Smith', 'Ann Smith'], {}, {class: 'select2'}
+                    = f.association :user, label: false, placeholder: 'Asset Manager', label_method: lambda{|user| "#{user.forename}"}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
@@ -23,11 +23,11 @@
                     = f.select :category, ['Cameras', 'Laptops', 'Sensors', 'Miscellaneous'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Status
+                %label.label Condition
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :status, ['Available', 'Booking', 'Repairing', 'Lost/Stolen'], {}, {class: 'select2'}
+                    = f.select :condition, ['Available', 'Booking', 'Repairing', 'Lost/Stolen'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset ID
@@ -41,7 +41,7 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: false, placeholder: 'Asset Name', input_html: {class: 'input'}
+                    = f.input :asset_name, label: false, required: false, placeholder: 'Asset Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Default Location
@@ -49,13 +49,13 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
-            .field.is-horizontal
+            -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals
               .field-body
                 .field
                   = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
-            .field.is-horizontal
+            -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Upload Image
               .field-body
@@ -81,5 +81,3 @@
                     = link_to 'Cancel' , assets_path, class: 'button is-light'
                   .control
                     = f.submit 'Create asset', class: 'button is-block is-info'
-
-= render 'form'
