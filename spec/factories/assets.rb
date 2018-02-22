@@ -10,7 +10,6 @@
 #  owner        :string
 #  condition    :string
 #  location     :string
-#  cost         :real
 #  serial       :string
 #  manufacturer :string
 #  user_id      :integer
