@@ -1,8 +1,66 @@
-= simple_form_for(@user) do |f|
-  = f.error_notification
+- content_for :title, "Create user"
 
-  .form-inputs
-
-	
-  .form-actions
-    = f.button :submit
+%section.hero.is-fullheight
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Create user
+        .box
+          = simple_form_for(@user) do |f|
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Name
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :forename, label: false, required: false, placeholder: 'First Name', input_html: {class: 'input'}
+                .field
+                  %p.control.is-expanded
+                    = f.input :surname, label: false, required: false, placeholder: 'Last Name', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Password
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :password, label: false, required: false, placeholder: 'Password', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Email
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :email, label: false, required: false, placeholder: 'Email', input_html: {class: 'input', type: 'email'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Phone
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        +44
+                    .control.is-expanded
+                      = f.input :phone, label: false, required: false, placeholder: 'Phone number', input_html: {class: 'input', type: 'tel'}
+                  %p.help Do not enter the first zero
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Department
+              .field-body
+                .field.is-narrow
+                  .control
+                    = f.input :department, label: false, class: 'select is-fullwidth', collection: ['Bioengineering', 'Computer Science', 'Dentistry'], selected: ''
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Permission level
+              .field-body
+                .field.is-narrow
+                  .control
+                    = f.input :permission, label: false, class: 'select is-fullwidth', collection: ['User', 'Asset Manager', 'Administrator'], selected: ''
+            .field.is-horizontal
+              .field-label
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = f.submit 'Create user', class: 'button is-block is-info'
