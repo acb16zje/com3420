@@ -1,5 +1,9 @@
-%h1 New user
-
-= render 'form'
+%section.hero.is-fullheight
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Create user
+        .box
+          = render 'form'
 
 = link_to 'Back', users_path
