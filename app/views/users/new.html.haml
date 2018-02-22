@@ -6,14 +6,14 @@
       .column.is-10.is-offset-1
         %h3.title Create user
         .box
-          = simple_form_for(:f) do |f|
+          = simple_form_for(@user) do |f|
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Name
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :firstname, label: false, required: false, placeholder: 'First Name', input_html: {class: 'input'}
+                    = f.input :forename, label: false, required: false, placeholder: 'First Name', input_html: {class: 'input'}
                 .field
                   %p.control.is-expanded
                     = f.input :surname, label: false, required: false, placeholder: 'Last Name', input_html: {class: 'input'}
