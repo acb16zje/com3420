@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180221180007) do
+ActiveRecord::Schema.define(version: 20180222113436) do
 
 # Could not dump table "assets" because of following StandardError
 #   Unknown type 'real' for column 'cost'
