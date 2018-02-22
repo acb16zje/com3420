@@ -1,5 +1,85 @@
-%h1 New asset
+- content_for :title, "Create asset"
 
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Create asset
+        .box
+          = simple_form_for(:f) do |f|
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Owner
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :owner, ['June Smith', 'Jane Smith', 'Ann Smith'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Category
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :category, ['Cameras', 'Laptops', 'Sensors', 'Miscellaneous'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Status
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :status, ['Available', 'Booking', 'Repairing', 'Lost/Stolen'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Asset ID
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :id, label: false, required: false, placeholder: 'Asset ID', input_html: {class: 'input', disabled: ''}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Asset Name
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :name, label: false, required: false, placeholder: 'Asset Name', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Default Location
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Peripherals
+              .field-body
+                .field
+                  = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Upload Image
+              .field-body
+                .field
+                  .file.has-name
+                    %label.file-label
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name
+                        Screen Shot 2017-07-29 at 15.54.25.png
+            %br
+            %br
+            .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Cancel' , assets_path, class: 'button is-light'
+                  .control
+                    = f.submit 'Create asset', class: 'button is-block is-info'
+                      
 = render 'form'
-
-= link_to 'Back', assets_path

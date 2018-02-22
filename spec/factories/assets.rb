@@ -10,7 +10,7 @@
 #  owner        :string
 #  condition    :string
 #  location     :string
-#  cost         :real
+#  cost         :float
 #  serial       :string
 #  manufacturer :string
 #

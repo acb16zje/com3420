@@ -25,11 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-// DataTable
-$(document).ready(function () {
-    $('#myTable').DataTable();
-});
-
 // Pikaday
 var picker = new Pikaday({
     field: document.getElementById('datepicker'),
@@ -38,4 +33,13 @@ var picker = new Pikaday({
     minDate: new Date(),
     maxDate: new Date(2020, 12, 31),
     yearRange: [2000, 2020]
+});
+
+$(document).ready(function () {
+    // Datatable
+    $('#myTable').DataTable();
+
+    // Select2
+    $.fn.select2.defaults.set( "width", "100%" );
+    $('.select2').select2();
 });

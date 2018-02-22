@@ -19,11 +19,11 @@
     %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
     %meta{:content => "#ffffff", :name => "theme-color"}/
 
-
-    / Bulma CSS, Pikaday, DataTable
+    / Bulma CSS, Pikaday, DataTable, Select 2
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css"
     = stylesheet_link_tag "https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
     = stylesheet_link_tag "style"
 
     %title #{content_for(:title)} - AMRC Asset Management System
@@ -59,25 +59,22 @@
               %span.icon
                 %i.fas.fa-plus
             .navbar-dropdown.is-boxed.is-right
-              = link_to new_asset_path, class: "navbar-item" do
-                Asset
-              = link_to new_user_path, class: "navbar-item" do
-                User
+              = link_to 'Asset', new_asset_path, class: "navbar-item"
+              = link_to 'User', new_user_path, class: "navbar-item"
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
               %span.icon
                 %i.fas.fa-user
             .navbar-dropdown.is-boxed.is-right
-              = link_to root_path, class: "navbar-item" do
-                Settings
-              = link_to login_index_path, class: "navbar-item" do
-                Sign out
+              = link_to 'Settings', root_path, class: "navbar-item"
+              = link_to 'Sign out', login_index_path, class: "navbar-item"
     = yield
 
-    / jQuery, Moment JS, Pikaday, Font Awesome
+    / jQuery, Moment JS, Pikaday, Font Awesome, Datatable, Select2
     = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
     = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"
     = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
     = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
     = javascript_include_tag "script"

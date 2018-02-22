@@ -1,6 +1,6 @@
 - content_for :title, "Create user"
 
-%section.hero.is-fullheight
+%section.hero
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
@@ -47,25 +47,25 @@
               .field-label.is-normal
                 %label.label Department
               .field-body
-                .field.is-narrow
+                .field{style: 'margin: auto'}
                   .control
-                    = f.input :department, label: false, class: 'select is-fullwidth', collection: ['Bioengineering', 'Computer Science', 'Dentistry'], selected: ''
+                    = f.select :department, ['Bioengineering', 'Computer Science', 'Dentistry'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Permission level
               .field-body
-                .field.is-narrow
-                  .control
-                    = f.input :permission, label: false, class: 'select is-fullwidth', collection: ['User', 'Asset Manager', 'Administrator'], selected: ''
+                .field
+                  %p.control
+                    .select.is-fullwidth
+                      = f.select :permission, ['User', 'Asset Manager', 'Administrator']
+            %br
+            %br
             .field.is-horizontal
               .field-label
                 -#Left empty for spacing
               .field-body
                 .field.is-grouped.is-grouped-right
                   .control
+                    = link_to 'Cancel' , assets_path, class: 'button is-light'
+                  .control
                     = f.submit 'Create user', class: 'button is-block is-info'
-
-
-	
-
-

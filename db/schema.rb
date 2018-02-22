@@ -12,8 +12,21 @@
 
 ActiveRecord::Schema.define(version: 20180221180007) do
 
-# Could not dump table "assets" because of following StandardError
-#   Unknown type 'real' for column 'cost'
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "assets", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "asset_name"
+    t.string "category"
+    t.string "owner"
+    t.string "condition"
+    t.string "location"
+    t.float "cost"
+    t.string "serial"
+    t.string "manufacturer"
+  end
 
   create_table "bookings", force: :cascade do |t|
     t.datetime "created_at", null: false
