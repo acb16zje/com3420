@@ -13,7 +13,12 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.association :user, label: false, placeholder: 'Asset Manager', label_method: lambda{|user| "#{user.forename}"}
+                    = f.association :user,
+                      label: false,
+                      wrapper: false,
+                      input_html: {class: 'select2'},
+                      label_method: lambda{|user| "#{user.forename}"},
+                      selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
