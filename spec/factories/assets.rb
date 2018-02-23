@@ -2,25 +2,24 @@
 #
 # Table name: assets
 #
-#  id           :integer          not null, primary key
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  asset_name   :string
-#  category     :string
-#  owner        :string
-#  condition    :string
-#  location     :string
-#  serial       :string
-#  manufacturer :string
-#  user_id      :integer
-#
-# Indexes
-#
-#  index_assets_on_user_id  (user_id)
+#  id          :integer          not null, primary key
+#  category    :string
+#  condition   :string
+#  name        :string
+#  location    :string
+#  peripherals :string
+#  image       :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 
 FactoryGirl.define do
   factory :asset do
-
+    category "MyString"
+    condition "MyString"
+    name "MyString"
+    location "MyString"
+    peripherals "MyString"
+    image "MyString"
   end
 end

@@ -10,37 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180222150640) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20180223105206) do
 
   create_table "assets", force: :cascade do |t|
+    t.string "category"
+    t.string "condition"
+    t.string "name"
+    t.string "location"
+    t.string "peripherals"
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "asset_name"
-    t.string "category"
-    t.string "owner"
-    t.string "condition"
-    t.string "location"
-    t.string "serial"
-    t.string "manufacturer"
-    t.integer "user_id"
-    t.index ["user_id"], name: "index_assets_on_user_id"
   end
 
   create_table "bookings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "serial"
-    t.string "manufacturer"
-    t.datetime "start"
-    t.datetime "end"
-    t.string "state"
-    t.integer "user_id"
-    t.integer "asset_id"
-    t.index ["asset_id"], name: "index_bookings_on_asset_id"
-    t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
