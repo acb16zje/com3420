@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: assets
+# Table name: items
 #
 #  id          :integer          not null, primary key
 #  category    :string
@@ -14,7 +14,7 @@
 #
 
 FactoryGirl.define do
-  factory :asset do
+  factory :item do
     category "MyString"
     condition "MyString"
     name "MyString"

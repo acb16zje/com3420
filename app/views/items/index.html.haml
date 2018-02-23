@@ -7,17 +7,18 @@
       %tr
         %th Name
         %th Image
-        %th Type
+        %th Category
         %th Owner
         %th Normal Location
         %th Condition
         %th Peripherals
     %tbody
-      - @assets.each do |asset|
-        %tr= asset.asset_name
-        %tr= ""
-        %tr= asset.category
-        %tr= asset.user_id
-        %tr= asset.location
-        %tr= asset.condition
-        %tr= ""
+      -@items.each do |item|
+        %tr
+          %td= item.name
+          %td= ""
+          %td= item.category
+          %td= ""
+          %td= item.location
+          %td= item.condition
+          %td= ""

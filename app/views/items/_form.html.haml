@@ -1,0 +1,13 @@
+= simple_form_for(@item) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :category
+    = f.input :condition
+    = f.input :name
+    = f.input :location
+    = f.input :peripherals
+    = f.input :image
+
+  .form-actions
+    = f.button :submit

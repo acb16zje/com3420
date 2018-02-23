@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180223105206) do
+ActiveRecord::Schema.define(version: 20180223110857) do
 
   create_table "assets", force: :cascade do |t|
     t.string "category"
@@ -41,6 +41,17 @@ ActiveRecord::Schema.define(version: 20180223105206) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "category"
+    t.string "condition"
+    t.string "name"
+    t.string "location"
+    t.string "peripherals"
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sessions", force: :cascade do |t|

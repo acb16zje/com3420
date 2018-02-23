@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Category:
+  = @item.category
+%p
+  %b Condition:
+  = @item.condition
+%p
+  %b Name:
+  = @item.name
+%p
+  %b Location:
+  = @item.location
+%p
+  %b Peripherals:
+  = @item.peripherals
+%p
+  %b Image:
+  = @item.image
+
+= link_to 'Edit', edit_item_path(@item)
+\|
+= link_to 'Back', items_path

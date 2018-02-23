@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: assets
+# Table name: items
 #
 #  id          :integer          not null, primary key
 #  category    :string
@@ -13,5 +13,8 @@
 #  updated_at  :datetime         not null
 #
 
-class Asset < ApplicationRecord
+require 'rails_helper'
+
+RSpec.describe Item, type: :model do
+  pending "add some examples to (or delete) #{__FILE__}"
 end
