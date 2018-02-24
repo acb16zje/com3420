@@ -25,21 +25,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-// Pikaday
-var picker = new Pikaday({
-    field: document.getElementById('datepicker'),
-    firstDay: 1,
-    format: 'D-MMM-YYYY',
-    minDate: new Date(),
-    maxDate: new Date(2020, 12, 31),
-    yearRange: [2000, 2020]
-});
-
 $(document).ready(function () {
     // Datatable
-    $('#myTable').DataTable();
+    $('#fullfeatures').DataTable({
+        "drawCallback": function (settings) {
+            if (!$("#fullfeatures").parent().hasClass("table-is-responsive")) {
+                $("#fullfeatures").wrap('<div class="table-is-responsive"></div>');
+            }
+        }
+    });
 
     // Select2
-    $.fn.select2.defaults.set( "width", "100%" );
+    $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 });
