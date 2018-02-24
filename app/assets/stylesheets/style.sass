@@ -1,3 +1,5 @@
+@import "is-awesome"
+
 body
   background: #fefefe
 
@@ -5,6 +7,15 @@ body
 .columns
   margin-left: 0
   margin-right: 0
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_desc:before
+  display: none
+
 
 /* Select2 fixes for Bulma
 .select2-container
@@ -34,7 +45,6 @@ body
         box-shadow: inset 0 1px 2px rgba(10,10,10,.1)
         max-width: 100%
         width: 100%
-        border-radius: 3px !important
 
     .select2-results__options
       max-height: 200px !important
@@ -43,4 +53,3 @@ body
         padding: 0.37em 0.75em !important
         font-size: 1rem
 
-        &.select2-results__option--highlighted
