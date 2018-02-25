@@ -1,19 +1,28 @@
-%h1 Listing users
+- content_for :title, "Users"
 
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
 
-  %tbody
-    - @users.each do |user|
+  %p.title.has-text-centered Current users
+  %table#users.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %thead
       %tr
-        %td= user.forename
-        %td= link_to 'Show', user
-        %td= link_to 'Edit', edit_user_path(user)
-        %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
-%br
+        %th a
+        %th b
+        %th c
+        %th d
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.forename
+          %td= link_to 'Show', user
+          %td= link_to 'Edit', edit_user_path(user)
+          %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
 
-= link_to 'New User', new_user_path
+  = link_to 'New User', new_user_path

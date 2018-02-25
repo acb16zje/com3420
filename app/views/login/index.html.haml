@@ -72,8 +72,8 @@
               = simple_form_for :f do |f|
                 .field
                   .control
-                    %label.label Username
-                    = f.input :username, label: false, required: false, input_html: {class: 'input is-large', autofocus:''}
+                    %label.label Email
+                    = f.input :email, label: false, required: false, input_html: {class: 'input is-large', autofocus:'', type: 'email'}
                 .field
                   .control
                     %label.label Password

@@ -336,7 +336,7 @@ del {
 
 .help-is-danger {
     color: #ff3860;
-    font-size: 11px;
+    font-size: 12px;
     margin-top: 5px;
 }
 
@@ -1692,10 +1692,6 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:las
 @media screen and (min-width: 769px) {
     .pagination {
         justify-content: center;
-    }
-    
-    .is-right {
-        float: right;
     }
 }
 
