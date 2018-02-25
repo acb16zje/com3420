@@ -1,5 +1,14 @@
-%p#notice= notice
-= render 'bookings'
+
+%br/
+.container.is-desktop
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
+  %p.title bookins
 
 = link_to 'Edit', edit_user_path(@user)
 \|

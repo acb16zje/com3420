@@ -16,6 +16,9 @@ gem 'uglifier'
 gem 'coffee-rails'
 
 gem 'jquery-rails'
+gem 'bootstrap-sass'
+gem 'font-awesome-rails'
+gem 'select2-rails'
 gem 'epi_js'
 
 gem 'simple_form'
@@ -25,6 +28,7 @@ gem 'ransack', '~> 1.8.0'
 gem 'polyamorous', '~> 1.3.1'
 
 gem 'will_paginate', '~> 3.1.5'
+gem 'bootstrap-will_paginate'
 
 gem 'devise'
 gem 'devise_ldap_authenticatable'
