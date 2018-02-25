@@ -1,23 +1,31 @@
-%p#notice= notice
+- content_for :title, "Asset details"
 
-%p
-  %b Category:
-  = @item.category
-%p
-  %b Condition:
-  = @item.condition
-%p
-  %b Name:
-  = @item.name
-%p
-  %b Location:
-  = @item.location
-%p
-  %b Peripherals:
-  = @item.peripherals
-%p
-  %b Image:
-  = @item.image
+.container.is-desktop
+  - if not notice.nil?
+    .columns
+      .column.is-2.is-offset-5
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
+  %p
+    %b Category:
+    = @item.category
+  %p
+    %b Condition:
+    = @item.condition
+  %p
+    %b Name:
+    = @item.name
+  %p
+    %b Location:
+    = @item.location
+  %p
+    %b Peripherals:
+    = @item.peripherals
+  %p
+    %b Image:
+    = @item.image
 
 = link_to 'Edit', edit_item_path(@item)
 \|

@@ -25,12 +25,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+$(document).on('click', '.notification > button.delete', function() {
+    this.parentNode.remove();
+});
+
 $(document).ready(function () {
     // Datatable
-    $('#fullfeatures').DataTable({
+    $('#assets').DataTable({
         "drawCallback": function (settings) {
-            if (!$("#fullfeatures").parent().hasClass("table-is-responsive")) {
-                $("#fullfeatures").wrap('<div class="table-is-responsive"></div>');
+            if (!$("#assets").parent().hasClass("table-is-responsive")) {
+                $("#assets").wrap('<div class="table-is-responsive"></div>');
+            }
+        }
+    });
+
+    $('#users').DataTable({
+        "drawCallback": function (settings) {
+            if (!$("#users").parent().hasClass("table-is-responsive")) {
+                $("#users").wrap('<div class="table-is-responsive"></div>');
             }
         }
     });

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root to: "home#index"
+  resources :login
   resources :items
   resources :users
   resources :bookings
@@ -12,8 +14,5 @@ Rails.application.routes.draw do
   get :ie_warning, to: 'errors#ie_warning'
   get :javascript_warning, to: 'errors#javascript_warning'
 
-  root to: "home#index"
-
-  resources :login
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

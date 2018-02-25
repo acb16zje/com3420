@@ -50,7 +50,7 @@
               = link_to 'Sensors', root_path, class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item"
           = link_to 'Asset Managers', root_path, class: "navbar-item"
-          = link_to 'Accounts', root_path, class: "navbar-item"
+          = link_to 'Users', users_path, class: "navbar-item"
 
         .navbar-end
           .navbar-item.has-dropdown.is-hoverable
@@ -77,5 +77,9 @@
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
     = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
     = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.19/dist/file.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.19/dist/image.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
     = javascript_include_tag "bulma.datatables"
     = javascript_include_tag "script"
