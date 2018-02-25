@@ -10,14 +10,14 @@
         %th Image
         %th Category
         %th Owner
-        %th Normal Location
+        %th Location
         %th Condition
         %th Peripherals
     %tbody
       -@items.each do |item|
         %tr
-          %td= item.name
-          %td= ""
+          %td= link_to item.name, item
+          %td= link_to item.image, item
           %td= item.category
           %td= ""
           %td= item.location

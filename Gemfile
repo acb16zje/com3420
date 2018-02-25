@@ -57,6 +57,7 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-passenger', require: false
   gem 'epi_deploy', git: 'https://github.com/epigenesys/epi_deploy.git'
+  gem "epi_cas", git: "git@git.shefcompsci.org.uk:gems/epi_cas.git"
 
   gem 'eventmachine'
   gem 'letter_opener'
@@ -71,7 +72,6 @@ group :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'rspec-instafail', require: false
-
 
   gem 'launchy'
   gem 'simplecov'

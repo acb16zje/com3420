@@ -31,7 +31,7 @@
   %body
     %nav.navbar.is-fixed-top.is-light
       .navbar-brand
-        = link_to root_path, class: "navbar-item" do
+        = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
           = image_tag("amrc.svg", width: "50")
           %strong Asset Management
         .navbar-burger.burger{"data-target" => "navbarExampleTransparentExample"}
@@ -48,9 +48,9 @@
               = link_to 'Cameras', root_path, class: "navbar-item"
               = link_to 'Laptops', root_path, class: "navbar-item"
               = link_to 'Sensors', root_path, class: "navbar-item"
-          = link_to 'Assets', items_path, class: "navbar-item"
+          = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
           = link_to 'Asset Managers', root_path, class: "navbar-item"
-          = link_to 'Users', users_path, class: "navbar-item"
+          = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
 
         .navbar-end
           .navbar-item.has-dropdown.is-hoverable
@@ -59,8 +59,8 @@
               %span.icon
                 %i.fas.fa-plus
             .navbar-dropdown.is-boxed.is-right
-              = link_to 'Asset', new_item_path, class: "navbar-item"
-              = link_to 'User', new_user_path, class: "navbar-item"
+              = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
+              = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
               %span.icon
