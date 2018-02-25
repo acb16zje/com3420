@@ -21,5 +21,8 @@ module ApplicationHelper
   def partial_exist?(partial_name, prefixes = lookup_context.prefixes)
     lookup_context.exists?(partial_name, prefixes, true)
   end
-  
+
+  def current_class?(test_path)
+    request.path == test_path ? 'is-active' : ''
+  end
 end
