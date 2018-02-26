@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226032004) do
+ActiveRecord::Schema.define(version: 20180226051646) do
 
   create_table "assets", force: :cascade do |t|
     t.string "category"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 20180226032004) do
     t.string "location"
     t.string "peripherals"
     t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "booking_states", force: :cascade do |t|
+    t.string "process_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -65,6 +71,11 @@ ActiveRecord::Schema.define(version: 20180226032004) do
     t.text "comments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "state_id"
+    t.integer "booking_states_id"
+    t.integer "items_id"
+    t.index ["booking_states_id"], name: "index_res_bookings_on_booking_states_id"
+    t.index ["items_id"], name: "index_res_bookings_on_items_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -86,6 +97,8 @@ ActiveRecord::Schema.define(version: 20180226032004) do
     t.integer "permission_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "permissions_id"
+    t.index ["permissions_id"], name: "index_users_on_permissions_id"
   end
 
 end
