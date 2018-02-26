@@ -42,3 +42,4 @@ coverage/index.html
 
 .byebug_history
 .rspec-examples
+Gemfile.lock

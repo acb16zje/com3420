@@ -1,31 +1,55 @@
-- content_for :title, "Asset details"
+- content_for :title, "#{@item.name}"
 
-.container.is-desktop
-  - if not notice.nil?
-    .columns
-      .column.is-2.is-offset-5
-        .notification.is-success.has-text-centered
-          %button.delete
-          = notice
-
-  %p
-    %b Category:
-    = @item.category
-  %p
-    %b Condition:
-    = @item.condition
-  %p
-    %b Name:
-    = @item.name
-  %p
-    %b Location:
-    = @item.location
-  %p
-    %b Peripherals:
-    = @item.peripherals
-  %p
-    %b Image:
-    = @item.image
+%section.section
+  .container.is-desktop
+    - if not notice.nil?
+      .columns
+        .column.is-4.is-offset-4
+          .notification.is-success.has-text-centered
+            %button.delete
+            = notice
+    .box
+      .columns
+        .column.is-5.has-text-centered
+          = image_tag("amrc.svg", width: "250")
+        .column
+          %table.table.is-bordered.is-striped.is-fullwidth
+            %tbody
+              %tr
+                %th Category
+                %td
+                  = @item.category
+              %tr
+                %th Condition
+                %td
+                  - case @item.condition
+                  - when 'Available'
+                    %span.tag.is-success.is-medium
+                      = @item.condition
+                  - when 'Booked'
+                    %span.tag.is-link.is-medium
+                      = @item.condition
+                  - when 'Repairing'
+                    %span.tag.is-warning.is-medium
+                      = @item.condition
+                  - when 'Lost'
+                    %span.tag.is-danger.is-medium
+                      = @item.condition
+                  - else
+                    %span.tag.is-black.is-medium
+                      Unknown
+              %tr
+                %th Name
+                %td
+                  = @item.name
+              %tr
+                %th Location
+                %td
+                  = @item.location
+              %tr
+                %th Peripherals
+                %td
+                  = @item.peripherals
 
 = link_to 'Edit', edit_item_path(@item)
 \|
