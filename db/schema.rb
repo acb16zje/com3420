@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227150558) do
+ActiveRecord::Schema.define(version: 20180227151627) do
 
   create_table "assets", force: :cascade do |t|
     t.string "category"
@@ -64,7 +64,9 @@ ActiveRecord::Schema.define(version: 20180227150558) do
     t.string "model"
     t.date "aquisition_date"
     t.decimal "purchase_price"
+    t.integer "user_id"
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["user_id"], name: "index_items_on_user_id"
   end
 
   create_table "permissions", force: :cascade do |t|

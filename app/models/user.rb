@@ -22,4 +22,5 @@
 class User < ApplicationRecord
 	belongs_to :permission
 	has_many :res_bookings
+	has_many :items
 end
