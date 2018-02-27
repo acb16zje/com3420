@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226051646) do
+ActiveRecord::Schema.define(version: 20180227150558) do
 
   create_table "assets", force: :cascade do |t|
     t.string "category"
@@ -21,10 +21,18 @@ ActiveRecord::Schema.define(version: 20180226051646) do
     t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category_id"
+    t.index ["category_id"], name: "index_assets_on_category_id"
   end
 
   create_table "booking_states", force: :cascade do |t|
     t.string "process_state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -45,15 +53,18 @@ ActiveRecord::Schema.define(version: 20180226051646) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "category"
     t.string "condition"
     t.string "name"
     t.string "location"
-    t.string "peripherals"
-    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "manufacturer"
+    t.integer "category_id"
+    t.string "serial"
+    t.string "model"
+    t.date "aquisition_date"
+    t.decimal "purchase_price"
+    t.index ["category_id"], name: "index_items_on_category_id"
   end
 
   create_table "permissions", force: :cascade do |t|
