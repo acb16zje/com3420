@@ -22,6 +22,7 @@
     / Bulma CSS, Google Open Sans font
     = stylesheet_link_tag "https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    = stylesheet_link_tag "style"
     :css
       html,body {
         font-family: 'Open Sans', serif;
@@ -60,24 +61,24 @@
       }
 
   %body
-    %section.hero.is-success.is-fullheight
+    %section.hero.is-success.is-fullheight.has-text-centered
       .hero-body
-        .container.has-text-centered
+        .container
           .column.is-4.is-offset-4
-            %h3.title.has-text-grey Login
-            %p.subtitle.has-text-grey Please login to proceed.
+            %h3.title.has-text-grey Sign in
+            %p.subtitle.has-text-grey Please sign in to proceed
             .box
               %figure.avatar
                 = image_tag("amrc.svg", width: "128")
               = simple_form_for :f do |f|
                 .field
-                  .control
-                    %label.label Email
-                    = f.input :email, label: false, required: false, input_html: {class: 'input is-large', autofocus:'', type: 'email'}
+                  %p.control
+                    %label.label Username
+                    = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus:''}
                 .field
-                  .control
+                  %p.control
                     %label.label Password
-                    = f.input :password, label: false, required: false, input_html: {class: 'input is-large', type: 'password'}
+                    = f.input :password, label: false, required: '', input_html: {class: 'input is-large', type: 'password'}
                 %br
                 .control
                   = f.submit 'Sign in', class: 'button is-block is-success is-large is-fullwidth'
@@ -86,7 +87,10 @@
                · 
               = link_to 'Need Help?', login_index_path
 
+    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    = javascript_include_tag "bulma.datatables"
     :javascript
       (function() {
         var burger = document.querySelector('.burger');

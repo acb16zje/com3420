@@ -23,9 +23,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    $('#purchaseDate').pickadate({
+       format: 'd mmmm yyyy'
+    });
 });
 
-$(document).on('click', '.notification > button.delete', function() {
+// Bulma notification
+$(document).on('click', '.notification > button.delete', function () {
     this.parentNode.remove();
 });
 

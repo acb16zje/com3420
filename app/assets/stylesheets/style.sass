@@ -1,4 +1,10 @@
 @import "is-awesome"
+@import "classic"
+@import "classic.date"
+
+/* Hide vertical scrollbar if not needed
+html
+  overflow: auto
 
 body
   background: #fefefe
@@ -7,6 +13,9 @@ body
 .columns
   margin-left: 0
   margin-right: 0
+
+table.picker__table tbody td, table.picker__table thead th
+  text-align: center !important
 
 /* Select2 fixes for Bulma
 .select2-container
@@ -43,4 +52,3 @@ body
       .select2-results__option
         padding: 0.37em 0.75em !important
         font-size: 1rem
-

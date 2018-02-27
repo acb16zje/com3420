@@ -6,7 +6,7 @@
       .column.is-10.is-offset-1
         %h3.title Create asset
         .box
-          = simple_form_for(@item) do |f|
+          = simple_form_for(:f) do |f|
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Owner
@@ -31,25 +31,39 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-<<<<<<< HEAD
-                    = f.select :condition, ['Available', 'Booked', 'Repairing', 'Lost'], {}, {class: 'select2'}
-=======
-                    = f.select :condition, ['Available', 'Booking', 'Repairing', 'Lost'], {}, {class: 'select2'}
->>>>>>> 80bbf29... Added BunnyJS form validator. Datatables added into Users page, UI improvement
+                    = f.select :condition, ['As new', 'Lightly used', 'Damaged'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Asset ID
+                %label.label ID
               .field-body
                 .field
                   %p.control.is-expanded
                     = f.input :id, label: false, placeholder: 'Asset ID', input_html: {class: 'input', disabled: ''}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Asset Name
+                %label.label Name
               .field-body
                 .field
                   %p.control.is-expanded
                     = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Serial
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Purchase Date
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :purchase_date, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Default Location

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /*! is-awesome template v0.1 | MIT License  */
 .indicator-world-map {
-    background-color: #00d1b2;
+    background-color: #3273dc;
     color: white;
     border-radius: 0 0 3px 0;
     padding: 20px;
@@ -79,7 +79,7 @@
 }
 
 .box-info .is-primary {
-    background-color: #00d1b2;
+    background-color: #3273dc;
     color: white;
 }
 
@@ -225,7 +225,7 @@ table.is-inverse tr:hover {
     position: fixed;
     z-index: 2;
     top: 60px;
-    background-color: #00d1b2;
+    background-color: #3273dc;
     width: 100%;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1);
 }
@@ -558,7 +558,7 @@ del {
 }
 
 .modal-card.is-primary .modal-card-foot, .modal-card.is-primary .modal-card-head {
-    background-color: #00d1b2;
+    background-color: #3273dc;
 }
 
 .modal-card.is-primary .modal-card-title {
@@ -692,7 +692,7 @@ del {
 }
 
 .is-brand {
-    background-color: #00d1b2;
+    background-color: #3273dc;
     padding: 20px;
     /*font-weight:lighter; */
     letter-spacing: 2px;
@@ -731,7 +731,7 @@ del {
 }
 
 .dropdown:hover {
-    border-bottom: 1px solid #00d1b2;
+    border-bottom: 1px solid #3273dc;
     border-top: 1px solid transparent;
 }
 
@@ -749,7 +749,7 @@ del {
     margin-bottom: 20px;
     padding-bottom: 15px;
     text-align: center;
-    border: solid 1px #00d1b2;
+    border: solid 1px #3273dc;
     border-radius: 3px;
     overflow: hidden;
 }
@@ -761,7 +761,7 @@ del {
 
 .packages .package .package-header {
     height: 57px;
-    background: #00d1b2;
+    background: #3273dc;
     padding-top: 14px;
 }
 
@@ -872,7 +872,7 @@ del {
     padding: 6px 20px 6px 20px;
     margin: 30px 10px 10px -66px;
     color: white;
-    background-color: #00d1b2;
+    background-color: #3273dc;
     font-family: "Montserrat", Helvetica, Arial, sans-serif;
 }
 
@@ -1185,15 +1185,15 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 input[type=range].ranger.is-primary::-webkit-slider-runnable-track, input[type=range].ranger.is-primary:focus::-webkit-slider-runnable-track {
-    background: #00d1b2;
+    background: #3273dc;
 }
 
 input[type=range].ranger.is-primary::-moz-range-track {
-    background: #00d1b2;
+    background: #3273dc;
 }
 
 input[type=range].ranger.is-primary::-ms-fill-lower, input[type=range].ranger.is-primary::-ms-fill-upper, input[type=range].ranger.is-primary:focus::-ms-fill-lower, input[type=range].ranger.is-primary:focus::-ms-fill-upper {
-    background: #00d1b2;
+    background: #3273dc;
 }
 
 input[type=range].ranger.is-info::-webkit-slider-runnable-track, input[type=range].ranger.is-info:focus::-webkit-slider-runnable-track {
@@ -1359,7 +1359,7 @@ input[type=range].ranger.is-large::-ms-thumb {
     font-family: "Helvetica", sans-serif;
     font-style: normal;
     font-weight: bold;
-    color: #00d1b2;
+    color: #3273dc;
 }
 
 .shadow-button.large {
@@ -1395,7 +1395,7 @@ input[type=range].ranger.is-large::-ms-thumb {
     font-family: "Helvetica", sans-serif;
     font-style: normal;
     font-weight: bold;
-    color: #00d1b2;
+    color: #3273dc;
 }
 
 .shadow.small {
@@ -1524,11 +1524,11 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .select-datatables:focus {
-    border: 1px solid #00d1b2;
+    border: 1px solid #3273dc;
 }
 
 .button.button-page {
-    color: #00d1b2;
+    color: #3273dc;
     margin-right: 4px;
 }
 
@@ -1544,8 +1544,8 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .button.button-page.is-active {
-    background-color: #00d1b2;
-    border-color: #00d1b2;
+    background-color: #3273dc;
+    border-color: #3273dc;
     color: white;
 }
 
@@ -1757,7 +1757,7 @@ h2 {
 }
 
 .fc-state-active {
-    background-color: #00d1b2 !important;
+    background-color: #3273dc !important;
     text-shadow: none !important;
     box-shadow: none !important;
     border-width: 0 !important;
@@ -1765,7 +1765,7 @@ h2 {
 }
 
 .fc-state-active:hover {
-    background-color: #00d1b2 !important;
+    background-color: #3273dc !important;
     text-shadow: none !important;
     box-shadow: none !important;
     border-color: transparent !important;
