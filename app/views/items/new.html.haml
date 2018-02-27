@@ -7,6 +7,8 @@
         %h3.title Create asset
         .box
           = simple_form_for(@item) do |f|
+            %h4.title
+              Asset Information
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset Manager
@@ -46,6 +48,9 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            %hr
+            %h4.title
+              Purchase Information
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Manufacturer
