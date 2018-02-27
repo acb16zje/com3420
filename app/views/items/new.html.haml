@@ -15,11 +15,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.association :user,
-                      label: false,
-                      input_html: {class: 'select2'},
-                      label_method: lambda{|user| "#{user.forename}"},
-                      selected: ''
+                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|user| "#{user.forename}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset Name
@@ -33,7 +29,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :category, ['Cameras', 'Laptops', 'Sensors', 'Miscellaneous'], {}, {class: 'select2'}
+                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Condition
