@@ -2,24 +2,22 @@
 #
 # Table name: items
 #
-#  id              :integer          not null, primary key
-#  condition       :string
-#  name            :string
-#  location        :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  manufacturer    :string
-#  category_id     :integer
-#  serial          :string
-#  model           :string
-#  aquisition_date :date
-#  purchase_price  :decimal(, )
-#  user_id         :integer
+#  id               :integer          not null, primary key
+#  user_id          :integer
+#  name             :string
+#  condition        :string
+#  location         :string
+#  manufacturer     :string
+#  model            :string
+#  serial           :string
+#  acquisition_date :string
+#  purchase_price   :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 # Indexes
 #
-#  index_items_on_category_id  (category_id)
-#  index_items_on_user_id      (user_id)
+#  index_items_on_user_id  (user_id)
 #
 
 class Item < ApplicationRecord

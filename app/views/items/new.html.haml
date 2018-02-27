@@ -15,7 +15,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|user| "#{user.forename}"}, selected: ''
+                    -#= f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|user| "#{user.forename}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset Name
@@ -29,7 +29,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
+                    -#= f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Condition
@@ -44,7 +44,9 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            %br
             %hr
+            %br
             %h4.title
               Purchase Information
             .field.is-horizontal
@@ -56,7 +58,7 @@
                     = f.input :manufacturer, label: false, required: '', placeholder: 'Manufacturer', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Name
+                %label.label Model
               .field-body
                 .field
                   %p.control.is-expanded
@@ -70,7 +72,7 @@
                     = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Purchase Date
+                %label.label Acquisition Date
               .field-body
                 .field.is-expanded
                   .field.has-addons
@@ -78,21 +80,7 @@
                       %a.button.is-static
                         %i.far.fa-calendar-alt
                     %p.control.is-expanded
-                      = f.input :purchase_date, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Default Location
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Aquisition Date
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :aquisition_date, label: false
+                      = f.input :acquisition_date, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Purchase Price
@@ -100,11 +88,6 @@
                 .field
                   %p.control.is-expanded
                     = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input'}
-
-
-
-
-
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals

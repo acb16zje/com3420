@@ -10,32 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227151627) do
+ActiveRecord::Schema.define(version: 20180223110857) do
 
-  create_table "assets", force: :cascade do |t|
-    t.string "category"
-    t.string "condition"
-    t.string "name"
-    t.string "location"
-    t.string "peripherals"
-    t.string "image"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "category_id"
-    t.index ["category_id"], name: "index_assets_on_category_id"
-  end
-
-  create_table "booking_states", force: :cascade do |t|
-    t.string "process_state"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -53,42 +31,18 @@ ActiveRecord::Schema.define(version: 20180227151627) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "condition"
-    t.string "name"
-    t.string "location"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "manufacturer"
-    t.integer "category_id"
-    t.string "serial"
-    t.string "model"
-    t.date "aquisition_date"
-    t.decimal "purchase_price"
     t.integer "user_id"
-    t.index ["category_id"], name: "index_items_on_category_id"
+    t.string "name"
+    t.string "condition"
+    t.string "location"
+    t.string "manufacturer"
+    t.string "model"
+    t.string "serial"
+    t.string "acquisition_date"
+    t.string "purchase_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_items_on_user_id"
-  end
-
-  create_table "permissions", force: :cascade do |t|
-    t.string "type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "res_bookings", force: :cascade do |t|
-    t.integer "item_id"
-    t.string "user_email"
-    t.integer "manager_id"
-    t.datetime "out_date"
-    t.datetime "in_date"
-    t.text "comments"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "state_id"
-    t.integer "booking_states_id"
-    t.integer "items_id"
-    t.index ["booking_states_id"], name: "index_res_bookings_on_booking_states_id"
-    t.index ["items_id"], name: "index_res_bookings_on_items_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -110,8 +64,6 @@ ActiveRecord::Schema.define(version: 20180227151627) do
     t.integer "permission_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "permissions_id"
-    t.index ["permissions_id"], name: "index_users_on_permissions_id"
   end
 
 end

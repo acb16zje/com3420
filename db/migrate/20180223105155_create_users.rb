@@ -7,7 +7,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :password
       t.string :phone
       t.string :department
-      t.string :permission
+      t.integer :permission_id
 
       t.timestamps
     end
