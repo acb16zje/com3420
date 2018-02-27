@@ -61,6 +61,7 @@
             .navbar-dropdown.is-boxed.is-right
               = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
               = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
+              = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
               %span.icon

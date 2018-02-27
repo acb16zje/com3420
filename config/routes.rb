@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :categories
   root to: "home#index"
   resources :login
   resources :items
