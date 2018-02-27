@@ -6,46 +6,61 @@
       .column.is-10.is-offset-1
         %h3.title Create asset
         .box
-          = simple_form_for(:f) do |f|
-            -#.field.is-horizontal
+          = simple_form_for(@item) do |f|
+            %h4.title
+              Asset Information
+            .field.is-horizontal
               .field-label.is-normal
-                %label.label Owner
+                %label.label Asset Manager
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.association :user,
-                      label: false,
-                      input_html: {class: 'select2'},
-                      label_method: lambda{|user| "#{user.forename}"},
-                      selected: ''
+                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|user| "#{user.forename}"}, selected: ''
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Asset Name
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :category, ['Cameras', 'Laptops', 'Sensors', 'Miscellaneous'], {}, {class: 'select2'}
+                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Condition
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :condition, ['As new', 'Lightly used', 'Damaged'], {}, {class: 'select2'}
+                    = f.select :condition, ['Like New', 'Good', 'Adequate', 'Damaged', 'Missing'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label ID
+                %label.label Default Location
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            %hr
+            %h4.title
+              Purchase Information
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Manufacturer
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :id, label: false, placeholder: 'Asset ID', input_html: {class: 'input', disabled: ''}
+                    = f.input :manufacturer, label: false, required: '', placeholder: 'Manufacturer', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Name
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+                    = f.input :model, label: false, required: '', placeholder: 'Model', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Serial
@@ -68,9 +83,28 @@
               .field-label.is-normal
                 %label.label Default Location
               .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+                .field
+                  %p.control.is-expanded
+                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Aquisition Date
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :aquisition_date, label: false
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Purchase Price
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input'}
+
+
+
+
+
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals

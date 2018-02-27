@@ -1,11 +1,13 @@
 # == Schema Information
 #
-# Table name: bookings
+# Table name: categories
 #
 #  id         :integer          not null, primary key
+#  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
-class Booking < ApplicationRecord
+class Category < ApplicationRecord
+  has_many :items
 end

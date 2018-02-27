@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+Item.create(id: '1', category_id: '1', condition: 'Available', name:'gopro',
+	location: 'diamond', created_at: '2018-02-23 15:17:11.475084', updated_at: '2018-02-23 15:17:11.47508')
+
+Item.create(id: '2', category_id: '1', condition: 'Available', name:'test',
+	location: 'diamond', created_at: '2018-02-23 16:21:13.106582', updated_at: '2018-02-23 16:21:13.106582')
+
+Item.create(id: '3', category_id: '1', condition: 'Available', name:'macbook aitr',
+	location: 'diamond', created_at: '2018-02-23 16:55:51.015394', updated_at: '2018-02-23 16:55:51.015394')
+	

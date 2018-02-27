@@ -1,6 +1,8 @@
 - content_for :title, "Home"
 
+
 %br/
+
 .container.is-fluid
   .columns
     .column
@@ -69,3 +71,23 @@
         .control
           %a.button.is-info
             Search
+
+
+-#%body
+  .container.is-fluid
+    -@categories.each do |category|
+      .columns
+        .column
+          .card
+            .card-content.hero.is-small.is-light
+              .columns.hero-body
+                .column.has-text-centered
+                  %br/
+                  %span.icon.is-large>
+                    %i.fas.fa-camera.fa-7x
+            %footer.card-footer
+              %p.card-footer-item
+                %span
+                  View
+                  = link_to root_path do
+                    = category.name
