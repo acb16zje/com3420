@@ -7,19 +7,15 @@
     %thead
       %tr
         %th Name
-        %th Image
         %th Category
-        %th Owner
-        %th Location
+        %th Manufacturer
         %th Condition
-        %th Peripherals
+        %th Location
     %tbody
       -@items.each do |item|
         %tr
           %td= link_to item.name, item
-          %td= link_to item.image, item
-          %td= item.category
-          %td= ""
+          %td= item.category.name
+          %td= item.manufacturer
           %td= item.location
           %td= item.condition
-          %td= ""
