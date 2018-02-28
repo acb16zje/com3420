@@ -51,6 +51,8 @@
                 %td
                   = @item.peripherals
 
+= link_to 'New Booking', new_item_booking_path(@item.id)
+
 = link_to 'Edit', edit_item_path(@item)
 \|
 = link_to 'Back', items_path

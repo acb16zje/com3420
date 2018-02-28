@@ -28,18 +28,12 @@
 #  dn                     :string
 #  sn                     :string
 #  givenname              :string
-#  category_id            :integer
 #
 # Indexes
 #
-#  index_users_on_category_id           (category_id)
 #  index_users_on_email                 (email)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_username              (username)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (category_id => categories.id)
 #
 
 class User < ApplicationRecord
@@ -49,5 +43,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :permission
-	has_many :res_bookings
+
+	#-has_many :res_bookings
 end

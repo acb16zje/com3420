@@ -1,7 +1,45 @@
-= simple_form_for(@booking) do |f|
-  = f.error_notification
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Create asset
+        .box
+          = simple_form_for(@booking) do |f|
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Start Date/Time
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :start, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
 
-  .form-inputs
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label End Date/Time
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :end, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
+                      = f.hidden_field :item_id, :value =>1
 
-  .form-actions
-    = f.button :submit
+                      -#= f.hidden_field :user_id, :value => @item.id
+
+            %br
+            %br
+            .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Cancel' , items_path, class: 'button is-light'
+                  .control
+                    = f.submit 'Create asset', class: 'button is-block is-info'
