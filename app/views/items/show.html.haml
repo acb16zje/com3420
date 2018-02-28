@@ -16,32 +16,55 @@
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
               %tr
+                %th Name
+                %td
+                  = @item.name
+              %tr
+                %th Manufacturer
+                %td
+                  = @item.manufacturer
+              %tr
+                %th Model
+                %td
+                  = @item.model
+              %tr
                 %th Category
                 %td
-                  = @item.category
+                  = @item.category.name
+              %tr
+                %th Serial
+                %td
+                  = @item.serial
+              %tr
+                %th Aquisition Date
+                %td
+                  = @item.acquisition_date
+              %tr
+                %th Purchase Price
+                %td
+                  = "£" + @item.purchase_price
               %tr
                 %th Condition
                 %td
                   - case @item.condition
-                  - when 'Available'
+                  - when 'Like New'
                     %span.tag.is-success.is-medium
                       = @item.condition
-                  - when 'Booked'
+                  - when 'Good'
                     %span.tag.is-link.is-medium
                       = @item.condition
-                  - when 'Repairing'
+                  - when 'Adequate'
                     %span.tag.is-warning.is-medium
                       = @item.condition
-                  - when 'Lost'
+                  - when 'Damaged'
+                    %span.tag.is-danger.is-medium
+                      = @item.condition
+                  - when 'Missing'
                     %span.tag.is-danger.is-medium
                       = @item.condition
                   - else
                     %span.tag.is-black.is-medium
                       Unknown
-              %tr
-                %th Name
-                %td
-                  = @item.name
               %tr
                 %th Location
                 %td
@@ -51,8 +74,8 @@
                 %td
                   = @item.peripherals
 
-= link_to 'New Booking', new_item_booking_path(@item.id)
+      = link_to 'New Booking', new_item_booking_path(@item.id), class:'button is-light center-block'
 
-= link_to 'Edit', edit_item_path(@item)
+
 \|
 = link_to 'Back', items_path
