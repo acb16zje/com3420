@@ -7,7 +7,7 @@
         %h2.panel-title Log In
       = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
         .panel-body
-          = f.input :email, autofocus: true
+          = f.input :username, autofocus: true
           = f.input :password
         .panel-footer
           = submit_button 'Log in'

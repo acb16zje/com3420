@@ -35,6 +35,8 @@ gem 'devise_ldap_authenticatable'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
 
+gem "epi_cas", git: "git@git.shefcompsci.org.uk:gems/epi_cas.git"
+
 gem 'whenever'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
@@ -57,7 +59,6 @@ group :development do
   gem 'capistrano-rvm', require: false
   gem 'capistrano-passenger', require: false
   gem 'epi_deploy', git: 'https://github.com/epigenesys/epi_deploy.git'
-  gem "epi_cas", git: "git@git.shefcompsci.org.uk:gems/epi_cas.git"
 
   gem 'eventmachine'
   gem 'letter_opener'
