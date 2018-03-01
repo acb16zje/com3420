@@ -22,7 +22,7 @@
     / Bulma CSS, Pikaday, DataTable, Select 2
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
     = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
-    = stylesheet_link_tag "style"
+    = stylesheet_link_tag "application"
 
     %title #{content_for(:title)} - AMRC Asset Management System
 
@@ -59,14 +59,15 @@
             .navbar-dropdown.is-boxed.is-right
               = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
               = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
-              = link_to 'Category', root_path, class: "navbar-item #{current_class?(new_category_path)}"
-          .navbar-item.has-dropdown.is-hoverable
-            %a.navbar-link
-              %span.icon
-                %i.fas.fa-user
-            .navbar-dropdown.is-boxed.is-right
-              = link_to 'Settings', root_path, class: "navbar-item"
-              = link_to 'Sign out', login_index_path, class: "navbar-item"
+              = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
+          - if user_signed_in?
+            .navbar-item.has-dropdown.is-hoverable
+              %a.navbar-link
+                %span.icon
+                  %i.fas.fa-user
+              .navbar-dropdown.is-boxed.is-right
+                = link_to 'Settings', root_path, class: "navbar-item"
+                = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item"
     = yield
 
     / jQuery, Moment JS, Pikaday, Font Awesome, Datatable, Select2
@@ -79,7 +80,4 @@
     = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.19/dist/image.min.js"
     = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
     = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
-    = javascript_include_tag "picker"
-    = javascript_include_tag "picker.date"
-    = javascript_include_tag "bulma.datatables"
-    = javascript_include_tag "script"
+    = javascript_include_tag "application"

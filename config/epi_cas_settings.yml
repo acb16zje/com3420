@@ -6,7 +6,7 @@ defaults: &defaults
   read_only:   false
 
   # The title of your application, shown in the title of the log out page
-  app_title:  'AMRC Asset Management System'
+  app_title:  'Application'
 
   # The title of the CAS service, shown in the log out link on the log out page: "Log out of #{@cas_title}"
   cas_title:  'Online Services'
@@ -25,13 +25,13 @@ defaults: &defaults
     - staff
     - staff_honorary
     - staff_visiting
-    - staff_retired
-    - external
+    # - staff_retired
+    # - external
     - student_pg_research
     - student_pg_taught
     - student_undergraduate
-    - role
-    - public
+    # - role
+    # - public
 
   # Users in the following groups are created automatically in the app when logging in (comment/uncomment as necessary).
   # Users must also be in a department that is allowed to be created automatically in the app (see departments_allowed_to_be_created).
@@ -39,13 +39,13 @@ defaults: &defaults
     - staff
     - staff_honorary
     - staff_visiting
-    - staff_retired
-    - external
+    # - staff_retired
+    # - external
     - student_pg_research
     - student_pg_taught
     - student_undergraduate
-    - role
-    - public
+    # - role
+    # - public
 
   # Users in the following departments can log in (specify CiCS department codes; leave empty for all).
   # Users must also be in a group that is allowed to log in (see groups_allowed_to_log_in).
@@ -53,20 +53,20 @@ defaults: &defaults
   # (see groups_allowed_to_be_created and departments_allowed_to_be_created).
   departments_allowed_to_log_in:
     # - EPG
-    - COM
+    # - COM
     # - etc
 
   # Users in the following departments are created automatically in the app when logging in (specify CiCS department codes; leave empty for all).
   # Users must also be in a group that is allowed to be created automatically in the app (see groups_allowed_to_be_created).
   departments_allowed_to_be_created:
     # - EPG
-    - COM
+    # - COM
     # - etc
 
   # Usernames specified here can always log in and are always automatically created in the app when logging in,
   # regardless of their group and department.
   username_whitelist:
-    - aca16wkk
+    # - user1
     # - user2
     # - etc
 

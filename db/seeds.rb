@@ -18,6 +18,3 @@
 User.where(email:
                'my.email.address@sheffield.ac.uk').first_or_create(password:
                                                                        'Password123', password_confirmation: 'Password123')
-User.where(email:
-               'wkkhaw1@sheffield.ac.uk').first_or_create(password:
-                                                                       'aaaa1234', password_confirmation: 'aaaa1234')

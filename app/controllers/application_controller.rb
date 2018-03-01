@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  # before_action :authenticate_user!
   protect_from_forgery with: :exception
+  before_action :authenticate_user!
   before_action :update_headers_to_disable_caching
   before_action :ie_warning
 
@@ -36,6 +36,8 @@ class ApplicationController < ActionController::Base
     super(file, opts)
   end
 
+  layout :layout
+
   private
     def update_headers_to_disable_caching
       response.headers['Cache-Control'] = 'no-cache, no-cache="set-cookie", no-store, private, proxy-revalidate'
@@ -45,5 +47,12 @@ class ApplicationController < ActionController::Base
 
     def ie_warning
       return redirect_to(ie_warning_path) if request.user_agent.to_s =~ /MSIE [6-7]/ && request.user_agent.to_s !~ /Trident\/7.0/
+    end
+
+    def layout
+      # only turn it off for login pages:
+      is_a?(Devise::SessionsController) ? false : "application"
+      # or turn layout off for every devise controller:
+      # devise_controller? && "application"
     end
 end

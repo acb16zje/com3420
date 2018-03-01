@@ -1,12 +1,12 @@
 source "https://rubygems.org"
-ruby '2.3.3'
+ruby '2.3.1'
 gem 'rails', '5.1.4'
 gem 'responders'
 gem 'activerecord-session_store', git: 'https://github.com/epigenesys/activerecord-session_store.git', branch: 'rails-5-generator'
 gem 'thin'
 
 gem 'sqlite3', group: [:development, :test]
-gem 'pg', '~> 0.21'
+gem 'pg'
 
 gem 'airbrake', git: 'https://github.com/epigenesys/airbrake.git', branch: 'airbrake-v4'
 
@@ -34,7 +34,6 @@ gem 'devise'
 gem 'devise_ldap_authenticatable'
 gem 'devise_cas_authenticatable'
 gem 'cancancan'
-
 gem "epi_cas", git: "git@git.shefcompsci.org.uk:gems/epi_cas.git"
 
 gem 'whenever'

@@ -32,6 +32,14 @@ module Project
                                integration_tool:  false
     end
 
+    config.to_prepare do
+      # Configure single controller layout
+      Devise::SessionsController.layout false
+
+      # Or to configure mailer layout
+      Devise::Mailer.layout "email" # email.haml or email.erb
+    end
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
 

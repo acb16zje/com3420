@@ -15,8 +15,6 @@ class BookingsController < ApplicationController
     @booking = Booking.new
   end
 
-
-
   # GET /bookings/1/edit
   def edit
   end
