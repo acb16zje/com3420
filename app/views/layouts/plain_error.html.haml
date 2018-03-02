@@ -6,7 +6,7 @@
     %meta{ :'http-equiv' => 'X-UA-Compatible', content: 'IE=edge' }
     = stylesheet_link_tag    "application", media: :all
     = javascript_include_tag "application"
-    = favicon_link_tag '/favicon.ico'
+    = favicon_link_tag 'favicon/favicon.ico', rel: 'shortcut icon'
 
   %body{ class: environment_notice_body_class }
     = render 'layouts/environment_notice'
