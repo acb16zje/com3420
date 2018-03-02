@@ -80,12 +80,12 @@ test:
 
 qa:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
 
 demo:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
 
 production:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
