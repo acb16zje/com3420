@@ -1,6 +1,6 @@
 defaults: &defaults
   # Allows switching between CAS and LDAP auth per environment
-  auth_method: cas
+  auth_method: ldap
 
   # Stops any users being created or updated
   read_only:   false
@@ -80,12 +80,12 @@ test:
 
 qa:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
 
 demo:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
 
 production:
   <<: *defaults
-  auth_method: :cas
+  auth_method: :ldap
