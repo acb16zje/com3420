@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(version: 20180228164737) do
   create_table "users", force: :cascade do |t|
     t.string "forename"
     t.string "surname"
-    t.string "password"
     t.string "phone"
     t.string "department"
     t.integer "permission_id"

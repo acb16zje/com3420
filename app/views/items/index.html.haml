@@ -3,8 +3,9 @@
 %br/
 .container.is-fluid
   %p.title.has-text-centered Current assets
-  %p.title.has-text-centered
-    = link_to 'Create new', new_item_path, class: 'button is-success'
+  - if current_user.permission_id != 1
+    %p.title.has-text-centered
+      = link_to 'Create new', new_item_path, class: 'button is-success'
   %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr

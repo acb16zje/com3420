@@ -26,11 +26,11 @@
                     = f.input :email, label: false, required: '', placeholder: 'Email', input_html: {class: 'input', type: 'email'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label{for: 'password'} Password
+                %label.label Phone
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :password, label: false, placeholder: 'Password', input_html: {class: 'input', name: 'password', minlength: '6', maxlength: '18'}
+                    = f.input :phone, label: false, required: '', placeholder: '+447464712390', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Department
@@ -38,14 +38,14 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.select :department, ['Bioengineering', 'Computer Science', 'Dentistry'], {}, {class: 'select2'}
-            -#.field.is-horizontal
+            .field.is-horizontal
               .field-label.is-normal
                 %label.label Permission level
               .field-body
                 .field{style: 'margin: auto'}
                   .control
                     .select.is-fullwidth
-                      = f.select :permission, ['User', 'Asset Manager', 'Administrator'], {}, {class: ''}
+                      = f.select :permission_id, [['User', 1], ['Asset Manager', 2], ['Administrator', 3]], {}, {class: ''}
             %br
             %br
             .field.is-horizontal

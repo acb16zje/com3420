@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  authorize_resource
 
   # GET /users
   def index
@@ -22,6 +23,9 @@ class UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
+    username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
+    @user.username = username[0]
+    # @user.username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:username]
 
     if @user.save
       redirect_to @user, notice: 'User was successfully created.'
@@ -53,6 +57,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-		params.require(:user).permit(:forename,:surname,:password,:email,:phone,:department,:permission)
+		params.require(:user).permit(:forename,:surname,:email,:phone,:department,:permission_id  )
     end
 end

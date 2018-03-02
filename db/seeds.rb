@@ -15,6 +15,6 @@
 # Item.create(id: '3', category_id: '1', condition: 'Available', name:'macbook air',
 # 	location: 'diamond', created_at: '2018-02-23 16:55:51.015394', updated_at: '2018-02-23 16:55:51.015394')
 
-User.where(email:
-               'my.email.address@sheffield.ac.uk').first_or_create(password:
-                                                                       'Password123', password_confirmation: 'Password123')
+User.create(email: 'wkkhaw1@sheffield.ac.uk', forename: 'Wei Kin', surname: 'Khaw', permission_id: 3, username: 'aca16wkk')
+
+#User.create(email: 'wkkhaw1@sheffield.ac.uk', forename: 'Wei Kin', surname: 'Khaw', permission_id: 3, username: 'aca16wkk')

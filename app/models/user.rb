@@ -5,7 +5,6 @@
 #  id                 :integer          not null, primary key
 #  forename           :string
 #  surname            :string
-#  password           :string
 #  phone              :string
 #  department         :string
 #  permission_id      :integer
