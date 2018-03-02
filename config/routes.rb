@@ -1,23 +1,22 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
-  mount EpiCas::Engine, at: "/"
+Rails.application.routes.draw do
+  mount EpiCas::Engine, at: '/'
   devise_for :users
   resources :categories
-  root to: "home#index"
-  resources :login
-  resources :items
   resources :users
   resources :bookings
-
+  resources :items
   resources :items do
     resources :bookings
   end
 
+  root to: 'home#index'
 
-  match "/403", to: "errors#error_403", via: :all
-  match "/404", to: "errors#error_404", via: :all
-  match "/422", to: "errors#error_422", via: :all
-  match "/500", to: "errors#error_500", via: :all
+  match '/403', to: 'errors#error_403', via: :all
+  match '/404', to: 'errors#error_404', via: :all
+  match '/422', to: 'errors#error_422', via: :all
+  match '/500', to: 'errors#error_500', via: :all
 
   get :ie_warning, to: 'errors#ie_warning'
   get :javascript_warning, to: 'errors#javascript_warning'

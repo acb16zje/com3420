@@ -1,21 +1,37 @@
-%h1 Listing categories
+- content_for :title, "Categories"
 
-%table
-  %thead
-    %tr
-      %th Name
-      %th
-      %th
-      %th
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
 
-  %tbody
-    - @categories.each do |category|
+  %p.title.has-text-centered Current categories
+  %p.title.has-text-centered
+    = link_to 'Create new', new_category_path, class: 'button is-success'
+  %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %thead
       %tr
-        %td= category.name
-        %td= link_to 'Show', category
-        %td= link_to 'Edit', edit_category_path(category)
-        %td= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' }
+        %th.has-text-centered Category
+        %th.has-text-centered Action
+    %tbody
+      - @categories.each do |category|
+        %tr
+          %td.is-size-4.has-text-centered{style: 'vertical-align: middle'}
+            = category.name
+          %td
+            .field.is-grouped.is-grouped-centered
+              %p.control
+                = link_to edit_category_path(category), class: 'button is-link' do
+                  %span.icon
+                    %i.class.fas.fa-edit
+                  %span Edit
+              %p.control
+                = link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                  %span.icon
+                    %i.class.fas.fa-trash
+                  %span Delete
 
-%br
-
-= link_to 'New Category', new_category_path

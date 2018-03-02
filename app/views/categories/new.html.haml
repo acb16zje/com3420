@@ -1,5 +1,28 @@
-%h1 New category
+- content_for :title, "Create category"
 
-= render 'form'
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Create category
+        .box
+          = simple_form_for(@category) do |f|
+            = f.error_notification
 
-= link_to 'Back', categories_path
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Category
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input'}
+            %br
+            .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Cancel' , categories_path, class: 'button is-block is-light'
+                  .control
+                    = f.submit 'Create category', class: 'button is-block is-info'

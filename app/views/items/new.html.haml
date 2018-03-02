@@ -80,14 +80,18 @@
                       %a.button.is-static
                         %i.far.fa-calendar-alt
                     %p.control.is-expanded
-                      = f.input :acquisition_date, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate'}
+                      = f.input :acquisition_date, as: :text, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Purchase Price
               .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input'}
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        &pound
+                    %p.control.is-expanded
+                      = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', min: '0'}
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals

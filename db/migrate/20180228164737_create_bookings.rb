@@ -1,8 +1,10 @@
 class CreateBookings < ActiveRecord::Migration[5.1]
   def change
     create_table :bookings do |t|
-      t.datetime :start
-      t.datetime :end
+      t.date :start_date
+      t.time :start_time
+      t.date :end_date
+      t.time :end_time
       t.string :reason
 
       t.timestamps

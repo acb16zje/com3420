@@ -10,8 +10,8 @@
 #  manufacturer     :string
 #  model            :string
 #  serial           :string
-#  acquisition_date :string
-#  purchase_price   :string
+#  acquisition_date :date
+#  purchase_price   :decimal(, )
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  category_id      :integer

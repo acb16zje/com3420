@@ -12,8 +12,8 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :manufacturer
       t.string :model
       t.string :serial
-      t.string :acquisition_date
-      t.string :purchase_price
+      t.date :acquisition_date
+      t.decimal :purchase_price
       t.index ['user_id'], name: 'index_items_on_user_id'
 
       t.timestamps

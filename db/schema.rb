@@ -16,8 +16,10 @@ ActiveRecord::Schema.define(version: 20180228164737) do
   enable_extension "plpgsql"
 
   create_table "bookings", force: :cascade do |t|
-    t.datetime "start"
-    t.datetime "end"
+    t.date "start_date"
+    t.time "start_time"
+    t.date "end_date"
+    t.time "end_time"
     t.string "reason"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -54,8 +56,8 @@ ActiveRecord::Schema.define(version: 20180228164737) do
     t.string "manufacturer"
     t.string "model"
     t.string "serial"
-    t.string "acquisition_date"
-    t.string "purchase_price"
+    t.date "acquisition_date"
+    t.decimal "purchase_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "category_id"

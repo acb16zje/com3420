@@ -3,8 +3,10 @@
 # Table name: bookings
 #
 #  id         :integer          not null, primary key
-#  start      :datetime
-#  end        :datetime
+#  start_date :date
+#  start_time :time
+#  end_date   :date
+#  end_time   :time
 #  reason     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

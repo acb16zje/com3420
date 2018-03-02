@@ -5,6 +5,17 @@ SimpleForm.setup do |config|
   # wrapper, change the order or even add your own to the
   # stack. The options given below are used to wrap the
   # whole input.
+
+  config.wrappers :multi_select, tag: 'div', class: 'field is-horizontal is-size-5' do |b|
+    b.use :html5
+    b.optional :readonly
+    b.use :input, class: 'input', style: 'margin: 0 10px !important; width: 80px; text-align: middle'
+  end
+
+  config.wrapper_mappings = {
+    time: :multi_select
+  }
+
   config.wrappers :default, class: :input, wrapper: false,
     hint_class: :field_with_hint, error_class: :field_with_errors do |b|
     ## Extensions enabled by default

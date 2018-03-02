@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class BookingsController < ApplicationController
-  before_action :set_booking, only: [:show, :edit, :update, :destroy]
+  before_action :set_booking, only: %i[show edit update destroy]
 
   # GET /bookings
   def index
@@ -7,17 +9,16 @@ class BookingsController < ApplicationController
   end
 
   # GET /bookings/1
-  def show
-  end
+  def show; end
 
   # GET /bookings/new
   def new
     @booking = Booking.new
+    @item = Item.find_by_id(params[:item_id])
   end
 
   # GET /bookings/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /bookings
   def create
@@ -46,13 +47,14 @@ class BookingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_booking
-      @booking = Booking.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def booking_params
-      params.require(:booking).permit!
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_booking
+    @booking = Booking.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def booking_params
+    params.require(:booking).permit!
+  end
 end

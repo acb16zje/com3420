@@ -10,7 +10,7 @@
             = notice
     .box
       .columns
-        .column.is-5.has-text-centered
+        .column.is-5.has-text-centered{style: 'margin: auto'}
           = image_tag("amrc.svg", width: "250")
         .column
           %table.table.is-bordered.is-striped.is-fullwidth
@@ -42,7 +42,7 @@
               %tr
                 %th Purchase Price
                 %td
-                  = "£" + @item.purchase_price
+                  = "£ " + @item.purchase_price.to_s
               %tr
                 %th Condition
                 %td
@@ -70,12 +70,16 @@
                 %td
                   = @item.location
               %tr
-              -#%th Peripherals
-                %td
-                  = @item.peripherals
+                -#%th Peripherals
+                -#  %td
+                -#    = @item.peripherals
 
-      = link_to 'New Booking', new_item_booking_path(@item.id), class:'button is-light center-block'
-
-
-\|
-= link_to 'Back', items_path
+      .field.is-horizontal
+        .field-label.has-text-left
+          -#Left empty for spacing
+        .field-body
+          .field.is-grouped.is-grouped-right
+            .control
+              = link_to 'Back' , items_path, class: 'button is-block is-light'
+            .control
+              = link_to 'Book or Reserve', new_item_booking_path(item_id: @item.id), class:'button is-link is-block'

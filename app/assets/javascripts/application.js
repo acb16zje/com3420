@@ -1,5 +1,80 @@
 //= require jquery_ujs
+//= require bulma.datatables
+//= require bunny
 //= require picker
 //= require picker.date
-//= require bulma.datatables
-//= require script
+
+// Navigation Burger menu
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Get all "navbar-burger" elements
+    var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+    // Check if there are any navbar burgers
+    if ($navbarBurgers.length > 0) {
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(function ($el) {
+            $el.addEventListener('click', function () {
+
+                // Get the target from the "data-target" attribute
+                var target = $el.dataset.target;
+                var $target = document.getElementById(target);
+
+                // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+                $el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+
+            });
+        });
+    }
+
+    $("#purchaseDate").each(function () {
+        $(this).pickadate({
+            format: 'd mmmm yyyy'
+        });
+    });
+
+    $('#startDate').pickadate({
+        format: 'd mmmm yyyy',
+        // An integer (positive/negative) sets it relative to today.
+        min: new Date()
+    })
+
+    $('#endDate').pickadate({
+        format: 'd mmmm yyyy',
+        min: 0
+    })
+
+    $('.datepicker').on('change', function () {
+        if ($(this).attr('id') === 'endDate') {
+            alert($(this).val())
+            $('#startDate').pickadate('picker').set('min', $(this).val());
+        }
+        if ($(this).attr('id') === 'startDate') {
+            $('#endDate').pickadate('picker').set('min', $(this).val());
+        }
+    });
+});
+
+// Bulma notification
+$(document).on('click', '.notification > button.delete', function () {
+    this.parentNode.remove();
+});
+
+$(document).ready(function () {
+    // Datatable
+    $("#assets, #users, #categories").each(function () {
+        $(this).DataTable({
+            "drawCallback": function (settings) {
+                if (!$(this).parent().hasClass("table-is-responsive")) {
+                    $(this).wrap('<div class="table-is-responsive"></div>');
+                }
+            }
+        });
+    });
+
+    // Select2
+    $.fn.select2.defaults.set("width", "100%");
+    $('.select2').select2();
+});

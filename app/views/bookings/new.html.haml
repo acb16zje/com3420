@@ -1,5 +1,137 @@
-%h1 New booking
+- content_for :title, "Booking #{@item.name}"
 
-= render 'form'
+%section.section
+  .container.is-desktop.has-text-centered
+    - if not notice.nil?
+      .columns
+        .column.is-4.is-offset-4
+          .notification.is-success.has-text-centered
+            %button.delete
+            = notice
 
-= link_to 'Back', bookings_path
+    %h3.title Create booking on #{@item.name}
+    .box
+      .columns
+        .column.is-5.has-text-centered{style: 'margin: auto'}
+          = image_tag("amrc.svg", width: "250")
+        .column
+          %table.table.is-bordered.is-striped.is-fullwidth
+            %tbody
+              %tr
+                %th Name
+                %td
+                  = @item.name
+              %tr
+                %th Manufacturer
+                %td
+                  = @item.manufacturer
+              %tr
+                %th Model
+                %td
+                  = @item.model
+              %tr
+                %th Category
+                %td
+                  = @item.category.name
+              %tr
+                %th Serial
+                %td
+                  = @item.serial
+              %tr
+                %th Acquisition Date
+                %td
+                  = @item.acquisition_date
+              %tr
+                %th Purchase Price
+                %td
+                  = "£ " + @item.purchase_price.to_s
+              %tr
+                %th Condition
+                %td
+                  - case @item.condition
+                  - when 'Like New'
+                    %span.tag.is-success.is-medium
+                      = @item.condition
+                  - when 'Good'
+                    %span.tag.is-link.is-medium
+                      = @item.condition
+                  - when 'Adequate'
+                    %span.tag.is-warning.is-medium
+                      = @item.condition
+                  - when 'Damaged'
+                    %span.tag.is-danger.is-medium
+                      = @item.condition
+                  - when 'Missing'
+                    %span.tag.is-danger.is-medium
+                      = @item.condition
+                  - else
+                    %span.tag.is-black.is-medium
+                      Unknown
+              %tr
+                %th Location
+                %td
+                  = @item.location
+              %tr
+                -#%th Peripherals
+                -#  %td
+                -#    = @item.peripherals
+
+      = simple_form_for(@booking) do |f|
+        .columns
+          .column
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Start Date
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :start_date, as: :text, label: false, required: '', placeholder: 'Select Start Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Start Time
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.fas.fa-clock
+                    = f.input :start_time, required: ''
+          .column
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label End Date
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :end_date, as: :text, label: false, required: '', placeholder: 'Select End Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
+                      = f.hidden_field :user_id, value: @item.id
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label End Time
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.fas.fa-clock
+                    = f.input :end_time, required: ''
+                    = f.hidden_field :user_id, value: @item.id
+      %br
+      %br
+      .field.is-horizontal
+        .field-label.has-text-left
+          -#Left empty for spacing
+        .field-body
+          .field.is-grouped.is-grouped-right
+            .control
+              = link_to 'Back' , bookings_path, class: 'button is-block is-light'
+            .control
+              = link_to 'Confirm booking', new_item_booking_path(item_id: @item.id), class:'button is-link is-block'
