@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                 :integer          not null, primary key
+#  phone              :string
 #  permission_id      :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null

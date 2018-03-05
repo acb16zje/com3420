@@ -2,9 +2,14 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Edit My Details
+        %h3.title
+          - if current_user.uid.eql? @user.uid
+          Edit My Details
+        - else
+          Edit #{@user.givenname} #{@user.sn}'s Details
         .box
-          
+
+
 
 = link_to 'Show', @user
 \|

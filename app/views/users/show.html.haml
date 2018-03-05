@@ -5,7 +5,7 @@
     .column.is-4.is-offset-4
       - if not notice.nil?
         .columns
-          .column.is-4.is-offset-4
+          .column.is-8.is-offset-2
             .notification.is-success.has-text-centered
               %button.delete
               = notice
@@ -26,7 +26,12 @@
 
         %hr
 
-        %label.label Department:
+        %label.label Phone:
+        %p #{@user.phone}
+
+        %hr
+
+        %label.label Department / Company:
         %p #{@user.ou}
 
         %hr
@@ -48,6 +53,5 @@
             .field.is-grouped.is-grouped-right
               .control
                 = link_to 'Back' , users_path, class: 'button is-block is-light'
-              - if current_user.permission_id == 3
-                .control
-                  = link_to 'Edit Permission' , edit_user_path, class: 'button is-block is-link'
+              .control
+                = link_to 'Edit Details' , edit_user_path, class: 'button is-block is-link'
