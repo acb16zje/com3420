@@ -10,3 +10,9 @@ task :reset do
   sh 'rails db:reset'
   sh 'rails db:migrate'
 end
+
+desc 'Deploy to epiDeploy.'
+task :deploy do
+  sh 'bundle exec ed release -d demo'
+  sh 'bundle exec cap demo deploy:seed'
+end

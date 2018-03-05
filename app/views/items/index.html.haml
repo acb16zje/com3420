@@ -2,6 +2,7 @@
 
 %br/
 .container.is-fluid
+  %h1.title #{@category}
   %p.title.has-text-centered Current assets
   - if current_user.permission_id != 1
     %p.title.has-text-centered

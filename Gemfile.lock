@@ -196,6 +196,10 @@ GEM
     git (1.3.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    gon (6.2.0)
+      actionpack (>= 3.0)
+      multi_json
+      request_store (>= 1.0)
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
@@ -441,6 +445,7 @@ DEPENDENCIES
   eventmachine
   factory_girl_rails
   font-awesome-rails
+  gon
   haml-rails
   jquery-rails
   launchy

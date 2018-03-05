@@ -7,6 +7,7 @@
     %meta{:content => "ZerJun Eng", :name => "author"}/
     %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
     = csrf_meta_tag
+    = include_gon(init: true)
 
     / Favicon
     = favicon_link_tag 'favicon/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180'
@@ -45,7 +46,7 @@
             .navbar-dropdown.is-boxed
               - categories = Category.all
               - categories.each do |category|
-                = link_to category.name, root_path, class: "navbar-item"
+                = link_to category.name, items_path(category_name: category.name), class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
           = link_to 'Asset Managers', root_path, class: "navbar-item"
           - if current_user.permission_id == 3
