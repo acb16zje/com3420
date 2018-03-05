@@ -26,12 +26,14 @@ class UsersController < ApplicationController
     @user.get_info_from_ldap
     username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
     @user.username = username[0]
-    # @user.username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:username]
 
-    if @user.save
-      redirect_to @user, notice: 'User was successfully created.'
-    else
-      render :new
+
+    if !User.exists?(:email => @user.email)
+      if @user.save
+        redirect_to @user, notice: 'User was successfully created.'
+      else
+        render :new
+      end
     end
   end
 
