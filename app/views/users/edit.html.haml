@@ -1,13 +1,68 @@
-%section.hero
-  .hero-body
-    .container.has-text-centered
-      .column.is-10.is-offset-1
-        %h3.title
-          - if current_user.uid.eql? @user.uid
+- content_for :title, "Editing #{@user.givenname} #{@user.sn}"
+
+%section.section
+  .columns
+    .column.is-4.is-offset-4
+      - if not notice.nil?
+        .columns
+          .column.is-8.is-offset-2
+            .notification.is-success.has-text-centered
+              %button.delete
+              = notice
+
+      %h1.title.has-text-centered
+        - if current_user.uid.eql? @user.uid
           Edit My Details
         - else
           Edit #{@user.givenname} #{@user.sn}'s Details
-        .box
+      .box
+        = simple_form_for(:f) do |f|
+          %label.label Username:
+          %p
+            = f.input :username, label: false, input_html: {class: 'input', value: "#{@user.username}", disabled: ''}
+          %hr
+
+          %label.label Name:
+          %p #{@user.givenname} #{@user.sn}
+
+          %hr
+
+          %label.label Email:
+          %p
+            = f.input :email, label: false, input_html: {class: 'input', value: "#{@user.email}", disabled: ''}
+
+          %hr
+
+          %label.label Phone:
+          %p
+            = f.input :phone, label: false, input_html: {class: 'input', value: "#{@user.phone}"}
+          %hr
+
+          %label.label Department / Company:
+          %p
+            = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
+          %hr
+
+          %label.label Permission:
+          %p.control
+            .select
+              - if current_user.permission_id == 3
+                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id), {}, {class: ''}
+              - else
+                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id), {}, {class: '', disabled: ''}
+
+        %br
+        %br
+        .field.is-horizontal
+          .field-label.has-text-left
+            -#Left empty for spacing
+          .field-body
+            .field.is-grouped.is-grouped-right
+              .control
+                = link_to 'Back' , users_path, class: 'button is-block is-light'
+              .control
+                = link_to 'Edit Details' , edit_user_path, class: 'button is-block is-link'
+
 
 
 

@@ -16,6 +16,11 @@
         - else
           #{@user.givenname} #{@user.sn}'s Details
       .box
+        %label.label Username:
+        %p #{@user.username}
+
+        %hr
+
         %label.label Name:
         %p #{@user.givenname} #{@user.sn}
 
