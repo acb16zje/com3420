@@ -75,10 +75,7 @@ ActiveRecord::Schema.define(version: 20180305143140) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "forename"
-    t.string "surname"
     t.string "phone"
-    t.string "department"
     t.integer "permission_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

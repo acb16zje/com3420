@@ -64,6 +64,13 @@
     %section.hero.is-success.is-fullheight.has-text-centered
       .hero-body
         .container
+          - flash.each do |name, msg|
+            - next unless name == 'alert' || name == 'notice'
+            .columns
+              .column.is-4.is-offset-4
+                .notification.is-danger.has-text-centered
+                  %button.delete
+                  = msg
           .column.is-4.is-offset-4
             %h3.title.has-text-grey Sign in
             %p.subtitle.has-text-grey Please sign in to proceed

@@ -3,6 +3,14 @@
 %section.hero
   .hero-body
     .container.has-text-centered
+      - flash.each do |name, msg|
+        - next unless name == 'alert' || name == 'notice'
+        .columns
+          .column.is-4.is-offset-4
+            .notification.is-danger.has-text-centered
+              %button.delete
+              = msg
+
       .column.is-10.is-offset-1
         %h3.title Create user
         .box

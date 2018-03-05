@@ -27,8 +27,9 @@ class UsersController < ApplicationController
     username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
     @user.username = username[0]
 
-
-    if !User.exists?(:email => @user.email)
+    if User.exists?(:email => @user.email)
+      redirect_to new_user_path, notice: 'Account already exists.'
+    else
       if @user.save
         redirect_to @user, notice: 'User was successfully created.'
       else
