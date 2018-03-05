@@ -23,13 +23,16 @@ class UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
-    @user.get_info_from_ldap
-    username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
-    @user.username = username[0]
 
+    # Checks whether the user already exists
     if User.exists?(:email => @user.email)
       redirect_to new_user_path, notice: 'Account already exists.'
     else
+      # Gets the info for this email from MUSE
+      @user.get_info_from_ldap
+      username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
+      @user.username = username[0]
+
       if @user.save
         redirect_to @user, notice: 'User was successfully created.'
       else

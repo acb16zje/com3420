@@ -53,9 +53,16 @@
 
         .field.is-horizontal
           .field-label.has-text-left
-            -#Left empty for spacing
+            -# Left empty for spacing
           .field-body
             .field.is-grouped.is-grouped-right
+              -# If user viewing his/her own details, unable to delete their own account
+              - if current_user.id != @user.id
+                %p.control
+                  = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                    %span.icon
+                      %i.class.fas.fa-trash
+                    %span Delete
               .control
                 = link_to 'Back' , users_path, class: 'button is-block is-light'
               .control
