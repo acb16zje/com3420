@@ -36,6 +36,7 @@ class ApplicationController < ActionController::Base
     super(file, opts)
   end
 
+
   layout :layout
 
   private
