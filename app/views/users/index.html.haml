@@ -15,16 +15,23 @@
   %table#users.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th a
-        %th b
-        %th c
+        %th Name
+        %th Email
+        %th Permission
         %th Action
     %tbody
       - @users.each do |user|
         %tr
-          %td= user.forename
+          %td= user.givenname.to_s + ' ' + user.sn.to_s
+          %td= user.email
           %td
-          %td
+            - case user.permission_id
+            - when 3
+              Admin
+            - when 2
+              Asset Manager
+            - else
+              User
           %td
             .field.is-grouped.is-grouped-centered
               %p.control

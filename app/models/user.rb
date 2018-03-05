@@ -3,10 +3,6 @@
 # Table name: users
 #
 #  id                 :integer          not null, primary key
-#  forename           :string
-#  surname            :string
-#  phone              :string
-#  department         :string
 #  permission_id      :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
@@ -32,4 +28,10 @@
 
 class User < ApplicationRecord
   include EpiCas::DeviseHelper
+
+  def generate_attributes_from_ldap_info
+    self.username = self.uid
+    self.email = self.mail
+    super # This needs to be left in so the default fields are also set
+  end
 end

@@ -70,8 +70,9 @@
               %a.navbar-link
                 %span.icon
                   %i.fas.fa-user
+                #{current_user.givenname}
               .navbar-dropdown.is-boxed.is-right
-                = link_to 'Settings', root_path, class: "navbar-item"
+                = link_to 'Settings', current_user, class: "navbar-item"
                 = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item"
     = yield
 

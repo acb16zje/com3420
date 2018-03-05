@@ -23,6 +23,7 @@ class UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
+    @user.get_info_from_ldap
     username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
     @user.username = username[0]
     # @user.username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:username]
@@ -57,6 +58,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-		params.require(:user).permit(:forename,:surname,:email,:phone,:department,:permission_id  )
+		  params.require(:user).permit(:email, :permission_id)
     end
 end
