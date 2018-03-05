@@ -7,6 +7,11 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  #Get /user/manager
+  def manager
+    @users = User.all
+  end
+
   # GET /users/1
   def show
   end

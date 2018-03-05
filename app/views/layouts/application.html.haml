@@ -48,7 +48,7 @@
               - categories.each do |category|
                 = link_to category.name, items_path(category_name: category.name), class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
-          = link_to 'Asset Managers', root_path, class: "navbar-item"
+          = link_to 'Asset Managers', manager_users_path, class: "navbar-item"
           - if current_user.permission_id == 3
             = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
           - if current_user.permission_id != 1

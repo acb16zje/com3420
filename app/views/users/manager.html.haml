@@ -1,0 +1,47 @@
+- content_for :title, "Users"
+
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
+  %p.title.has-text-centered Current users
+  %p.title.has-text-centered
+    = link_to 'Create new', new_user_path, class: 'button is-success'
+  %table#users.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %thead
+      %tr
+        %th Name
+        %th Email
+        %th Permission Level
+        %th Action
+    %tbody
+      - @users.each do |user|
+        - if user.permission_id == 2
+          %tr
+            %td= user.givenname.to_s + ' ' + user.sn.to_s
+            %td= user.email
+            %td
+              - case user.permission_id
+              - when 3
+                Admin
+              - when 2
+                Asset Manager
+              - else
+                User
+            %td
+              .field.is-grouped.is-grouped-centered
+                %p.control
+                  = link_to user, class: 'button is-primary' do
+                    %span.icon
+                      %i.class.fas.fa-eye
+                    %span View
+                %p.control
+                  = link_to edit_user_path(user), class: 'button is-link' do
+                    %span.icon
+                      %i.class.fas.fa-edit
+                    %span Edit
