@@ -2,16 +2,11 @@
 
 %br/
 .container.is-fluid
-  %h1.title #{@category}
-  %p.title.has-text-centered Current assets
-  - if current_user.permission_id != 1
-    %p.title.has-text-centered
-      = link_to 'Create new', new_item_path, class: 'button is-success'
+  %p.title.has-text-centered #{@manager.givenname}'s Assets
   %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
         %th Name
-        %th Hash ID
         %th Category
         %th Manufacturer
         %th Condition
@@ -20,7 +15,6 @@
       -@items.each do |item|
         %tr
           %td= link_to item.name, item
-          %td= item.hash_id
           %td= item.category.name
           %td= item.manufacturer
           %td= item.condition

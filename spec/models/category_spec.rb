@@ -6,10 +6,12 @@
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  tag        :string
 #
 # Indexes
 #
 #  index_categories_on_name  (name) UNIQUE
+#  index_categories_on_tag   (tag) UNIQUE
 #
 
 require 'rails_helper'

@@ -8,6 +8,12 @@ class ItemsController < ApplicationController
     gon.category = params[:category_name]
   end
 
+  #Get /items/manager
+  def manager
+    @items = Item.where("user_id = ?", params[:user_id])
+    @manager = User.find_by_id(params[:user_id])
+  end
+
   # GET /items/1
   def show
   end
@@ -24,6 +30,14 @@ class ItemsController < ApplicationController
   # POST /items
   def create
     @item = Item.new(item_params)
+    @item.user_id = current_user.id
+    
+    category = Category.find_by_id(@item.category_id)
+    id_str = (Item.where(category_id: @item.category_id).count() + 1).to_s
+    (0...(5 - id_str.length)).each do |i|
+      id_str = '0' + id_str
+    end
+    @item.hash_id = category.tag + id_str
 
     if @item.save
       redirect_to @item, notice: 'Item was successfully created.'
@@ -48,13 +62,14 @@ class ItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def item_params
-      params.require(:item).permit!
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_item
+    @item = Item.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def item_params
+    params.require(:item).permit!
+  end
 end

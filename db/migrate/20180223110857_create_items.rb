@@ -7,8 +7,7 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :condition
       t.string :location
-      # t.string :peripherals
-      # t.string :image
+      t.string :hash_id
       t.string :manufacturer
       t.string :model
       t.string :serial

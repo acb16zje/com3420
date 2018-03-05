@@ -7,6 +7,7 @@
 #  name             :string
 #  condition        :string
 #  location         :string
+#  hash_id          :string
 #  manufacturer     :string
 #  model            :string
 #  serial           :string
@@ -19,6 +20,7 @@
 # Indexes
 #
 #  index_items_on_category_id  (category_id)
+#  index_items_on_hash_id      (hash_id) UNIQUE
 #  index_items_on_user_id      (user_id)
 #
 # Foreign Keys

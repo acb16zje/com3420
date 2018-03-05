@@ -8,9 +8,9 @@ Rails.application.routes.draw do
     get 'manager', :on => :collection
   end
   resources :bookings
-  resources :items
   resources :items do
     resources :bookings
+    get 'manager', :on => :collection
   end
 
   root to: 'home#index'

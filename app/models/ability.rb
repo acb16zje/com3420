@@ -44,14 +44,14 @@ class Ability
       can :manage, Item
       can :manage, Booking
       can :manage, Category
-      can [:show,:edit,:update], User, id: user.id
+      can [:show,:edit,:update,:manager], User, id: user.id
     end
 
     #USER
     if user.permission_id == 1
       can :read, Item
       can :read, Booking, id: user.id
-      can [:show,:edit,:update], User, id: user.id
+      can [:show,:edit,:update,:manager], User, id: user.id
     end
   end
 end

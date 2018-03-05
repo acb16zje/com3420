@@ -7,8 +7,10 @@ task :reset do
   end
 
   sh 'rails db:migrate'
-  sh 'rails db:reset'
+  sh 'rails db:drop'
+  sh 'rails db:create'
   sh 'rails db:migrate'
+  sh 'rails db:seed'
 end
 
 desc 'Deploy to epiDeploy.'
