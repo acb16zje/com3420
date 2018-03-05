@@ -33,6 +33,10 @@ class UsersController < ApplicationController
       username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
       @user.username = username[0]
 
+      if @user.phone == "" || @user.phone.nil?
+        @user.phone = "-"
+      end
+
       if @user.save
         redirect_to @user, notice: 'User was successfully created.'
       else

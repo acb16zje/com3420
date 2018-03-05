@@ -9,5 +9,4 @@ task :reset do
   sh 'rails db:migrate'
   sh 'rails db:reset'
   sh 'rails db:migrate'
-  sh 'rails db:seed'
 end

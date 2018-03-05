@@ -25,10 +25,15 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
 
-    if @category.save
-      redirect_to categories_path, notice: 'Category was successfully created.'
+    # Checks whether the user already exists
+    if Category.exists?(:name => @category.name)
+      redirect_to new_category_path, notice: 'Category already exists.'
     else
-      render :new
+      if @category.save
+        redirect_to categories_path, notice: 'Category was successfully created.'
+      else
+        render :new
+      end
     end
   end
 
