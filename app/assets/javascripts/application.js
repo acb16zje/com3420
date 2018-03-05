@@ -64,7 +64,7 @@ $(document).on('click', '.notification > button.delete', function () {
 
 $(document).ready(function () {
     // Datatable
-    $("#assets, #users, #categories").each(function () {
+    $("#users, #categories").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -73,6 +73,18 @@ $(document).ready(function () {
             }
         });
     });
+
+    var table = $("#assets").DataTable({
+        "drawCallback": function (settings) {
+            if (!$(this).parent().hasClass("table-is-responsive")) {
+                $(this).wrap('<div class="table-is-responsive"></div>');
+            }
+        }
+    });
+
+    if (gon.category != null) {
+        table.search(gon.category).draw();
+    }
 
     // Select2
     $.fn.select2.defaults.set("width", "100%");

@@ -51,11 +51,11 @@
           - else
             User
 
+        %br
+        %br
         .field.is-horizontal
-          .field-label.has-text-left
-            -# Left empty for spacing
           .field-body
-            .field.is-grouped.is-grouped-right
+            .field.is-grouped.is-grouped-left
               -# If user viewing his/her own details, unable to delete their own account
               - if current_user.id != @user.id
                 %p.control
@@ -63,6 +63,7 @@
                     %span.icon
                       %i.class.fas.fa-trash
                     %span Delete
+            .field.is-grouped.is-grouped-right
               .control
                 = link_to 'Back' , users_path, class: 'button is-block is-light'
               .control

@@ -20,6 +20,7 @@ gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 gem 'select2-rails'
 gem 'epi_js'
+gem 'gon'
 
 gem 'simple_form'
 gem 'draper'
