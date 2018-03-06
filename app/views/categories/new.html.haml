@@ -24,6 +24,15 @@
                 .field
                   %p.control.is-expanded
                     = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input'}
+
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Tag
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :tag, label: false, required: '', placeholder: 'Tag', input_html: {class: 'input'}
+
             %br
             .field.is-horizontal
               .field-label.has-text-left

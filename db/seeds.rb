@@ -15,7 +15,7 @@
 # Item.create(id: '3', category_id: '1', condition: 'Available', name:'macbook air',
 # 	location: 'diamond', created_at: '2018-02-23 16:55:51.015394', updated_at: '2018-02-23 16:55:51.015394')
 
-Category.create(name: 'Cameras')
-Category.create(name: 'Data Logger')
-User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
-User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
+Category.create(name: 'Cameras', tag: 'CAM')
+Category.create(name: 'Data Logger', tag: 'DL')
+User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk', phone: '-')
+User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje', phone: '-')
