@@ -18,6 +18,7 @@ module Project
 
     # This points to our own routes middleware to handle exceptions
     config.exceptions_app = self.routes
+    config.action_view.automatically_disable_submit_tag = false
 
     I18n.enforce_available_locales = false
     config.generators do |g|
