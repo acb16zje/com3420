@@ -21,10 +21,10 @@
 #  fk_rails_...  (item_id => items.id)
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :booking do
-    start "2018-02-28 16:47:37"
-    end "2018-02-28 16:47:37"
-    reason "MyString"
+    # start_date "2018-02-28 16:47:37"
+    # end_date "2018-02-28 16:47:37"
+    # reason "MyString"
   end
 end

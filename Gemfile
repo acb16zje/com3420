@@ -68,7 +68,8 @@ end
 
 group :test do
   gem 'capybara-select2', git: 'https://github.com/goodwill/capybara-select2.git'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
+  gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'poltergeist'
