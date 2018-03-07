@@ -9,13 +9,6 @@
           = simple_form_for(@item) do |f|
             %h4.title
               Asset Information
-            -#.field.is-horizontal
-              .field-label.is-normal
-                %label.label Asset Manager
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|user| "#{user.forename}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset Name
@@ -91,7 +84,7 @@
                       %a.button.is-static
                         &pound
                     %p.control.is-expanded
-                      = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', min: '0'}
+                      = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals

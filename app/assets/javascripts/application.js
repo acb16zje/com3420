@@ -1,6 +1,7 @@
 //= require jquery_ujs
 //= require bulma.datatables
 //= require bunny
+//= require inputTypeNumberPolyfill
 //= require picker
 //= require picker.date
 
@@ -74,6 +75,7 @@ $(document).ready(function () {
         });
     });
 
+    // Browse by categories
     var table = $("#assets").DataTable({
         "drawCallback": function (settings) {
             if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -82,6 +84,7 @@ $(document).ready(function () {
         }
     });
 
+    // Use gon to get ruby variables into JS
     if (gon.category != null) {
         table.search(gon.category).draw();
     }
@@ -89,4 +92,8 @@ $(document).ready(function () {
     // Select2
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
+
+    // Phone number validation
+    var number = document.getElementById("number");
+    inputTypeNumberPolyfill.polyfillElement(number);
 });

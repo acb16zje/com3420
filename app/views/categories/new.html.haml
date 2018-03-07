@@ -24,6 +24,7 @@
                 .field
                   %p.control.is-expanded
                     = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input'}
+                  %p.help Under 20 characters, characters allowed: alpha-numeric & , ; '
 
             .field.is-horizontal
               .field-label.is-normal
@@ -32,6 +33,7 @@
                 .field
                   %p.control.is-expanded
                     = f.input :tag, label: false, required: '', placeholder: 'Tag', input_html: {class: 'input'}
+                  %p.help Characters allowed: Only letters allowed; e.g. CAM for Cameras
 
             %br
             .field.is-horizontal

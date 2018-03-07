@@ -19,7 +19,7 @@
         = simple_form_for(:f) do |f|
           %label.label Username:
           %p
-            = f.input :username, label: false, input_html: {class: 'input', value: "#{@user.username}", disabled: ''}
+            #{@user.username}
           %hr
 
           %label.label Name:
@@ -29,18 +29,25 @@
 
           %label.label Email:
           %p
-            = f.input :email, label: false, input_html: {class: 'input', value: "#{@user.email}", disabled: ''}
+            #{@user.email}
 
           %hr
 
           %label.label Phone:
-          %p
-            = f.input :phone, label: false, input_html: {class: 'input', value: "#{@user.phone}"}
+          .field.has-addons
+            %p.control
+              %a.button.is-static
+                +44
+            %p.control.is-expanded
+              = f.input :phone, label: false, input_html: {class: 'input', id: 'number', maxlength: '10', value: "#{@user.phone}"}
+          %p.help Do not enter the first zero
+
           %hr
 
           %label.label Department / Company:
           %p
             = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
+
           %hr
 
           %label.label Permission:

@@ -1,12 +1,16 @@
 - content_for :title, "Server Error"
 
-.page-header
-  %h1 
-    Server Error
-    %sup#error-code 500
-  
-%p Sorry, there was a problem, please try again.
-
-%p 
-  If you continue to experience this problem please contact
-  = mail_to "support@epigenesys.co.uk"
+%section.hero.is-large
+  .hero-body
+    .container
+      .columns
+        .column.is-3.is-offset-2
+          %h1.title{:style => "font-size: 70px;color:#ff470f"} 500
+          %h2.subtitle.is-3 Server Error
+        .column.is-5
+          %p
+            Sorry, there was a problem, please try again.
+          %br
+          %p
+            If you continue to see this message please send a description of the problem to:
+            = mail_to "support@epigenesys.org.uk"

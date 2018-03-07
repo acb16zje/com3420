@@ -16,6 +16,11 @@
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
               %tr
+                %th Owner
+                %td
+                  - user = User.find_by_id(@item.user_id)
+                  = user.givenname.to_s + ' ' + user.sn.to_s
+              %tr
                 %th Name
                 %td
                   = @item.name
