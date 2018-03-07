@@ -146,6 +146,7 @@ GEM
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     daemons (1.2.6)
+    database_cleaner (1.6.2)
     delayed-plugins-airbrake (1.1.0)
       airbrake
       delayed_job
@@ -185,10 +186,10 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.5)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.8.2)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.8.2)
+      factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
     ffi (1.9.23)
     font-awesome-rails (4.7.0.3)
@@ -432,6 +433,7 @@ DEPENDENCIES
   capybara-select2!
   coffee-rails
   daemons
+  database_cleaner
   delayed-plugins-airbrake
   delayed_job
   delayed_job_active_record
@@ -443,7 +445,7 @@ DEPENDENCIES
   epi_deploy!
   epi_js
   eventmachine
-  factory_girl_rails
+  factory_bot_rails
   font-awesome-rails
   gon
   haml-rails

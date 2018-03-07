@@ -35,17 +35,18 @@ class UsersController < ApplicationController
     else
       # Gets the info for this email from MUSE
       @user.get_info_from_ldap
-      username = SheffieldLdapLookup::LdapFinder.new(@user.email).lookup[:uid]
-      @user.username = username[0]
-
-      if @user.phone == "" || @user.phone.nil?
-        @user.phone = "-"
-      end
-
-      if @user.save
-        redirect_to @user, notice: 'User was successfully created.'
+      if @user.uid == "" || @user.uid.nil?
+        redirect_to new_user_path, notice: 'Not a valid email.'
       else
-        render :new
+        if @user.phone == "" || @user.phone.nil?
+          @user.phone = "-"
+        end
+
+        if @user.save
+          redirect_to @user, notice: 'User was successfully created.'
+        else
+          render :new
+        end
       end
     end
   end
@@ -66,13 +67,14 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def user_params
-		  params.require(:user).permit(:email, :permission_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def user_params
+    params.require(:user).permit(:email, :permission_id)
+  end
 end

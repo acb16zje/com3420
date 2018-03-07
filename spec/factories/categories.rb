@@ -14,7 +14,7 @@
 #  index_categories_on_tag   (tag) UNIQUE
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :category do
     name "MyString"
     items ""
