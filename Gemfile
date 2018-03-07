@@ -72,6 +72,7 @@ group :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'capybara-screenshot'
   gem 'poltergeist'
   gem 'rspec-instafail', require: false
 

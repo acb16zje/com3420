@@ -12,8 +12,7 @@ describe 'Managing login' do
   specify 'I can login with correct email and password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
+    sign_in_as_zerjun_email
     click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
   end
@@ -22,8 +21,7 @@ describe 'Managing login' do
   specify 'I can login with correct username and password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
+    sign_in_as_zerjun_uid
     click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
   end
@@ -39,8 +37,7 @@ describe 'Managing login' do
   specify 'I cannot login with wrong username' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    fill_in 'user_username', with: 'wrongusername'
-    fill_in 'user_password', with: ''
+    sign_in_as_wrong_username
     click_button 'Sign in'
     expect(page).to have_content 'Invalid username or password.'
   end
@@ -48,8 +45,7 @@ describe 'Managing login' do
   specify 'I cannot login with wrong password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    fill_in 'user_username', with: 'zjeng1@sheffield.ac.uk'
-    fill_in 'user_password', with: 'wrongpassword'
+    sign_in_as_wrong_password
     click_button 'Sign in'
     expect(page).to have_content 'Invalid username or password.'
   end

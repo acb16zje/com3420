@@ -54,8 +54,6 @@
         %br
         %br
         .field.is-horizontal
-          .field-label.has-text-left
-            -#Left empty for spacing
           .field-body
             .field.is-grouped.is-grouped-left
               -# If user viewing his/her own details, unable to delete their own account
@@ -70,10 +68,3 @@
                 = link_to 'Back' , users_path, class: 'button is-block is-light'
               .control
                 = link_to 'Save changes' , edit_user_path, class: 'button is-block is-success'
-
-
-
-
-= link_to 'Show', @user
-\|
-= link_to 'Back', users_path

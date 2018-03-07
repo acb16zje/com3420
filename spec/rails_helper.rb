@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
+require 'database_cleaner'
 SimpleCov.start 'rails'
 
 ENV["RAILS_ENV"] ||= 'test'
@@ -7,6 +8,8 @@ require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'support/factory_bot'
+require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -42,7 +45,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation, { pre_count: true, reset_ids: false })
+    DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
@@ -50,7 +53,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation, { pre_count: true, reset_ids: false }
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.after(:each, js: true) do
@@ -59,25 +62,15 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
-    
-    FactoryBot.create :user
-    #Fill in your MUSE username and password to run tests
-    visit '/users/sign_in'
-    expect(page).to have_content 'Sign in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
-    click_button 'Sign in'
-    expect(page).to_not have_content 'Sign in'
   end
 
-  config.after(:each) do
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 
   config.before(:each) do
     ActionMailer::Base.deliveries.clear
   end
-
 
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
