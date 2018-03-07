@@ -6,7 +6,6 @@ task :reset do
     File.delete('./db/schema.rb')
   end
 
-  sh 'rails db:migrate'
   sh 'rails db:drop'
   sh 'rails db:create'
   sh 'rails db:migrate'
