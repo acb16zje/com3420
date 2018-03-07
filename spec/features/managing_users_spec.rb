@@ -3,13 +3,6 @@ require 'spec_helper'
 
 describe 'Managing accounts' do
   before :each do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.start
-    FactoryBot.create :user
-    visit '/users/sign_in'
-    expect(page).to have_content 'Sign in'
-    sign_in_as_zerjun_uid
-    click_button 'Sign in'
     visit '/users/new'
     expect(page).to have_content 'Create user'
   end
@@ -102,5 +95,15 @@ describe 'Managing accounts' do
     click_link('Delete')
     expect(page).to have_content 'User was successfully deleted.'
     expect(page).to_not have_content 'wkkhaw1@sheffield.ac.uk Admin'
+  end
+
+  specify 'I cannot delete my own account' do
+    click_link ('Users')
+    expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
+    click_link('view_user_1')
+    expect(page).to have_content 'acb16zje'
+    expect(page).to have_content 'COM'
+    click_link('Edit Details')
+    expect(page).to_not have_content 'Delete'
   end
 end

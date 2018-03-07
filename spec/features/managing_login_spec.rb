@@ -3,9 +3,7 @@ require 'spec_helper'
 
 describe 'Managing login' do
   before :each do
-    DatabaseCleaner.clean
-    DatabaseCleaner.start
-    FactoryBot.create :user
+    click_link('sign_out')
   end
 
   # Fill in your MUSE username and password to run and also fill your details in factories/users.rb

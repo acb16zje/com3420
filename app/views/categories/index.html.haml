@@ -15,22 +15,25 @@
   %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
+        %th.has-text-centered Tag
         %th.has-text-centered Category
         %th.has-text-centered Action
     %tbody
       - @categories.each do |category|
         %tr
           %td.is-size-4.has-text-centered{style: 'vertical-align: middle'}
+            = category.tag
+          %td.is-size-4.has-text-centered{style: 'vertical-align: middle'}
             = category.name
           %td
             .field.is-grouped.is-grouped-centered
               %p.control
-                = link_to edit_category_path(category), class: 'button is-link' do
+                = link_to edit_category_path(category), class: 'button is-link', id: "edit_category_#{category.id}" do
                   %span.icon
                     %i.class.fas.fa-edit
                   %span Edit
               %p.control
-                = link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                = link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "delete_category_#{category.id}" do
                   %span.icon
                     %i.class.fas.fa-trash
                   %span Delete
