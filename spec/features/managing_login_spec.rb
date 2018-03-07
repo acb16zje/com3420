@@ -1,12 +1,17 @@
 require 'rails_helper'
 require 'spec_helper'
 
-describe 'Managing categories' do
+describe 'Managing login' do
+  before :each do
+    DatabaseCleaner.clean
+    DatabaseCleaner.start
+    FactoryBot.create :user
+  end
+
   # Fill in your MUSE username and password to run and also fill your details in factories/users.rb
   specify 'I can login with correct email and password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    FactoryBot.create :user
     fill_in 'user_username', with: ''
     fill_in 'user_password', with: ''
     click_button 'Sign in'
@@ -17,7 +22,6 @@ describe 'Managing categories' do
   specify 'I can login with correct username and password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    FactoryBot.create :user
     fill_in 'user_username', with: ''
     fill_in 'user_password', with: ''
     click_button 'Sign in'
@@ -35,7 +39,6 @@ describe 'Managing categories' do
   specify 'I cannot login with wrong username' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    FactoryBot.create :user
     fill_in 'user_username', with: 'wrongusername'
     fill_in 'user_password', with: ''
     click_button 'Sign in'
@@ -45,7 +48,6 @@ describe 'Managing categories' do
   specify 'I cannot login with wrong password' do
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    FactoryBot.create :user
     fill_in 'user_username', with: 'zjeng1@sheffield.ac.uk'
     fill_in 'user_password', with: 'wrongpassword'
     click_button 'Sign in'
