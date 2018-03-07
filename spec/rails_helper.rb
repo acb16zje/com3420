@@ -62,6 +62,13 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.start
+    FactoryBot.create :user
+    visit '/users/sign_in'
+    expect(page).to have_content 'Sign in'
+    sign_in_as_zerjun_uid
+    click_button 'Sign in'
   end
 
   config.append_after(:each) do
