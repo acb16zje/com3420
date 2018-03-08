@@ -30,7 +30,7 @@ class CategoriesController < ApplicationController
       redirect_to new_category_path, notice: 'Category or tag already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
-        if (@category.tag =~ /^[a-zA-Z]{3,5}$/)
+        if (@category.tag =~ /^[a-zA-Z]{2,5}$/)
           @category.name = @category.name.titleize
           @category.tag.upcase!
           if @category.save
@@ -38,7 +38,7 @@ class CategoriesController < ApplicationController
           else
             render :new
           end
-        else 
+        else
           redirect_to new_category_path, notice: 'Category tag does not meet requirements.'
         end
       else
