@@ -1,9 +1,21 @@
 - content_for :title, "Home"
 
-
-%br/
-
 .container.is-fluid
+  .columns.has-text-centered
+    .column.is-half.is-offset-one-quarter
+      %br
+      %br
+      = image_tag("amrc_main.svg", width: "1000")
+  .columns
+    .column.is-half.is-offset-one-quarter
+      %br
+      %br
+      .field.has-addons
+        .control.is-expanded
+          %input.input{:type => "text"}/
+        .control
+          %a.button.is-info
+            Search
   .columns
     .column
       .card
@@ -61,16 +73,6 @@
               View
               = link_to root_path do
                 Miscellaneous
-  .columns
-    .column.is-half.is-offset-one-quarter
-      %br
-      %br
-      .field.has-addons
-        .control.is-expanded
-          %input.input{:type => "text"}/
-        .control
-          %a.button.is-info
-            Search
 
 
 -#%body
