@@ -31,7 +31,7 @@ class Ability
 
     user ||= User.new
 
-    # ADMIN
+    # Admin
     if user.permission_id == 3
       can :manage, Item
       can :manage, Booking
@@ -39,19 +39,19 @@ class Ability
       can :manage, User
     end
 
-    # ASSET MANAGER
+    # Asset Manager
     if user.permission_id == 2
       can :manage, Item
       can :manage, Booking
       can :manage, Category
-      can [:show,:edit,:update,:manager], User, id: user.id
+      can [:show, :edit, :update, :manager], User, id: user.id
     end
 
-    #USER
+    # User
     if user.permission_id == 1
       can :read, Item
       can :read, Booking, id: user.id
-      can [:show,:edit,:update,:manager], User, id: user.id
+      can [:show, :edit, :update, :manager], User, id: user.id
     end
   end
 end

@@ -11,6 +11,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1
   def show
+    redirect_to '/404'
   end
 
   # GET /bookings/new

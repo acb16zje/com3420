@@ -22,9 +22,9 @@
     %tbody
       - @users.each do |user|
         %tr
-          %td= user.givenname.to_s + ' ' + user.sn.to_s
-          %td= user.email
-          %td
+          %td.has-text-centered= user.givenname.to_s + ' ' + user.sn.to_s
+          %td.has-text-centered= user.email
+          %td.has-text-centered
             - case user.permission_id
             - when 3
               Admin

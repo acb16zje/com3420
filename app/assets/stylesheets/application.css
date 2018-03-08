@@ -25,6 +25,11 @@ table.picker__table tbody td, table.picker__table thead th {
   text-align: center !important;
 }
 
+/* Vertical align the table td content */
+td.has-text-centered {
+  vertical-align: middle;
+}
+
 /* Select2 fixes for Bulma */
 .select2-container .select2-selection--single {
   height: auto !important;

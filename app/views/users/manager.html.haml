@@ -1,4 +1,4 @@
-- content_for :title, "Users"
+- content_for :title, "Asset Manager"
 
 %br/
 .container.is-fluid
@@ -20,8 +20,8 @@
       - @users.each do |user|
         - if user.permission_id != 1
           %tr
-            %td= user.givenname.to_s + ' ' + user.sn.to_s
-            %td= user.email
+            %td.has-text-centered= user.givenname.to_s + ' ' + user.sn.to_s
+            %td.has-text-centered= user.email
             %td
               .field.is-grouped.is-grouped-centered
                 %p.control
