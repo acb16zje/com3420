@@ -21,6 +21,10 @@
                   - user = User.find_by_id(@item.user_id)
                   = user.givenname.to_s + ' ' + user.sn.to_s
               %tr
+                %th Image
+                %td
+                  = image_tag(@item.image.url, alt: 'Image') if @item.image?
+              %tr
                 %th Name
                 %td
                   = @item.name

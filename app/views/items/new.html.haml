@@ -37,6 +37,13 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Image
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
             %br
             %hr
             %br

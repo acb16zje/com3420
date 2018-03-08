@@ -16,6 +16,7 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  category_id      :integer
+#  image            :string
 #
 # Indexes
 #
@@ -32,4 +33,5 @@ class Item < ApplicationRecord
   belongs_to :category
   has_many :bookings
 
+  mount_uploader :image, ImageUploader
 end

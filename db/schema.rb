@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20180305230625) do
     t.string "serial"
     t.date "acquisition_date"
     t.decimal "purchase_price"
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "category_id"

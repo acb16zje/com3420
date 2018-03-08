@@ -137,6 +137,10 @@ GEM
     capybara-screenshot (1.0.18)
       capybara (>= 1.0, < 3)
       launchy
+    carrierwave (1.2.2)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     chronic (0.10.2)
     cliver (0.3.2)
     coffee-rails (4.2.2)
@@ -435,6 +439,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   capybara-select2!
+  carrierwave
   coffee-rails
   daemons
   database_cleaner
