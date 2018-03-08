@@ -10,8 +10,11 @@
             = notice
     .box
       .columns
-        .column.is-5.has-text-centered{style: 'margin: auto'}
-          = image_tag("amrc.svg", width: "250")
+        .column.is-5.has-text-centered#zoom{style: 'margin: auto'}
+          - if @item.image?
+            = image_tag(@item.image.url, alt: 'Image')
+          - else
+            = image_tag("amrc.svg", width: "250", alt: 'Default Image, AMRC')
         .column
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
@@ -20,10 +23,6 @@
                 %td
                   - user = User.find_by_id(@item.user_id)
                   = user.givenname.to_s + ' ' + user.sn.to_s
-              %tr
-                %th Image
-                %td
-                  = image_tag(@item.image.url, alt: 'Image') if @item.image?
               %tr
                 %th Name
                 %td

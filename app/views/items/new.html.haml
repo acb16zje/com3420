@@ -39,11 +39,27 @@
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Image
+                %label.label Upload Image
               .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                .field
+                  .file.has-name
+                    %label.file-label
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name#file_name
+                        Uploaded file name
+
+            -# .field.is-horizontal
+            -#   .field-label.is-normal
+            -#     %label.label Image
+            -#   .field-body
+            -#     .field{style: 'margin: auto'}
+            -#       .control
+            -#         = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
             %br
             %hr
             %br
@@ -98,21 +114,6 @@
               .field-body
                 .field
                   = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
-            -#.field.is-horizontal
-              .field-label.is-normal
-                %label.label Upload Image
-              .field-body
-                .field
-                  .file.has-name
-                    %label.file-label
-                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
-                      %span.file-cta
-                        %span.file-icon
-                          %i.fas.fa-upload
-                        %span.file-label
-                          Choose a file…
-                      %span.file-name
-                        Screen Shot 2017-07-29 at 15.54.25.png
             %br
             %br
             .field.is-horizontal

@@ -4,6 +4,7 @@
 //= require inputTypeNumberPolyfill
 //= require picker
 //= require picker.date
+//= require zoom
 
 // Navigation Burger menu
 document.addEventListener('DOMContentLoaded', function () {
@@ -49,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('.datepicker').on('change', function () {
         if ($(this).attr('id') === 'endDate') {
-            alert($(this).val())
             $('#startDate').pickadate('picker').set('min', $(this).val());
         }
         if ($(this).attr('id') === 'startDate') {
@@ -95,5 +95,17 @@ $(document).ready(function () {
 
     // Phone number validation
     var number = document.getElementById("number");
-    inputTypeNumberPolyfill.polyfillElement(number);
+    if (number != null) {
+        inputTypeNumberPolyfill.polyfillElement(number);
+    }
+
+    $('#item_image').change(function() {
+        var i = $(this).prev('label').clone();
+        var file = $('#item_image')[0].files[0].name;
+        $("#file_name").text(file);
+    });
+
+    $('#zoom').zoom({
+        magnify: 0.8
+    });
 });

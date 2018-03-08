@@ -24,7 +24,9 @@ ActiveRecord::Schema.define(version: 20180305230625) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
+    t.bigint "user_id"
     t.index ["item_id"], name: "index_bookings_on_item_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -103,5 +105,6 @@ ActiveRecord::Schema.define(version: 20180305230625) do
   end
 
   add_foreign_key "bookings", "items"
+  add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
 end

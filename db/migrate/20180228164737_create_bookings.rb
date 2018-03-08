@@ -10,5 +10,6 @@ class CreateBookings < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_reference :bookings, :item, foreign_key: true
+    add_reference :bookings, :user, foreign_key: true
   end
 end
