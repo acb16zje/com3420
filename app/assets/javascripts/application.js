@@ -65,7 +65,7 @@ $(document).on('click', '.notification > button.delete', function () {
 
 $(document).ready(function () {
     // Datatable
-    $("#users, #categories").each(function () {
+    $("#users, #categories, #bookings").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {

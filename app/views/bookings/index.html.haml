@@ -1,19 +1,36 @@
-%h1 Listing bookings
+- content_for :title, "My Bookings"
 
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
 
-  %tbody
-    - @bookings.each do |booking|
+  %p.title.has-text-centered My Bookings
+  %p.title.has-text-centered
+    = link_to 'Book an asset', items_path, class: 'button is-success'
+  %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %thead
       %tr
-        %td= link_to 'Show', booking
-        %td= link_to 'Edit', edit_booking_path(booking)
-        %td= link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
-= link_to 'New Booking', new_booking_path
+        %th Asset
+        %th Start Date
+        %th Start Time
+        %th End Date
+        %th End Time
+        %th Action
+    %tbody
+      - @bookings.each do |booking|
+        %tr
+          - @item = Item.find_by_id(booking.item_id)
+          %td= link_to @item.name, @item
+          %td= booking.start_date
+          %td= booking.start_time.strftime("%I:%M %p")
+          %td= booking.end_date
+          %td= booking.end_time.strftime("%I:%M %p")
+          %td
+            = link_to 'Show', booking
+            = link_to 'Edit', edit_booking_path(booking)
+            = link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' }
