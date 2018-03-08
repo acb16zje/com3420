@@ -4,7 +4,6 @@
 ---
 
 ### Client E: Asset Management System
-![wow](/app/assets/images/amrc_main.svg)
 ![wow](https://media1.tenor.com/images/a136bc5f7e7c57ba0297fe3ce8aefeca/tenor.gif?itemid=10533630)
 
 Describe your app here...
