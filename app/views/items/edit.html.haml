@@ -1,7 +1,127 @@
-%h1 Editing item
+- content_for :title, "Editing #{@item.name}"
 
-= render 'form'
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      .column.is-10.is-offset-1
+        %h3.title Edit asset
+        .box
+          = simple_form_for(@item) do |f|
+            %h4.title
+              Asset Information
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Asset Name
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Category
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Condition
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :condition, ['Like New', 'Good', 'Adequate', 'Damaged', 'Missing'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Default Location
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Upload Image
+              .field-body
+                .field
+                  .file.has-name
+                    %label.file-label
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name#file_name
+                        Uploaded file name
 
-= link_to 'Show', @item
-\|
-= link_to 'Back', items_path
+            -# .field.is-horizontal
+            -#   .field-label.is-normal
+            -#     %label.label Image
+            -#   .field-body
+            -#     .field{style: 'margin: auto'}
+            -#       .control
+            -#         = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+            %br
+            %hr
+            %br
+            %h4.title
+              Purchase Information
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Manufacturer
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :manufacturer, label: false, required: '', placeholder: 'Manufacturer', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Model
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :model, label: false, required: '', placeholder: 'Model', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Serial
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Acquisition Date
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        %i.far.fa-calendar-alt
+                    %p.control.is-expanded
+                      = f.input :acquisition_date, as: :text, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Purchase Price
+              .field-body
+                .field.is-expanded
+                  .field.has-addons
+                    %p.control
+                      %a.button.is-static
+                        &pound
+                    %p.control.is-expanded
+                      = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
+            -#.field.is-horizontal
+              .field-label.is-normal
+                %label.label Peripherals
+              .field-body
+                .field
+                  = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
+            %br
+            %br
+            .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Cancel' , items_path, class: 'button is-light'
+                  .control
+                    = f.submit 'Save changes', class: 'button is-block is-success'
