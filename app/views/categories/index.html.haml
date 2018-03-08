@@ -15,15 +15,15 @@
   %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th.has-text-centered Tag
-        %th.has-text-centered Category
-        %th.has-text-centered Action
+        %th Tag
+        %th Category
+        %th Action
     %tbody
       - @categories.each do |category|
         %tr
-          %td.is-size-4.has-text-centered{style: 'vertical-align: middle'}
+          %td.has-text-centered
             = category.tag
-          %td.is-size-4.has-text-centered{style: 'vertical-align: middle'}
+          %td.has-text-centered
             = category.name
           %td
             .field.is-grouped.is-grouped-centered

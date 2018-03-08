@@ -14,8 +14,8 @@
     %tbody
       -@items.each do |item|
         %tr
-          %td= link_to item.name, item
-          %td= item.category.name
-          %td= item.manufacturer
-          %td= item.condition
-          %td= item.location
+          %td.has-text-centered= link_to item.name, item
+          %td.has-text-centered= item.category.name
+          %td.has-text-centered= item.manufacturer
+          %td.has-text-centered= item.condition
+          %td.has-text-centered= item.location

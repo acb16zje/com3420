@@ -23,14 +23,23 @@
         %th Action
     %tbody
       - @bookings.each do |booking|
-        %tr
-          - @item = Item.find_by_id(booking.item_id)
-          %td= link_to @item.name, @item
-          %td= booking.start_date
-          %td= booking.start_time.strftime("%I:%M %p")
-          %td= booking.end_date
-          %td= booking.end_time.strftime("%I:%M %p")
-          %td
-            = link_to 'Show', booking
-            = link_to 'Edit', edit_booking_path(booking)
-            = link_to 'Destroy', booking, method: :delete, data: { confirm: 'Are you sure?' }
+        - if booking.user_id == current_user.id
+          %tr
+            - @item = Item.find_by_id(booking.item_id)
+            %td.has-text-centered= link_to @item.name, @item
+            %td.has-text-centered= booking.start_date
+            %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
+            %td.has-text-centered= booking.end_date
+            %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+            %td
+              .field.is-grouped.is-grouped-centered
+                %p.control
+                  = link_to edit_booking_path(booking), class: 'button is-link' do
+                    %span.icon
+                      %i.class.fas.fa-edit
+                    %span Edit
+                %p.control
+                  = link_to bookings_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                    %span.icon
+                      %i.class.fas.fa-ban
+                    %span Cancel
