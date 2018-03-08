@@ -6,7 +6,7 @@ module Helpers
 
   def sign_in_as_zerjun_email
     fill_in 'user_username', with: ''
-    fill_in 'user_password', with: 'Idpuk123'
+    fill_in 'user_password', with: ''
   end
 
   def sign_in_as_wrong_username
