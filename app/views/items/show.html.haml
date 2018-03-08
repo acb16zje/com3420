@@ -10,10 +10,11 @@
             = notice
     .box
       .columns
-        .column.is-5.has-text-centered#zoom{style: 'margin: auto'}
-          - if @item.image?
+        - if @item.image?
+          .column.is-5.has-text-centered#zoom{style: 'margin: auto'}
             = image_tag(@item.image.url, alt: 'Image')
-          - else
+        -else
+          .column.is-5.has-text-centered{style: 'margin: auto'}
             = image_tag("amrc.svg", width: "250", alt: 'Default Image, AMRC')
         .column
           %table.table.is-bordered.is-striped.is-fullwidth

@@ -3,14 +3,15 @@
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
   # authorize_resource
-  
+
   # GET /bookings
   def index
     @bookings = Booking.all
   end
 
   # GET /bookings/1
-  def show; end
+  def show
+  end
 
   # GET /bookings/new
   def new
@@ -24,6 +25,7 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
+    @item = Item.find_by_id(params[:item_id])
 
     if @booking.save
       redirect_to @booking, notice: 'Booking was successfully created.'
