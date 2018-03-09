@@ -55,14 +55,6 @@
         %br
         .field.is-horizontal
           .field-body
-            .field.is-grouped.is-grouped-left
-              -# If user viewing his/her own details, unable to delete their own account
-              - if current_user.id != @user.id
-                %p.control
-                  = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
-                    %span.icon
-                      %i.class.fas.fa-trash
-                    %span Delete
             .field.is-grouped.is-grouped-right
               .control
                 = link_to 'Back' , users_path, class: 'button is-block is-light'

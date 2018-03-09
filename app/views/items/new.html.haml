@@ -41,9 +41,9 @@
               .field-label.is-normal
                 %label.label Keywords
               .field-body
-                .field{style: 'margin: auto'}
+                .field
                   .control
-                    = f.input :keywords, as: :text, label: false, required: false, placeholder: '', input_html: {class: 'textarea'}
+                    = f.input :keywords, as: :text, label: false, required: false, placeholder: 'fragile shiny blue_colour', input_html: {class: 'textarea', rows: '2'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Upload Image
@@ -59,7 +59,6 @@
                           Choose a file…
                       %span.file-name#file_name
                         Uploaded file name
-
             %br
             %hr
             %br
