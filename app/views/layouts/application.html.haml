@@ -32,7 +32,6 @@
       .navbar-brand
         = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
           = image_tag("amrc.svg", width: "50")
-          %strong Asset Management
         .navbar-burger.burger{"data-target" => "navbarExampleTransparentExample"}
           %span
           %span
@@ -41,8 +40,7 @@
         .navbar-start
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
-              %p
-                Browse by <strong>Categories</strong>
+              %p Browse by <br class="is-hidden-widescreen"><strong>Categories</strong>
             .navbar-dropdown.is-boxed
               - categories = Category.take(5)
               - categories.each do |category|
@@ -50,25 +48,29 @@
               = link_to 'View All', filter_categories_path, class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
           = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
-          - if current_user.permission_id != 1
-            = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
           .navbar-item.has-dropdown.is-hoverable
             = link_to requests_bookings_path, class: 'navbar-link' do
-              %p Manage Bookings
+              %p Manage
             .navbar-dropdown.is-boxed
               = link_to 'Requests', requests_bookings_path, class: "navbar-item"
               = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
               = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item"
               = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item"
               = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item"
-          - if current_user.permission_id == 3
-            = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
+          - if current_user.permission_id != 1
+            .navbar-item.has-dropdown.is-hoverable
+              %a.navbar-link
+                %p More
+              .navbar-dropdown.is-boxed
+                = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
+                - if current_user.permission_id == 3
+                  = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
 
         .navbar-end
           .navbar-item.has-dropdown.is-hoverable
             - if current_user.permission_id != 1
               %a.navbar-link
-                Create new
+                Create
                 %span.icon
                   %i.fas.fa-plus
               .navbar-dropdown.is-boxed.is-right
