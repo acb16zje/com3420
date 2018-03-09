@@ -53,7 +53,7 @@
                     %span.tag.is-success.is-medium
                       = @item.condition
                   - when 'Good'
-                    %span.tag.is-link.is-medium
+                    %span.tag.is-primary.is-medium
                       = @item.condition
                   - when 'Adequate'
                     %span.tag.is-warning.is-medium
@@ -88,8 +88,10 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    %p.control.is-expanded
-                      = f.input :start_date, as: :text, label: false, required: '', placeholder: 'Select Start Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :start_date, as: :text, label: false, required: '', placeholder: 'Start Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Start Time
@@ -110,8 +112,10 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    %p.control.is-expanded
-                      = f.input :end_date, as: :text, label: false, required: '', placeholder: 'Select End Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :end_date, as: :text, label: false, required: '', placeholder: 'End Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label End Time

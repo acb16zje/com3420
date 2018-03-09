@@ -49,10 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     $('.datepicker').on('change', function () {
-        if ($(this).attr('id') === 'endDate') {
-            $('#startDate').pickadate('picker').set('min', $(this).val());
-        }
         if ($(this).attr('id') === 'startDate') {
+            var startDate = new Date($('#startDate').val());
+            var endDate = new Date($('#endDate').val());
+            if (endDate < startDate) {
+                $('#endDate').val("");
+            }
             $('#endDate').pickadate('picker').set('min', $(this).val());
         }
     });

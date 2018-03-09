@@ -15,16 +15,6 @@
         %h3.title Create user
         .box
           = simple_form_for(@user) do |f|
-            -# .field.is-horizontal
-            -#   .field-label.is-normal
-            -#     %label.label Name
-            -#   .field-body
-            -#     .field
-            -#       %p.control.is-expanded
-            -#         = f.input :forename, label: false, required: '', placeholder: 'First Name', input_html: {class: 'input'}
-            -#     .field
-            -#       %p.control.is-expanded
-            -#         = f.input :surname, label: false, required: '', placeholder: 'Last Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Email
@@ -32,26 +22,6 @@
                 .field
                   %p.control.is-expanded
                     = f.input :email, label: false, required: '', placeholder: 'Email', input_html: {class: 'input', type: 'email'}
-            -# .field.is-horizontal
-            -#   .field-label.is-normal
-            -#     %label.label Phone
-            -#   .field-body
-            -#     .field.is-expanded
-            -#       .field.has-addons
-            -#         %p.control
-            -#           %a.button.is-static
-            -#             +44
-            -#         %p.control.is-expanded
-            -#           = f.input :phone, label: false, placeholder: 'Optional', input_html: {class: 'input', maxlength: '10'}
-            -#       %p.help
-            -#         Do not enter the first zero
-            -# .field.is-horizontal
-            -#   .field-label.is-normal
-            -#     %label.label Department
-            -#   .field-body
-            -#     .field{style: 'margin: auto'}
-            -#       .control
-            -#         = f.select :department, ['Bioengineering', 'Computer Science', 'Dentistry'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Permission level
