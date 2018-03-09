@@ -16,7 +16,7 @@
         - else
           Edit #{@user.givenname} #{@user.sn}'s Details
       .box
-        = simple_form_for(:f) do |f|
+        = simple_form_for(@user) do |f|
           %label.label Username:
           %p
             #{@user.username}
@@ -58,20 +58,20 @@
               - else
                 = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id), {}, {class: '', disabled: ''}
 
-        %br
-        %br
-        .field.is-horizontal
-          .field-body
-            .field.is-grouped.is-grouped-left
-              -# If user viewing his/her own details, unable to delete their own account
-              - if current_user.id != @user.id
-                %p.control
-                  = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
-                    %span.icon
-                      %i.class.fas.fa-trash
-                    %span Delete
-            .field.is-grouped.is-grouped-right
-              .control
-                = link_to 'Back' , users_path, class: 'button is-block is-light'
-              .control
-                = link_to 'Save changes' , edit_user_path, class: 'button is-block is-success'
+          %br
+          %br
+          .field.is-horizontal
+            .field-body
+              -# .field.is-grouped.is-grouped-left
+              -#   -# If user viewing his/her own details, unable to delete their own account
+              -#   - if current_user.id != @user.id
+              -#     %p.control
+              -#       = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+              -#         %span.icon
+              -#           %i.class.fas.fa-trash
+              -#         %span Delete
+              .field.is-grouped.is-grouped-right
+                .control
+                  = link_to 'Back' , users_path, class: 'button is-block is-light'
+                .control
+                  = f.submit 'Save changes', class: 'button is-block is-success'

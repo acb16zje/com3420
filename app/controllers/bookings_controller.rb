@@ -6,7 +6,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.all
+    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ?", current_user.id)
   end
 
   # GET /bookings/1

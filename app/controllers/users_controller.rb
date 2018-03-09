@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # GET /users/bookings
   def bookings
-    @bookings = Booking.all
+    @bookings = Booking.where("user_id = ?", current_user.id)
   end
 
   # GET /users/1
@@ -80,6 +80,6 @@ class UsersController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def user_params
-    params.require(:user).permit(:email, :permission_id)
+    params.require(:user).permit!
   end
 end
