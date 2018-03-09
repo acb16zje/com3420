@@ -1,4 +1,4 @@
-- content_for :title, "Bookings"
+- content_for :title, "Bookings History"
 
 %br/
 .container.is-fluid
@@ -9,7 +9,7 @@
           %button.delete
           = notice
 
-  %p.title.has-text-centered Booking History
+  %p.title.has-text-centered Bookings History
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
@@ -19,7 +19,6 @@
         %th End Date
         %th End Time
         %th Status
-        %th Action
     %tbody
       - @bookings.each do |booking|
         %tr
@@ -41,15 +40,3 @@
               Accepted
             - else
               Pending
-          %td
-            .field.is-grouped.is-grouped-centered
-              %p.control
-                = link_to edit_booking_path(booking), class: 'button is-link' do
-                  %span.icon
-                    %i.class.fas.fa-edit
-                  %span Edit
-              %p.control
-                = link_to bookings_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
-                  %span.icon
-                    %i.class.fas.fa-ban
-                  %span Cancel

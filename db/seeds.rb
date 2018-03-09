@@ -11,12 +11,14 @@
 #
 # Item.create(id: '2', category_id: '1', condition: 'Available', name:'test',
 # 	location: 'diamond', created_at: '2018-02-23 16:21:13.106582', updated_at: '2018-02-23 16:21:13.106582')
-#
-# Item.create(id: '3', category_id: '1', condition: 'Available', name:'macbook air',
-# 	location: 'diamond', created_at: '2018-02-23 16:55:51.015394', updated_at: '2018-02-23 16:55:51.015394')
 
 Category.create(name: 'Cameras', tag: 'CAM')
 Category.create(name: 'Data Logger', tag: 'DL')
+
+Item.create(id: '1', category_id: '1', condition: 'Like New', name:'GoPro Hero 5', location: 'Diamond', hash_id: 'CAM00001', 
+    manufacturer: 'GoPro', model: 'Hero 5', serial: 'GPH5', acquisition_date: '2018-03-09', purchase_price: 100.1)
+    # , created_at: '2018-03-09 02:56:09.080621	', updated_at: '2018-02-23 16:55:51.015394')
+
 User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
 User.create(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')

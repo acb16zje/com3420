@@ -1,4 +1,4 @@
-- content_for :title, "Requests"
+- content_for :title, "Completed Bookings"
 
 %br/
 .container.is-fluid
@@ -9,7 +9,7 @@
           %button.delete
           = notice
 
-  %p.title.has-text-centered Requests
+  %p.title.has-text-centered Completed Bookings
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
@@ -18,7 +18,6 @@
         %th Start Time
         %th End Date
         %th End Time
-        %th Action
     %tbody
       - @bookings.each do |booking|
         %tr
@@ -28,14 +27,3 @@
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-          %td
-            .field.is-grouped.is-grouped-centered
-              = simple_form_for(booking) do |f|
-                .control
-                  = f.submit 'Accept', class: 'button is-block is-success'
-                  = f.hidden_field :status, value: 2
-              = simple_form_for(booking) do |f|
-                .control
-                  = f.submit 'Reject  ', class: 'button is-block is-success'
-                  = f.hidden_field :status, value: 5
-  

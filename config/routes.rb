@@ -12,6 +12,10 @@ Rails.application.routes.draw do
 
   resources :bookings do
     get 'requests', :on => :collection
+    get 'accepted', :on => :collection
+    get 'ongoing', :on => :collection
+    get 'completed', :on => :collection
+    get 'rejected', :on => :collection
   end
 
   resources :items do
