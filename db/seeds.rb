@@ -15,7 +15,7 @@
 Category.create(name: 'Cameras', tag: 'CAM')
 Category.create(name: 'Data Logger', tag: 'DL')
 
-Item.create(id: '1', user_id: 1, category_id: '1', condition: 'Like New', name:'GoPro Hero 5', location: 'Diamond', hash_id: 'CAM00001',
+Item.create(user_id: 1, category_id: '1', condition: 'Like New', name:'GoPro Hero 5', location: 'Diamond', hash_id: 'CAM00001',
     manufacturer: 'GoPro', model: 'Hero 5', serial: 'GPH5', acquisition_date: '2018-03-09', purchase_price: 100.1)
     # , created_at: '2018-03-09 02:56:09.080621	', updated_at: '2018-02-23 16:55:51.015394')
 
