@@ -9,7 +9,7 @@
           %button.delete
           = notice
 
-  %p.title.has-text-centered Booking History
+  %p.title.has-text-centered Requests
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
@@ -43,13 +43,11 @@
               Pending
           %td
             .field.is-grouped.is-grouped-centered
-              %p.control
-                = link_to edit_booking_path(booking), class: 'button is-link' do
-                  %span.icon
-                    %i.class.fas.fa-edit
-                  %span Edit
-              %p.control
-                = link_to bookings_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
-                  %span.icon
-                    %i.class.fas.fa-ban
-                  %span Cancel
+              = simple_form_for(booking) do |f|
+                .control
+                  = f.submit 'Accept', class: 'button is-block is-success'
+                  = f.hidden_field :status, value: 2
+              = simple_form_for(booking) do |f|
+                .control
+                  = f.submit 'Reject  ', class: 'button is-block is-success'
+                  = f.hidden_field :status, value: 5

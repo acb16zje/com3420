@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20180305230625) do
     t.date "end_date"
     t.time "end_time"
     t.string "reason"
+    t.string "next_location"
+    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"

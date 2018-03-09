@@ -13,6 +13,11 @@ class BookingsController < ApplicationController
   def show
   end
 
+  # GET /bookings/requests
+  def requests
+    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 1", current_user.id)
+  end
+
   # GET /bookings/new
   def new
     @booking = Booking.new
@@ -25,7 +30,9 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
-    @item = Item.find_by_id(params[:item_id])
+
+    # Booking status {1: Pending, 2: Ongoing, 3: Completed, 4: Rejected}
+    @booking.status = 1
 
     if @booking.save
       redirect_to bookings_path, notice: 'Booking was successfully created.'

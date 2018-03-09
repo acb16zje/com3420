@@ -6,6 +6,8 @@ class CreateBookings < ActiveRecord::Migration[5.1]
       t.date :end_date
       t.time :end_time
       t.string :reason
+      t.string :next_location
+      t.integer :status
 
       t.timestamps
     end
