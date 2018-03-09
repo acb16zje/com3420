@@ -98,3 +98,38 @@
               = link_to 'Back', items_path, class: 'button is-block is-light'
             .control
               = link_to 'Book or Reserve', new_item_booking_path(item_id: @item.id), class:'button is-link is-block'
+
+    %br
+    %br
+    - if (@item.user_id == current_user.id || current_user.permission_id == 3)
+      %p.title.has-text-centered Bookings History
+      %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+        %thead
+          %tr
+            %th Asset
+            %th Start Date
+            %th Start Time
+            %th End Date
+            %th End Time
+            %th Status
+        %tbody
+          - @bookings.each do |booking|
+            %tr
+              - @item = Item.find_by_id(booking.item_id)
+              %td.has-text-centered= link_to @item.name, @item
+              %td.has-text-centered= booking.start_date
+              %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
+              %td.has-text-centered= booking.end_date
+              %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+              %td.has-text-centered 
+                - case booking.status
+                - when 5
+                  Rejected
+                - when 4
+                  Completed
+                - when 3
+                  Ongoing
+                - when 2
+                  Accepted
+                - else
+                  Pending

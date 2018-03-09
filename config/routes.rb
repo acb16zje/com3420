@@ -3,7 +3,10 @@
 Rails.application.routes.draw do
   mount EpiCas::Engine, at: '/'
   devise_for :users
-  resources :categories
+
+  resources :categories do
+    get 'filter', :on => :collection
+  end
 
   resources :users do
     get 'bookings', :on => :collection
