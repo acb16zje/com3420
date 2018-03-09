@@ -1,104 +1,54 @@
 - content_for :title, "Home"
 
-.container.is-fluid
-  .columns.has-text-centered
-    .column.is-half.is-offset-one-quarter
-      %br
-      %br
-      = image_tag("amrc_main.svg", width: "1000")
-  .columns
-    .column.is-half.is-offset-one-quarter
-      %br
-      %br
-      = form_tag items_path, enforce_utf8: false, method: :get do
-        .field.has-addons
-          .control.is-expanded
-            %input.input{type:'text', name: 'category_name', placeholder: 'Search for an asset'}
-          .control
-            %button.button.is-info{type:'submit'}
-              Search
+%html
+  %head
 
-      -# = simple_form_for items_path, url: items_path, method: :get, enforce_utf8: false do |f|
-      -#   .field.has-addons
-      -#     .control.is-expanded
-      -#       -# = f.input :query, name: 'category_name', label: false, input_html: {class: 'input', type: 'text'}
-      -#       %input.input{type:'text', name: 'category_name'}
-      -#     .control
-      -#       = f.submit 'Search', class: 'button is-info'
-  .columns
-    .column
-      .card
-        .card-content.hero.is-small.is-light
-          .columns.hero-body
-            .column.has-text-centered
-              %br/
-              %span.icon.is-large>
-                %i.fas.fa-camera.fa-7x
-        %footer.card-footer
-          %p.card-footer-item
-            %span
-              View
-              = link_to root_path do
-                Cameras
-    .column
-      .card
-        .card-content.hero.is-small
-          .columns.hero-body
-            .column.has-text-centered
-              %br/
-              %span.icon.is-large>
-                %i.fas.fa-laptop.fa-7x
-        %footer.card-footer
-          %p.card-footer-item
-            %span
-              View
-              = link_to root_path do
-                Laptops
-    .column
-      .card
-        .card-content.hero.is-small.is-light
-          .columns.hero-body
-            .column.has-text-centered
-              %br/
-              %span.icon.is-large>
-                %i.fas.fa-wifi.fa-7x
-        %footer.card-footer
-          %p.card-footer-item
-            %span
-              View
-              = link_to root_path do
-                Sensors
-    .column
-      .card
-        .card-content.hero.is-small
-          .columns.hero-body
-            .column.has-text-centered
-              %br/
-              %span.icon.is-large>
-                %i.fas.fa-archive.fa-7x
-        %footer.card-footer
-          %p.card-footer-item
-            %span
-              View
-              = link_to root_path do
-                Miscellaneous
-
-
--#%body
-  .container.is-fluid
-    -@categories.each do |category|
+  %body
+    .container.is-fluid
+      .columns.has-text-centered
+        .column.is-half.is-offset-one-quarter
+          %br
+          %br
+          = image_tag("amrc_main.svg", width: "1000")
       .columns
-        .column
-          .card
-            .card-content.hero.is-small.is-light
-              .columns.hero-body
-                .column.has-text-centered
-                  %br/
-                  %span.icon.is-large>
-                    %i.fas.fa-camera.fa-7x
-            %footer.card-footer
-              %p.card-footer-item
-                %span
-                  View
-                  = link_to root_path do
-                    = category.name
+        .column.is-half.is-offset-one-quarter
+          %br
+          %br
+          = form_tag items_path, enforce_utf8: false, method: :get do
+            .field.has-addons
+              .control.is-expanded
+                %input.input{type:'text', name: 'category_name', placeholder: 'Search for an asset'}
+              .control
+                %button.button.is-info{type:'submit'}
+                  Search
+      .columns
+        -@user_home_categories.each do |usercat|
+          .column
+            .card
+              .card-content.hero.is-small.is-light
+                .columns.hero-body
+                  .column.has-text-centered
+                    %br/
+                    %span.icon.is-large>
+                      %i.fas.fa-camera.fa-7x
+              %footer.card-footer
+                %p.card-footer-item
+                  %span
+                    View
+                    = link_to root_path do
+                      = usercat.category.name
+
+      .container.is-fluid
+        .columns
+          .column
+            .card
+              .card-content.hero.is-small.is-light
+                .columns.hero-body
+                  .column.has-text-centered
+                    %br/
+                    %span.icon.is-large>
+                      %i.fas.fa-plus.fa-7x
+              %footer.card-footer
+                %p.card-footer-item
+                  %span
+                    = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block'

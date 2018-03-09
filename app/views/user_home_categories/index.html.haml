@@ -1,0 +1,23 @@
+%h1 Listing user_home_categories
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Category
+      %th
+      %th
+      %th
+
+  %tbody
+    - @user_home_categories.each do |user_home_category|
+      %tr
+        %td= user_home_category.user
+        %td= user_home_category.category
+        %td= link_to 'Show', user_home_category
+        %td= link_to 'Edit', edit_user_home_category_path(user_home_category)
+        %td= link_to 'Destroy', user_home_category, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New User home category', new_user_home_category_path
