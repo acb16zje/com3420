@@ -9,6 +9,8 @@
           %button.delete
           = notice
 
+  = render "tabs"
+
   %p.title.has-text-centered Requests
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
@@ -38,4 +40,4 @@
                 .control
                   = f.submit 'Reject  ', class: 'button is-block is-success'
                   = f.hidden_field :status, value: 5
-  
+

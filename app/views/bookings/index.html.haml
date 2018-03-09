@@ -9,7 +9,9 @@
           %button.delete
           = notice
 
-  %p.title.has-text-centered Bookings History
+  = render "tabs"
+
+  %p.title.has-text-centered My Assets Booking History
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
@@ -28,7 +30,7 @@
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-          %td.has-text-centered 
+          %td.has-text-centered
             - case booking.status
             - when 5
               Rejected

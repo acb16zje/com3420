@@ -53,9 +53,8 @@
           - if current_user.permission_id != 1
             = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
           .navbar-item.has-dropdown.is-hoverable
-            %a.navbar-link{href: bookings_path}
-              %p
-                Manage  <strong>Bookings</strong>
+            = link_to requests_bookings_path, class: 'navbar-link' do
+              %p Manage Bookings
             .navbar-dropdown.is-boxed
               = link_to 'Requests', requests_bookings_path, class: "navbar-item"
               = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
