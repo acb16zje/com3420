@@ -1,6 +1,5 @@
 desc 'Dropping and re-creating the tables...'
 task :reset do
-
   if File.file?('./db/schema.rb')
     puts 'Deleting schema.rb'
     File.delete('./db/schema.rb')
@@ -14,6 +13,13 @@ end
 
 desc 'Deploy to epiDeploy.'
 task :deploy do
+  sh 'ssh-add'
   sh 'bundle exec ed release -d demo'
   sh 'bundle exec cap demo deploy:seed'
+end
+
+desc 'Deploy to epiDeploy without seed.'
+task :deploy_no_seed do
+  sh 'ssh-add'
+  sh 'bundle exec ed release -d demo'
 end
