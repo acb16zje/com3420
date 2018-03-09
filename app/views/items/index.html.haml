@@ -15,6 +15,7 @@
         %th Manufacturer
         %th Condition
         %th Location
+        %th.is-hidden Keywords
     %tbody
       -@items.each do |item|
         %tr
@@ -24,3 +25,4 @@
           %td.has-text-centered= item.manufacturer
           %td.has-text-centered= item.condition
           %td.has-text-centered= item.location
+          %td.has-text-centered.is-hidden= item.keywords

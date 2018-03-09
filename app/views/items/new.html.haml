@@ -39,6 +39,13 @@
                     = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
+                %label.label Keywords
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.input :keywords, as: :text, label: false, required: false, placeholder: '', input_html: {class: 'textarea'}
+            .field.is-horizontal
+              .field-label.is-normal
                 %label.label Upload Image
               .field-body
                 .field

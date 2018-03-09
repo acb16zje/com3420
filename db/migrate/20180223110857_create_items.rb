@@ -15,6 +15,7 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.decimal :purchase_price
       t.index ['user_id'], name: 'index_items_on_user_id'
       t.string :image
+      t.string :keywords
 
       t.timestamps
     end

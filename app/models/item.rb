@@ -13,10 +13,11 @@
 #  serial           :string
 #  acquisition_date :date
 #  purchase_price   :decimal(, )
+#  image            :string
+#  keywords         :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  category_id      :integer
-#  image            :string
 #
 # Indexes
 #
