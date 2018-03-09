@@ -1,8 +1,12 @@
-- content_for :title, "Assets"
 
 %br/
 .container.is-fluid
-  %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
+  - if @manager.givenname.eql? current_user.givenname and @manager.sn.eql? current_user.sn
+    - content_for :title, "My Assets"
+    %p.title.has-text-centered My Assets
+  - else
+    - content_for :title, "#{@manager.givenname} #{@manager.sn}'s Assets"
+    %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
   %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr

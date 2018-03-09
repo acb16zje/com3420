@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
-        min: 0
+        min: new Date()
     })
 
     $('.datepicker').on('change', function () {

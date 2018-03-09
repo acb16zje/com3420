@@ -64,7 +64,7 @@
                     %span.tag.is-success.is-medium
                       = @item.condition
                   - when 'Good'
-                    %span.tag.is-link.is-medium
+                    %span.tag.is-primary.is-medium
                       = @item.condition
                   - when 'Adequate'
                     %span.tag.is-warning.is-medium
@@ -88,21 +88,13 @@
                 -#    = @item.peripherals
 
       .field.is-horizontal
-        .field-label.has-text-left
-          -#Left empty for spacing
         .field-body
+          - if current_user.permission_id > 1
+            .field.is-grouped.is-grouped-left
+              .control
+                = link_to 'Edit', edit_item_path(@item), class: 'button is-link', id: "edit_item_#{@item.id}"
           .field.is-grouped.is-grouped-right
             .control
-              = link_to 'Back' , items_path, class: 'button is-block is-light'
-            .control
-              = link_to edit_item_path(@item), class: 'button is-link', id: "edit_item_#{@item.id}" do
-                %span.icon
-                  %i.class.fas.fa-edit
-                %span Edit
-            .control
-              = link_to item_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "delete_item_#{@item.id}" do
-                %span.icon
-                  %i.class.fas.fa-trash
-                %span Delete
+              = link_to 'Back', items_path, class: 'button is-block is-light'
             .control
               = link_to 'Book or Reserve', new_item_booking_path(item_id: @item.id), class:'button is-link is-block'

@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @item.user_id = current_user.id
-    
+
     category = Category.find_by_id(@item.category_id)
     id_str = (Item.where(category_id: @item.category_id).count() + 1).to_s
     (0...(5 - id_str.length)).each do |i|
@@ -58,7 +58,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   def destroy
     @item.destroy
-    redirect_to items_url, notice: 'Item was successfully destroyed.'
+    redirect_to items_path, notice: 'Item was successfully deleted.'
   end
 
   private
@@ -70,6 +70,6 @@ class ItemsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def item_params
-    params.require(:item).permit!
+    params.require(:item).except(:bunny).permit!
   end
 end
