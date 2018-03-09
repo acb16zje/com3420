@@ -51,7 +51,7 @@
           = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
           - if current_user.permission_id != 1
             = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
-            = link_to 'Review Bookings', bookings_path, class: "navbar-item #{current_class?(bookings_path)}"
+            = link_to 'Manage Bookings', bookings_path, class: "navbar-item #{current_class?(bookings_path)}"
           - if current_user.permission_id == 3
             = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
 
