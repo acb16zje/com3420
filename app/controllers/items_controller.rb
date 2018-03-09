@@ -16,6 +16,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
+    @bookings = Booking.joins(:item).where("bookings.item_id = items.id", @item.id)
   end
 
   # GET /items/new

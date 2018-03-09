@@ -44,9 +44,10 @@
               %p
                 Browse by <strong>Categories</strong>
             .navbar-dropdown.is-boxed
-              - categories = Category.all
+              - categories = Category.take(5)
               - categories.each do |category|
                 = link_to category.name, items_path(category_name: category.name), class: "navbar-item"
+              = link_to 'View All', filter_categories_path, class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
           = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
           - if current_user.permission_id != 1
