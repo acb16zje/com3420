@@ -50,9 +50,13 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
-
+    item = Item.find_by_id(@booking.item_id)
+    if item.user_id == current_user.id
     # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed, 5: Rejected}
-    @booking.status = 1
+      @booking.status = 2
+    else
+      @booking.status = 1
+    end
 
     if @booking.save
       redirect_to bookings_path, notice: 'Booking was successfully created.'
