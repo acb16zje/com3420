@@ -75,7 +75,7 @@
               .navbar-dropdown.is-boxed.is-right
                 - if current_user.permission_id != 1
                   = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item"
-                = link_to 'My Bookings', bookings_path, class: 'navbar-item'
+                = link_to 'My Bookings', bookings_users_path, class: 'navbar-item'
                 = link_to 'My Profile', current_user, class: "navbar-item"
                 = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item", id: "sign_out"
     = yield

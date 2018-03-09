@@ -80,7 +80,7 @@
               = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
                 .field
                   %p.control
-                    %label.label Username
+                    %label.label Username or Email
                     = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus:''}
                 .field
                   %p.control
@@ -94,8 +94,6 @@
 
     = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
-    = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
-    = javascript_include_tag "application"
     :javascript
       (function() {
         var burger = document.querySelector('.burger');

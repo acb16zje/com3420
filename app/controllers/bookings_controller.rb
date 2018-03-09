@@ -11,7 +11,6 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1
   def show
-    redirect_to '/404'
   end
 
   # GET /bookings/new
@@ -29,7 +28,7 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
 
     if @booking.save
-      redirect_to @booking, notice: 'Booking was successfully created.'
+      redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       render :new
     end
