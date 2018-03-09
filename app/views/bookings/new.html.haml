@@ -128,6 +128,20 @@
                     = f.input :end_time, required: ''
                     = f.hidden_field :item_id, value: @item.id
                     = f.hidden_field :user_id, value: current_user.id
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Location
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :next_location, label: false, required: '', placeholder: 'Booking location', input_html: {class: 'input', type: 'text'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Reason
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
 
             %br
             %br

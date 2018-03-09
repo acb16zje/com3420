@@ -14,6 +14,11 @@ body {
   background: #fefefe;
 }
 
+/* No resize for textarea */
+.textarea {
+  resize: none;
+}
+
 /* Home page card fixes on mobile resolution */
 .columns {
   margin-left: 0;
