@@ -94,8 +94,10 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    %p.control.is-expanded
-                      = f.input :acquisition_date, as: :text, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :acquisition_date, as: :string, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Purchase Price
@@ -105,8 +107,10 @@
                     %p.control
                       %a.button.is-static
                         &pound
-                    %p.control.is-expanded
-                      = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals
@@ -123,4 +127,4 @@
                   .control
                     = link_to 'Cancel' , items_path, class: 'button is-light'
                   .control
-                    = f.submit 'Create asset', class: 'button is-block is-link'
+                    = f.submit 'Create asset', class: 'button is-block is-link', id: 'submitButton'
