@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305230625) do
+ActiveRecord::Schema.define(version: 20180309155632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,15 @@ ActiveRecord::Schema.define(version: 20180305230625) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
 
+  create_table "user_home_categories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "category_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_user_home_categories_on_category_id"
+    t.index ["user_id"], name: "index_user_home_categories_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "phone"
     t.integer "permission_id"
@@ -110,4 +119,6 @@ ActiveRecord::Schema.define(version: 20180305230625) do
   add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
+  add_foreign_key "user_home_categories", "categories"
+  add_foreign_key "user_home_categories", "users"
 end

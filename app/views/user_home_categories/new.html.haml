@@ -1,0 +1,25 @@
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      .box
+        = @user_home_categories
+        = simple_form_for(@user_home_category) do |f|
+          %h4.title
+            Add To Home
+          .field.is-horizontal
+            .field-label.is-normal
+              %label.label Category To Favourite
+            .field-body
+              .field
+                %p.control.is-expanded
+                  = f.hidden_field :user_id, value: current_user.id
+                  = f.association :category, label: false, input_html: {class: 'select2'},  selected: '', collection: @allowedcat
+          .field.is-horizontal
+            .field-label.has-text-left
+              -#Left empty for spacing
+            .field-body
+              .field.is-grouped.is-grouped-right
+                .control
+                  = link_to 'Cancel' , items_path, class: 'button is-light'
+                .control
+                  = f.submit 'Add Category', class: 'button is-block is-link'
