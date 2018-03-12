@@ -16,13 +16,14 @@
                 .field
                   %p.control.is-expanded
                     = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Owner
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|u| "#{u.givenname}"}, selected: ''
+            - if current_user.id == @item.user_id
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Owner
+                .field-body
+                  .field{style: 'margin: auto'}
+                    .control
+                      = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|u| "#{u.givenname}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
