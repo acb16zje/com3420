@@ -1,5 +1,9 @@
 // BunnyJS form validation configuration
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
 (function (global) {
 
@@ -132,7 +136,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                         if (!resolved) {
                             resolved = true;
 
-                            if (value !== val) resolve(promise, val);else fulfill(promise, val);
+                            if (value !== val) resolve(promise, val);
+                            else fulfill(promise, val);
                         }
                     }, function (reason) {
                         if (!resolved) {
@@ -252,14 +257,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 remaining++;
                 return function (value) {
                     results[index] = value;
-                    if (! --remaining) resolve(results);
+                    if (!--remaining) resolve(results);
                 };
             }
 
             for (var i = 0, promise; i < promises.length; i++) {
                 promise = promises[i];
 
-                if (promise && typeof promise.then === 'function') promise.then(resolver(i), reject);else results[i] = promise;
+                if (promise && typeof promise.then === 'function') promise.then(resolver(i), reject);
+                else results[i] = promise;
             }
 
             if (!remaining) resolve(results);
@@ -275,7 +281,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             for (var i = 0, promise; i < promises.length; i++) {
                 promise = promises[i];
 
-                if (promise && typeof promise.then === 'function') promise.then(resolve, reject);else resolve(promise);
+                if (promise && typeof promise.then === 'function') promise.then(resolve, reject);
+                else resolve(promise);
             }
         });
     };
@@ -397,7 +404,9 @@ var BunnyFile = {
         }
 
         // write the ArrayBuffer to a blob, and you're done
-        return new Blob([ab], { type: mimeString });
+        return new Blob([ab], {
+            type: mimeString
+        });
     },
 
 
@@ -710,7 +719,9 @@ var Ajax = {
      */
     sendForm: function sendForm(form_el, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : { 'Content-Type': 'application/x-www-form-urlencoded' };
+        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
 
         var data = {};
         form_el.querySelectorAll('[name]').forEach(function (input) {
@@ -731,7 +742,9 @@ var Ajax = {
      */
     sendFormWithFiles: function sendFormWithFiles(form_el, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : { 'Content-Type': 'multipart/form-data' };
+        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+            'Content-Type': 'multipart/form-data'
+        };
 
         this.sendForm(form_el, on_success, on_error, headers);
     },
@@ -750,21 +763,29 @@ var Ajax = {
      */
     get: function get(url, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : { 'X-Requested-With': 'XMLHttpRequest' };
+        var headers = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+            'X-Requested-With': 'XMLHttpRequest'
+        };
 
         this.create('GET', url, {}, on_success, on_error, headers, true);
     },
 
     post: function post(url, data, on_success) {
         var on_error = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-        var headers = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : { 'X-Requested-With': 'XMLHttpRequest' };
+        var headers = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {
+            'X-Requested-With': 'XMLHttpRequest'
+        };
 
         this.create('POST', url, data, on_success, on_error, headers, true);
     }
 
 };
 
-var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
 
 var BunnyElement = {
     getCurrentDocumentPosition: function getCurrentDocumentPosition() {
@@ -953,7 +974,39 @@ var BunnyElement = {
     }
 };
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray = function () {
+    function sliceIterator(arr, i) {
+        var _arr = [];
+        var _n = true;
+        var _d = false;
+        var _e = undefined;
+        try {
+            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+                _arr.push(_s.value);
+                if (i && _arr.length === i) break;
+            }
+        } catch (err) {
+            _d = true;
+            _e = err;
+        } finally {
+            try {
+                if (!_n && _i["return"]) _i["return"]();
+            } finally {
+                if (_d) throw _e;
+            }
+        }
+        return _arr;
+    }
+    return function (arr, i) {
+        if (Array.isArray(arr)) {
+            return arr;
+        } else if (Symbol.iterator in Object(arr)) {
+            return sliceIterator(arr, i);
+        } else {
+            throw new TypeError("Invalid attempt to destructure non-iterable instance");
+        }
+    };
+}();
 
 var ValidationConfig = {
 
@@ -1083,7 +1136,7 @@ var ValidationValidators = {
         return new Promise(function (valid, invalid) {
             if (input.value.length > 0 && input.getAttribute('type') === 'tel') {
                 // input is tel, parse string to match tel regexp
-                var Regex = /^[0-9\-\+\(\)\#\ \*]{6,20}$/;
+                var Regex = /^[0-9\-\+\(\)\#\ \*]{10,10}$/;
                 if (Regex.test(input.value)) {
                     valid();
                 } else {
@@ -1097,7 +1150,9 @@ var ValidationValidators = {
     maxLength: function maxLength(input) {
         return new Promise(function (valid, invalid) {
             if (input.getAttribute('maxlength') !== null && input.value.length > input.getAttribute('maxlength')) {
-                invalid({ maxLength: input.getAttribute('maxlength') });
+                invalid({
+                    maxLength: input.getAttribute('maxlength')
+                });
             } else {
                 valid();
             }
@@ -1106,7 +1161,9 @@ var ValidationValidators = {
     minLength: function minLength(input) {
         return new Promise(function (valid, invalid) {
             if (input.getAttribute('minlength') !== null && input.value.length < input.getAttribute('minlength')) {
-                invalid({ minLength: input.getAttribute('minlength') });
+                invalid({
+                    minLength: input.getAttribute('minlength')
+                });
             } else {
                 valid();
             }
@@ -1120,7 +1177,10 @@ var ValidationValidators = {
                 if (fileSize <= maxFileSize) {
                     valid(input);
                 } else {
-                    invalid({ maxFileSize: maxFileSize, fileSize: fileSize });
+                    invalid({
+                        maxFileSize: maxFileSize,
+                        fileSize: fileSize
+                    });
                 }
             } else {
                 valid(input);
@@ -1138,7 +1198,9 @@ var ValidationValidators = {
                     if (BunnyFile.isJpeg(signature) || BunnyFile.isPng(signature)) {
                         valid();
                     } else {
-                        invalid({ signature: signature });
+                        invalid({
+                            signature: signature
+                        });
                     }
                 }).catch(function (e) {
                     invalid(e);
@@ -1163,7 +1225,12 @@ var ValidationValidators = {
                         var width = BunnyImage.getImageWidth(img);
                         var height = BunnyImage.getImageHeight(img);
                         if (width < minWidth || height < minHeight) {
-                            invalid({ width: width, height: height, minWidth: minWidth, minHeight: minHeight });
+                            invalid({
+                                width: width,
+                                height: height,
+                                minWidth: minWidth,
+                                minHeight: minHeight
+                            });
                         } else {
                             valid();
                         }
@@ -1191,7 +1258,12 @@ var ValidationValidators = {
                         var width = BunnyImage.getImageWidth(img);
                         var height = BunnyImage.getImageHeight(img);
                         if (width > maxWidth || height > maxHeight) {
-                            invalid({ width: width, height: height, maxWidth: maxWidth, maxHeight: maxHeight });
+                            invalid({
+                                width: width,
+                                height: height,
+                                maxWidth: maxWidth,
+                                maxHeight: maxHeight
+                            });
                         } else {
                             valid();
                         }
@@ -1238,7 +1310,9 @@ var ValidationValidators = {
                         }
                     });
                     if (selectedOptionsCount < minOptionsCount) {
-                        invalid({ minOptionsCount: minOptionsCount });
+                        invalid({
+                            minOptionsCount: minOptionsCount
+                        });
                     } else {
                         valid();
                     }
@@ -1256,7 +1330,9 @@ var ValidationValidators = {
                 if (originalInput.value == input.value) {
                     valid();
                 } else {
-                    invalid({ originalLabel: ValidationUI.getLabel(ValidationUI.getInputGroup(originalInput)).textContent });
+                    invalid({
+                        originalLabel: ValidationUI.getLabel(ValidationUI.getInputGroup(originalInput)).textContent
+                    });
                 }
             } else {
                 valid();
@@ -1517,6 +1593,9 @@ var Validation = {
                     submitBtn.disabled = false;
                 });
                 if (result === true) {
+                    [].forEach.call(submitBtns, function (submitBtn) {
+                        submitBtn.disabled = true;
+                    });
                     form.submit();
                 } else {
                     _this.focusInput(result[0]);

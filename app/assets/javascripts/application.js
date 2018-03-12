@@ -6,9 +6,8 @@
 //= require picker.date
 //= require zoom
 
-// Navigation Burger menu
-document.addEventListener('DOMContentLoaded', function () {
-
+$(document).ready(function () {
+    // Navigation Burger menu
     // Get all "navbar-burger" elements
     var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 
@@ -31,21 +30,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    $("#purchaseDate").each(function () {
-        $(this).pickadate({
-            format: 'd mmmm yyyy'
-        });
+    // Pickadate datepicker
+    $("#purchaseDate").pickadate({
+        format: 'd mmmm yyyy',
+        clear: '',
+        onStart: function () {
+            var date = new Date()
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+        }
     });
 
     $('#startDate').pickadate({
         format: 'd mmmm yyyy',
+        clear: '',
         // An integer (positive/negative) sets it relative to today.
-        min: new Date()
+        min: new Date(),
+        onStart: function () {
+            var date = new Date()
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+        }
     })
 
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
-        min: new Date()
+        clear: '',
+        min: new Date(),
+        onStart: function () {
+            var date = new Date()
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate() + 1]);
+        }
     })
 
     $('.datepicker').on('change', function () {
@@ -58,14 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#endDate').pickadate('picker').set('min', $(this).val());
         }
     });
-});
 
-// Bulma notification
-$(document).on('click', '.notification > button.delete', function () {
-    this.parentNode.remove();
-});
+    // Bulma notification
+    $(document).on('click', '.notification > button.delete', function () {
+        this.parentNode.remove();
+    });
 
-$(document).ready(function () {
     // Datatable
     $("#users, #categories, #bookings").each(function () {
         $(this).DataTable({
@@ -101,12 +112,14 @@ $(document).ready(function () {
         inputTypeNumberPolyfill.polyfillElement(number);
     }
 
-    $('#item_image').change(function() {
+    // Image upload show file name
+    $('#item_image').change(function () {
         var i = $(this).prev('label').clone();
         var file = $('#item_image')[0].files[0].name;
         $("#file_name").text(file);
     });
 
+    // Zoom.js config
     $('#zoom').zoom({
         magnify: 0.8
     });

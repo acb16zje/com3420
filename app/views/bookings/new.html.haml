@@ -12,8 +12,12 @@
     %h3.title Create booking on #{@item.name}
     .box
       .columns
-        .column.is-5.has-text-centered{style: 'margin: auto'}
-          = image_tag("amrc.svg", width: "250")
+        - if @item.image?
+          .column.is-5.has-text-centered#zoom{style: 'margin: auto'}
+            = image_tag(@item.image.url, alt: 'Image')
+        -else
+          .column.is-5.has-text-centered{style: 'margin: auto'}
+            = image_tag("amrc.svg", width: "250", alt: 'Default Image, AMRC')
         .column
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
