@@ -1,25 +1,41 @@
+- content_for :title, "#{@manager.givenname}'s Assets'"
 
-%br/
-.container.is-fluid
-  - if @manager.givenname.eql? current_user.givenname and @manager.sn.eql? current_user.sn
-    - content_for :title, "My Assets"
-    %p.title.has-text-centered My Assets
-  - else
-    - content_for :title, "#{@manager.givenname} #{@manager.sn}'s Assets"
-    %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
-  %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
-    %thead
-      %tr
-        %th Name
-        %th Category
-        %th Manufacturer
-        %th Condition
-        %th Location
-    %tbody
-      -@items.each do |item|
-        %tr
-          %td.has-text-centered= link_to item.name, item
-          %td.has-text-centered= item.category.name
-          %td.has-text-centered= item.manufacturer
-          %td.has-text-centered= item.condition
-          %td.has-text-centered= item.location
+%section.section
+  .container.is-desktop
+    - if not notice.nil?
+      .columns
+        .column.is-4.is-offset-4
+          .notification.is-success.has-text-centered
+            %button.delete
+            = notice
+    %br/
+    .container.is-fluid
+      - if @manager.givenname.eql? current_user.givenname and @manager.sn.eql? current_user.sn
+        - content_for :title, "My Assets"
+        %p.title.has-text-centered My Assets
+      - else
+        - content_for :title, "#{@manager.givenname} #{@manager.sn}'s Assets"
+        %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
+      = form_tag change_manager_multiple_items_path do
+        %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+          %thead
+            %tr
+              %th
+              %th Name
+              %th Category
+              %th Manufacturer
+              %th Condition
+              %th Location
+          %tbody
+            -@items.each do |item|
+              %tr
+                %td
+                  =check_box_tag "item_ids[]", item.id
+                %td.has-text-centered= link_to item.name, item
+                %td.has-text-centered= item.category.name
+                %td.has-text-centered= item.manufacturer
+                %td.has-text-centered= item.condition
+                %td.has-text-centered= item.location
+        .field.is-grouped.is-grouped-right
+          .control
+            = submit_tag "Transfer Selection", class:'button is-link is-block'

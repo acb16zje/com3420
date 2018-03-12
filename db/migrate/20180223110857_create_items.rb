@@ -3,7 +3,6 @@
 class CreateItems < ActiveRecord::Migration[5.1]
   def change
     create_table :items do |t|
-      t.integer 'user_id'
       t.string :name
       t.string :condition
       t.string :location
@@ -13,12 +12,12 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :serial
       t.date :acquisition_date
       t.decimal :purchase_price
-      t.index ['user_id'], name: 'index_items_on_user_id'
       t.string :image
       t.string :keywords
 
       t.timestamps
     end
+    add_reference :items, :user, foreign_key: true
     add_reference :items, :category, foreign_key: true
   end
 end

@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   resources :users do
     get 'bookings', :on => :collection
     get 'manager', :on => :collection
+
+
   end
 
   resources :bookings do
@@ -25,6 +27,9 @@ Rails.application.routes.draw do
   resources :items do
     resources :bookings
     get 'manager', :on => :collection
+    put 'update_manager_multiple', :on => :collection
+    post 'change_manager_multiple', :on => :collection
+
   end
 
   root to: 'home#index'

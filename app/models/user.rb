@@ -37,6 +37,7 @@ class User < ApplicationRecord
   end
 
   has_many :bookings
+  has_many :items
   has_many :categories, through: :user_home_categories
 
 end

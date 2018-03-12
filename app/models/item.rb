@@ -33,6 +33,6 @@
 class Item < ApplicationRecord
   belongs_to :category
   has_many :bookings
-
+  belongs_to :user
   mount_uploader :image, ImageUploader
 end

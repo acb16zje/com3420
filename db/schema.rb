@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 20180312161826) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.integer "user_id"
     t.string "name"
     t.string "condition"
     t.string "location"
@@ -71,6 +70,7 @@ ActiveRecord::Schema.define(version: 20180312161826) do
     t.string "keywords"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.bigint "category_id"
     t.index ["category_id"], name: "index_items_on_category_id"
     t.index ["hash_id"], name: "index_items_on_hash_id", unique: true
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20180312161826) do
   add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
+  add_foreign_key "items", "users"
   add_foreign_key "user_home_categories", "categories"
   add_foreign_key "user_home_categories", "users"
 end
