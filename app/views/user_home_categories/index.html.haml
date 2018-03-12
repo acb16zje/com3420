@@ -1,23 +1,29 @@
-%h1 Listing user_home_categories
+- content_for :title, "My Favourites"
 
-%table
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
+%p.title.has-text-centered My Favourites
+%p.title.has-text-centered
+  = link_to 'Create new', new_user_home_category_path, class: 'button is-success'
+
+%table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
   %thead
     %tr
-      %th User
       %th Category
       %th
-      %th
-      %th
-
   %tbody
     - @user_home_categories.each do |user_home_category|
       %tr
-        %td= user_home_category.user
-        %td= user_home_category.category
-        %td= link_to 'Show', user_home_category
-        %td= link_to 'Edit', edit_user_home_category_path(user_home_category)
-        %td= link_to 'Destroy', user_home_category, method: :delete, data: { confirm: 'Are you sure?' }
-
-%br
-
-= link_to 'New User home category', new_user_home_category_path
+        %td.has-text-centered
+          = user_home_category.category.name
+        %td
+          .field.is-grouped.is-grouped-centered
+            %p.control
+              = link_to 'Remove', user_home_category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' 
