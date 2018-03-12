@@ -29,8 +29,12 @@
                 .columns.hero-body
                   .column.has-text-centered
                     %br/
-                    %span.icon.is-large>
-                      %i.fas.fa-camera.fa-7x
+                    - if usercat.category.categoryicon?
+                      .icon.is-large
+                        = image_tag(usercat.category.categoryicon.url, alt: 'Icon')
+                    - else
+                      %span.icon.is-large>
+                        %i.fas.fa-camera.fa-7x
               %footer.card-footer
                 %p.card-footer-item
                   %span

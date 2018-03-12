@@ -34,6 +34,21 @@
                   %p.control.is-expanded
                     = f.input :tag, label: false, required: '', placeholder: 'Tag', input_html: {class: 'input'}
                   %p.help 3-5 characters long, only letters allowed; e.g. CAM for Cameras
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Upload Image
+              .field-body
+                .field
+                  .file.has-name.is-fullwidth
+                    %label.file-label
+                      = f.input :categoryicon, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name#file_name
+                        Uploaded file name
 
             %br
             .field.is-horizontal
