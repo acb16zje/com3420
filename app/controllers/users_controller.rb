@@ -12,11 +12,6 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
-  # GET /users/bookings
-  def bookings
-    @bookings = Booking.where("user_id = ?", current_user.id)
-  end
-
   # GET /users/1
   def show
   end

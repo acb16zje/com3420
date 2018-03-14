@@ -1,4 +1,4 @@
-- content_for :title, "Bookings History"
+- content_for :title, "My Bookings"
 
 %br/
 .container.is-fluid
@@ -9,9 +9,9 @@
           %button.delete
           = notice
 
-  = render "tabs"
-
-  %p.title.has-text-centered My Assets Booking History
+  %p.title.has-text-centered My Bookings
+  %p.title.has-text-centered
+    = link_to 'Book an asset', items_path, class: 'button is-success'
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
@@ -21,6 +21,7 @@
         %th End Date
         %th End Time
         %th Status
+        %th Action
     %tbody
       - @bookings.each do |booking|
         %tr
@@ -32,13 +33,31 @@
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
           %td.has-text-centered
             - case booking.status
-            - when 5
-              Rejected
-            - when 4
-              Completed
-            - when 3
-              Ongoing
+            - when 1
+              %span.tag.is-warning.is-medium
+                Pending
             - when 2
-              Accepted
-            - else
-              Pending
+              %span.tag.is-success.is-medium
+                Accepted
+            - when 3
+              %span.tag.is-primary.is-medium
+                Ongoing
+            - when 4
+              %span.tag.is-info.is-medium
+                Completed
+            - when 5
+              %span.tag.is-danger.is-medium
+                Rejected
+
+          %td
+            .field.is-grouped.is-grouped-centered
+              %p.control
+                = link_to edit_booking_path(booking), class: 'button is-link' do
+                  %span.icon
+                    %i.class.fas.fa-edit
+                  %span Edit
+              %p.control
+                = link_to bookings_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                  %span.icon
+                    %i.class.fas.fa-ban
+                  %span Cancel

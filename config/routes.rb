@@ -10,10 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    get 'bookings', :on => :collection
     get 'manager', :on => :collection
-
-
   end
 
   resources :bookings do
