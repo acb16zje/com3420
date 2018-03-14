@@ -47,6 +47,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/edit
   def edit
+    @item = Item.find_by_id(@booking.item_id)
   end
 
   # POST /bookings

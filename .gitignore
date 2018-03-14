@@ -10,7 +10,7 @@ db/*.sqlite3-journal
 config/database.yml
 config/settings.yml
 config/setup_load_paths.rb
-log/*.log
+log/
 tmp/
 /public/system
 /coverage/
