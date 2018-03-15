@@ -24,7 +24,9 @@ task :deploy_no_seed do
   sh 'bundle exec ed release -d demo'
 end
 
+desc 'update_booking_status_to_ongoing'
 task :update_booking_status_to_ongoing => :environment do
+  puts("running")
   # Get current date/time
   timefordate = Time.new
 
@@ -40,6 +42,7 @@ task :update_booking_status_to_ongoing => :environment do
   end
 end
 
+desc 'update_booking_status_to_late'
 task :update_booking_status_to_late => :environment do
   # Get current date/time
   timefordate = Time.new

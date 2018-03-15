@@ -14,11 +14,13 @@ end
 require 'rake'
 env :MAILTO, 'systems@epigenesys.org.uk'
 set :output, { standard: 'log/whenever.log' }
+env :PATH, ENV['PATH']
 
 every :reboot, roles: [ :db ] do
   runner "require 'delayed/command'; Delayed::Command.new(['-p #{@delayed_job_args_p}', '-n #{@delayed_job_args_n}', 'start']).daemonize"
 end
 
-every 1.hours do
-  rake ""
+every 2.minutes do
+  rake "update_booking_status_to_ongoing"
+  rake "update_booking_status_to_late"
 end
