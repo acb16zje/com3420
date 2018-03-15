@@ -32,13 +32,21 @@
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
           %td
             .field.is-grouped.is-grouped-centered
-              %p.control
-                = link_to edit_booking_path(booking), class: 'button is-link' do
-                  %span.icon
-                    %i.class.fas.fa-edit
-                  %span Edit
-              %p.control
-                = link_to bookings_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
-                  %span.icon
-                    %i.class.fas.fa-ban
-                  %span Cancel
+              - if (booking.status < 3)
+                %p.control
+                  = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-link' do
+                    %span.icon
+                      %i.class.fas.fa-edit
+                    %span Cancel Booking
+              - elsif (booking.status == 3)
+                %p.control
+                  = link_to set_booking_returned_booking_path(booking), method: :put, class: 'button is-link' do
+                    %span.icon
+                      %i.class.fas.fa-redo
+                    %span Return Item
+              - elsif (booking.status > 3)
+                %p.control
+                  = link_to new_item_booking_path(booking.item.id), class: 'button is-link' do
+                    %span.icon
+                      %i.class.fas.fa-sync
+                    %span Book Again

@@ -52,7 +52,7 @@ class BookingsController < ApplicationController
     @booking = Booking.new(booking_params)
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
-    # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed, 5: Rejected}
+    # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed, 5: Rejected, 6: Cancelled}
       @booking.status = 2
     else
       @booking.status = 1
@@ -79,6 +79,31 @@ class BookingsController < ApplicationController
     @booking.destroy
     redirect_to bookings_url, notice: 'Booking was successfully destroyed.'
   end
+
+  #
+  def set_booking_cancelled
+    @booking = Booking.find(params[:id])
+    @booking.status = 6
+    if @booking.save
+      redirect_to bookings_users_path, notice: 'Booking was successfully cancelled.'
+    else
+      redirect_to bookings_users_path, notice: 'Could not cancel booking.'
+    end
+  end
+
+  #
+  def set_booking_returned
+    @booking = Booking.find(params[:id])
+    @booking.status = 4
+    if @booking.save
+      redirect_to bookings_users_path, notice: 'Item marked as returned'
+    else
+      redirect_to bookings_users_path, notice: 'Could not be returned'
+    end
+  end
+
+
+
 
   private
 
