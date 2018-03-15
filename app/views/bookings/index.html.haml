@@ -40,10 +40,10 @@
               %span.tag.is-success.is-medium
                 Accepted
             - when 3
-              %span.tag.is-primary.is-medium
+              %span.tag.is-info.is-medium
                 Ongoing
             - when 4
-              %span.tag.is-info.is-medium
+              %span.tag.is-success.is-medium
                 Completed
             - when 5
               %span.tag.is-danger.is-medium
@@ -51,6 +51,9 @@
             - when 6
               %span.tag.is-danger.is-medium
                 Cancelled
+            - when 7
+              %span.tag.is-danger.is-medium
+                Late
           %td
             .field.is-grouped.is-grouped-centered
               - if (booking.status < 3)
@@ -59,13 +62,13 @@
                     %span.icon
                       %i.class.fas.fa-edit
                     %span Cancel Booking
-              - elsif (booking.status == 3)
+              - elsif (booking.status == 3) || (booking.status == 7)
                 %p.control
                   = link_to set_booking_returned_booking_path(booking), method: :put, class: 'button is-link' do
                     %span.icon
                       %i.class.fas.fa-redo
                     %span Return Item
-              - elsif (booking.status > 3)
+              - elsif (booking.status == 4) || (booking.status == 5) || (booking.status == 6)
                 %p.control
                   = link_to new_item_booking_path(booking.item.id), class: 'button is-link' do
                     %span.icon

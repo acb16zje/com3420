@@ -18,3 +18,7 @@ set :output, { standard: 'log/whenever.log' }
 every :reboot, roles: [ :db ] do
   runner "require 'delayed/command'; Delayed::Command.new(['-p #{@delayed_job_args_p}', '-n #{@delayed_job_args_n}', 'start']).daemonize"
 end
+
+every 1.hours do
+  rake ""
+end

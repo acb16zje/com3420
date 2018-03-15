@@ -55,7 +55,8 @@ class BookingsController < ApplicationController
     @booking = Booking.new(booking_params)
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
-    # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed, 5: Rejected, 6: Cancelled}
+    # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
+    # 5: Rejected, 6: Cancelled, 7: Late}
       @booking.status = 2
     else
       @booking.status = 1
@@ -88,9 +89,9 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 6
     if @booking.save
-      redirect_to bookings_users_path, notice: 'Booking was successfully cancelled.'
+      redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     else
-      redirect_to bookings_users_path, notice: 'Could not cancel booking.'
+      redirect_to bookings_path, notice: 'Could not cancel booking.'
     end
   end
 
@@ -99,9 +100,9 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 4
     if @booking.save
-      redirect_to bookings_users_path, notice: 'Item marked as returned'
+      redirect_to bookings_path, notice: 'Item marked as returned'
     else
-      redirect_to bookings_users_path, notice: 'Could not be returned'
+      redirect_to bookings_path, notice: 'Could not be returned'
     end
   end
 
