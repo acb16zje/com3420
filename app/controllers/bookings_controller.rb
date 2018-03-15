@@ -30,7 +30,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def completed
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 4", current_user.id)
+    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
   end
 
   # GET /bookings/requests
