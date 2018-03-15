@@ -26,7 +26,7 @@ class UserHomeCategoriesController < ApplicationController
     @user_home_category = UserHomeCategory.new(user_home_category_params)
 
     if @user_home_category.save
-      redirect_to @user_home_category, notice: 'User home category was successfully created.'
+      redirect_to root_path, notice: 'Favourites added.'
     else
       render :new
     end

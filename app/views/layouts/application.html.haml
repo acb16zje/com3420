@@ -48,17 +48,12 @@
               = link_to 'View All', filter_categories_path, class: "navbar-item"
           = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
           = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
-          .navbar-item.has-dropdown.is-hoverable
-            = link_to requests_bookings_path, class: 'navbar-link' do
-              %p Manage
-            .navbar-dropdown.is-boxed
-              = link_to 'Requests', requests_bookings_path, class: "navbar-item"
-              = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
-              = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item"
-              = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item"
-              = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item"
           - if current_user.permission_id != 1
-            .navbar-item.has-dropdown.is-hoverable
+            = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)} is-hidden-custom"
+            - if current_user.permission_id == 3
+              = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)} is-hidden-custom"
+          - if current_user.permission_id != 1
+            .navbar-item.has-dropdown.is-hoverable.is-hidden.is-show-custom
               %a.navbar-link
                 %p More
               .navbar-dropdown.is-boxed
@@ -67,30 +62,42 @@
                   = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
 
         .navbar-end
-          .navbar-item.has-dropdown.is-hoverable
-            - if current_user.permission_id != 1
+          - if current_user.permission_id != 1
+            .navbar-item.has-dropdown.is-hoverable
+              = link_to requests_bookings_path, class: 'navbar-link' do
+                Manage
+              .navbar-dropdown.is-boxed.is-right
+                = link_to 'Requests', requests_bookings_path, class: "navbar-item"
+                = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
+                = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item"
+                = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item"
+                = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item"
+            .navbar-item.has-dropdown.is-hoverable
               %a.navbar-link
                 Create
-                %span.icon
-                  %i.fas.fa-plus
               .navbar-dropdown.is-boxed.is-right
                 = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
                 = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
                 - if current_user.permission_id == 3
                   = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
-          - if user_signed_in?
-            .navbar-item.has-dropdown.is-hoverable
-              %a.navbar-link
-                %span.icon
-                  %i.fas.fa-user
-                #{current_user.givenname}
-              .navbar-dropdown.is-boxed.is-right
-                - if current_user.permission_id != 1
-                  = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item"
-                = link_to 'My Bookings', bookings_users_path, class: 'navbar-item'
-                = link_to 'My Profile', current_user, class: "navbar-item"
-                = link_to 'Manage Favourites', user_home_categories_path, class: "navbar-item"
-                = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item", id: "sign_out"
+          .navbar-item.has-dropdown.is-hoverable
+            = link_to requests_bookings_path, class: 'navbar-link' do
+              %span.icon
+                %i.fas.fa-bell
+            .navbar-dropdown.is-boxed.is-right
+              = link_to 'Requests', requests_bookings_path, class: "navbar-item"
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              %span.icon
+                %i.fas.fa-user
+              #{current_user.givenname}
+            .navbar-dropdown.is-boxed.is-right
+              - if current_user.permission_id != 1
+                = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item"
+              = link_to 'My Bookings', bookings_path, class: 'navbar-item'
+              = link_to 'My Profile', current_user, class: "navbar-item"
+              = link_to 'Manage Favourites', user_home_categories_path, class: "navbar-item"
+              = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item", id: "sign_out"
     = yield
 
     / jQuery, Pikaday, Font Awesome, Datatable, Select2, bunnyJS

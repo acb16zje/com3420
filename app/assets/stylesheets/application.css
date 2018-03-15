@@ -70,3 +70,16 @@ td.has-text-centered {
   padding: 0.37em 0.75em !important;
   font-size: 1rem;
 }
+
+/* Navbar responsive adjust */
+@media screen and (min-width: 1024px) and (max-width: 1065px) {
+  /* Categories and Users */
+  .is-hidden-custom {
+    display: none !important;
+  }
+
+  /* More dropdown */
+  .is-hidden.is-show-custom {
+    display: flex !important;
+  }
+}

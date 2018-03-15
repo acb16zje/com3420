@@ -39,10 +39,10 @@ test:
 ### Significant Features/Technology
 The system has the following:
 
-* Such amazing
-* Wow
-* Much booking
-* Many assets
+* Search asset
+* Book asset
+* Booking history
+* Favourite category
 
 ### Special Development Pre-requisites
 None.

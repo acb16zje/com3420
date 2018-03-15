@@ -51,7 +51,7 @@
                 .field
                   .file.has-name.is-fullwidth
                     %label.file-label
-                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*', maxfilesize: '1'}
                       %span.file-cta
                         %span.file-icon
                           %i.fas.fa-upload
@@ -59,6 +59,7 @@
                           Choose a file…
                       %span.file-name#file_name
                         Uploaded file name
+                  %p.help Max file size: 1MB
             %br
             %hr
             %br
@@ -70,21 +71,21 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :manufacturer, label: false, required: '', placeholder: 'Manufacturer', input_html: {class: 'input'}
+                    = f.input :manufacturer, label: false, placeholder: 'Manufacturer', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Model
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :model, label: false, required: '', placeholder: 'Model', input_html: {class: 'input'}
+                    = f.input :model, label: false, placeholder: 'Model', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Serial
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
+                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Acquisition Date
@@ -97,7 +98,7 @@
                     .field-body
                       .field
                         %p.control.is-expanded
-                          = f.input :acquisition_date, as: :string, label: false, required: '', placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
+                          = f.input :acquisition_date, as: :string, label: false, placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Purchase Price
@@ -110,13 +111,13 @@
                     .field-body
                       .field
                         %p.control.is-expanded
-                          = f.input :purchase_price, label: false, required: '', placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
+                          = f.input :purchase_price, label: false, placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
             -#.field.is-horizontal
               .field-label.is-normal
                 %label.label Peripherals
               .field-body
                 .field
-                  = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
+                  = f.input :peripherals, as: :text, label: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
             %br
             %br
             .field.is-horizontal

@@ -41,14 +41,20 @@
             .field-body
               .field
                 %p.control.is-expanded
-                  = f.input :phone, label: false, placeholder: 'Phone', input_html: {class: 'input', type:'tel', id: 'number', maxlength: '10', value: "#{@user.phone}"}
+                  - if current_user.uid.eql? @user.uid
+                    = f.input :phone, label: false, placeholder: 'Phone', input_html: {class: 'input', type:'tel', id: 'number', maxlength: '10', value: "#{@user.phone}"}
+                  - else
+                    = f.input :phone, label: false, placeholder: 'Phone', input_html: {class: 'input', type:'tel', id: 'number', maxlength: '10', value: "#{@user.phone}", disabled: ''}
           %p.help Do not enter the first zero
 
           %hr
 
           %label.label Department / Company:
           %p
-            = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
+            - if current_user.uid.eql? @user.uid
+              = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
+            - else
+              = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}", disabled: ''}
 
           %hr
 

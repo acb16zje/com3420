@@ -6,7 +6,8 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ?", current_user.id)
+    # @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ?", current_user.id)
+    @bookings = Booking.where("user_id = ?", current_user.id)
   end
 
   # GET /bookings/1
@@ -18,22 +19,22 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 1", current_user.id)
   end
 
-  # GET /bookings/requests
+  # GET /bookings/accepted
   def accepted
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 2", current_user.id)
   end
 
-  # GET /bookings/requests
+  # GET /bookings/ongoing
   def ongoing
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 3", current_user.id)
   end
 
-  # GET /bookings/requests
+  # GET /bookings/completed
   def completed
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
   end
 
-  # GET /bookings/requests
+  # GET /bookings/rejected
   def rejected
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 5", current_user.id)
   end
@@ -45,7 +46,9 @@ class BookingsController < ApplicationController
   end
 
   # GET /bookings/1/edit
-  def edit; end
+  def edit
+    @item = Item.find_by_id(@booking.item_id)
+  end
 
   # POST /bookings
   def create
