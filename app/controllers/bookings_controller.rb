@@ -79,7 +79,8 @@ class BookingsController < ApplicationController
       elsif @booking.status == 5
         UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       end
-      redirect_to bookings_path, notice: 'Booking was successfully updated.'
+
+      redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
     else
       render :edit
     end

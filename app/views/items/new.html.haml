@@ -36,7 +36,8 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+                    = f.input :location, label: false, required: '', placeholder: 'Asset location', input_html: {class: 'input'}
+                    -# = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Keywords
