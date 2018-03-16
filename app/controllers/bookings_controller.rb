@@ -1,8 +1,6 @@
-# frozen_string_literal: true
-
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
-  # authorize_resource
+  authorize_resource
 
   # GET /bookings
   def index
@@ -53,6 +51,10 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
+
+    @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
+    @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
       # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
@@ -114,9 +116,6 @@ class BookingsController < ApplicationController
     end
   end
 
-
-
-
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -126,6 +125,6 @@ class BookingsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def booking_params
-    params.require(:booking).permit!
+    params.require(:booking).except(:start_date, :start_time, :end_date, :end_time).permit!
   end
 end

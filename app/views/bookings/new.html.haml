@@ -73,7 +73,7 @@
                 -#  %td
                 -#    = @item.peripherals
 
-      = simple_form_for(@booking) do |f|
+      = simple_form_for @booking do |f|
         .columns
           .column
             .field.is-horizontal
@@ -88,7 +88,7 @@
                     .field-body
                       .field
                         %p.control.is-expanded
-                          = f.input :start_date, as: :text, label: false, required: '', placeholder: 'Start Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
+                          = f.input :start_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Start Time
@@ -112,7 +112,7 @@
                     .field-body
                       .field
                         %p.control.is-expanded
-                          = f.input :end_date, as: :text, label: false, required: '', placeholder: 'End Date DD MMMM YYYY', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
+                          = f.input :end_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label End Time

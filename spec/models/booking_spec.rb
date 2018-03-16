@@ -2,18 +2,20 @@
 #
 # Table name: bookings
 #
-#  id            :integer          not null, primary key
-#  start_date    :date
-#  start_time    :time
-#  end_date      :date
-#  end_time      :time
-#  reason        :string
-#  next_location :string
-#  status        :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  item_id       :integer
-#  user_id       :integer
+#  id             :integer          not null, primary key
+#  start_date     :date
+#  start_time     :time
+#  end_date       :date
+#  end_time       :time
+#  start_datetime :datetime
+#  end_datetime   :datetime
+#  reason         :string
+#  next_location  :string
+#  status         :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  item_id        :integer
+#  user_id        :integer
 #
 # Indexes
 #

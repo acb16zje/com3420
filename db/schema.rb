@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 20180312161826) do
     t.time "start_time"
     t.date "end_date"
     t.time "end_time"
+    t.datetime "start_datetime"
+    t.datetime "end_datetime"
     t.string "reason"
     t.string "next_location"
     t.integer "status"

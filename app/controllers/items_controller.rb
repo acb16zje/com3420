@@ -63,14 +63,13 @@ class ItemsController < ApplicationController
     redirect_to items_path, notice: 'Item was successfully deleted.'
   end
 
-
-  #GET
+  # GET
   def change_manager_multiple
     @item = Item.new
     @users = User.where("permission_id > ?", 1)
   end
 
-  #POST
+  # POST
   def update_manager_multiple
     item_ids = params[:item][:item_id_list].split(' ')
     @items = Item.where(id: item_ids)
@@ -79,6 +78,7 @@ class ItemsController < ApplicationController
       item.user_id = params[:item][:user_id]
       item.save()
     end
+
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Item was successfully moved.'
   end
 
