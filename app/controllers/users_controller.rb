@@ -43,6 +43,8 @@ class UsersController < ApplicationController
         end
 
         if @user.save
+          # email new user their details
+          UserMailer.welcome(@user).deliver
           redirect_to @user, notice: 'User was successfully created.'
         else
           render :new

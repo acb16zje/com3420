@@ -57,6 +57,7 @@ class BookingsController < ApplicationController
     if item.user_id == current_user.id
     # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
     # 5: Rejected, 6: Cancelled, 7: Late}
+      UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       @booking.status = 2
     else
       @booking.status = 1
@@ -72,6 +73,11 @@ class BookingsController < ApplicationController
   # PATCH/PUT /bookings/1
   def update
     if @booking.update(booking_params)
+      if @booking.status == 2
+        UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+      elsif @booking.status == 5
+        UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+      end
       redirect_to bookings_path, notice: 'Booking was successfully updated.'
     else
       render :edit
