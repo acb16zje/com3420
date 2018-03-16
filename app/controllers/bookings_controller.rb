@@ -55,12 +55,12 @@ class BookingsController < ApplicationController
     @booking = Booking.new(booking_params)
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
-    # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
-    # 5: Rejected, 6: Cancelled, 7: Late}
-      UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+      # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
+      # 5: Rejected, 6: Cancelled, 7: Late}
       @booking.status = 2
     else
-      UserMailer.booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+      UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
       @booking.status = 1
     end
 

@@ -1,0 +1,14 @@
+%p
+  Dear #{@manager.givenname},
+%p
+  The item : #{@item.name}
+  has been requested for booking by the user : #{@user.givenname}
+  %br/
+  Please respond to the following request.
+  Click #{link_to 'here', requests_bookings_url} to view it.
+%p
+  Regards,
+  %br/
+  AMRC
+%p
+  N.B. This is an auto-generated email
