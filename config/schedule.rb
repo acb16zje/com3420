@@ -21,8 +21,8 @@ every :reboot, roles: [ :db ] do
 end
 
 every 2.minutes do
-  rake "update_booking_status_to_ongoing"
-  rake "update_booking_status_to_late"
+  # rake "update_booking_status_to_ongoing"
+  # rake "update_booking_status_to_late"
 end
 
 every 1.day do
