@@ -19,7 +19,8 @@
     %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
       %thead
         %tr
-          %th
+          - if current_user.id == @manager.id
+            %th
           %th Name
           %th Category
           %th Manufacturer
@@ -28,8 +29,9 @@
       %tbody
         -@items.each do |item|
           %tr
-            %td
-              = check_box_tag "item_ids[]", item.id
+            - if current_user.id == @manager.id
+              %td
+                = check_box_tag "item_ids[]", item.id
             %td.has-text-centered= link_to item.name, item
             %td.has-text-centered= item.category.name
             %td.has-text-centered= item.manufacturer
