@@ -1,4 +1,14 @@
-%h1= class_name + "#" + @action
-
 %p
-  = @greeting + ", find me in app/views/user_mailer/asset_due.html.haml"
+  Dear #{@user.givenname},
+%p
+  The item you borrowed is due for return today at #{@booking_due.end_time}
+  %br/
+  Item due for return: #{@item.name}
+  %br/
+  Please follow further emails to check the status of your booking.
+%p
+  Regards,
+  %br/
+  AMRC
+%p
+  N.B. This is an auto-generated email

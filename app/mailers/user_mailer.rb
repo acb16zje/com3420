@@ -29,7 +29,8 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Booking rejection for " + @item.name + " has been rejected"
   end
 
-  def asset_due (user, item)
+  def asset_due (booking, user, item)
+    @booking = booking
     @user = user
     @item = item
 
@@ -37,7 +38,8 @@ class UserMailer < ApplicationMailer
   end
 
 
-  def asset_overdue (user, item)
+  def asset_overdue (booking, user, item)
+    @booking = booking
     @user = user
     @item = item
 

@@ -1,3 +1,12 @@
-UserMailer#asset_due
+Dear = @user.givenname
 
-= @greeting + ", find me in app/views/user_mailer/asset_due.text.haml"
+The item you borrowed is due for return today at #{@booking_due.end_time}
+
+Item due for return: = @item.name
+
+Please follow further emails to check the status of your booking.
+
+Regards,
+AMRC
+
+N.B. This is an auto-generated email
