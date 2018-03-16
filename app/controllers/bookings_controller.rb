@@ -60,6 +60,7 @@ class BookingsController < ApplicationController
       UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       @booking.status = 2
     else
+      UserMailer.booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       @booking.status = 1
     end
 

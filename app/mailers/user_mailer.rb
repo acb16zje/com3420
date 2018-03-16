@@ -12,14 +12,21 @@ class UserMailer < ApplicationMailer
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking request for " + @item.name + " has been approved"
+    mail to: user.email, subject: "Booking confirmation for " + @item.name + " has been approved"
+  end
+
+  def booking_requested (user, item)
+    @user = user
+    @item = item
+
+    mail to: user.email, subject: "Booking request for " + @item.name + " is being processed"
   end
 
   def booking_rejected (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking request for " + @item.name + " has been rejected"
+    mail to: user.email, subject: "Booking rejection for " + @item.name + " has been rejected"
   end
 
   def asset_due (user, item)
