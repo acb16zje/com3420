@@ -2,6 +2,9 @@ class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
   authorize_resource
 
+  # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
+  # 5: Rejected, 6: Cancelled, 7: Late}
+
   # GET /bookings
   def index
     # @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ?", current_user.id)
@@ -41,6 +44,51 @@ class BookingsController < ApplicationController
   def new
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
+    bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
+    block_dates = []
+    bookings.each do |booking|
+      if (booking.start_date).eql? booking.end_date
+        if booking.start_datetime.to_time.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p")) && 
+          booking.end_datetime.to_time.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+      elsif (booking.end_date - booking.start_date).to_i == 1 
+        if booking.start_datetime.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p"))
+          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+        if booking.end_date.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+          block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+      elsif (booking.end_date - booking.start_date).to_i > 1
+        @item.name = (booking.start_datetime ).to_s
+        ((Date.parse(booking.start_datetime.to_s)+1)..(Date.parse(booking.end_datetime.to_s)-1)).each do |date|
+          block_date = date.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+        
+        if booking.start_datetime.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p"))
+          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+        
+        if booking.end_date.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+          block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
+          block_date[1] = (block_date[1].to_i - 1).to_s
+          block_dates.append(block_date)
+        end
+      end
+
+    end
+    gon.block_dates = block_dates
+    @block_dates = block_dates
   end
 
   # GET /bookings/1/edit
@@ -57,8 +105,6 @@ class BookingsController < ApplicationController
 
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
-      # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
-      # 5: Rejected, 6: Cancelled, 7: Late}
       @booking.status = 2
     else
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
@@ -125,6 +171,6 @@ class BookingsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def booking_params
-    params.require(:booking).except(:start_date, :start_time, :end_date, :end_time).permit!
+    params.require(:booking).permit!
   end
 end

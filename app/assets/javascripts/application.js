@@ -48,9 +48,10 @@ $(document).ready(function () {
         onStart: function () {
             var date = new Date()
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
-        }
+        },
+        disable: gon.block_dates
     })
-
+    
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',
@@ -58,7 +59,8 @@ $(document).ready(function () {
         onStart: function () {
             var date = new Date()
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate() + 1]);
-        }
+        },
+        disable: gon.block_dates
     })
 
     $('.datepicker').on('change', function () {
