@@ -20,7 +20,8 @@ every :reboot, roles: [ :db ] do
   runner "require 'delayed/command'; Delayed::Command.new(['-p #{@delayed_job_args_p}', '-n #{@delayed_job_args_n}', 'start']).daemonize"
 end
 
-every 2.minutes do
+# every 30 seconds
+every 30000.milliseconds() do
   rake "update_booking_status_to_ongoing"
   rake "update_booking_status_to_late"
 end

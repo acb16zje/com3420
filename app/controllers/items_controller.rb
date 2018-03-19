@@ -39,7 +39,7 @@ class ItemsController < ApplicationController
     (0...(5 - id_str.length)).each do |i|
       id_str = '0' + id_str
     end
-    @item.hash_id = category.tag + id_str
+    @item.serial_id = category.tag + id_str
 
     if @item.save
       redirect_to @item, notice: 'Item was successfully created.'

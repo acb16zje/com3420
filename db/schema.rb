@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20180312161826) do
     t.string "name"
     t.string "condition"
     t.string "location"
-    t.string "hash_id"
+    t.string "serial_id"
     t.string "manufacturer"
     t.string "model"
     t.string "serial"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20180312161826) do
     t.bigint "user_id"
     t.bigint "category_id"
     t.index ["category_id"], name: "index_items_on_category_id"
-    t.index ["hash_id"], name: "index_items_on_hash_id", unique: true
+    t.index ["serial_id"], name: "index_items_on_serial_id", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 

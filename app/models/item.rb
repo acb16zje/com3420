@@ -3,11 +3,10 @@
 # Table name: items
 #
 #  id               :integer          not null, primary key
-#  user_id          :integer
 #  name             :string
 #  condition        :string
 #  location         :string
-#  hash_id          :string
+#  serial_id        :string
 #  manufacturer     :string
 #  model            :string
 #  serial           :string
@@ -17,17 +16,19 @@
 #  keywords         :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  user_id          :integer
 #  category_id      :integer
 #
 # Indexes
 #
 #  index_items_on_category_id  (category_id)
-#  index_items_on_hash_id      (hash_id) UNIQUE
+#  index_items_on_serial_id    (serial_id) UNIQUE
 #  index_items_on_user_id      (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
+#  fk_rails_...  (user_id => users.id)
 #
 
 class Item < ApplicationRecord
