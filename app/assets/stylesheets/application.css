@@ -2,6 +2,7 @@
   *= require epi_utilities
   *= require classic
   *= require classic.date
+  *= require classic.time
   *= require is-awesome
 */
 
