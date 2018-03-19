@@ -1,3 +1,5 @@
+require 'irb'
+
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
   authorize_resource
@@ -46,49 +48,116 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
     block_dates = []
+    check_dates = []
+    check_start_dates = []
+    check_end_dates = []
     bookings.each do |booking|
       if (booking.start_date).eql? booking.end_date
-        if booking.start_datetime.to_time.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p")) && 
-          booking.end_datetime.to_time.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time) &&
+           DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
           block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-      elsif (booking.end_date - booking.start_date).to_i == 1 
-        if booking.start_datetime.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p"))
+      elsif (booking.end_date - booking.start_date).to_i == 1
+        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
+          @item.name = (DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time))
+          @item.model = (DateTime.parse(booking.start_time.to_time.to_s))
+          @item.location = (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
           block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-        if booking.end_date.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+        if DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
           block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
       elsif (booking.end_date - booking.start_date).to_i > 1
-        @item.name = (booking.start_datetime ).to_s
-        ((Date.parse(booking.start_datetime.to_s)+1)..(Date.parse(booking.end_datetime.to_s)-1)).each do |date|
+        ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
           block_date = date.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-        
-        if booking.start_datetime.strftime("%I:%M %p") <= (DateTime.new(2000,1,1,9,0,0).to_time.strftime("%I:%M %p"))
+
+        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
           block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-        
-        if booking.end_date.strftime("%I:%M %p") >= (DateTime.new(2000,1,1,17,0,0).to_time.strftime("%I:%M %p"))
+
+        if DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
           block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
       end
 
+      check_dates.append(booking.start_datetime)
+      check_dates.append(booking.end_datetime)
+      check_start_dates.append(booking.start_datetime)
+      check_end_dates.append(booking.end_datetime)
     end
+
+    i = 0
+    check_dates.sort!
+    check_start_dates.sort!
+    check_end_dates.sort!
+
+    not_found_pair = false
+    while i < check_dates.length - 2
+      start_count = i + 1
+      end_count = i + 1
+
+      prev_day = false
+      next_day = false
+      start_index = 0
+      end_index = 0
+
+      # Checks for consecutive times and gets the the end of the streak
+      while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
+        start_count += 2
+        end_count += 2
+        break if check_dates[end_count + 1].nil?
+      end
+
+      # Checks if the first time of the section is connected to a booking on the previous day
+      if (check_end_dates.include? check_dates[i])
+        prev_day = true
+        start_count -= 1
+        start_index = check_end_dates.index(check_dates[i])
+      else
+        start_index = check_start_dates.index(check_dates[i])
+      end
+
+      # # Checks if the last time of the section is connected to a  booking on the next day
+      # if (check_start_dates.include? check_dates.last)
+      #   next_day = true
+      #   end_count += 1
+      #   end_index = check_start_dates.index(check_dates[i])
+      # else
+      #   end_index = check_end_dates.index(check_dates[i])
+      # end
+
+      puts check_dates[i]
+      puts check_dates[end_count]
+
+      # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
+      if !prev_day #&& !next_day
+        if DateTime.parse(check_dates[i].to_time.to_s) <= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 9, 0, 0))
+          if DateTime.parse(check_dates[end_count].to_time.to_s) >= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 17, 0, 0))
+            block_date = check_dates[i].strftime("%Y-%m-%d").split('-')
+            block_date[1] = (block_date[1].to_i - 1).to_s
+            block_dates.append(block_date)
+          end
+        end
+      end
+
+      # i +=1
+      i = end_count + 1
+    end
+
     gon.block_dates = block_dates
-    @block_dates = block_dates
   end
 
   # GET /bookings/1/edit
