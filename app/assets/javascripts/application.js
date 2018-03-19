@@ -4,6 +4,7 @@
 //= require inputTypeNumberPolyfill
 //= require picker
 //= require picker.date
+//= require picker.time
 //= require zoom
 
 $(document).ready(function () {
@@ -30,7 +31,7 @@ $(document).ready(function () {
         });
     }
 
-    // Pickadate datepicker
+    // Pickadate purchaseDate on creating assets
     $("#purchaseDate").pickadate({
         format: 'd mmmm yyyy',
         clear: '',
@@ -40,6 +41,7 @@ $(document).ready(function () {
         }
     });
 
+    // Pickadate startDate on creating booking
     $('#startDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',
@@ -51,14 +53,15 @@ $(document).ready(function () {
         },
         disable: gon.block_dates
     })
-    
+
+    // Pickadate endDate on creating booking
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         min: new Date(),
         onStart: function () {
             var date = new Date()
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate() + 1]);
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         },
         disable: gon.block_dates
     })
@@ -68,11 +71,27 @@ $(document).ready(function () {
             var startDate = new Date($('#startDate').val());
             var endDate = new Date($('#endDate').val());
             if (endDate < startDate) {
-                $('#endDate').val("");
+                $('#endDate').val($('#startDate').val());
             }
             $('#endDate').pickadate('picker').set('min', $(this).val());
         }
     });
+
+    // Timepicker startTime on creating booking
+    $('#startTime').pickatime({
+        clear: '',
+        min: [9, 0],
+        max: [17, 0],
+        interval: 10
+    })
+
+    // Timepicker endTime on creating booking
+    $('#endTime').pickatime({
+        clear: '',
+        min: [9, 0],
+        max: [17, 0],
+        interval: 10
+    })
 
     // Bulma notification
     $(document).on('click', '.notification > button.delete', function () {

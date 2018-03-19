@@ -85,10 +85,8 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    .field-body
-                      .field
-                        %p.control.is-expanded
-                          = f.input :start_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
+                    %p.control.is-expanded
+                      = f.input :start_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Start Time
@@ -98,7 +96,8 @@
                     %p.control
                       %a.button.is-static
                         %i.fas.fa-clock
-                    = f.input :start_time, required: ''
+                    %p.control.is-expanded
+                      = f.input :start_time, as: :text, label: false, required: '', input_html: {class: 'input timepicker', id: 'startTime', style: 'resize: none'}
           .column
             .field.is-horizontal
               .field-label.is-normal
@@ -109,10 +108,8 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    .field-body
-                      .field
-                        %p.control.is-expanded
-                          = f.input :end_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
+                    %p.control.is-expanded
+                      = f.input :end_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label End Time
@@ -122,9 +119,10 @@
                     %p.control
                       %a.button.is-static
                         %i.fas.fa-clock
-                    = f.input :end_time, required: ''
-                    = f.hidden_field :item_id, value: @item.id
-                    = f.hidden_field :user_id, value: current_user.id
+                    %p.control.is-expanded
+                      = f.input :end_time, as: :text, label: false, required: '', input_html: {class: 'input timepicker', id: 'endTime', style: 'resize: none'}
+                      = f.hidden_field :item_id, value: @item.id
+                      = f.hidden_field :user_id, value: current_user.id
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Location

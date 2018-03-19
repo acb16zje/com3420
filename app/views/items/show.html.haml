@@ -121,15 +121,26 @@
               %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
               %td.has-text-centered= booking.end_date
               %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-              %td.has-text-centered 
+              %td.has-text-centered
                 - case booking.status
-                - when 5
-                  Rejected
-                - when 4
-                  Completed
-                - when 3
-                  Ongoing
+                - when 1
+                  %span.tag.is-warning.is-medium
+                    Pending
                 - when 2
-                  Accepted
-                - else
-                  Pending
+                  %span.tag.is-success.is-medium
+                    Accepted
+                - when 3
+                  %span.tag.is-info.is-medium
+                    Ongoing
+                - when 4
+                  %span.tag.is-success.is-medium
+                    Completed
+                - when 5
+                  %span.tag.is-danger.is-medium
+                    Rejected
+                - when 6
+                  %span.tag.is-danger.is-medium
+                    Cancelled
+                - when 7
+                  %span.tag.is-danger.is-medium
+                    Late
