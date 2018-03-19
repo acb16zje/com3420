@@ -51,7 +51,9 @@ class BookingsController < ApplicationController
     check_dates = []
     check_start_dates = []
     check_end_dates = []
+
     bookings.each do |booking|
+      # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
         if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time) &&
            DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
@@ -59,11 +61,9 @@ class BookingsController < ApplicationController
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
+      # If a single booking that spans 2 days, would fill up either day
       elsif (booking.end_date - booking.start_date).to_i == 1
         if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
-          @item.name = (DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time))
-          @item.model = (DateTime.parse(booking.start_time.to_time.to_s))
-          @item.location = (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
           block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
@@ -73,6 +73,7 @@ class BookingsController < ApplicationController
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
+      # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
       elsif (booking.end_date - booking.start_date).to_i > 1
         ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
           block_date = date.strftime("%Y-%m-%d").split('-')
@@ -106,6 +107,7 @@ class BookingsController < ApplicationController
 
     not_found_pair = false
     while i < check_dates.length - 2
+      # so the start count will point to the correct day
       start_count = i + 1
       end_count = i + 1
 
@@ -139,8 +141,8 @@ class BookingsController < ApplicationController
       #   end_index = check_end_dates.index(check_dates[i])
       # end
 
-      puts check_dates[i]
-      puts check_dates[end_count]
+      # puts check_dates[i]
+      # puts check_dates[end_count]
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day #&& !next_day
