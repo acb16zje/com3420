@@ -71,12 +71,14 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
     block_dates = []
+    block_start_time = []
+    block_end_time = []
     check_dates = []
 
     bookings.each do |booking|
       # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
-        if check_before_nine_am(booking.start_time) && check_after_five_ppm(booking.end_time)
+        if check_before_nine_am(booking.start_time) && check_after_five_pm(booking.end_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
         # If a single booking that spans 2 days, would fill up either day
@@ -84,7 +86,7 @@ class BookingsController < ApplicationController
         if check_before_nine_am(booking.start_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
-        if check_after_five_ppm(booking.end_time)
+        if check_after_five_pm(booking.end_time)
           block_dates.append(get_block_date(booking.end_datetime))
         end
         # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
@@ -92,41 +94,42 @@ class BookingsController < ApplicationController
         ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
           block_dates.append(get_block_date(date))
         end
-        
+
         if check_before_nine_am(booking.start_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
-        
+
         if check_after_five_pm(booking.end_time)
           block_dates.append(get_block_date(booking.end_datetime))
         end
       end
-      
+
       check_dates.append(booking.start_datetime)
       check_dates.append(booking.end_datetime)
     end
 
-    i = 0
     check_dates.sort!
-    
+
+    i = 0
     not_found_pair = false
+
     while i < check_dates.length - 2
       # so the start count will point to the correct day
       start_count = i + 1
       end_count = i + 1
-      
+
       prev_day = false
       next_day = false
       start_index = 0
       end_index = 0
-      
+
       # Checks for consecutive times and gets the the end of the streak
       while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
         start_count += 2
         end_count += 2
         break if check_dates[end_count + 1].nil?
       end
-      
+
       # Checks if the first time of the section is connected to a booking on the previous day
       if (Date.parse(check_dates[end_count].to_time.to_s)- Date.parse(check_dates[i].to_time.to_s)) > 0
         prev_day = true
@@ -134,7 +137,7 @@ class BookingsController < ApplicationController
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
-        if check_before_nine_am(check_dates[i]) && check_after_five_ppm(check_dates[end_count])
+        if check_before_nine_am(check_dates[i]) && check_after_five_pm(check_dates[end_count])
           block_dates.append(get_block_date(check_dates[i]))
         end
       else
@@ -147,7 +150,7 @@ class BookingsController < ApplicationController
           block_dates.append(get_block_date(check_dates[i]))
         end
         # Check whether end date needs to be blocked
-        if check_after_five_ppm(check_dates[end_count])
+        if check_after_five_pm(check_dates[end_count])
           block_dates.append(check_dates[end_count])
         end
       end
@@ -155,7 +158,11 @@ class BookingsController < ApplicationController
       i = end_count + 1
     end
 
+    # Dynamic time blocking
+
     gon.block_dates = block_dates
+    gon.block_start_time = block_start_time
+    gon.block_end_time = block_end_time
   end
 
   # GET /bookings/1/edit
@@ -209,7 +216,7 @@ class BookingsController < ApplicationController
     redirect_to bookings_url, notice: 'Booking was successfully destroyed.'
   end
 
-  #
+  # Set booking as cancelled
   def set_booking_cancelled
     @booking = Booking.find(params[:id])
     @booking.status = 6
@@ -221,7 +228,7 @@ class BookingsController < ApplicationController
     end
   end
 
-  #
+  # Set booking as returned
   def set_booking_returned
     @booking = Booking.find(params[:id])
     @booking.status = 4

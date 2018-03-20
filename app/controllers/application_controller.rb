@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ie_warning
-    return redirect_to(ie_warning_path) if request.user_agent.to_s =~ /MSIE [6-7]/ && request.user_agent.to_s !~ /Trident\/7.0/
+    redirect_to(ie_warning_path) if request.user_agent.to_s =~ /MSIE [6-7]/ && request.user_agent.to_s !~ /Trident\/7.0/
   end
 
   def layout

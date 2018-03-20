@@ -58,7 +58,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
     display: block;
-    padding: 0px;
+    padding: 0;
     height: 90px;
 }
 
@@ -714,7 +714,7 @@ del {
     position: absolute;
     background-color: #fafafa;
     min-width: 280px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
 }
@@ -972,10 +972,10 @@ del {
     position: fixed;
     bottom: 0;
     right: 0;
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border-top: 77px solid transparent;
-    border-bottom: 0px solid transparent;
+    border-bottom: 0 solid transparent;
     border-right: 77px solid #4a4a4a;
 }
 
@@ -1376,7 +1376,7 @@ input[type=range].ranger.is-large::-ms-thumb {
 
 .shadow-button:hover i {
     color: #4a4a4a;
-    text-shadow: 1px 1px 0px #dbdbdb, 2px 2px 0px #dbdbdb, 3px 3px 0px #dbdbdb, 4px 4px 0px #dbdbdb, 5px 5px 0px #dbdbdb, 6px 6px 0px #dbdbdb, 7px 7px 0px #dbdbdb, 8px 8px 0px #dbdbdb, 9px 9px 0px #dbdbdb, 10px 10px 0px #dbdbdb, 11px 11px 0px #dbdbdb, 12px 12px 0px #dbdbdb, 13px 13px 0px #dbdbdb, 14px 14px 0px #dbdbdb, 15px 15px 0px #dbdbdb, 16px 16px 0px #dbdbdb, 17px 17px 0px #dbdbdb, 18px 18px 0px #dbdbdb, 19px 19px 0px #dbdbdb, 20px 20px 0px #dbdbdb, 21px 21px 0px #dbdbdb, 22px 22px 0px #dbdbdb, 23px 23px 0px #dbdbdb, 24px 24px 0px #dbdbdb, 25px 25px 0px #dbdbdb, 26px 26px 0px #dbdbdb, 27px 27px 0px #dbdbdb, 28px 28px 0px #dbdbdb, 29px 29px 0px #dbdbdb, 30px 30px 0px #dbdbdb, 31px 31px 0px #dbdbdb, 32px 32px 0px #dbdbdb, 33px 33px 0px #dbdbdb, 34px 34px 0px #dbdbdb, 35px 35px 0px #dbdbdb, 36px 36px 0px #dbdbdb, 37px 37px 0px #dbdbdb, 38px 38px 0px #dbdbdb, 39px 39px 0px #dbdbdb, 40px 40px 0px #dbdbdb, 41px 41px 0px #dbdbdb, 42px 42px 0px #dbdbdb, 43px 43px 0px #dbdbdb, 44px 44px 0px #dbdbdb, 45px 45px 0px #dbdbdb, 46px 46px 0px #dbdbdb, 47px 47px 0px #dbdbdb, 48px 48px 0px #dbdbdb, 49px 49px 0px #dbdbdb, 50px 50px 0px #dbdbdb, 51px 51px 0px #dbdbdb;
+    text-shadow: 1px 1px 0 #dbdbdb, 2px 2px 0 #dbdbdb, 3px 3px 0 #dbdbdb, 4px 4px 0 #dbdbdb, 5px 5px 0 #dbdbdb, 6px 6px 0 #dbdbdb, 7px 7px 0 #dbdbdb, 8px 8px 0 #dbdbdb, 9px 9px 0 #dbdbdb, 10px 10px 0 #dbdbdb, 11px 11px 0 #dbdbdb, 12px 12px 0 #dbdbdb, 13px 13px 0 #dbdbdb, 14px 14px 0 #dbdbdb, 15px 15px 0 #dbdbdb, 16px 16px 0 #dbdbdb, 17px 17px 0 #dbdbdb, 18px 18px 0 #dbdbdb, 19px 19px 0 #dbdbdb, 20px 20px 0 #dbdbdb, 21px 21px 0 #dbdbdb, 22px 22px 0 #dbdbdb, 23px 23px 0 #dbdbdb, 24px 24px 0 #dbdbdb, 25px 25px 0 #dbdbdb, 26px 26px 0 #dbdbdb, 27px 27px 0 #dbdbdb, 28px 28px 0 #dbdbdb, 29px 29px 0 #dbdbdb, 30px 30px 0 #dbdbdb, 31px 31px 0 #dbdbdb, 32px 32px 0 #dbdbdb, 33px 33px 0 #dbdbdb, 34px 34px 0 #dbdbdb, 35px 35px 0 #dbdbdb, 36px 36px 0 #dbdbdb, 37px 37px 0 #dbdbdb, 38px 38px 0 #dbdbdb, 39px 39px 0 #dbdbdb, 40px 40px 0 #dbdbdb, 41px 41px 0 #dbdbdb, 42px 42px 0 #dbdbdb, 43px 43px 0 #dbdbdb, 44px 44px 0 #dbdbdb, 45px 45px 0 #dbdbdb, 46px 46px 0 #dbdbdb, 47px 47px 0 #dbdbdb, 48px 48px 0 #dbdbdb, 49px 49px 0 #dbdbdb, 50px 50px 0 #dbdbdb, 51px 51px 0 #dbdbdb;
 }
 
 .shadow {
@@ -1388,7 +1388,7 @@ input[type=range].ranger.is-large::-ms-thumb {
     vertical-align: top;
     width: 2.3rem;
     overflow: hidden;
-    text-shadow: 1px 1px 0px #dbdbdb, 2px 2px 0px #dbdbdb, 3px 3px 0px #dbdbdb, 4px 4px 0px #dbdbdb, 5px 5px 0px #dbdbdb, 6px 6px 0px #dbdbdb, 7px 7px 0px #dbdbdb, 8px 8px 0px #dbdbdb, 9px 9px 0px #dbdbdb, 10px 10px 0px #dbdbdb, 11px 11px 0px #dbdbdb, 12px 12px 0px #dbdbdb, 13px 13px 0px #dbdbdb, 14px 14px 0px #dbdbdb, 15px 15px 0px #dbdbdb, 16px 16px 0px #dbdbdb, 17px 17px 0px #dbdbdb, 18px 18px 0px #dbdbdb, 19px 19px 0px #dbdbdb, 20px 20px 0px #dbdbdb, 21px 21px 0px #dbdbdb, 22px 22px 0px #dbdbdb, 23px 23px 0px #dbdbdb, 24px 24px 0px #dbdbdb, 25px 25px 0px #dbdbdb, 26px 26px 0px #dbdbdb, 27px 27px 0px #dbdbdb, 28px 28px 0px #dbdbdb, 29px 29px 0px #dbdbdb, 30px 30px 0px #dbdbdb, 31px 31px 0px #dbdbdb, 32px 32px 0px #dbdbdb, 33px 33px 0px #dbdbdb, 34px 34px 0px #dbdbdb, 35px 35px 0px #dbdbdb, 36px 36px 0px #dbdbdb, 37px 37px 0px #dbdbdb, 38px 38px 0px #dbdbdb, 39px 39px 0px #dbdbdb, 40px 40px 0px #dbdbdb, 41px 41px 0px #dbdbdb, 42px 42px 0px #dbdbdb, 43px 43px 0px #dbdbdb, 44px 44px 0px #dbdbdb, 45px 45px 0px #dbdbdb, 46px 46px 0px #dbdbdb, 47px 47px 0px #dbdbdb, 48px 48px 0px #dbdbdb, 49px 49px 0px #dbdbdb, 50px 50px 0px #dbdbdb, 51px 51px 0px #dbdbdb;
+    text-shadow: 1px 1px 0 #dbdbdb, 2px 2px 0 #dbdbdb, 3px 3px 0 #dbdbdb, 4px 4px 0 #dbdbdb, 5px 5px 0 #dbdbdb, 6px 6px 0 #dbdbdb, 7px 7px 0 #dbdbdb, 8px 8px 0 #dbdbdb, 9px 9px 0 #dbdbdb, 10px 10px 0 #dbdbdb, 11px 11px 0 #dbdbdb, 12px 12px 0 #dbdbdb, 13px 13px 0 #dbdbdb, 14px 14px 0 #dbdbdb, 15px 15px 0 #dbdbdb, 16px 16px 0 #dbdbdb, 17px 17px 0 #dbdbdb, 18px 18px 0 #dbdbdb, 19px 19px 0 #dbdbdb, 20px 20px 0 #dbdbdb, 21px 21px 0 #dbdbdb, 22px 22px 0 #dbdbdb, 23px 23px 0 #dbdbdb, 24px 24px 0 #dbdbdb, 25px 25px 0 #dbdbdb, 26px 26px 0 #dbdbdb, 27px 27px 0 #dbdbdb, 28px 28px 0 #dbdbdb, 29px 29px 0 #dbdbdb, 30px 30px 0 #dbdbdb, 31px 31px 0 #dbdbdb, 32px 32px 0 #dbdbdb, 33px 33px 0 #dbdbdb, 34px 34px 0 #dbdbdb, 35px 35px 0 #dbdbdb, 36px 36px 0 #dbdbdb, 37px 37px 0 #dbdbdb, 38px 38px 0 #dbdbdb, 39px 39px 0 #dbdbdb, 40px 40px 0 #dbdbdb, 41px 41px 0 #dbdbdb, 42px 42px 0 #dbdbdb, 43px 43px 0 #dbdbdb, 44px 44px 0 #dbdbdb, 45px 45px 0 #dbdbdb, 46px 46px 0 #dbdbdb, 47px 47px 0 #dbdbdb, 48px 48px 0 #dbdbdb, 49px 49px 0 #dbdbdb, 50px 50px 0 #dbdbdb, 51px 51px 0 #dbdbdb;
 }
 
 .shadow .is-awesome-icon-content {

@@ -115,8 +115,7 @@
         %tbody
           - @bookings.each do |booking|
             %tr
-              - @item = Item.find_by_id(booking.item_id)
-              %td.has-text-centered= link_to @item.name, @item
+              %td.has-text-centered= @item.name
               %td.has-text-centered= booking.start_date
               %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
               %td.has-text-centered= booking.end_date

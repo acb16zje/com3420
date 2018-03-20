@@ -78,12 +78,40 @@ $(document).ready(function () {
         }
     });
 
+    // Dynamic time disabler ajax call
+    $('#startDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                start_date: $('#startDate').val(),
+            },
+            success: function() {
+                // $('#startTime').pickatime({
+            }
+        });
+    });
+
+    $('#endDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                start_date: $('#startDate').val(),
+            },
+            success: function() {
+                console.log("success");
+            }
+        })
+    });
+
     // Timepicker startTime on creating booking
     $('#startTime').pickatime({
         clear: '',
         min: [9, 0],
         max: [17, 0],
-        interval: 10
+        interval: 10,
+        disable: gon.block_start_time
     });
 
     // Timepicker endTime on creating booking
@@ -91,7 +119,8 @@ $(document).ready(function () {
         clear: '',
         min: [9, 0],
         max: [17, 0],
-        interval: 10
+        interval: 10,
+        disable: gon.block_end_time
     });
 
     // Bulma notification
