@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: %i[show edit update destroy]
   authorize_resource
 
   # GET /users
@@ -13,8 +15,7 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  def show
-  end
+  def show; end
 
   # GET /users/new
   def new
@@ -22,25 +23,22 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /users
   def create
     @user = User.new(user_params)
 
     # Checks whether the user already exists
-    if User.exists?(:email => @user.email)
+    if User.exists?(email: @user.email)
       redirect_to new_user_path, notice: 'Account already exists.'
     else
       # Gets the info for this email from MUSE
       @user.get_info_from_ldap
-      if @user.uid == "" || @user.uid.nil?
+      if @user.uid == '' || @user.uid.nil?
         redirect_to new_user_path, notice: 'Not a valid email.'
       else
-        if @user.phone == "" || @user.phone.nil?
-          @user.phone = "-"
-        end
+        @user.phone = '-' if @user.phone == '' || @user.phone.nil?
 
         if @user.save
           # email new user their details
@@ -68,8 +66,8 @@ class UsersController < ApplicationController
     redirect_to users_path, notice: 'User was successfully deleted.'
   end
 
-
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])

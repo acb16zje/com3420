@@ -29,7 +29,7 @@
                 %td
                   = @item.name
               %tr
-                %th Hash ID
+                %th Serial ID
                 %td
                   = @item.serial_id
               %tr
@@ -101,7 +101,7 @@
 
     %br
     %br
-    - if (@item.user_id == current_user.id || current_user.permission_id == 3)
+    - if @item.user_id == current_user.id || current_user.permission_id == 3
       %p.title.has-text-centered Bookings History
       %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
         %thead

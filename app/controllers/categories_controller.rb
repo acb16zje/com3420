@@ -31,13 +31,14 @@ class CategoriesController < ApplicationController
     @category = Category.new(category_params)
 
     # Checks whether the user already exists
-    if Category.exists?(:name => @category.name) || Category.exists?(:tag => @category.tag)
+    if Category.exists?(name: @category.name) || Category.exists?(tag: @category.tag)
       redirect_to new_category_path, notice: 'Category or tag already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
-        if (@category.tag =~ /^[a-zA-Z]{2,5}$/)
+        if @category.tag =~ /^[a-zA-Z]{2,5}$/
           @category.name = @category.name.titleize
           @category.tag.upcase!
+          
           if @category.save
             redirect_to categories_path, notice: 'Category was successfully created.'
           else

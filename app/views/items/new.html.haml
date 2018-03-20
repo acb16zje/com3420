@@ -52,7 +52,7 @@
                 .field
                   .file.has-name.is-fullwidth
                     %label.file-label
-                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*', maxfilesize: '1'}
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*', maxfilesize: '1', mindimensions: '500x500'}
                       %span.file-cta
                         %span.file-icon
                           %i.fas.fa-upload
@@ -61,6 +61,7 @@
                       %span.file-name#file_name
                         Uploaded file name
                   %p.help Max file size: 1MB
+                  %p.help Images < 500x500 px will be invalid
             %br
             %hr
             %br
