@@ -1,5 +1,5 @@
 class UserHomeCategoriesController < ApplicationController
-  before_action :set_user_home_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_user_home_category, only: %i[show edit update destroy]
 
   # GET /user_home_categories
   def index
@@ -7,8 +7,7 @@ class UserHomeCategoriesController < ApplicationController
   end
 
   # GET /user_home_categories/1
-  def show
-  end
+  def show; end
 
   # GET /user_home_categories/new
   def new
@@ -18,8 +17,7 @@ class UserHomeCategoriesController < ApplicationController
   end
 
   # GET /user_home_categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /user_home_categories
   def create
@@ -48,13 +46,14 @@ class UserHomeCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user_home_category
-      @user_home_category = UserHomeCategory.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def user_home_category_params
-      params.require(:user_home_category).permit(:user_id, :category_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user_home_category
+    @user_home_category = UserHomeCategory.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def user_home_category_params
+    params.require(:user_home_category).permit(:user_id, :category_id)
+  end
 end

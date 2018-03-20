@@ -4,13 +4,14 @@
 //= require inputTypeNumberPolyfill
 //= require picker
 //= require picker.date
+//= require picker.time
 //= require zoom
 //= require notifications
 
 $(document).ready(function () {
     // Navigation Burger menu
     // Get all "navbar-burger" elements
-    var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    var $navbarBurgers = getAll('.navbar-burger');
 
     // Check if there are any navbar burgers
     if ($navbarBurgers.length > 0) {
@@ -31,48 +32,66 @@ $(document).ready(function () {
         });
     }
 
-    // Pickadate datepicker
+    // Pickadate purchaseDate on creating assets
     $("#purchaseDate").pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         onStart: function () {
-            var date = new Date()
+            var date = new Date();
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         }
     });
 
+    // Pickadate startDate on creating booking
     $('#startDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         // An integer (positive/negative) sets it relative to today.
         min: new Date(),
         onStart: function () {
-            var date = new Date()
+            var date = new Date();
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         },
         disable: gon.block_dates
-    })
+    });
 
+    // Pickadate endDate on creating booking
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         min: new Date(),
         onStart: function () {
-            var date = new Date()
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate() + 1]);
+            var date = new Date();
+            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         },
         disable: gon.block_dates
-    })
+    });
 
     $('.datepicker').on('change', function () {
         if ($(this).attr('id') === 'startDate') {
             var startDate = new Date($('#startDate').val());
             var endDate = new Date($('#endDate').val());
             if (endDate < startDate) {
-                $('#endDate').val("");
+                $('#endDate').val($('#startDate').val());
             }
             $('#endDate').pickadate('picker').set('min', $(this).val());
         }
+    });
+
+    // Timepicker startTime on creating booking
+    $('#startTime').pickatime({
+        clear: '',
+        min: [9, 0],
+        max: [17, 0],
+        interval: 10
+    });
+
+    // Timepicker endTime on creating booking
+    $('#endTime').pickatime({
+        clear: '',
+        min: [9, 0],
+        max: [17, 0],
+        interval: 10
     });
 
     // Bulma notification
@@ -126,4 +145,59 @@ $(document).ready(function () {
     $('#zoom').zoom({
         magnify: 0.8
     });
+<<<<<<< HEAD
 });
+=======
+
+    // Launch and close the modal
+    function getAll(selector) {
+        return Array.prototype.slice.call(document.querySelectorAll(selector), 0);
+    }
+
+    var modals = getAll('.modal');
+    var modalButtons = getAll('.modal-button');
+    var modalCloses = getAll('.modal-close');
+
+    // Open the modal
+    if (modalButtons.length > 0) {
+        modalButtons.forEach(function ($el) {
+            $el.addEventListener('click', function () {
+                var target = $el.dataset.target;
+                var $target = document.getElementById(target);
+                $target.classList.add('is-active');
+            });
+        });
+    }
+
+    // Close modal button
+    if (modalCloses.length > 0) {
+        modalCloses.forEach(function ($el) {
+            $el.addEventListener('click', function () {
+                closeModals();
+            });
+        });
+    }
+
+    // Close modal when Esc is pressed
+    $(document).keydown(function () {
+        var e = event || window.event;
+        if (e.keyCode === 27) {
+            closeModals();
+        }
+    });
+
+    // Close modal when click outside of image
+    $(document).click(function (e) {
+        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
+            closeModals();
+        }
+    });
+
+    // closeModals function
+    function closeModals() {
+        modals.forEach(function ($el) {
+            $el.classList.remove('is-active');
+        });
+    }
+});
+>>>>>>> 9c5de3821cf38c996dd7b912548144b0144df975

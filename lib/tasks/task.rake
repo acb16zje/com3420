@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Dropping and re-creating the tables...'
 task :reset do
   if File.file?('./db/schema.rb')
@@ -24,11 +26,11 @@ task :deploy_no_seed do
   sh 'bundle exec ed release -d demo'
 end
 
-desc 'update_booking_status_to_ongoing'
-task :update_booking_status_to_ongoing => :environment do
+desc 'Update booking status to ongoing'
+task update_booking_status_to_ongoing: :environment do
   # Get current date/time
   now = Time.new
-  bookings = Booking.where("status = 2 AND start_datetime <= ?", now)
+  bookings = Booking.where('status = 2 AND start_datetime <= ?', now)
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b)
     b.status = 3
@@ -36,11 +38,11 @@ task :update_booking_status_to_ongoing => :environment do
   end
 end
 
-desc 'update_booking_status_to_late'
-task :update_booking_status_to_late => :environment do
+desc 'Update booking status to late'
+task update_booking_status_to_late: :environment do
   # Get current date/time
   now = Time.new
-  bookings = Booking.where("status = 3 AND end_datetime <= ?", now)
+  bookings = Booking.where('status = 3 AND end_datetime <= ?', now)
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "late", notifiable: b)
     b.status = 7

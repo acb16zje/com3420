@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20180320144252) do
+=======
+ActiveRecord::Schema.define(version: 20180305230625) do
+>>>>>>> 9c5de3821cf38c996dd7b912548144b0144df975
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,9 +40,9 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "tag"
+    t.string "categoryicon"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "categoryicon"
     t.index ["name"], name: "index_categories_on_name", unique: true
     t.index ["tag"], name: "index_categories_on_tag", unique: true
   end
@@ -62,7 +66,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "name"
     t.string "condition"
     t.string "location"
-    t.string "hash_id"
+    t.string "serial_id"
     t.string "manufacturer"
     t.string "model"
     t.string "serial"
@@ -75,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.bigint "user_id"
     t.bigint "category_id"
     t.index ["category_id"], name: "index_items_on_category_id"
-    t.index ["hash_id"], name: "index_items_on_hash_id", unique: true
+    t.index ["serial_id"], name: "index_items_on_serial_id", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 

@@ -1,0 +1,104 @@
+/****
+1 day 1 booking
+
+today 5am - today 10am : block - none
+
+today 10am - today 3pm : block - none
+
+today 5am - today 6pm : block - today
+
+****/
+
+/****
+2 day 1 booking
+
+today 9am - tmr 10am : block - today
+
+today 4pm - tmr 10am : block - none
+
+today 9am - tmr 6pm : block - today,tmr
+
+today 4pm - tmr 6pm : block - tmr
+
+****/
+
+/****
+multiple day 1 booking
+
+start 9am - end 10am : block - start,between
+
+start 4pm - end 10am : block - start,between
+
+start 9am - end 6pm : block - start,end,between
+
+start 4pm - end 6pm : block - end,between
+
+start 4pm - end 4pm : block - between
+****/
+
+/****
+1 day multiple bookings
+
+today 9am - today 3pm
+today 3pm - today 4pm
+today 4pm - today 5pm : block - today
+
+today 1pm - today 3pm
+today 3pm - today 4pm
+today 4pm - today 5pm : block - none
+
+today 9am - today 2pm
+today 2pm - today 3pm
+today 3pm - today 4pm : block - none
+
+today 10am - today 1pm
+today 1pm - today 2pm
+today 2pm - today 3pm : block - none
+****/
+
+/****
+2 day multiple bookings
+
+today 9am - tmr 3pm
+tmr 3pm - tmr 4pm
+tmr 4pm - tmr 5pm  : block - today,tmr
+
+today 9am - today 3pm
+today 3pm - tmr 3pm
+tmr 3pm - tmr 4pm
+tmr 4pm - tmr 5pm : block - today,tmr
+
+today 1pm - tmr 3pm
+tmr 3pm - tmr 4pm
+tmr 4pm - tmr 5pm : block - tmr
+
+today 9am - tmr 2pm
+tmr 2pm - tmr 3pm
+tmr 3pm - tmr 4pm : block - today
+
+today 1pm - tmr 1pm
+tmr 1pm - tmr 2pm
+tmr 2pm - tmr 3pm : block - none
+****/
+
+
+/****
+multiple day 1 booking
+
+start 9am - day2 2pm
+day2 2pm - end 10am
+end 10am - end 2pm : block - start,between
+
+start 9am - day2 2pm
+day2 2pm - end 10am
+end 10am - end 5pm : block - start,end,between
+
+start 1pm - day2 2pm
+day2 2pm - end 10am
+end 10am - end 5pm : block - end,between
+
+start 1pm - day2 2pm
+day2 2pm - end 10am
+end 10am - end 2pm : block - between
+****/
+

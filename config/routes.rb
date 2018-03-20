@@ -1,34 +1,31 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
   resources :user_home_categories
   mount EpiCas::Engine, at: '/'
   devise_for :users
 
   resources :categories do
-    get 'filter', :on => :collection
+    get 'filter', on: :collection
   end
 
   resources :users do
-    get 'manager', :on => :collection
+    get 'manager', on: :collection
   end
 
   resources :bookings do
-    get 'requests', :on => :collection
-    get 'accepted', :on => :collection
-    get 'ongoing', :on => :collection
-    get 'completed', :on => :collection
-    get 'rejected', :on => :collection
-    put 'set_booking_cancelled', :on => :member
-    put 'set_booking_returned', :on => :member
+    get 'requests', on: :collection
+    get 'accepted', on: :collection
+    get 'ongoing', on: :collection
+    get 'completed', on: :collection
+    get 'rejected', on: :collection
+    put 'set_booking_cancelled', on: :member
+    put 'set_booking_returned', on: :member
   end
 
   resources :items do
     resources :bookings
-    get 'manager', :on => :collection
-    put 'update_manager_multiple', :on => :collection
-    post 'change_manager_multiple', :on => :collection
-
+    get 'manager', on: :collection
+    put 'update_manager_multiple', on: :collection
+    post 'change_manager_multiple', on: :collection
   end
 
   resources :notifications do

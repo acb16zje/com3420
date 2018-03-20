@@ -10,7 +10,8 @@
     %thead
       %tr
         %th Name
-        %th Hash ID
+        %th Image
+        %th Serial ID
         %th Category
         %th Manufacturer
         %th Condition
@@ -20,7 +21,18 @@
       -@items.each do |item|
         %tr
           %td.has-text-centered= link_to item.name, item
-          %td.has-text-centered= item.hash_id
+          %td.has-text-centered
+            - if item.image?
+              = link_to image_tag(item.image.url, width: '50', height: '50', alt: 'Image', style: 'vertical-align: middle'), '#', 'data-target' => "modal-#{item.serial_id}", class: 'modal-button'
+              .modal{id: "modal-#{item.serial_id}"}
+                .modal-background
+                .modal-content
+                  %p.image-modal
+                    = image_tag(item.image.url, width: '600', alt: 'Image')
+                %button.modal-close.is-large{"aria-label" => "close"}
+            - else
+              = image_tag("amrc.svg", width: "50", alt: 'Default Image, AMRC', style: 'vertical-align: middle')
+          %td.has-text-centered= item.serial_id
           %td.has-text-centered= item.category.name
           %td.has-text-centered= item.manufacturer
           %td.has-text-centered= item.condition

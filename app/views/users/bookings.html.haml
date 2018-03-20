@@ -57,7 +57,7 @@
           %td
           %td
             .field.is-grouped.is-grouped-centered
-              - if (booking.status < 3)
+              - if booking.status < 3
                 %p.control
                   = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-link' do
                     %span.icon
