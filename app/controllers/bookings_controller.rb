@@ -141,16 +141,20 @@ class BookingsController < ApplicationController
       #   end_index = check_end_dates.index(check_dates[i])
       # end
       
+      puts
+      puts
       puts "startcount"
       puts check_dates[i]
       puts "endcount"
       puts check_dates[end_count]
-      puts (Date.parse(check_dates[end_count].to_time.to_s)- Date.parse(check_dates[i].to_time.to_s)).to_i 
+      puts prev_day
       puts
+      puts
+
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
         if DateTime.parse(check_dates[i].to_time.to_s) <= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 9, 0, 0))
-          if DateTime.parse(check_dates[end_count].to_time.to_s) >= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 17, 0, 0))
+          if DateTime.parse(check_dates[end_count].to_time.to_s) >= (DateTime.new(check_dates[end_count].year, check_dates[end_count].month, check_dates[end_count].day, 17, 0, 0))
             block_date = check_dates[i].strftime("%Y-%m-%d").split('-')
             block_date[1] = (block_date[1].to_i - 1).to_s
             block_dates.append(block_date)
@@ -170,7 +174,7 @@ class BookingsController < ApplicationController
           block_dates.append(block_date)
         end
 
-        if DateTime.parse(check_dates[end_count].to_s) >= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 17, 0, 0))
+        if DateTime.parse(check_dates[end_count].to_s) >= (DateTime.new(check_dates[end_count].year, check_dates[end_count].month, check_dates[end_count].day, 17, 0, 0))
           block_date = check_dates[end_count].strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
