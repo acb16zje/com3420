@@ -42,6 +42,29 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 5", current_user.id)
   end
 
+  # Convert the datetime object to a date string to block
+  def get_block_date(date_time)
+    block_date = date_time.strftime("%Y-%m-%d").split('-')
+    block_date[1] = (block_date[1].to_i - 1).to_s
+    return block_date
+  end
+
+  # Check if the provided date time is before 9 AM
+  def check_before_nine_am(datetime)
+    if DateTime.parse(datetime.to_time.to_s) <= DateTime.new(datetime.year, datetime.month, datetime.day, 9, 0, 0)
+      return true
+    end
+    return false
+  end
+
+  # Check if the provided date time is after 5 PM
+  def check_after_five_pm(datetime)
+    if DateTime.parse(datetime.to_time.to_s) >= DateTime.new(datetime.year, datetime.month, datetime.day, 17, 0, 0)
+      return true
+    end
+    return false
+  end
+
   # GET /bookings/new
   def new
     @booking = Booking.new
@@ -53,42 +76,29 @@ class BookingsController < ApplicationController
     bookings.each do |booking|
       # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
-        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time) &&
-           DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
-          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_before_nine_am(booking.start_time) && check_after_five_ppm(booking.end_time)
+          block_dates.append(get_block_date(booking.start_datetime))
         end
         # If a single booking that spans 2 days, would fill up either day
       elsif (booking.end_date - booking.start_date).to_i == 1
-        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
-          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_before_nine_am(booking.start_time)
+          block_dates.append(get_block_date(booking.start_datetime))
         end
-        if DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
-          block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_after_five_ppm(booking.end_time)
+          block_dates.append(get_block_date(booking.end_datetime))
         end
         # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
       elsif (booking.end_date - booking.start_date).to_i > 1
         ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
-          block_date = date.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+          block_dates.append(get_block_date(date))
         end
         
-        if DateTime.parse(booking.start_time.to_time.to_s) <= (DateTime.new(2000, 1, 1, 9, 0, 0).to_time)
-          block_date = booking.start_datetime.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_before_nine_am(booking.start_time)
+          block_dates.append(get_block_date(booking.start_datetime))
         end
         
-        if DateTime.parse(booking.end_time.to_time.to_s) >= (DateTime.new(2000, 1, 1, 17, 0, 0).to_time)
-          block_date = booking.end_datetime.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_after_five_pm(booking.end_time)
+          block_dates.append(get_block_date(booking.end_datetime))
         end
       end
       
@@ -124,31 +134,21 @@ class BookingsController < ApplicationController
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
-        if DateTime.parse(check_dates[i].to_time.to_s) <= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 9, 0, 0))
-          if DateTime.parse(check_dates[end_count].to_time.to_s) >= (DateTime.new(check_dates[end_count].year, check_dates[end_count].month, check_dates[end_count].day, 17, 0, 0))
-            block_date = check_dates[i].strftime("%Y-%m-%d").split('-')
-            block_date[1] = (block_date[1].to_i - 1).to_s
-            block_dates.append(block_date)
-          end
+        if check_before_nine_am(check_dates[i]) && check_after_five_ppm(check_dates[end_count])
+          block_dates.append(get_block_date(check_dates[i]))
         end
       else
         # If it is connected, then block dates in between start and end
-        ((Date.parse(check_dates[i].to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
-          block_date = date.strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        ((Date.parse(check_dates[i].to_time.to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
+          block_dates.append(get_block_date(date))
         end
         # Check whether start date needs to be blocked
-        if DateTime.parse(check_dates[i].to_s) <= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 9, 0, 0))
-          block_date = check_dates[i].strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_before_nine_am(booking.start_time)
+          block_dates.append(get_block_date(check_dates[i]))
         end
         # Check whether end date needs to be blocked
-        if DateTime.parse(check_dates[end_count].to_s) >= (DateTime.new(check_dates[end_count].year, check_dates[end_count].month, check_dates[end_count].day, 17, 0, 0))
-          block_date = check_dates[end_count].strftime("%Y-%m-%d").split('-')
-          block_date[1] = (block_date[1].to_i - 1).to_s
-          block_dates.append(block_date)
+        if check_after_five_ppm(check_dates[end_count])
+          block_dates.append(check_dates[end_count])
         end
       end
 

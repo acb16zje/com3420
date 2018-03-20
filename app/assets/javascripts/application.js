@@ -145,9 +145,6 @@ $(document).ready(function () {
     $('#zoom').zoom({
         magnify: 0.8
     });
-<<<<<<< HEAD
-});
-=======
 
     // Launch and close the modal
     function getAll(selector) {
@@ -200,4 +197,3 @@ $(document).ready(function () {
         });
     }
 });
->>>>>>> 9c5de3821cf38c996dd7b912548144b0144df975
