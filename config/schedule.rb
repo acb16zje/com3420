@@ -21,7 +21,7 @@ every :reboot, roles: [ :db ] do
 end
 
 # every 30 seconds
-every (0.5).minutes do
+every 1.minutes do
   rake "update_booking_status_to_ongoing"
   rake "update_booking_status_to_late"
 end
