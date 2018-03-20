@@ -49,8 +49,6 @@ class BookingsController < ApplicationController
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
     block_dates = []
     check_dates = []
-    # check_start_dates = []
-    # check_end_dates = []
 
     bookings.each do |booking|
       # If a single booking fills in the entire day
@@ -96,14 +94,10 @@ class BookingsController < ApplicationController
       
       check_dates.append(booking.start_datetime)
       check_dates.append(booking.end_datetime)
-      # check_start_dates.append(booking.start_datetime)
-      # check_end_dates.append(booking.end_datetime)
     end
 
     i = 0
     check_dates.sort!
-    # check_start_dates.sort!
-    # check_end_dates.sort!
     
     not_found_pair = false
     while i < check_dates.length - 2
@@ -126,30 +120,7 @@ class BookingsController < ApplicationController
       # Checks if the first time of the section is connected to a booking on the previous day
       if (Date.parse(check_dates[end_count].to_time.to_s)- Date.parse(check_dates[i].to_time.to_s)) > 0
         prev_day = true
-        start_count -= 1
-        # start_index = check_end_dates.index(check_dates[i])
-      else
-        # start_index = check_start_dates.index(check_dates[i])
       end
-      
-      # # Checks if the last time of the section is connected to a  booking on the next day
-      # if (check_start_dates.include? check_dates.last)
-      #   next_day = true
-      #   end_count += 1
-      #   end_index = check_start_dates.index(check_dates[i])
-      # else
-      #   end_index = check_end_dates.index(check_dates[i])
-      # end
-      
-      puts
-      puts
-      puts "startcount"
-      puts check_dates[i]
-      puts "endcount"
-      puts check_dates[end_count]
-      puts prev_day
-      puts
-      puts
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
@@ -161,19 +132,19 @@ class BookingsController < ApplicationController
           end
         end
       else
+        # If it is connected, then block dates in between start and end
         ((Date.parse(check_dates[i].to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
           block_date = date.strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-        
+        # Check whether start date needs to be blocked
         if DateTime.parse(check_dates[i].to_s) <= (DateTime.new(check_dates[i].year, check_dates[i].month, check_dates[i].day, 9, 0, 0))
           block_date = check_dates[i].strftime("%Y-%m-%d").split('-')
-          puts "hiasdasdas"
           block_date[1] = (block_date[1].to_i - 1).to_s
           block_dates.append(block_date)
         end
-
+        # Check whether end date needs to be blocked
         if DateTime.parse(check_dates[end_count].to_s) >= (DateTime.new(check_dates[end_count].year, check_dates[end_count].month, check_dates[end_count].day, 17, 0, 0))
           block_date = check_dates[end_count].strftime("%Y-%m-%d").split('-')
           block_date[1] = (block_date[1].to_i - 1).to_s
@@ -181,7 +152,6 @@ class BookingsController < ApplicationController
         end
       end
 
-      # i +=1
       i = end_count + 1
     end
 

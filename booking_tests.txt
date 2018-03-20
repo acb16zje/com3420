@@ -81,3 +81,24 @@ tmr 1pm - tmr 2pm
 tmr 2pm - tmr 3pm : block - none
 ****/
 
+
+/****
+multiple day 1 booking
+
+start 9am - day2 2pm
+day2 2pm - end 10am
+end 10am - end 2pm : block - start,between
+
+start 9am - day2 2pm
+day2 2pm - end 10am
+end 10am - end 5pm : block - start,end,between
+
+start 1pm - day2 2pm
+day2 2pm - end 10am
+end 10am - end 5pm : block - end,between
+
+start 1pm - day2 2pm
+day2 2pm - end 10am
+end 10am - end 2pm : block - between
+****/
+
