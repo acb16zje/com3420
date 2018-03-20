@@ -31,6 +31,12 @@ Rails.application.routes.draw do
 
   end
 
+  resources :notifications do
+    collection do
+      post :mark_as_read
+    end
+  end
+
   root to: 'home#index'
 
   match '/403', to: 'errors#error_403', via: :all

@@ -5,6 +5,7 @@
 //= require picker
 //= require picker.date
 //= require zoom
+//= require notifications
 
 $(document).ready(function () {
     // Navigation Burger menu
@@ -51,7 +52,7 @@ $(document).ready(function () {
         },
         disable: gon.block_dates
     })
-    
+
     $('#endDate').pickadate({
         format: 'd mmmm yyyy',
         clear: '',

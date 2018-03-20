@@ -36,7 +36,7 @@
           %span
           %span
           %span
-      #navbarExampleTransparentExample.navbar-menu
+      #navbarExampleTransparentExample.navbar-menu{"data-behavior" => "notifications" }
         .navbar-start
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
@@ -80,12 +80,12 @@
                 = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
                 - if current_user.permission_id == 3
                   = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
-          .navbar-item.has-dropdown.is-hoverable
+          .navbar-item.has-dropdown.is-hoverable{"data-behavior" => "notification-link" }
             = link_to requests_bookings_path, class: 'navbar-link' do
               %span.icon
                 %i.fas.fa-bell
-            .navbar-dropdown.is-boxed.is-right
-              = link_to 'Requests', requests_bookings_path, class: "navbar-item"
+                %span{"data-behavior" => "unread-count"}
+            .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items" }
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
               %span.icon

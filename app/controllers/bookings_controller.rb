@@ -194,8 +194,10 @@ class BookingsController < ApplicationController
   def update
     if @booking.update(booking_params)
       if @booking.status == 2
+        Notification.create(recipient: @booking.user, action: "approved", notifiable: @booking)
         UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       elsif @booking.status == 5
+        Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking)
         UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       end
 
@@ -216,6 +218,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 6
     if @booking.save
+      Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking)
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     else
       redirect_to bookings_path, notice: 'Could not cancel booking.'
@@ -227,6 +230,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 4
     if @booking.save
+      Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking)
       redirect_to bookings_path, notice: 'Item marked as returned'
     else
       redirect_to bookings_path, notice: 'Could not be returned'

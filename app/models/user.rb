@@ -39,5 +39,5 @@ class User < ApplicationRecord
   has_many :bookings
   has_many :items
   has_many :categories, through: :user_home_categories
-
+  has_many :notifications, foreign_key: :recipient_id
 end

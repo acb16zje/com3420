@@ -30,6 +30,7 @@ task :update_booking_status_to_ongoing => :environment do
   now = Time.new
   bookings = Booking.where("status = 2 AND start_datetime <= ?", now)
   bookings.each do |b|
+    Notification.create(recipient: b.user, action: "started", notifiable: b)
     b.status = 3
     b.save
   end
@@ -41,6 +42,7 @@ task :update_booking_status_to_late => :environment do
   now = Time.new
   bookings = Booking.where("status = 3 AND end_datetime <= ?", now)
   bookings.each do |b|
+    Notification.create(recipient: b.user, action: "late", notifiable: b)
     b.status = 7
     b.save
   end
