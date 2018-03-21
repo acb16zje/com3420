@@ -39,6 +39,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @item = item
     @manager = manager
+    @booking = booking
 
     mail to: manager.email, subject: "Asset: " + @item.serial_id + ", " + @item.name + " has been requested for booking."
   end

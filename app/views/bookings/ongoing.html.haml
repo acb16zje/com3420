@@ -15,6 +15,7 @@
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
+        %th Booking ID
         %th Asset
         %th Start Date
         %th Start Time
@@ -23,8 +24,8 @@
     %tbody
       - @bookings.each do |booking|
         %tr
-          - @item = Item.find_by_id(booking.item_id)
-          %td.has-text-centered= link_to @item.name, @item
+          %td.has-text-centered= booking.id
+          %td.has-text-centered= link_to booking.item.name, booking.item
           %td.has-text-centered= booking.start_date
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date

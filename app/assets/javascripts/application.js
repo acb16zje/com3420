@@ -104,8 +104,9 @@ $(document).ready(function () {
             data: {
                 start_date: $('#startDate').val(),
             },
-            success: function(data) {
-                console.log(data.block_start_time)
+            dataType: 'json',
+            success: function (data) {
+                $('#startTime').pickatime('picker').set('enable', true);
                 $('#startTime').pickatime('picker').set('disable', data.block_start_time);
             }
         });
@@ -118,11 +119,27 @@ $(document).ready(function () {
             data: {
                 end_date: $('#endDate').val(),
             },
-            success: function() {
-                console.log(data.block_start_time)
-                $('#endTime').pickatime('picker').set('disable', gon.block_end_time);
+            dataType: 'json',
+            success: function (data) {
+                console.log($('#endTime').pickatime('picker').get('disable'));
+                console.log(data.block_end_time);
+                $('#endTime').pickatime('picker').set('enable', true);
+                $('#endTime').pickatime('picker').set('disable', data.block_end_time);
             }
         })
+    });
+
+    $('.timepicker').on('change', function () {
+        if ($(this).attr('id') === 'startTime') {
+            var startTime = new Date($('#startDate').val() + ' ' + $('#startTime').val());
+            var endTime = new Date($('#endDate').val() + ' ' + $('#endTime').val());
+            if (endTime < startTime) {
+                $('#endTime').val(new Date(startTime.getTime() + 10 * 60000));
+            }
+
+            // Prevent same startTime and endTime
+            $('#endTime').pickatime('picker').set('min', new Date(startTime.getTime() + 10 * 60000));
+        }
     });
 
     // Bulma notification

@@ -9,7 +9,6 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    # @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ?", current_user.id)
     @bookings = Booking.where("user_id = ?", current_user.id)
   end
 
@@ -155,11 +154,19 @@ class BookingsController < ApplicationController
     # Dynamic time blocking
     if !params[:start_date].nil?
       gon.block_start_time = get_block_times(bookings, params[:start_date])
-      gon.block_end_time = get_block_times(bookings, params[:end_date])
+
       data = {
-        :block_start_time => gon.block_start_time,
-        :block_end_time => gon.block_end_time,
+        :block_start_time => gon.block_start_time
       }
+
+      render :json => data
+    elsif !params[:end_date].nil?
+      gon.block_end_time = get_block_times(bookings, params[:end_date])
+
+      data = {
+        :block_end_time => gon.block_end_time
+      }
+
       render :json => data
     else
       gon.block_start_time = get_block_times(bookings, DateTime.now)
