@@ -83,7 +83,8 @@ $(document).ready(function () {
         clear: '',
         min: [9, 0],
         max: [17, 0],
-        interval: 10
+        interval: 10,
+        disable: gon.block_start_time
     });
 
     // Timepicker endTime on creating booking
@@ -91,7 +92,37 @@ $(document).ready(function () {
         clear: '',
         min: [9, 0],
         max: [17, 0],
-        interval: 10
+        interval: 10,
+        disable: gon.block_end_time
+    });
+
+    // Dynamic time disabler ajax call
+    $('#startDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                start_date: $('#startDate').val(),
+            },
+            success: function(data) {
+                console.log(data.block_start_time)
+                $('#startTime').pickatime('picker').set('disable', data.block_start_time);
+            }
+        });
+    });
+
+    $('#endDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                end_date: $('#endDate').val(),
+            },
+            success: function() {
+                console.log(data.block_start_time)
+                $('#endTime').pickatime('picker').set('disable', gon.block_end_time);
+            }
+        })
     });
 
     // Bulma notification

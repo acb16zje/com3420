@@ -17,7 +17,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
-    @bookings = Booking.joins(:item).where('bookings.item_id = items.id', @item.id)
+    @bookings = Booking.where('bookings.item_id = ?', @item.id)
   end
 
   # GET /items/new
@@ -35,7 +35,7 @@ class ItemsController < ApplicationController
     @item.user_id = current_user.id
 
     category = Category.find_by_id(@item.category_id)
-    id_str = (Item.where(category_id: @item.category_id).count() + 1).to_s
+    id_str = (Item.where(category_id: @item.category_id).count + 1).to_s
     (0...(5 - id_str.length)).each do |_i|
       id_str = '0' + id_str
     end
@@ -76,7 +76,7 @@ class ItemsController < ApplicationController
 
     @items.each do |item|
       item.user_id = params[:item][:user_id]
-      item.save()
+      item.save
     end
 
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Item was successfully moved.'
