@@ -38,6 +38,7 @@
             %td.has-text-centered= item.condition
             %td.has-text-centered= item.location
     - if current_user.id == @manager.id
-      .field.is-grouped.is-grouped-right
-        .control
-          = submit_tag "Transfer Selection", class:'button is-link is-block'
+      .columns
+        .column
+          .buttons.is-centered
+            = submit_tag "Transfer Selection", class:'button is-link is-block'
