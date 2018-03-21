@@ -157,7 +157,7 @@ class BookingsController < ApplicationController
       gon.block_start_time = get_block_times(bookings, params[:start_date])
 
       data = {
-        :block_start_time => gon.block_start_time
+        :block_start_time => gon.block_start_time,
       }
 
       render :json => data
@@ -166,7 +166,7 @@ class BookingsController < ApplicationController
       gon.block_end_time = get_block_times(bookings, params[:end_date])
 
       data = {
-        :block_end_time => gon.block_end_time
+        :block_end_time => gon.block_end_time,
       }
 
       render :json => data
@@ -179,14 +179,23 @@ class BookingsController < ApplicationController
   end
 
   # Get the times to be blocked on the provided date
-  def get_block_times(bookings, date)
+  def get_block_times(bookings, today)
     block_times = []
     check_times = []
 
-    block_bookings = bookings.where("bookings.start_date = ?", date)
+    # To get the single booking where it may be connected from a previous day
+    block_bookings = bookings.where("bookings.end_date = ? and bookings.start_date != ?", today, today)
+    if !block_bookings.nil?
+      block_bookings.each do |booking|
+        check_times.append(booking.start_datetime)
+        check_times.append(booking.end_datetime)
+      end
+    end
+
+    block_bookings = bookings.where("bookings.start_date = ?", today)
     block_bookings.each do |booking|
-      check_times.append(booking.start_time)
-      check_times.append(booking.end_time)
+      check_times.append(booking.start_datetime)
+      check_times.append(booking.end_datetime)
     end
 
     i = 0
@@ -199,15 +208,39 @@ class BookingsController < ApplicationController
         end_count += 2
       end
 
+      # The start of the time chunk to be blocked
       temp_start_time = check_times[i]
+      # The end of the time chunk to be blocked
       temp_end_time = check_times[end_count]
-      puts (temp_start_time)
-      puts (temp_end_time)
-      while (temp_start_time.to_time - temp_end_time.to_time).to_i <= 0 && !check_after_five_pm(temp_start_time)
+
+      # Comparing the difference between today and the end date
+      today_end_comp = (DateTime.parse(today + " 09:00:00 AM") - DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)).to_i
+      # Comparing the difference between the start and the end date
+      start_end_comp = (DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 9, 0, 0) - DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)).to_i
+
+      # If the end date is on a day after today
+      if today_end_comp < 0
+        # Ends the block chunk on the end of the day
+        temp_end_time = DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 17, 0, 0)
+      else
+        # If the start date is before the end date
+        if start_end_comp < 0
+          # Start the block chunk at the start of the day
+          temp_start_time = DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)
+        end
+      end
+
+      # A loop to add the time strings to be blocked from the start to end time, does not add 5 PM to the blocked time
+      while (temp_start_time.to_time - temp_end_time.to_time).to_i < 0 && !check_after_five_pm(temp_start_time)
         block_time_string = temp_start_time.strftime("%H-%M").split('-')
-        puts (temp_start_time.to_time - temp_end_time.to_time).to_i
         block_times.append([block_time_string[0], block_time_string[1]])
+        # So the next time string to be blocked will be 10 minutes after
         temp_start_time += 10.minutes
+      end
+      # If the booking ended the next day, block 5PM
+      if today_end_comp < 0
+        block_time_string = temp_start_time.strftime("%H-%M").split('-')
+        block_times.append([block_time_string[0], block_time_string[1]])
       end
       i = end_count + 1
     end
