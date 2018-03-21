@@ -268,7 +268,7 @@ class BookingsController < ApplicationController
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
       @booking.status = 1
-#    end
+    end
 
     if @booking.save
       redirect_to bookings_path, notice: 'Booking was successfully created.'
