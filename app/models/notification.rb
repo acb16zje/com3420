@@ -4,6 +4,7 @@
 #
 #  id              :integer          not null, primary key
 #  recipient_id    :integer
+#  context         :string
 #  read_at         :datetime
 #  action          :string
 #  notifiable_id   :integer

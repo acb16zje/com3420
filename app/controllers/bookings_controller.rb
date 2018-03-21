@@ -261,13 +261,14 @@ class BookingsController < ApplicationController
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
 
     item = Item.find_by_id(@booking.item_id)
-    if item.user_id == current_user.id
-      @booking.status = 2
-    else
+#    if item.user_id == current_user.id
+#      @booking.status = 2
+#    else
+      Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
       @booking.status = 1
-    end
+#    end
 
     if @booking.save
       redirect_to bookings_path, notice: 'Booking was successfully created.'
@@ -280,10 +281,10 @@ class BookingsController < ApplicationController
   def update
     if @booking.update(booking_params)
       if @booking.status == 2
-        Notification.create(recipient: @booking.user, action: "approved", notifiable: @booking)
+        Notification.create(recipient: @booking.user, action: "approved", notifiable: @booking, context: "U")
         UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       elsif @booking.status == 5
-        Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking)
+        Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking, context: "U")
         UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       end
 
@@ -304,7 +305,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 6
     if @booking.save
-      Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking)
+      Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking, context: "AM")
       UserMailer.manager_booking_cancelled(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     else
@@ -317,7 +318,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 4
     if @booking.save
-      Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking)
+      Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking, context: "AM")
       UserMailer.manager_asset_returned(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
       redirect_to bookings_path, notice: 'Item marked as returned'
     else

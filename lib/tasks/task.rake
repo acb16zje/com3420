@@ -32,8 +32,9 @@ task update_booking_status_to_ongoing: :environment do
   now = Time.new
   bookings = Booking.where('status = 2 AND start_datetime <= ?', now)
   bookings.each do |b|
-    Notification.create(recipient: b.user, action: "started", notifiable: b)
-    UserMailer.booking_ongoing(User.find(@b.user_id), Item.find(@b.item_id)).deliver
+    Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
+    Notification.create(recipient: b.item.user_id, action: "started", notifiable: b, context: "AM")
+    UserMailer.booking_ongoing(User.find(b.user_id), Item.find(b.item_id)).deliver
     b.status = 3
     b.save
   end
@@ -45,7 +46,8 @@ task update_booking_status_to_late: :environment do
   now = Time.new
   bookings = Booking.where('status = 3 AND end_datetime <= ?', now)
   bookings.each do |b|
-    Notification.create(recipient: b.user, action: "late", notifiable: b)
+    Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
+    Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
     b.status = 7
     b.save
   end
