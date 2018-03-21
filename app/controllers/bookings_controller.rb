@@ -71,8 +71,6 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
     block_dates = []
-    block_start_time = []
-    block_end_time = []
     check_dates = []
 
     bookings.each do |booking|
@@ -111,7 +109,6 @@ class BookingsController < ApplicationController
     check_dates.sort!
 
     i = 0
-    not_found_pair = false
 
     while i < check_dates.length - 2
       # so the start count will point to the correct day
@@ -119,9 +116,6 @@ class BookingsController < ApplicationController
       end_count = i + 1
 
       prev_day = false
-      next_day = false
-      start_index = 0
-      end_index = 0
 
       # Checks for consecutive times and gets the the end of the streak
       while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
@@ -131,7 +125,7 @@ class BookingsController < ApplicationController
       end
 
       # Checks if the first time of the section is connected to a booking on the previous day
-      if (Date.parse(check_dates[end_count].to_time.to_s)- Date.parse(check_dates[i].to_time.to_s)) > 0
+      if (Date.parse(check_dates[end_count].to_time.to_s) - Date.parse(check_dates[i].to_time.to_s)) > 0
         prev_day = true
       end
 
@@ -146,7 +140,7 @@ class BookingsController < ApplicationController
           block_dates.append(get_block_date(date))
         end
         # Check whether start date needs to be blocked
-        if check_before_nine_am(booking.start_time)
+        if check_before_nine_am(check_dates[i])
           block_dates.append(get_block_date(check_dates[i]))
         end
         # Check whether end date needs to be blocked
@@ -160,16 +154,56 @@ class BookingsController < ApplicationController
 
     # Dynamic time blocking
     if !params[:start_date].nil?
-      gon.block_start_time = [13, 14]
-      puts "success"
-
-      data = {:block_start_time => gon.block_start_time}
+      gon.block_start_time = get_block_times(bookings, params[:start_date])
+      gon.block_end_time = get_block_times(bookings, params[:end_date])
+      data = {
+        :block_start_time => gon.block_start_time,
+        :block_end_time => gon.block_end_time,
+      }
       render :json => data
+    else
+      gon.block_start_time = get_block_times(bookings, DateTime.now)
+      gon.block_end_time = get_block_times(bookings, DateTime.now)
     end
 
     gon.block_dates = block_dates
-    # gon.block_start_time = block_start_time
-    gon.block_end_time = block_end_time
+  end
+
+  # Get the times to be blocked on the provided date
+  def get_block_times(bookings, date)
+    block_times = []
+    check_times = []
+
+    block_bookings = bookings.where("bookings.start_date = ?", date)
+    block_bookings.each do |booking|
+      check_times.append(booking.start_time)
+      check_times.append(booking.end_time)
+    end
+
+    i = 0
+    while i < check_times.length - 1
+      start_count = i + 1
+      end_count = i + 1
+
+      while !check_times[end_count + 1].nil? && (check_times[start_count].to_time - check_times[end_count + 1].to_time).to_i == 0
+        start_count += 2
+        end_count += 2
+      end
+
+      temp_start_time = check_times[i]
+      temp_end_time = check_times[end_count]
+      puts (temp_start_time)
+      puts (temp_end_time)
+      while (temp_start_time.to_time - temp_end_time.to_time).to_i <= 0 && !check_after_five_pm(temp_start_time)
+        block_time_string = temp_start_time.strftime("%H-%M").split('-')
+        puts (temp_start_time.to_time - temp_end_time.to_time).to_i
+        block_times.append([block_time_string[0], block_time_string[1]])
+        temp_start_time += 10.minutes
+      end
+      i = end_count + 1
+    end
+
+    return block_times
   end
 
   # GET /bookings/1/edit
@@ -189,7 +223,7 @@ class BookingsController < ApplicationController
       @booking.status = 2
     else
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
-      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id),@booking).deliver
+      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
       @booking.status = 1
     end
 
