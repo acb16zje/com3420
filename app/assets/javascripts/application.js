@@ -76,6 +76,9 @@ $(document).ready(function () {
             }
             $('#endDate').pickadate('picker').set('min', $(this).val());
         }
+
+        // Prevent user to input smaller endTime than startTime
+        checkTimes();
     });
 
     // Timepicker startTime on creating booking
@@ -96,7 +99,7 @@ $(document).ready(function () {
         disable: gon.block_end_time
     });
 
-    // Dynamic time disabler ajax call
+    // Dynamic disable startTime when startDate is changed
     $('#startDate').on('change', function () {
         $.ajax({
             type: "GET",
@@ -112,6 +115,7 @@ $(document).ready(function () {
         });
     });
 
+    // Dynamic disable endTime when endDate is changed
     $('#endDate').on('change', function () {
         $.ajax({
             type: "GET",
@@ -127,18 +131,31 @@ $(document).ready(function () {
         })
     });
 
+    // Prevent endTime smaller than startTime on the same date
     $('.timepicker').on('change', function () {
-        if ($(this).attr('id') === 'startTime') {
-            var startTime = new Date($('#startDate').val() + ' ' + $('#startTime').val());
-            var endTime = new Date($('#endDate').val() + ' ' + $('#endTime').val());
-            if (endTime < startTime) {
-                $('#endTime').val(new Date(startTime.getTime() + 10 * 60000));
-            }
-
-            // Prevent same startTime and endTime
-            $('#endTime').pickatime('picker').set('min', new Date(startTime.getTime() + 10 * 60000));
-        }
+        checkTimes();
     });
+
+    function checkTimes() {
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+
+        // if ($(this).attr('id') === 'startTime') {
+            if (startDate === endDate) {
+                var startTime = new Date(startDate + ' ' + $('#startTime').val());
+                var endTime = new Date(endDate + ' ' + $('#endTime').val());
+                if (endTime <= startTime) {
+                    $('#endTime').val(moment(moment(startTime).add(10, 'm').toDate()).format('h:mm A'));
+                }
+
+                // Prevent same startTime and endTime
+                $('#endTime').pickatime('picker').set('min', moment(startTime).add(10, 'm').toDate());
+            } else {
+                $('#endTime').pickatime('picker').set('val', '');
+                $('#endTime').pickatime('picker').set('min', [9, 0]);
+            }
+        // }
+    }
 
     // Bulma notification
     $(document).on('click', '.notification > button.delete', function () {
