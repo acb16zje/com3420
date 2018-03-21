@@ -261,9 +261,9 @@ class BookingsController < ApplicationController
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
 
     item = Item.find_by_id(@booking.item_id)
-#    if item.user_id == current_user.id
-#      @booking.status = 2
-#    else
+    if item.user_id == current_user.id
+      @booking.status = 2
+    else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
       UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
