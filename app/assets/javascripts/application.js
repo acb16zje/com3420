@@ -121,8 +121,6 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                console.log($('#endTime').pickatime('picker').get('disable'));
-                console.log(data.block_end_time);
                 $('#endTime').pickatime('picker').set('enable', true);
                 $('#endTime').pickatime('picker').set('disable', data.block_end_time);
             }
