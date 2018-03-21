@@ -159,9 +159,16 @@ class BookingsController < ApplicationController
     end
 
     # Dynamic time blocking
+    if !params[:start_date].nil?
+      gon.block_start_time = [13, 14]
+      puts "success"
+
+      data = {:block_start_time => gon.block_start_time}
+      render :json => data
+    end
 
     gon.block_dates = block_dates
-    gon.block_start_time = block_start_time
+    # gon.block_start_time = block_start_time
     gon.block_end_time = block_end_time
   end
 

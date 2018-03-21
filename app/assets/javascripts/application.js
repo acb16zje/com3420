@@ -78,33 +78,6 @@ $(document).ready(function () {
         }
     });
 
-    // Dynamic time disabler ajax call
-    $('#startDate').on('change', function () {
-        $.ajax({
-            type: "GET",
-            url: "new",
-            data: {
-                start_date: $('#startDate').val(),
-            },
-            success: function() {
-                // $('#startTime').pickatime({
-            }
-        });
-    });
-
-    $('#endDate').on('change', function () {
-        $.ajax({
-            type: "GET",
-            url: "new",
-            data: {
-                start_date: $('#startDate').val(),
-            },
-            success: function() {
-                console.log("success");
-            }
-        })
-    });
-
     // Timepicker startTime on creating booking
     $('#startTime').pickatime({
         clear: '',
@@ -121,6 +94,35 @@ $(document).ready(function () {
         max: [17, 0],
         interval: 10,
         disable: gon.block_end_time
+    });
+
+    // Dynamic time disabler ajax call
+    $('#startDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                start_date: $('#startDate').val(),
+            },
+            success: function(data) {
+                console.log(data.block_start_time)
+                $('#startTime').pickatime('picker').set('disable', data.block_start_time);
+            }
+        });
+    });
+
+    $('#endDate').on('change', function () {
+        $.ajax({
+            type: "GET",
+            url: "new",
+            data: {
+                end_date: $('#endDate').val(),
+            },
+            success: function() {
+                console.log(data.block_start_time)
+                $('#endTime').pickatime('picker').set('disable', gon.block_end_time);
+            }
+        })
     });
 
     // Bulma notification
