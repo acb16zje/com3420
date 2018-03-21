@@ -1,8 +1,7 @@
 %p
   Dear #{@user.givenname},
 %p
-  Your resouce booking request has been given for processing.
-  The item requested : #{@item.name}
+  Your booking request for the item, #{@item.serial_id}, #{@item.name} has been sent to the manager for processing.
   %br/
   Please follow further emails to check the status of your booking.
   Click #{link_to 'here', bookings_url} to view it.

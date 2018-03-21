@@ -1,15 +1,14 @@
 %p
   Dear #{@user.givenname},
 %p
-  The asset you borrowed is due for return today at #{@booking_due.end_time}
-  %br/
-  Asset due for return: #{@item.name}
-  %br/
-  Please follow further emails to check the status of your booking.
+  Your booking for the item:#{@item.serial_id}, #{@item.name} has ended
+  %br
+  You should now return the item.
   %br/
   If you have returned it, please remember to mark it as returned in your bookings.
   %br/
   Click #{link_to 'here', bookings_url} to view it.
+
 %p
   Regards,
   %br/

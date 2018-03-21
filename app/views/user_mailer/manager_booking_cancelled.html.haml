@@ -1,16 +1,16 @@
 %p
   Dear #{@manager.givenname},
 %p
-  The item : #{@item.serial_id}, #{@item.name} has been requested for booking by the user : #{@user.givenname}, for the duration:
-  
+  Booking ID: #{@booking.id} 
+  %hr/
+  The booking for item : #{@item.name}, for the duration of 
   %br
   Start Date : #{@booking.start_date}, Start Time: #{@booking.start_time}
   %br
   End Date : #{@booking.end_date}, End Time: #{@booking.end_time}
   %br  
-
-  Please respond to the following request.
-  Click #{link_to 'here', requests_bookings_url} to view it.
+  has been cancelled for by the user : #{@user.givenname}
+  %br/
 %p
   Regards,
   %br/

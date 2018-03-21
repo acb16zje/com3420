@@ -76,7 +76,7 @@ class BookingsController < ApplicationController
     bookings.each do |booking|
       # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
-        if check_before_nine_am(booking.start_time) && check_after_five_ppm(booking.end_time)
+        if check_before_nine_am(booking.start_time) && check_after_five_pm(booking.end_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
         # If a single booking that spans 2 days, would fill up either day
@@ -84,7 +84,7 @@ class BookingsController < ApplicationController
         if check_before_nine_am(booking.start_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
-        if check_after_five_ppm(booking.end_time)
+        if check_after_five_pm(booking.end_time)
           block_dates.append(get_block_date(booking.end_datetime))
         end
         # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
@@ -134,7 +134,7 @@ class BookingsController < ApplicationController
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
-        if check_before_nine_am(check_dates[i]) && check_after_five_ppm(check_dates[end_count])
+        if check_before_nine_am(check_dates[i]) && check_after_five_pm(check_dates[end_count])
           block_dates.append(get_block_date(check_dates[i]))
         end
       else
@@ -147,7 +147,7 @@ class BookingsController < ApplicationController
           block_dates.append(get_block_date(check_dates[i]))
         end
         # Check whether end date needs to be blocked
-        if check_after_five_ppm(check_dates[end_count])
+        if check_after_five_pm(check_dates[end_count])
           block_dates.append(check_dates[end_count])
         end
       end
@@ -175,7 +175,7 @@ class BookingsController < ApplicationController
       @booking.status = 2
     else
       UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
-      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
+      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id),@booking).deliver
       @booking.status = 1
     end
 
@@ -215,6 +215,7 @@ class BookingsController < ApplicationController
     @booking.status = 6
     if @booking.save
       Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking)
+      UserMailer.manager_booking_cancelled(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     else
       redirect_to bookings_path, notice: 'Could not cancel booking.'
@@ -227,6 +228,7 @@ class BookingsController < ApplicationController
     @booking.status = 4
     if @booking.save
       Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking)
+      UserMailer.manager_asset_returned(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
       redirect_to bookings_path, notice: 'Item marked as returned'
     else
       redirect_to bookings_path, notice: 'Could not be returned'

@@ -7,34 +7,64 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Welcome to AMRC online resource booking system"
   end
 
-
   def booking_approved (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking confirmation for " + @item.name + " has been approved"
+    mail to: user.email, subject: "Booking for asset: " + @item.serial_id + ", " + @item.name + " has been approved"
+  end
+
+  def booking_ongoing (user, item)
+    @user = user
+    @item = item
+
+    mail to: user.email, subject: "Booking for asset: " + @item.serial_id + ", " + @item.name + " has started"
+  end
+
+  def booking_late (user, item)
+    @user = user
+    @item = item
+
+    mail to: user.email, subject: "Asset: " + @item.serial_id + ", " + @item.name + " is due to be returned."
   end
 
   def user_booking_requested (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking request for " + @item.name + " is being processed"
+    mail to: user.email, subject: "Booking request for asset: " + @item.serial_id + ", " + @item.name + " is being processed"
   end
 
-  def manager_booking_requested (user, item, manager)
+  def manager_booking_requested (user, item, manager, booking)
     @user = user
     @item = item
     @manager = manager
 
-    mail to: manager.email, subject: "Booking request for " + @item.name + " is being processed"
+    mail to: manager.email, subject: "Asset: " + @item.serial_id + ", " + @item.name + " has been requested for booking."
+  end
+
+  def manager_asset_returned (user, item, manager)
+    @user = user
+    @item = item
+    @manager = manager
+
+    mail to: manager.email, subject: "Asset: " + @item.serial_id + ", " + @item.name + " has been returned."
+  end
+
+  def manager_booking_cancelled (user, item, manager, booking)
+    @user = user
+    @item = item
+    @manager = manager
+    @booking = booking
+
+    mail to: manager.email, subject: "Booking ID: " + @booking.id + " for asset:" + @item.serial_id + ", " + @item.name + " has been cancelled."
   end
 
   def booking_rejected (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking rejection for " + @item.name + " has been rejected"
+    mail to: user.email, subject: "Booking for asset: " + @item.serial_id + ", " + @item.name + " has been rejected."
   end
 
   def asset_due (booking, user, item)

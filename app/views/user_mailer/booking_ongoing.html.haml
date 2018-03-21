@@ -1,0 +1,15 @@
+%p
+  Dear #{@user.givenname},
+%p
+  Your booking for the item:#{@item.serial_id}, #{@item.name} has started
+  %br
+  You may now collect the item.
+  %br/
+  Click #{link_to 'here', bookings_url} to view your booking.
+
+%p
+  Regards,
+  %br/
+  AMRC
+%p
+  N.B. This is an auto-generated email

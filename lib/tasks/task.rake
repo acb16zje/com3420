@@ -33,6 +33,7 @@ task update_booking_status_to_ongoing: :environment do
   bookings = Booking.where('status = 2 AND start_datetime <= ?', now)
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b)
+    UserMailer.booking_ongoing(User.find(@b.user_id), Item.find(@b.item_id)).deliver
     b.status = 3
     b.save
   end
