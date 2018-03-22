@@ -117,6 +117,8 @@ $(document).ready(function () {
                     
                     endDate.pickadate('picker').set('max', data.max_end_date);
 
+                    endTime.pickatime('picker').set('enable', true);
+                    endTime.pickatime('picker').set('disable', data.block_end_time);
 
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
@@ -164,6 +166,7 @@ $(document).ready(function () {
         } else {
             endTime.pickatime('picker').set('val', '');
             endTime.pickatime('picker').set('min', '');
+            endTime.pickatime('picker').set('disable', data.block_end_time);
         }
     }
 

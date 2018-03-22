@@ -56,86 +56,12 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
-    block_dates = []
-    check_dates = []
-    bookings.each do |booking|
-      # If a single booking fills in the entire day
-      if (booking.start_date).eql? booking.end_date
-        if check_start_of_day(booking.start_time) && check_after_date(booking.end_time)
-          block_dates.append(get_array_from_date(booking.start_datetime))
-        end
-        # If a single booking that spans 2 days, would fill up either day
-      elsif (booking.end_date - booking.start_date).to_i == 1
-        if check_start_of_day(booking.start_time)
-          block_dates.append(get_array_from_date(booking.start_datetime))
-        end
-        if check_after_date(booking.end_time)
-          block_dates.append(get_array_from_date(booking.end_datetime))
-        end
-        # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
-      elsif (booking.end_date - booking.start_date).to_i > 1
-        ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
-          block_dates.append(get_array_from_date(date))
-        end
-
-        if check_start_of_day(booking.start_time)
-          block_dates.append(get_array_from_date(booking.start_datetime))
-        end
-
-        if check_after_date(booking.end_time)
-          block_dates.append(get_array_from_date(booking.end_datetime))
-        end
-      end
-
-      check_dates.append(booking.start_datetime)
-      check_dates.append(booking.end_datetime)
-    end
-
-    check_dates.sort!
-
-    i = 0
-
-    while i < check_dates.length - 2
-      # so the start count will point to the correct day
-      start_count = i + 1
-      end_count = i + 1
-
-      prev_day = false
-
-      # Checks for consecutive times and gets the the end of the streak
-      while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
-        start_count += 2
-        end_count += 2
-        break if check_dates[end_count + 1].nil?
-      end
-
-      # Checks if the first time of the section is connected to a booking on the previous day
-      if (Date.parse(check_dates[end_count].to_time.to_s) - Date.parse(check_dates[i].to_time.to_s)) > 0
-        prev_day = true
-      end
-
-      # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
-      if !prev_day
-        if check_start_of_day(check_dates[i]) && check_after_date(check_dates[end_count])
-          block_dates.append(get_array_from_date(check_dates[i]))
-        end
-      else
-        # If it is connected, then block dates in between start and end
-        ((Date.parse(check_dates[i].to_time.to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
-          block_dates.append(get_array_from_date(date))
-        end
-        # Check whether start date needs to be blocked
-        if check_start_of_day(check_dates[i])
-          block_dates.append(get_array_from_date(check_dates[i]))
-        end
-        # Check whether end date needs to be blocked
-        if check_after_date(check_dates[end_count])
-          block_dates.append(check_dates[end_count])
-        end
-      end
-
-      i = end_count + 1
-    end
+    
+    set_of_dates = get_single_block_dates(bookings)
+    block_dates = set_of_dates[0]
+    check_dates = set_of_dates[1]
+    
+    block_dates = get_cons_block_dates(check_dates,block_dates)
 
     gon.block_start_dates = block_dates
     gon.max_end_date = get_min_date(block_dates,DateTime.now)
@@ -156,10 +82,12 @@ class BookingsController < ApplicationController
 
         # Get what times to be blocked for selected date
         gon.block_start_time = get_block_times(bookings, params[:start_date])
-        
+        gon.block_end_time = get_block_times(bookings, params[:start_date])
+
         data = {
           :max_end_date => gon.max_end_date,
           :block_start_time => gon.block_start_time,
+          :block_end_time => gon.block_end_time,
         }
 
         render :json => data
@@ -316,19 +244,23 @@ end
     return false
   end
 
-  # A loop to get the earlier date from the array
+  # A loop to get the earliest date from the array from the start of today
   def get_min_date(full_dates,today)
     dates = []
-    puts full_dates
+
+    # Get all the dates from the start of today
     full_dates.each do |d|
       if get_date_from_array(d) >= today
         dates.append(d)
       end
     end
+    # If all dates are before today, return nothing to block
     if dates.nil? || dates.blank? 
       max_end_date = []
     end
     return max_end_date
+
+    # Get the set of dates with the lowest amount in years
     min_year_array = [dates[0]]
     max_end_date = dates[0]
     dates.each do |date|
@@ -339,7 +271,8 @@ end
         max_end_date = date
       end
     end
-
+    
+    # Get the set of dates with the lowest amount in months
     min_month_array = [min_year_array[0]]
     max_end_date = min_month_array[0]
     min_year_array.each do |date|
@@ -351,6 +284,7 @@ end
       end
     end
     
+    # Get the single date with the lowest amount in days
     max_end_date = min_month_array[0]
     min_month_array.each do |date|
       if date[2] < max_end_date[2]
@@ -434,4 +368,95 @@ end
     end
 
     return block_times
+  end
+
+  # Get block dates for single bookings
+  def get_single_block_dates(bookings)
+    block_dates = []
+    check_dates = []
+    bookings.each do |booking|
+      # If a single booking fills in the entire day
+      if (booking.start_date).eql? booking.end_date
+        if check_start_of_day(booking.start_time) && check_after_date(booking.end_time)
+          block_dates.append(get_array_from_date(booking.start_datetime))
+        end
+        # If a single booking that spans 2 days, would fill up either day
+      elsif (booking.end_date - booking.start_date).to_i == 1
+        if check_start_of_day(booking.start_time)
+          block_dates.append(get_array_from_date(booking.start_datetime))
+        end
+        if check_after_date(booking.end_time)
+          block_dates.append(get_array_from_date(booking.end_datetime))
+        end
+        # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
+      elsif (booking.end_date - booking.start_date).to_i > 1
+        ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
+          block_dates.append(get_array_from_date(date))
+        end
+
+        if check_start_of_day(booking.start_time)
+          block_dates.append(get_array_from_date(booking.start_datetime))
+        end
+
+        if check_after_date(booking.end_time)
+          block_dates.append(get_array_from_date(booking.end_datetime))
+        end
+      end
+
+      check_dates.append(booking.start_datetime)
+      check_dates.append(booking.end_datetime)
+    end
+
+    check_dates.sort!
+    
+    return [block_dates,check_dates]
+  end
+
+  # Get the block dates for consecutive bookings
+  def get_cons_block_dates(check_dates,block_dates)
+    i = 0
+
+    while i < check_dates.length - 2
+      # so the start count will point to the correct day
+      start_count = i + 1
+      end_count = i + 1
+
+      prev_day = false
+
+      # Checks for consecutive times and gets the the end of the streak
+      while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
+        start_count += 2
+        end_count += 2
+        break if check_dates[end_count + 1].nil?
+      end
+
+      # Checks if the first time of the section is connected to a booking on the previous day
+      if (Date.parse(check_dates[end_count].to_time.to_s) - Date.parse(check_dates[i].to_time.to_s)) > 0
+        prev_day = true
+      end
+
+      # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
+      if !prev_day
+        if check_start_of_day(check_dates[i]) && check_after_date(check_dates[end_count])
+          block_dates.append(get_array_from_date(check_dates[i]))
+        end
+      else
+        # If it is connected, then block dates in between start and end
+        ((Date.parse(check_dates[i].to_time.to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
+          block_dates.append(get_array_from_date(date))
+        end
+        # Check whether start date needs to be blocked
+        if check_start_of_day(check_dates[i])
+          block_dates.append(get_array_from_date(check_dates[i]))
+        end
+        # Check whether end date needs to be blocked
+        if check_after_date(check_dates[end_count])
+          block_dates.append(check_dates[end_count])
+        end
+      end
+
+      i = end_count + 1
+    end
+
+    return block_dates
   end
