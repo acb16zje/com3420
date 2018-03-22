@@ -72,35 +72,27 @@
                 .notification.is-danger.has-text-centered
                   %button.delete
                   = msg
-          .column.is-4.is-offset-4
-            %h3.title.has-text-grey Sign in
-            %p.subtitle.has-text-grey Please sign in to proceed
-            .box
-              %figure.avatar
-                = image_tag("amrc.svg", width: "128")
-              = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-                .field
-                  %p.control
-                    %label.label Username or Email
-                    = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus:''}
-                .field
-                  %p.control
-                    %label.label Password
-                    = f.input :password, label: false, required: '', input_html: {class: 'input is-large', type: 'password'}
-                %br
-                .control
-                  = f.submit 'Sign in', class: 'button is-block is-success is-large is-fullwidth'
-            %p.has-text-grey
-              = link_to 'Forgot Password', "https://www.sheffield.ac.uk/cics/account/problems"
+          .columns
+            .column.is-4.is-offset-4
+              %h3.title.has-text-grey Sign in
+              %p.subtitle.has-text-grey Please sign in to proceed
+              .box
+                %figure.avatar
+                  = image_tag("amrc.svg", width: "128")
+                = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+                  .field
+                    %p.control
+                      %label.label Username or Email
+                      = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus:''}
+                  .field
+                    %p.control
+                      %label.label Password
+                      = f.input :password, label: false, required: '', input_html: {class: 'input is-large', type: 'password'}
+                  %br
+                  .control
+                    = f.submit 'Sign in', class: 'button is-block is-success is-large is-fullwidth'
+              %p.has-text-grey
+                = link_to 'Forgot Password', "https://www.sheffield.ac.uk/cics/account/problems"
 
     = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
     = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
-    :javascript
-      (function() {
-        var burger = document.querySelector('.burger');
-        var menu = document.querySelector('#'+burger.dataset.target);
-        burger.addEventListener('click', function() {
-          burger.classList.toggle('is-active');
-          menu.classList.toggle('is-active');
-        });
-      })();

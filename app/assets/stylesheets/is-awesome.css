@@ -63,10 +63,7 @@
 }
 
 .box-info .box-icon {
-    border-top-left-radius: 2px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 2px;
+    border-radius: 2px 0 0 2px;
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
     padding: 30px;
     width: 90px;
@@ -99,10 +96,7 @@
 }
 
 .box-info > p {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 97px;
-    padding-right: 20px;
+    padding: 5px 20px 5px 97px;
 }
 
 .box-good {
@@ -345,8 +339,7 @@ del {
 }
 
 .validator-is-danger .button {
-    border-color: #ff3860;
-    border-width: 1px;
+    border: 1px #ff3860;
 }
 
 .validator-is-danger select, .validator-is-danger .textarea {
@@ -518,7 +511,6 @@ del {
     user-select: none;
     -moz-appearance: none;
     -webkit-appearance: none;
-    background-color: rgba(10, 10, 10, 0.1);
     border: none;
     border-radius: 290486px;
     cursor: pointer;
@@ -528,7 +520,7 @@ del {
     position: relative;
     vertical-align: top;
     width: 24px;
-    background: none;
+    background: rgba(10, 10, 10, 0.1) none;
     height: 40px;
     position: fixed;
     right: 20px;
@@ -1439,8 +1431,7 @@ input[type=range].ranger.is-large::-ms-thumb {
 }
 
 .tile-profile figure {
-    margin: auto;
-    margin-bottom: 14px;
+    margin: auto auto 14px;
 }
 
 table.dataTable {
@@ -1752,8 +1743,7 @@ h2 {
 
 .fc-state-default {
     border: 0;
-    background-color: white !important;
-    background-image: none !important;
+    background: white none !important;
 }
 
 .fc-state-active {

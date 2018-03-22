@@ -313,7 +313,6 @@ var BunnyFile = {
      * Only files from CORS-enabled domains can be downloaded or AJAX will get security error
      *
      * @param {String} URL
-     * @param {Boolean} convert_to_blob = true
      * @returns {Promise}: success(Blob object | base64 string), fail(response XHR object)
      */
     download: function download(URL) {
@@ -540,8 +539,6 @@ var BunnyImage = {
     /**
      *
      * @param {Image|HTMLImageElement} img
-     * @param {Number?} width
-     * @param {Number?} height
      * @returns {string}
      */
     imageToBase64: function imageToBase64(img) {
@@ -555,8 +552,6 @@ var BunnyImage = {
     /**
      *
      * @param {Image|HTMLImageElement} img
-     * @param {Number?} width
-     * @param {Number?} height
      * @returns {Blob}
      */
     imageToBlob: function imageToBlob(img) {
@@ -640,10 +635,7 @@ var Ajax = {
      *        https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
      * @param {object} data - key: value pair of data to send. Data is automatically URL encoded
      * @param {callback(responseText)} on_success - callback on response with status code 200
-     * @param {callback(responseText, responseStatusCode)} on_error = null - custom handler
      *        for response with status code different from 200
-     * @param {object} headers = {} - key: value map of headers to send
-     * @param {boolean} do_send = true - instantly makes requests
      *
      * @returns {Object}
      */
@@ -714,8 +706,6 @@ var Ajax = {
      *
      * @param {object} form_el - Form document element
      * @param {callback(responseText)} on_success - callback for status code 200
-     * @param {callback(responseText, responseStatusCode)} on_error = null - custom handler for non 200 status codes
-     * @param {object} headers = {'Content-Type': 'application/x-www-form-urlencoded'} - key: value map of headers
      */
     sendForm: function sendForm(form_el, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -737,8 +727,6 @@ var Ajax = {
      *
      * @param {object} form_el - Form document element
      * @param {callback(responseText)} on_success - callback for status code 200
-     * @param {callback(responseText, responseStatusCode)} on_error = null - custom handler for non 200 status codes
-     * @param {object} headers = {'Content-Type': 'multipart/form-data'} - key: value map of headers
      */
     sendFormWithFiles: function sendFormWithFiles(form_el, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -758,8 +746,6 @@ var Ajax = {
      *
      * @param {string} url - URI or full URL for cross domain requests
      * @param {callback(responseText)} on_success - callback for status code 200
-     * @param {callback(responseText, responseStatusCode)} on_error = null - custom handler for non 200 status codes
-     * @param headers = {'X-Requested-With': 'XMLHttpRequest'} key: value map of headers
      */
     get: function get(url, on_success) {
         var on_error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -838,8 +824,6 @@ var BunnyElement = {
      * Based on https://www.sitepoint.com/smooth-scrolling-vanilla-javascript/
      *
      * @param {HTMLElement, string, number} target
-     * @param {Number|function} duration
-     * @param {Number} offset
      */
     scrollTo: function scrollTo(target) {
         var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
@@ -1503,7 +1487,6 @@ var ValidationUI = {
      * @meta if second argument true - return object with meta information to use during promise resolving
      *
      * @param {HTMLElement} node
-     * @param {boolean} resolving = false
      *
      * @returns {Array|Object}
      */

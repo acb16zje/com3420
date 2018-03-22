@@ -153,7 +153,7 @@ class BookingsController < ApplicationController
 
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
-    if !params[:start_date].nil?
+    if !params[:start_date].blank?
       gon.block_start_time = get_block_times(bookings, params[:start_date])
 
       data = {
@@ -162,7 +162,7 @@ class BookingsController < ApplicationController
 
       render :json => data
     # If end date is changed, then check for times that needed to be blocked
-    elsif !params[:end_date].nil?
+    elsif !params[:end_date].blank?
       gon.block_end_time = get_block_times(bookings, params[:end_date])
 
       data = {

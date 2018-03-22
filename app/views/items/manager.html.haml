@@ -27,7 +27,7 @@
           %th Condition
           %th Location
       %tbody
-        -@items.each do |item|
+        - @items.each do |item|
           %tr
             - if current_user.id == @manager.id
               %td
@@ -37,7 +37,7 @@
             %td.has-text-centered= item.manufacturer
             %td.has-text-centered= item.condition
             %td.has-text-centered= item.location
-    - if current_user.id == @manager.id
+    - if current_user.id == @manager.id && @items.any?
       .columns
         .column
           .buttons.is-centered

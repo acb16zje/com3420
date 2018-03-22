@@ -42,8 +42,13 @@ $(document).ready(function () {
         }
     });
 
+    var startDate = $('#startDate');
+    var endDate = $('#endDate');
+    var startTime = $('#startTime');
+    var endTime = $('#endTime');
+
     // Pickadate startDate on creating booking
-    $('#startDate').pickadate({
+    startDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         // An integer (positive/negative) sets it relative to today.
@@ -56,7 +61,7 @@ $(document).ready(function () {
     });
 
     // Pickadate endDate on creating booking
-    $('#endDate').pickadate({
+    endDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
         min: new Date(),
@@ -67,68 +72,62 @@ $(document).ready(function () {
         disable: gon.block_dates
     });
 
-    $('.datepicker').on('change', function () {
-        if ($(this).attr('id') === 'startDate') {
-            var startDate = new Date($('#startDate').val());
-            var endDate = new Date($('#endDate').val());
-            if (endDate < startDate) {
-                $('#endDate').val($('#startDate').val());
-            }
-            $('#endDate').pickadate('picker').set('min', $(this).val());
-        }
-
-        // Prevent user to input smaller endTime than startTime
-        checkTimes();
-    });
-
     // Timepicker startTime on creating booking
-    $('#startTime').pickatime({
+    startTime.pickatime({
         clear: '',
-        min: [9, 0],
-        max: [17, 0],
+        min: moment(new Date()),
         interval: 10,
         disable: gon.block_start_time
     });
 
     // Timepicker endTime on creating booking
-    $('#endTime').pickatime({
+    endTime.pickatime({
         clear: '',
-        min: [9, 0],
-        max: [17, 0],
         interval: 10,
         disable: gon.block_end_time
     });
 
-    // Dynamic disable startTime when startDate is changed
-    $('#startDate').on('change', function () {
-        $.ajax({
-            type: "GET",
-            url: "new",
-            data: {
-                start_date: $('#startDate').val(),
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#startTime').pickatime('picker').set('enable', true);
-                $('#startTime').pickatime('picker').set('disable', data.block_start_time);
+    $('.datepicker').on('change', function () {
+        if ($(this).attr('id') === 'startDate') {
+            var start_date = new Date(startDate.val());
+            var end_date = new Date(endDate.val());
+            if (end_date < start_date) {
+                endDate.val(startDate.val());
             }
-        });
-    });
+            endDate.pickadate('picker').set('min', $(this).val());
 
-    // Dynamic disable endTime when endDate is changed
-    $('#endDate').on('change', function () {
-        $.ajax({
-            type: "GET",
-            url: "new",
-            data: {
-                end_date: $('#endDate').val(),
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#endTime').pickatime('picker').set('enable', true);
-                $('#endTime').pickatime('picker').set('disable', data.block_end_time);
-            }
-        })
+            // Dynamic disable startTime when startDate is changed
+            $.ajax({
+                type: "GET",
+                url: "new",
+                data: {
+                    start_date: $('#startDate').val(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    startTime.pickatime('picker').set('enable', true);
+                    startTime.pickatime('picker').set('disable', data.block_start_time);
+                }
+            });
+        } else {
+            // Dynamic disable endTime when endDate is changed
+            $.ajax({
+                type: "GET",
+                url: "new",
+                data: {
+                    end_date: $('#endDate').val(),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    endTime.pickatime('picker').set('enable', true);
+                    endTime.pickatime('picker').set('disable', data.block_end_time);
+                }
+            })
+
+        }
+
+        // Prevent user to input smaller endTime than startTime
+        checkTimes();
     });
 
     // Prevent endTime smaller than startTime on the same date
@@ -137,24 +136,22 @@ $(document).ready(function () {
     });
 
     function checkTimes() {
-        var startDate = $('#startDate').val();
-        var endDate = $('#endDate').val();
+        var start_date = startDate.val();
+        var end_date = endDate.val();
 
-        // if ($(this).attr('id') === 'startTime') {
-            if (startDate === endDate) {
-                var startTime = new Date(startDate + ' ' + $('#startTime').val());
-                var endTime = new Date(endDate + ' ' + $('#endTime').val());
-                if (endTime <= startTime) {
-                    $('#endTime').val(moment(moment(startTime).add(10, 'm').toDate()).format('h:mm A'));
-                }
-
-                // Prevent same startTime and endTime
-                $('#endTime').pickatime('picker').set('min', moment(startTime).add(10, 'm').toDate());
-            } else {
-                $('#endTime').pickatime('picker').set('val', '');
-                $('#endTime').pickatime('picker').set('min', [9, 0]);
+        if (start_date === end_date) {
+            var start_time = new Date(start_date + ' ' + startTime.val());
+            var end_time = new Date(end_date + ' ' + endTime.val());
+            if (end_time <= start_time) {
+                endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
             }
-        // }
+
+            // Prevent same startTime and endTime
+            endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
+        } else {
+            endTime.pickatime('picker').set('val', '');
+            endTime.pickatime('picker').set('min', '');
+        }
     }
 
     // Bulma notification

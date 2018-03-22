@@ -36,6 +36,11 @@ td.has-text-centered {
   vertical-align: middle;
 }
 
+/* Modal cross fix */
+.modal-close:before {
+  width: 42% !important;
+}
+
 /* Select2 fixes for Bulma */
 .select2-container .select2-selection--single {
   height: auto !important;
