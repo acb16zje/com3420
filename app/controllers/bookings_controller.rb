@@ -60,7 +60,7 @@ class BookingsController < ApplicationController
       b.status = 7
       b.save
     end
-    
+
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 7", current_user.id)
   end
 
@@ -223,13 +223,10 @@ class BookingsController < ApplicationController
         date_s = DateTime.now
         # Get what end dates are accepted starting from today, till date of first booking
         # E.g If today is 23 March 2018, the first booking after that date is 29 March 2018, accepted dates is 23-28 March 2018
-<<<<<<< HEAD
         gon.block_end_dates = block_dates[0]#get_accepted_dates(block_dates,date_s)
         puts block_dates[0]
-=======
         gon.block_end_dates = get_accepted_dates(block_dates, date_s)
 
->>>>>>> b48f7bbc993261fe73f0db48523d1f592b9e1af1
         date_s = date_s.day.to_s + " " + Date::MONTHNAMES[date_s.month] + " " + date_s.year.to_s
         gon.block_start_time = get_block_times(bookings, date_s)
         gon.block_end_time = get_block_times(bookings, date_s)
