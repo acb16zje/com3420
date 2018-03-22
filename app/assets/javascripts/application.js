@@ -68,8 +68,8 @@ $(document).ready(function () {
         onStart: function () {
             var date = new Date();
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+            this.set('max', gon.max_end_date);
         },
-        disable: gon.block_end_dates
     });
 
     // Timepicker startTime on creating booking
@@ -111,9 +111,12 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    // endDate.pickadate('picker').set('enable', true);
-                    console.log(data.block_end_dates);
-                    endDate.pickadate('picker').set('disable', [{from: data.block_end_dates, to: [2018,11,31]}]);
+                    endDate.pickadate('picker').set('enable', true);
+                    // console.log(data.block_end_dates);
+                    // console.log(data.max_end_date)
+                    
+                    endDate.pickadate('picker').set('max', data.max_end_date);
+
 
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
