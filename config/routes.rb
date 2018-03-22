@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get 'ongoing', on: :collection
     get 'completed', on: :collection
     get 'rejected', on: :collection
+    get 'late', on: :collection
     put 'set_booking_cancelled', on: :member
     put 'set_booking_returned', on: :member
   end

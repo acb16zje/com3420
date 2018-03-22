@@ -1,0 +1,32 @@
+- content_for :title, "Late Returns"
+
+%br/
+.container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
+  = render "tabs"
+
+  %p.title.has-text-centered Late Returns
+  %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %thead
+      %tr
+        %th Booking ID
+        %th Asset
+        %th Start Date
+        %th Start Time
+        %th End Date
+        %th End Time
+    %tbody
+      - @bookings.each do |booking|
+        %tr
+          %td.has-text-centered= booking.id
+          %td.has-text-centered= link_to booking.item.name, booking.item
+          %td.has-text-centered= booking.start_date
+          %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
+          %td.has-text-centered= booking.end_date
+          %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
