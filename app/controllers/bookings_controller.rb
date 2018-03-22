@@ -49,16 +49,16 @@ class BookingsController < ApplicationController
   end
 
   # Check if the provided date time is before 9 AM
-  def check_before_nine_am(datetime)
-    if DateTime.parse(datetime.to_time.to_s) <= DateTime.new(datetime.year, datetime.month, datetime.day, 9, 0, 0)
+  def check_before_date(datetime)
+    if DateTime.parse(datetime.to_time.to_s) <= DateTime.new(datetime.year, datetime.month, datetime.day, 0, 0, 0)
       return true
     end
     return false
   end
 
   # Check if the provided date time is after 5 PM
-  def check_after_five_pm(datetime)
-    if DateTime.parse(datetime.to_time.to_s) >= DateTime.new(datetime.year, datetime.month, datetime.day, 17, 0, 0)
+  def check_after_date(datetime)
+    if DateTime.parse(datetime.to_time.to_s) >= DateTime.new(datetime.year, datetime.month, datetime.day + 1, 0, 0, 0)
       return true
     end
     return false
@@ -75,15 +75,15 @@ class BookingsController < ApplicationController
     bookings.each do |booking|
       # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
-        if check_before_nine_am(booking.start_time) && check_after_five_pm(booking.end_time)
+        if check_before_date(booking.start_time) && check_after_date(booking.end_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
         # If a single booking that spans 2 days, would fill up either day
       elsif (booking.end_date - booking.start_date).to_i == 1
-        if check_before_nine_am(booking.start_time)
+        if check_before_date(booking.start_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
-        if check_after_five_pm(booking.end_time)
+        if check_after_date(booking.end_time)
           block_dates.append(get_block_date(booking.end_datetime))
         end
         # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
@@ -92,11 +92,11 @@ class BookingsController < ApplicationController
           block_dates.append(get_block_date(date))
         end
 
-        if check_before_nine_am(booking.start_time)
+        if check_before_date(booking.start_time)
           block_dates.append(get_block_date(booking.start_datetime))
         end
 
-        if check_after_five_pm(booking.end_time)
+        if check_after_date(booking.end_time)
           block_dates.append(get_block_date(booking.end_datetime))
         end
       end
@@ -130,7 +130,7 @@ class BookingsController < ApplicationController
 
       # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
       if !prev_day
-        if check_before_nine_am(check_dates[i]) && check_after_five_pm(check_dates[end_count])
+        if check_before_date(check_dates[i]) && check_after_date(check_dates[end_count])
           block_dates.append(get_block_date(check_dates[i]))
         end
       else
@@ -139,11 +139,11 @@ class BookingsController < ApplicationController
           block_dates.append(get_block_date(date))
         end
         # Check whether start date needs to be blocked
-        if check_before_nine_am(check_dates[i])
+        if check_before_date(check_dates[i])
           block_dates.append(get_block_date(check_dates[i]))
         end
         # Check whether end date needs to be blocked
-        if check_after_five_pm(check_dates[end_count])
+        if check_after_date(check_dates[end_count])
           block_dates.append(check_dates[end_count])
         end
       end
@@ -151,31 +151,35 @@ class BookingsController < ApplicationController
       i = end_count + 1
     end
 
+    gon.block_dates = block_dates
+
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
-    if !params[:start_date].blank?
-      gon.block_start_time = get_block_times(bookings, params[:start_date])
+    if !bookings.nil?
+      if !params[:start_date].blank?
+        gon.block_start_time = get_block_times(bookings, params[:start_date])
 
-      data = {
-        :block_start_time => gon.block_start_time,
-      }
+        data = {
+          :block_start_time => gon.block_start_time,
+        }
 
-      render :json => data
-    # If end date is changed, then check for times that needed to be blocked
-    elsif !params[:end_date].blank?
-      gon.block_end_time = get_block_times(bookings, params[:end_date])
+        render :json => data
+        # If end date is changed, then check for times that needed to be blocked
+      elsif !params[:end_date].blank?
+        gon.block_end_time = get_block_times(bookings, params[:end_date])
 
-      data = {
-        :block_end_time => gon.block_end_time,
-      }
+        data = {
+          :block_end_time => gon.block_end_time,
+        }
 
-      render :json => data
-    else
-      gon.block_start_time = get_block_times(bookings, DateTime.now)
-      gon.block_end_time = get_block_times(bookings, DateTime.now)
+        render :json => data
+      else
+        date_s = DateTime.now
+        date_s = date_s.day.to_s + " " + Date::MONTHNAMES[date_s.month] + " " + date_s.year.to_s
+        gon.block_start_time = get_block_times(bookings, date_s)
+        gon.block_end_time = get_block_times(bookings, date_s)
+      end
     end
-
-    gon.block_dates = block_dates
   end
 
   # Get the times to be blocked on the provided date
@@ -221,17 +225,18 @@ class BookingsController < ApplicationController
       # If the end date is on a day after today
       if today_end_comp < 0
         # Ends the block chunk on the end of the day
-        temp_end_time = DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 17, 0, 0)
+        temp_end_time = DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 23, 50, 0)
       else
         # If the start date is before the end date
         if start_end_comp < 0
-          # Start the block chunk at the start of the day
-          temp_start_time = DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)
+          # Start the block chunk at the start of the end date
+          temp_start_time = DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 0, 0, 0)
         end
       end
 
+      temp_start_time += 10.minutes
       # A loop to add the time strings to be blocked from the start to end time, does not add 5 PM to the blocked time
-      while (temp_start_time.to_time - temp_end_time.to_time).to_i < 0 && !check_after_five_pm(temp_start_time)
+      while (temp_start_time.to_time - temp_end_time.to_time).to_i < 0 && !check_after_date(temp_start_time)
         block_time_string = temp_start_time.strftime("%H-%M").split('-')
         block_times.append([block_time_string[0], block_time_string[1]])
         # So the next time string to be blocked will be 10 minutes after

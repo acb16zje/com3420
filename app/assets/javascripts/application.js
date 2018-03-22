@@ -96,6 +96,12 @@ $(document).ready(function () {
             }
             endDate.pickadate('picker').set('min', $(this).val());
 
+            if (moment().format('D MMMM YYYY') === startDate.val()) {
+                startTime.pickatime('picker').set('min', moment(new Date()));
+            } else {
+                startTime.pickatime('picker').set('min', '');
+            }
+
             // Dynamic disable startTime when startDate is changed
             $.ajax({
                 type: "GET",
