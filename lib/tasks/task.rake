@@ -43,7 +43,7 @@ end
 desc 'Update booking status to late'
 task update_booking_status_to_late: :environment do
   # Get current date/time
-  now = Time.new
+  now = DateTime.now
   bookings = Booking.where('status = 3 AND end_datetime <= ?', now)
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
