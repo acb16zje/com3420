@@ -44,7 +44,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :location, ['Diamond', 'Pam Liversidge Building'], {}, {class: 'select2'}
+                    = f.input :location, label: false, required: '', placeholder: 'Asset location', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Upload Image
@@ -60,6 +60,8 @@
                           Choose a file…
                       %span.file-name#file_name
                         #{@item.image.url}
+                  %p.help Max file size: 1MB
+                  %p.help Images < 500x500 px will be invalid
 
             %br
             %hr

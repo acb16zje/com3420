@@ -24,25 +24,18 @@ class UserHomeCategoriesController < ApplicationController
     @user_home_category = UserHomeCategory.new(user_home_category_params)
 
     if @user_home_category.save
-      redirect_to root_path, notice: 'Favourites added.'
-    else
-      render :new
+      redirect_to root_path, notice: 'Favourite category successfully added.'
     end
   end
 
   # PATCH/PUT /user_home_categories/1
   def update
-    if @user_home_category.update(user_home_category_params)
-      redirect_to @user_home_category, notice: 'User home category was successfully updated.'
-    else
-      render :edit
-    end
   end
 
   # DELETE /user_home_categories/1
   def destroy
     @user_home_category.destroy
-    redirect_to user_home_categories_url, notice: 'User home category was successfully destroyed.'
+    redirect_to user_home_categories_url, notice: 'Favourite category successfully removed.'
   end
 
   private

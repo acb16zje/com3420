@@ -34,6 +34,6 @@ FactoryBot.define do
     sn 'Eng'
     permission_id 3
     username 'acb16zje'
-    phone '-'
+    phone ''
   end
 end

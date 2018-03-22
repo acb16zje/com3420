@@ -33,6 +33,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @item.user_id = current_user.id
+    @item.location = params[:item][:location].titleize
 
     category = Category.find_by_id(@item.category_id)
     id_str = (Item.where(category_id: @item.category_id).count + 1).to_s
@@ -42,34 +43,31 @@ class ItemsController < ApplicationController
     @item.serial_id = category.tag + id_str
 
     if @item.save
-      redirect_to @item, notice: 'Item was successfully created.'
-    else
-      render :new
+      redirect_to @item, notice: 'Asset was successfully created.'
     end
   end
 
   # PATCH/PUT /items/1
   def update
     if @item.update(item_params)
-      redirect_to @item, notice: 'Item was successfully updated.'
-    else
-      render :edit
+      @item.location = params[:item][:location].titleize
+      redirect_to @item, notice: 'Asset was successfully updated.'
     end
   end
 
   # DELETE /items/1
   def destroy
     @item.destroy
-    redirect_to items_path, notice: 'Item was successfully deleted.'
+    redirect_to items_path, notice: 'Asset was successfully deleted.'
   end
 
-  # GET
+  # GET /items/change_manager_multiple
   def change_manager_multiple
     @item = Item.new
     @users = User.where('permission_id > ?', 1)
   end
 
-  # POST
+  # POST /items/change_manager_multiple
   def update_manager_multiple
     item_ids = params[:item][:item_id_list].split(' ')
     @items = Item.where(id: item_ids)
@@ -79,7 +77,7 @@ class ItemsController < ApplicationController
       item.save
     end
 
-    redirect_to manager_items_path(user_id: current_user.id), notice: 'Item was successfully moved.'
+    redirect_to manager_items_path(user_id: current_user.id), notice: 'Ownership was successfully transfered.'
   end
 
   private
