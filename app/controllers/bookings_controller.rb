@@ -87,17 +87,18 @@ class BookingsController < ApplicationController
     return false
   end
 
-  def get_accepted_dates(block_dates, selected_date)
-    allowed_dates = [true]
-    now = selected_date
-    first_block_date_array = block_dates[0]
-    first_block_date = DateTime.new(first_block_date_array[0].to_i, (first_block_date_array[1].to_i + 1), first_block_date_array[2].to_i, 0, 0, 0)
+  def get_accepted_dates(block_dates)
+    # allowed_dates = [true]
+    # now = selected_date
+    # first_block_date_array = block_dates[0]
+    # first_block_date = DateTime.new(first_block_date_array[0].to_i, (first_block_date_array[1].to_i + 1), first_block_date_array[2].to_i, 0, 0, 0)
 
-    (Date.parse(now.to_s)..Date.parse(first_block_date.to_s)).each do |date|
-      allowed_dates.append(get_date_array(date))
-    end
+    # (Date.parse(now.to_s)..Date.parse(first_block_date.to_s)).each do |date|
+    #   allowed_dates.append(get_date_array(date))
+    # end
 
-    return allowed_dates - block_dates
+    # return allowed_dates - block_dates
+    block_dates[0]
   end
 
   # GET /bookings/new
@@ -107,7 +108,6 @@ class BookingsController < ApplicationController
     bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
     block_dates = []
     check_dates = []
-
     bookings.each do |booking|
       # If a single booking fills in the entire day
       if (booking.start_date).eql? booking.end_date
@@ -192,16 +192,19 @@ class BookingsController < ApplicationController
 
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
-    if !bookings.nil? && !bookings.blank?
+    if !bookings.blank? && !bookings.nil?
       if !params[:start_date].blank?
         # Get what end dates are accepted starting from selected start date, till date of first booking
         # E.g If start date is 23 March 2018, the first booking after that date is 29 March 2018, accepted dates is 23-28 March 2018
-        start_date_array = get_date_array(params[:start_date])
-        gon.block_end_dates = get_accepted_dates(block_dates, DateTime.new(start_date_array[0], start_date_array[1], start_date_array[2], 0, 0, 0))
+        # start_date_array = get_date_array(params[:start_date])
+        # gon.block_end_dates = get_accepted_dates(block_dates,DateTime.new(start_date_array[0],start_date_array[1],start_date_array[2],0,0,0))
+        gon.block_end_dates = block_dates[0]#get_accepted_dates(block_dates)
+        puts block_dates[0].class
         # Get what times to be blocked for selected date
         gon.block_start_time = get_block_times(bookings, params[:start_date])
 
         data = {
+          :block_end_dates => gon.block_end_dates,
           :block_start_time => gon.block_start_time,
         }
 
@@ -220,8 +223,13 @@ class BookingsController < ApplicationController
         date_s = DateTime.now
         # Get what end dates are accepted starting from today, till date of first booking
         # E.g If today is 23 March 2018, the first booking after that date is 29 March 2018, accepted dates is 23-28 March 2018
+<<<<<<< HEAD
+        gon.block_end_dates = block_dates[0]#get_accepted_dates(block_dates,date_s)
+        puts block_dates[0]
+=======
         gon.block_end_dates = get_accepted_dates(block_dates, date_s)
 
+>>>>>>> b48f7bbc993261fe73f0db48523d1f592b9e1af1
         date_s = date_s.day.to_s + " " + Date::MONTHNAMES[date_s.month] + " " + date_s.year.to_s
         gon.block_start_time = get_block_times(bookings, date_s)
         gon.block_end_time = get_block_times(bookings, date_s)

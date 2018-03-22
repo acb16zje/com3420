@@ -57,7 +57,7 @@ $(document).ready(function () {
             var date = new Date();
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         },
-        disable: gon.block_dates
+        disable: gon.block_start_dates
     });
 
     // Pickadate endDate on creating booking
@@ -69,7 +69,7 @@ $(document).ready(function () {
             var date = new Date();
             this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
         },
-        disable: gon.block_dates
+        disable: gon.block_end_dates
     });
 
     // Timepicker startTime on creating booking
@@ -111,6 +111,10 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
+                    // endDate.pickadate('picker').set('enable', true);
+                    console.log(data.block_end_dates);
+                    endDate.pickadate('picker').set('disable', [{from: data.block_end_dates, to: [2018,11,31]}]);
+
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
                 }
@@ -148,9 +152,9 @@ $(document).ready(function () {
         if (start_date === end_date) {
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
-            if (end_time <= start_time) {
-                endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
-            }
+            // if (end_time <= start_time) {
+            //     endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
+            // }
 
             // Prevent same startTime and endTime
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());

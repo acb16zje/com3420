@@ -60,6 +60,7 @@ RSpec.configure do |config|
     expect(current_path).to eq current_path
   end
 
+  # Automatic login
   config.before(:each) do
     DatabaseCleaner.start
     DatabaseCleaner.clean_with(:truncation)
@@ -67,7 +68,7 @@ RSpec.configure do |config|
     FactoryBot.create :user
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
-    sign_in_as_zerjun_uid
+    sign_in_using_uid
     click_button 'Sign in'
   end
 
