@@ -16,8 +16,8 @@
 #
 
 FactoryBot.define do
-  factory :category do
-    name "MyString"
-    items ""
+  factory :category, class: 'Category' do
+    name "Laptops"
+    tag "LPT"
   end
 end

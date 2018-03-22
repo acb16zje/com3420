@@ -1,0 +1,125 @@
+!!!
+%html.has-navbar-fixed-top{:lang => "en"}
+  %head
+    / Required meta tags
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "ZerJun Eng", :name => "author"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    = csrf_meta_tag
+    = include_gon(init: true)
+
+    / Favicon
+    = favicon_link_tag 'favicon/apple-touch-icon.png', rel: 'apple-touch-icon', sizes: '180x180'
+    = favicon_link_tag 'favicon/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png'
+    = favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
+    = favicon_link_tag 'favicon/site.webmanifest', rel: 'manifest'
+    = favicon_link_tag 'favicon/safari-pinned-tab.svg', rel: 'mask-icon', color: '#5bbad5'
+    = favicon_link_tag 'favicon/favicon.ico', rel: 'shortcut icon'
+    %meta{:content => "#da532c", :name => "msapplication-TileColor"}/
+    %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
+    %meta{:content => "#ffffff", :name => "theme-color"}/
+
+    / Bulma CSS, Pikaday, DataTable, Select 2
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+    = stylesheet_link_tag "application"
+
+    %title #{@error_message} - AMRC Asset Management System
+
+  %body
+    %nav.navbar.is-fixed-top.is-light
+      .navbar-brand
+        = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
+          = image_tag("amrc.svg", width: "50")
+        .navbar-burger.burger{"data-target" => "navbarExampleTransparentExample"}
+          %span
+          %span
+          %span
+      #navbarExampleTransparentExample.navbar-menu{"data-behavior" => "notifications" }
+        .navbar-start
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              %p Browse by <br class="is-hidden-widescreen"><strong>Categories</strong>
+            .navbar-dropdown.is-boxed
+              - categories = Category.take(5)
+              - categories.each do |category|
+                = link_to category.name, items_path(category_name: category.name), class: "navbar-item"
+              = link_to 'View All', filter_categories_path, class: "navbar-item"
+          = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
+          = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
+          - if current_user.permission_id != 1
+            = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)} is-hidden-custom"
+            - if current_user.permission_id == 3
+              = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)} is-hidden-custom"
+          - if current_user.permission_id != 1
+            .navbar-item.has-dropdown.is-hoverable.is-hidden.is-show-custom
+              %a.navbar-link
+                %p More
+              .navbar-dropdown.is-boxed
+                = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
+                - if current_user.permission_id == 3
+                  = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
+
+        .navbar-end
+          - if current_user.permission_id != 1
+            .navbar-item.has-dropdown.is-hoverable
+              = link_to requests_bookings_path, class: 'navbar-link' do
+                Manage
+              .navbar-dropdown.is-boxed.is-right
+                = link_to 'Requests', requests_bookings_path, class: "navbar-item"
+                = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
+                = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item"
+                = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item"
+                = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item"
+            .navbar-item.has-dropdown.is-hoverable
+              %a.navbar-link
+                Create
+              .navbar-dropdown.is-boxed.is-right
+                = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
+                = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
+                - if current_user.permission_id == 3
+                  = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
+          .navbar-item.has-dropdown.is-hoverable{"data-behavior" => "notification-link" }
+            = link_to requests_bookings_path, class: 'navbar-link' do
+              %span.icon
+                %i.fas.fa-bell
+                %span{"data-behavior" => "unread-count"}
+            .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items" }
+          .navbar-item.has-dropdown.is-hoverable
+            %a.navbar-link
+              %span.icon
+                %i.fas.fa-user
+              #{current_user.givenname}
+            .navbar-dropdown.is-boxed.is-right
+              - if current_user.permission_id != 1
+                = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item"
+              = link_to 'My Bookings', bookings_path, class: 'navbar-item'
+              = link_to 'My Profile', current_user, class: "navbar-item"
+              = link_to 'Manage Favourites', user_home_categories_path, class: "navbar-item"
+              = link_to 'Sign out', destroy_user_session_path, method: :delete, class: "navbar-item", id: "sign_out"
+              
+    %section.hero.is-large
+      .hero-body
+        .container
+          .columns
+            .column.is-3.is-offset-2
+              %h1.title{:style => "font-size: 70px;color:#ff470f"} #{@error_code}
+              %h2.subtitle.is-3 #{@error_message}
+            .column.is-5
+              %p
+                Sorry, there was a problem, please try again.
+              %br
+              %p
+                If you continue to see this message please send a description of the problem to:
+                = mail_to "support@epigenesys.org.uk"
+
+    / jQuery, Pikaday, Font Awesome, Datatable, Select2, bunnyJS, momentJS
+    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+    = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
+    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
+    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"
+    = javascript_include_tag "application"

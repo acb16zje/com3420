@@ -140,11 +140,11 @@ $(document).ready(function () {
         var end_date = endDate.val();
 
         if (start_date === end_date) {
-            var start_time = new Date(start_date + ' ' + startTime.val());
-            var end_time = new Date(end_date + ' ' + endTime.val());
-            if (end_time <= start_time) {
-                endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
-            }
+            // var start_time = new Date(start_date + ' ' + startTime.val());
+            // var end_time = new Date(end_date + ' ' + endTime.val());
+            // if (end_time <= start_time) {
+            //     endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
+            // }
 
             // Prevent same startTime and endTime
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
