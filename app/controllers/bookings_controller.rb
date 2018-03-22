@@ -73,9 +73,9 @@ class BookingsController < ApplicationController
     # If start date is changed, then check for times that needed to be blocked
     if !bookings.blank? && !bookings.nil?
       if !params[:start_date].blank?
-        
+
         gon.max_end_date = get_min_date(block_dates,get_date_from_string(params[:start_date]))
-        
+
         if gon.max_end_date.blank? || gon.max_end_date.nil? || get_date_from_string(params[:start_date]) > get_date_from_array(gon.max_end_date)
           gon.max_end_date = ''
         end
@@ -201,7 +201,7 @@ class BookingsController < ApplicationController
   end
 end
 
-  # Convert the datetime object to an array, ie. Date time object with date 22/4/2018 ~> [2018,3,22] 
+  # Convert the datetime object to an array, ie. Date time object with date 22/4/2018 ~> [2018,3,22]
   def get_array_from_date(date_time)
     block_date = date_time.strftime("%Y-%m-%d").split('-')
     block_date[1] = (block_date[1].to_i - 1).to_s
@@ -218,7 +218,7 @@ end
     return DateTime.parse(s + " 00:00:00")
   end
 
-  
+
   # Check if the provided date time is before the date of today
   def check_before_today(datetime)
     now = DateTime.now
@@ -291,7 +291,7 @@ end
         max_end_date = date
       end
     end
-    
+
     temp_date = get_date_from_array(max_end_date) - 1
 
     return get_array_from_date(temp_date)

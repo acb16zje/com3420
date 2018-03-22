@@ -81,6 +81,22 @@ describe 'Managing accounts' do
     expect(page).to have_content 'COM'
   end
 
+  specify 'I can edit my profile details' do
+    visit '/users'
+    expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
+    click_link('View')
+    expect(page).to have_content 'acb16zje'
+    expect(page).to_not have_content '7874304130'
+    expect(page).to have_content 'COM'
+    expect(page).to have_content 'Edit Details'
+    click_link('Edit Details')
+    expect(page).to have_content 'Edit My Details'
+    fill_in 'number', with: '7874304130'
+    click_button('Save changes')
+    expect(page).to have_content 'User was successfully updated'
+    expect(page).to have_content '7874304130'
+  end
+
   specify 'I can delete a different user' do
     fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
     select('Admin', from: 'user_permission_id')
@@ -107,5 +123,10 @@ describe 'Managing accounts' do
     expect(page).to have_content 'COM'
     click_link('Edit Details')
     expect(page).to_not have_content 'Delete'
+  end
+
+  specify 'I can view the list of asset managers' do
+    click_link 'Asset Managers'
+    expect(page).to have_content 'zjeng1@sheffield.ac.uk'
   end
 end

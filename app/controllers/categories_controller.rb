@@ -14,7 +14,6 @@ class CategoriesController < ApplicationController
 
   # GET /categories/1
   def filter
-    @categories = Category.all
   end
 
   # GET /categories/new
@@ -38,11 +37,9 @@ class CategoriesController < ApplicationController
         if @category.tag =~ /^[a-zA-Z]{2,5}$/
           @category.name = @category.name.titleize
           @category.tag.upcase!
-          
+
           if @category.save
             redirect_to categories_path, notice: 'Category was successfully created.'
-          else
-            render :new
           end
         else
           redirect_to new_category_path, notice: 'Category tag does not meet requirements.'
@@ -57,8 +54,6 @@ class CategoriesController < ApplicationController
   def update
     if @category.update(category_params)
       redirect_to @category, notice: 'Category was successfully updated.'
-    else
-      render :edit
     end
   end
 

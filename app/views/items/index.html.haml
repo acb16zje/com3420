@@ -2,6 +2,13 @@
 
 %br/
 .container.is-fluid
+  - if not notice.nil?
+    .columns
+      .column.is-4.is-offset-4
+        .notification.is-success.has-text-centered
+          %button.delete
+          = notice
+
   %p.title.has-text-centered Current assets
   - if current_user.permission_id != 1
     %p.title.has-text-centered

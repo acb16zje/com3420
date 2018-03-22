@@ -44,8 +44,6 @@ class UsersController < ApplicationController
           # email new user their details
           UserMailer.welcome(@user).deliver
           redirect_to @user, notice: 'User was successfully created.'
-        else
-          render :new
         end
       end
     end
@@ -55,8 +53,6 @@ class UsersController < ApplicationController
   def update
     if @user.update(user_params)
       redirect_to @user, notice: 'User was successfully updated.'
-    else
-      render :edit
     end
   end
 

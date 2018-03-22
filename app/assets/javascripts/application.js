@@ -37,8 +37,7 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         onStart: function () {
-            var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+            this.set('select', moment());
         }
     });
 
@@ -51,23 +50,21 @@ $(document).ready(function () {
     startDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
-        // An integer (positive/negative) sets it relative to today.
-        min: new Date(),
+        min: moment(),
+        disable: gon.block_start_dates,
         onStart: function () {
-            var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
-        },
-        disable: gon.block_start_dates
+            this.set('select', moment());
+        }
     });
 
     // Pickadate endDate on creating booking
     endDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
-        min: new Date(),
+        min: moment(),
+        disable: gon.block_end_dates,
         onStart: function () {
-            var date = new Date();
-            this.set('select', [date.getFullYear(), date.getMonth(), date.getDate()]);
+            this.set('select', moment());
             this.set('max', gon.max_end_date);
         },
     });
@@ -75,7 +72,7 @@ $(document).ready(function () {
     // Timepicker startTime on creating booking
     startTime.pickatime({
         clear: '',
-        min: moment(new Date()),
+        min: moment(),
         interval: 10,
         disable: gon.block_start_time
     });
@@ -83,6 +80,7 @@ $(document).ready(function () {
     // Timepicker endTime on creating booking
     endTime.pickatime({
         clear: '',
+        min: moment(),
         interval: 10,
         disable: gon.block_end_time
     });
@@ -97,7 +95,7 @@ $(document).ready(function () {
             endDate.pickadate('picker').set('min', $(this).val());
 
             if (moment().format('D MMMM YYYY') === startDate.val()) {
-                startTime.pickatime('picker').set('min', moment(new Date()));
+                startTime.pickatime('picker').set('min', moment());
             } else {
                 startTime.pickatime('picker').set('min', '');
             }
@@ -114,7 +112,7 @@ $(document).ready(function () {
                     endDate.pickadate('picker').set('enable', true);
                     // console.log(data.block_end_dates);
                     // console.log(data.max_end_date)
-                    
+
                     endDate.pickadate('picker').set('max', data.max_end_date);
 
                     endTime.pickatime('picker').set('enable', true);
@@ -157,9 +155,6 @@ $(document).ready(function () {
         if (start_date === end_date) {
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
-            // if (end_time <= start_time) {
-            //     endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
-            // }
 
             // Prevent same startTime and endTime
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
@@ -186,7 +181,7 @@ $(document).ready(function () {
         });
     });
 
-    // Browse by categories
+    // For searching browse by categories
     var table = $("#assets").DataTable({
         "drawCallback": function (settings) {
             if (!$(this).parent().hasClass("table-is-responsive")) {
