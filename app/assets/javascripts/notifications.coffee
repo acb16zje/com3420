@@ -27,9 +27,9 @@ class Notifications
       if notification.context == "AM"
         if (notification.action == "returned") or (notification.action == "requested")
           "#{notification.notifiable.booker} has #{notification.action}: #{notification.notifiable.itemname}"
-        if (notification.action == "overdue")
+        else if (notification.action == "overdue")
           "#{notification.notifiable.booker} has not returned #{notification.notifiable.itemname} on time"
-        if (notification.action == "started") or (notification.action == "cancelled")
+        else if (notification.action == "started") or (notification.action == "cancelled")
           "#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}"
       else if notification.context == "U"
         if (notification.action == "approved") or (notification.action == "rejected")
