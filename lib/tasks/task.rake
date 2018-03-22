@@ -51,7 +51,7 @@ task update_booking_status_to_late: :environment do
     b.save
   end
 end
-=======
+
 # frozen_string_literal: true
 
 desc 'Dropping and re-creating the tables...'
@@ -93,17 +93,3 @@ task update_booking_status_to_ongoing: :environment do
     b.save
   end
 end
-
-desc 'Update booking status to late'
-task update_booking_status_to_late: :environment do
-  # Get current date/time
-  now = DateTime.now
-  bookings = Booking.where('status = 3 AND end_datetime <= ?', now)
-  bookings.each do |b|
-    Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
-    Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
-    b.status = 7
-    b.save
-  end
-end
->>>>>>> 3ec63d8941a37c1b1c72d5d5442bd743e3f6791e
