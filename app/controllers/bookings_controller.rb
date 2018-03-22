@@ -28,6 +28,16 @@ class BookingsController < ApplicationController
 
   # GET /bookings/ongoing
   def ongoing
+    # Get current date/time
+    to_update = Booking.where('status = 2 AND start_datetime < ?', DateTime.now)
+    to_update.each do |b|
+      Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
+      Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
+      UserMailer.booking_ongoing(User.find(b.user_id), Item.find(b.item_id)).deliver
+      b.status = 3
+      b.save
+    end
+
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 3", current_user.id)
   end
 
@@ -39,6 +49,19 @@ class BookingsController < ApplicationController
   # GET /bookings/rejected
   def rejected
     @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 5", current_user.id)
+  end
+
+  def late
+    # Get current date/time
+    to_update = Booking.where('status = 3 AND end_datetime < ?', DateTime.now)
+    to_update.each do |b|
+      Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
+      Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
+      b.status = 7
+      b.save
+    end
+    
+    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 7", current_user.id)
   end
 
   # Convert the datetime object to a date string to block
