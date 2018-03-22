@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # frozen_string_literal: true
 
 desc 'Dropping and re-creating the tables...'
@@ -50,32 +49,4 @@ task update_booking_status_to_late: :environment do
     b.status = 7
     b.save
   end
-end
-
-# frozen_string_literal: true
-
-desc 'Dropping and re-creating the tables...'
-task :reset do
-  if File.file?('./db/schema.rb')
-    puts 'Deleting schema.rb'
-    File.delete('./db/schema.rb')
-  end
-
-  sh 'rails db:drop'
-  sh 'rails db:create'
-  sh 'rails db:migrate'
-  sh 'rails db:seed'
-end
-
-desc 'Deploy to epiDeploy.'
-task :deploy do
-  sh 'ssh-add'
-  sh 'bundle exec ed release -d demo'
-  sh 'bundle exec cap demo deploy:seed'
-end
-
-desc 'Deploy to epiDeploy without seed.'
-task :deploy_no_seed do
-  sh 'ssh-add'
-  sh 'bundle exec ed release -d demo'
 end
