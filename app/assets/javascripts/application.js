@@ -142,7 +142,6 @@ $(document).ready(function () {
 
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
-
                 }
             });
         } else {
@@ -172,6 +171,7 @@ $(document).ready(function () {
         }
 
         // Prevent user to input smaller endTime than startTime
+        checkTimes();
     });
 
     // Prevent endTime smaller than startTime on the same date
@@ -189,15 +189,31 @@ $(document).ready(function () {
             var end_time = new Date(end_date + ' ' + endTime.val());
 
             // Prevent same startTime and endTime
-            if ((end_time <= start_time)) {
-                endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
-            } else {
-                endTime.pickatime('picker').set('val', '');
-            }
+            // if ((end_time <= start_time)) {
+            //     endTime.pickatime('picker').set('clear');
+            // } else {
+            //     endTime.pickatime('picker').set('clear');
+            // }
+
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
             endTime.pickatime('picker').set('val', '');
             endTime.pickatime('picker').set('min', '');
+        }
+
+        if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
+            endDate.prop('disabled', true);
+            endTime.prop('disabled', true);
+        } else {
+            endDate.prop('disabled', false);
+            endTime.prop('disabled', false)
+        }
+    }
+
+    if (startDate.pickadate('picker') != undefined) {
+        if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
+            endDate.prop('disabled', true);
+            endTime.prop('disabled', true);
         }
     }
 
