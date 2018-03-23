@@ -145,18 +145,23 @@ $(document).ready(function () {
 
     // Prevent endTime smaller than startTime on the same date
     $('.timepicker').on('change', function () {
-        checkTimes();
+        if ($(this).attr('id') === 'startTime'){
+            checkTimes();
+        }
     });
 
     function checkTimes() {
         var start_date = startDate.val();
         var end_date = endDate.val();
-
         if (start_date === end_date) {
+            console.log("ADOSHASIHDASOIDHAOSIDH")
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
 
             // Prevent same startTime and endTime
+            if (end_time <= start_time){
+                endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
+            }
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
             endTime.pickatime('picker').set('val', '');
