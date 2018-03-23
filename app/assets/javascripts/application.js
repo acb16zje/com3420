@@ -51,9 +51,15 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         min: moment(),
-        disable: gon.block_start_dates,
+        max: gon.max_start_date,
         onStart: function () {
             this.set('select', moment());
+            if (gon.date_to_disable === undefined){
+                this.set('disable',gon.block_start_dates);
+            }
+            else{
+                this.set('disable',gon.block_start_dates.push(gon.date_to_disable));
+            }
         }
     });
 
@@ -62,10 +68,10 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         min: moment(),
+        max: gon.max_end_date,
         disable: gon.block_end_dates,
         onStart: function () {
             this.set('select', moment());
-            this.set('max', gon.max_end_date);
         },
     });
 
@@ -74,7 +80,7 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         interval: 10,
-        disable: gon.block_start_time
+        disable: gon.block_start_time,
     });
 
     // Timepicker endTime on creating booking
@@ -109,7 +115,6 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    // console.log(data.end_date)
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
                     checkTimes();
@@ -120,7 +125,7 @@ $(document).ready(function () {
 
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
-
+                    
                 }
             });
         } else {
@@ -133,6 +138,15 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
+                    if ((data.date_to_disable === undefined) || (data.date_to_disable === null) || (data.date_to_disable === '')){
+                        startDate.pickadate('picker').set('disable',gon.block_start_dates);
+                    }
+                    else{
+                        startDate.pickadate('picker').set('disable',gon.block_start_dates.concat([data.date_to_disable]));
+                    }
+                    if ((data.max_start_time != undefined) && (data.max_start_time != null)){
+                        startTime.pickatime('picker').set('max',data.max_start_time);
+                    }
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
                     checkTimes();
@@ -167,7 +181,6 @@ $(document).ready(function () {
             }
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
-            console.log("asdasd")
             endTime.pickatime('picker').set('val', '');
             endTime.pickatime('picker').set('min', '');
         }
