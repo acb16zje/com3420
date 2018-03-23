@@ -44,20 +44,42 @@ RSpec.configure do |config|
 
   config.mock_with :rspec
 
+  #  This will cause the the javascipt to use, re-test if the one below fail
+  # config.before(:suite) do
+  #   DatabaseCleaner.clean_with(:truncation)
+  # end
+
+  # config.before(:each) do
+  #   DatabaseCleaner.strategy = :transaction
+  # end
+
+  # config.before(:each, js: true) do
+  #   DatabaseCleaner.strategy = :truncation
+  # end
+
+  # config.after(:each, js: true) do
+  #   expect(current_path).to eq current_path
+  # end
+
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
 
   config.before(:each) do
+    # set the default
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, js: true) do
+  config.before(:each, type: :feature) do
     DatabaseCleaner.strategy = :truncation
   end
 
-  config.after(:each, js: true) do
-    expect(current_path).to eq current_path
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.append_after(:each) do
+    DatabaseCleaner.clean
   end
 
   # Automatic login
@@ -146,9 +168,6 @@ end
 
 def wait_for_ajax
   Timeout.timeout(Capybara.default_max_wait_time) do
-    loop do
-      break if page.evaluate_script('jQuery.active') == 0
-      sleep 0.5
-    end
+    loop until page.evaluate_script('jQuery.active').zero?
   end
 end

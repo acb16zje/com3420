@@ -78,7 +78,7 @@ td.has-text-centered {
 }
 
 /* Navbar responsive adjust */
-@media screen and (min-width: 1024px) and (max-width: 1065px) {
+@media screen and (min-width: 1024px) and (max-width: 1070px) {
   /* Categories and Users */
   .is-hidden-custom {
     display: none !important;

@@ -2,10 +2,12 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing categories' do
-
-  specify 'I can create a category that does not exist yet' do
+  before :each do
     visit '/categories/new'
     expect(page).to have_content 'Create category'
+  end
+
+  specify 'I can create a category that does not exist yet' do
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -14,8 +16,6 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a category that has an invalid name' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -23,8 +23,6 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a category that has an invalid name' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'C1AM'
     click_button('Create category')
@@ -32,8 +30,6 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a category that already exists' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -48,8 +44,6 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a category that already exists' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -64,8 +58,6 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a new category with a tag that already exists' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -80,8 +72,6 @@ describe 'Managing categories' do
   end
 
   specify 'I can update a category' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -97,8 +87,6 @@ describe 'Managing categories' do
   end
 
   specify 'I can delete a category' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -110,8 +98,6 @@ describe 'Managing categories' do
   end
 
   specify 'I can add favourite category to home page' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
@@ -127,8 +113,6 @@ describe 'Managing categories' do
   end
 
   specify 'I can remove favourite category from home page' do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_tag', with: 'CAM'
     click_button('Create category')

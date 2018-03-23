@@ -18,8 +18,7 @@ class Notifications
       dataType: "JSON"
       method: "POST"
       success: ->
-        $("[data-behavior='unread-count']").text("")
-
+        # $("[data-behavior='unread-count']").text("")
     )
 
   handleSuccess: (data) =>

@@ -15,12 +15,14 @@
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th Booking ID
+        %th ID
         %th Asset
         %th Start Date
         %th Start Time
         %th End Date
         %th End Time
+        %th Reason
+        %th Booked By
         %th Action
     %tbody
       - @bookings.each do |booking|
@@ -31,6 +33,9 @@
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+          %td.has-text-centered= booking.next_location
+          %td.has-text-centered= booking.reason
+          %td.has-text-centered= link_to booking.user.givenname, booking.user
           %td
             .field.is-grouped.is-grouped-centered
               %p.control
