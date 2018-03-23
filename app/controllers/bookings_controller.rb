@@ -18,12 +18,12 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 1", current_user.id)
+    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 1", current_user.id)
   end
 
   # GET /bookings/accepted
   def accepted
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 2", current_user.id)
+    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 2", current_user.id)
   end
 
   # GET /bookings/ongoing
@@ -38,24 +38,30 @@ class BookingsController < ApplicationController
       b.save
     end
 
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 3", current_user.id)
+    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 3", current_user.id)
   end
 
   # GET /bookings/completed
   def completed
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
+    # @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
+    @bookings = Booking.joins(:item).where("items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
   end
 
   # GET /bookings/rejected
   def rejected
-    @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and bookings.status = 5", current_user.id)
+    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 5", current_user.id)
+  end
+
+  # GET /bookings/late
+  def late
+    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 7", current_user.id)
   end
 
   # GET /bookings/new
   def new
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
-    bookings = Booking.where("bookings.status = 2 or bookings.status = 3")
+    bookings = Booking.where("(bookings.status = 2 or bookings.status = 3) and bookings.item_id = ?", params[:item_id])
 
     set_of_dates = get_single_block_dates(bookings)
     block_dates = set_of_dates[0]
@@ -142,6 +148,7 @@ class BookingsController < ApplicationController
 
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+    @booking.next_location = params[:booking][:next_location].titleize
 
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id

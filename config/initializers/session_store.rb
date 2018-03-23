@@ -4,6 +4,6 @@ if Rails.env.production?
 else
   Rails.env.demo? ? '_project_demo_session_id' : '_project_dev_session_id'
 end),
-                                                             expire_after: (90.minutes),
+                                                             expire_after: (Rails.env.development? ? 99.years :  90.minutes),
                                                              secure: (Rails.env.demo? || Rails.env.production?),
                                                              httponly: true

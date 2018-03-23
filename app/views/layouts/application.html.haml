@@ -21,13 +21,21 @@
     %meta{:content => "#ffffff", :name => "theme-color"}/
 
     / Bulma CSS, Pikaday, DataTable, Select 2
-    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
-    = stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
     = stylesheet_link_tag "application"
 
     %title #{content_for(:title)} - AMRC Asset Management System
 
   %body
+    %noscript
+      .modal.is-active
+        .modal-background
+        .modal-content
+          .notification.is-danger
+            %p.title.is-3.is-spaced Sorry, it appears that you are using a web browser without JavaScript which prevents us offering you a rich online experience.
+            %p.subtitle.is-5 Please enable JavaScript or use a different web browser, or alternatively contact the CiCS Helpdesk
+
     %nav.navbar.is-fixed-top.is-light
       .navbar-brand
         = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
@@ -65,7 +73,7 @@
           - if current_user.permission_id != 1
             .navbar-item.has-dropdown.is-hoverable
               = link_to requests_bookings_path, class: 'navbar-link' do
-                Manage
+                Asset <br class="is-hidden-widescreen"> Requests
               .navbar-dropdown.is-boxed.is-right
                 = link_to 'Requests', requests_bookings_path, class: "navbar-item"
                 = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
@@ -101,11 +109,11 @@
     = yield
 
     / jQuery, Pikaday, Font Awesome, Datatable, Select2, bunnyJS, momentJS
-    = javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-    = javascript_include_tag "https://use.fontawesome.com/releases/v5.0.6/js/all.js"
-    = javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
-    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
-    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
-    = javascript_include_tag "https://unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
-    = javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"
+    = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
+    = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
+    = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"
     = javascript_include_tag "application"

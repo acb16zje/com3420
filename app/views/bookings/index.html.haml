@@ -15,12 +15,14 @@
   %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th Booking ID
+        %th ID
         %th Asset
         %th Start Date
         %th Start Time
         %th End Date
         %th End Time
+        %th Location
+        %th Reason
         %th Status
         %th Action
     %tbody
@@ -32,6 +34,8 @@
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date
           %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+          %td.has-text-centered= booking.next_location
+          %td.has-text-centered= booking.reason
           %td.has-text-centered
             - case booking.status
             - when 1
