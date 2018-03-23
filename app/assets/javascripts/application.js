@@ -82,7 +82,7 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         interval: 10,
-        max: gon.block_end_time
+        max: gon.max_end_time
     });
 
     $('.datepicker').on('change', function () {
@@ -118,7 +118,7 @@ $(document).ready(function () {
                     endDate.pickadate('picker').set('select',data.end_date);
 
                     endTime.pickatime('picker').set('enable', true);
-                    endTime.pickatime('picker').set('max', data.block_end_time);
+                    endTime.pickatime('picker').set('max', data.max_end_time);
 
                 }
             });
@@ -133,7 +133,7 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     endTime.pickatime('picker').set('enable', true);
-                    endTime.pickatime('picker').set('max', data.block_end_time);
+                    endTime.pickatime('picker').set('max', data.max_end_time);
                 }
             })
 

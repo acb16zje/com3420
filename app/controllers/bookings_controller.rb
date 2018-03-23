@@ -63,36 +63,30 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
     bookings = Booking.where("(bookings.status = 2 or bookings.status = 3) and bookings.item_id = ?", params[:item_id])
 
+    # Get the dates that are blocked by a single booking
     set_of_dates = get_single_block_dates(bookings)
     block_dates = set_of_dates[0]
     check_dates = set_of_dates[1]
 
+    # Get the dates that are blocked by consecutive bookings
     block_dates = get_cons_block_dates(check_dates, block_dates)
+    
+    # If the time is after 11.50pm, add to blocked dates 
     now = DateTime.now
     if (now > DateTime.new(now.year, now.month, now.day, 23, 50, 0))
       block_dates.append(get_array_from_date(now))
     end
 
     gon.block_start_dates = block_dates
-    gon.block_end_dates = block_dates
-    gon.max_end_date = get_min_date(block_dates, DateTime.now)
-    puts "TEST"
-    puts block_dates
-    puts "TEST"
     
-    if gon.max_end_date.blank? || gon.max_end_date.nil? || check_before_today(get_date_from_array(gon.max_end_date))
-      gon.max_end_date = ''
-    end
-    puts "22222"
-    puts gon.max_end_date
-    puts "2222"
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
     if !bookings.blank? && !bookings.nil?
       if !params[:start_date].blank?
 
+        # Get the limit to the end date
+        gon.max_end_date = get_max_end_date(bookings, get_date_from_string(params[:start_date]))
         # If the the earliest booking is before the selected start date, no max is set for the end date
-        gon.max_end_date = get_min_date(block_dates, get_date_from_string(params[:start_date]))
         if gon.max_end_date.blank? || gon.max_end_date.nil? || get_date_from_string(params[:start_date]) > get_date_from_array(gon.max_end_date)
           gon.max_end_date = ''
         end
@@ -100,45 +94,60 @@ class BookingsController < ApplicationController
         # Get what times to be blocked for selected date
         gon.block_start_time = get_block_times(bookings, params[:start_date])
         if gon.block_start_time.nil? || gon.block_start_time.blank?
-          gon.block_end_time = ''
+          # Set no max time
+          gon.max_end_time = ''
         else
-          gon.block_end_time = get_max_end_time(gon.block_start_time[0])
+          # Set the max time to the earliest booking start time on the day
+          gon.max_end_time = get_max_end_time(gon.block_start_time[0])
         end
+
         data = {
           :end_date => get_array_from_date(get_date_from_string(params[:start_date])),
           :max_end_date => gon.max_end_date,
           :block_start_time => gon.block_start_time,
-          :block_end_time => gon.block_end_time,
+          :max_end_time => gon.max_end_time,
         }
 
         render :json => data
-        # If end date is changed, then check for times that needed to be blocked
+      # If end date is changed, then check for times that needed to be blocked
       elsif !params[:end_date].blank?
-        gon.block_end_time = get_block_times(bookings, params[:end_date])
-        if gon.block_end_time.nil? || gon.block_end_time.blank?
-          gon.block_end_time = ''
+        gon.max_end_time = get_block_times(bookings, params[:end_date])
+        if gon.max_end_time.nil? || gon.max_end_time.blank?
+          # Set no max time
+          gon.max_end_time = ''
         else
-          gon.block_end_time = get_max_end_time(gon.block_end_time[0])
+          # Set the max time to the earliest booking start time on the day
+          gon.max_end_time = get_max_end_time(gon.max_end_time[0])
         end
         data = {
-          :block_end_time => gon.block_end_time,
+          :max_end_time => gon.max_end_time,
         }
 
         render :json => data
-        # If the page just refreshed, use todays values to check for times to be blocked
+      # If the page just refreshed, use todays values to check for times to be blocked
       else
+        gon.max_end_date = get_max_end_date(bookings, DateTime.now)
+        
+        if gon.max_end_date.blank? || gon.max_end_date.nil? || check_before_today(get_date_from_array(gon.max_end_date))
+          gon.max_end_date = ''
+        end
+
+        # Get the times to be blocked on the start time
         date_now = DateTime.now
         date_s = date_now.day.to_s + " " + Date::MONTHNAMES[date_now.month] + " " + date_now.year.to_s
         gon.block_start_time = get_block_times(bookings, date_s)
-        gon.block_end_time = get_block_times(bookings, date_s)
-
-        if !gon.block_end_time[0].nil? || !gon.block_end_time[0].blank?
-          gon.block_end_time = get_max_end_time(gon.block_end_time[0])
-          if check_before_today(DateTime.new(date_now.year, date_now.month, date_now.day, gon.block_end_time[0].to_i, gon.block_end_time[1].to_i))
-            gon.block_end_time = ''
+        
+        # Get the limit to the end time
+        gon.max_end_time = get_block_times(bookings, date_s)
+        if !gon.max_end_time[0].nil? || !gon.max_end_time[0].blank?
+          gon.max_end_time = get_max_end_time(gon.max_end_time[0])
+          if check_before_today(DateTime.new(date_now.year, date_now.month, date_now.day, gon.max_end_time[0].to_i, gon.max_end_time[1].to_i))
+            # If the limit is the day before, set no limit
+            gon.max_end_time = ''
           end
         else
-          gon.block_end_time = ''
+          # No limit to end time
+          gon.max_end_time = ''
         end
       end
     end
@@ -270,59 +279,22 @@ def check_start_of_day(datetime)
   return false
 end
 
-# A loop to get the earliest date from the array from the start of today
-def get_min_date(full_dates, today)
-  dates = []
-
-  # Get all the dates from the start of today
-  full_dates.each do |d|
-    if get_date_from_array(d) >= today
-      dates.append(d)
+# A loop to get the earliest date that a booking is made in the array from the start of today
+def get_max_end_date(bookings, today)
+  max_end_date = []
+  bookings.each do |booking|
+    if DateTime.parse(booking.start_datetime.to_time.to_s) >= today
+      if max_end_date.blank? || max_end_date.nil?
+        max_end_date = booking.start_date
+      else
+        if DateTime.parse(booking.start_datetime.to_time.to_s) < DateTime.parse(max_end_date.to_time.to_s) && 
+          max_end_date = booking.start_date
+        end
+      end
     end
   end
 
-  # If all dates are before today, return nothing to block
-  if dates.nil? || dates.blank?
-    max_end_date = []
-    return max_end_date
-  end
-
-  # Get the set of dates with the lowest amount in years
-  min_year_array = [dates[0]]
-  max_end_date = dates[0]
-  dates.each do |date|
-    if date[0] == max_end_date[0]
-      min_year_array.push(date)
-    elsif date[0] < max_end_date[0]
-      min_year_array = [date]
-      max_end_date = date
-    end
-  end
-
-  # Get the set of dates with the lowest amount in months
-  min_month_array = [min_year_array[0]]
-  max_end_date = min_month_array[0]
-  min_year_array.each do |date|
-    if date[1] == max_end_date[1]
-      min_month_array.push(date)
-    elsif date[1] < max_end_date[1]
-      min_month_array = [date]
-      max_end_date = date
-    end
-  end
-
-  puts min_month_array
-  # Get the single date with the lowest amount in days
-  max_end_date = min_month_array[0]
-  min_month_array.each do |date|
-    if date[2] < max_end_date[2]
-      max_end_date = date
-    end
-  end
-
-  temp_date = get_date_from_array(max_end_date) - 1
-
-  return get_array_from_date(temp_date)
+  return get_array_from_date(max_end_date
 end
 
 def get_max_end_time(max_end_time)
