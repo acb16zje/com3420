@@ -125,7 +125,6 @@ $(document).ready(function () {
 
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
-                    
                 }
             });
         } else {
