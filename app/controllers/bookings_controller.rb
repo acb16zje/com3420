@@ -150,6 +150,8 @@ class BookingsController < ApplicationController
           gon.max_end_time = ''
         end
       end
+    else
+      gon.max_end_date = ''
     end
   end
 
