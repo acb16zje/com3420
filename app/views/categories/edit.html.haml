@@ -4,7 +4,7 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title "Editing #{@category.name}"
+        %h3.title Editing #{@category.name}
         .box
           = simple_form_for(@category) do |f|
             = f.error_notification
