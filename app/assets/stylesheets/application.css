@@ -15,6 +15,12 @@ body {
   background: #fefefe;
 }
 
+/* Mobile notification style */
+#mobile_notification_dropdown .dropdown-content{
+  top: 1px !important;
+  left: 0px;
+}
+
 /* No resize for textarea */
 .textarea {
   resize: none;

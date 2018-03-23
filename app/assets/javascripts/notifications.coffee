@@ -18,30 +18,61 @@ class Notifications
       dataType: "JSON"
       method: "POST"
       success: ->
-        # $("[data-behavior='unread-count']").text("")
+        $("[data-behavior='unread-count']").text("")
     )
 
   handleSuccess: (data) =>
     items = $.map data, (notification) ->
       if notification.context == "AM"
         if (notification.action == "returned") or (notification.action == "requested")
-          "#{notification.notifiable.booker} has #{notification.action}: #{notification.notifiable.itemname}"
+          "<a class='navbar-item'>#{notification.notifiable.booker} has #{notification.action}: #{notification.notifiable.itemname}</a>
+          <hr class='navbar-divider>"
         else if (notification.action == "overdue")
-          "#{notification.notifiable.booker} has not returned #{notification.notifiable.itemname} on time"
+          "<a class='navbar-item'>#{notification.notifiable.booker} has not returned #{notification.notifiable.itemname} on time</a>
+          <hr class='navbar-divider>"
         else if (notification.action == "started") or (notification.action == "cancelled")
-          "#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}"
+          "<a class='navbar-item'>#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}</a>
+          <hr class='navbar-divider>"
       else if notification.context == "U"
         if (notification.action == "approved") or (notification.action == "rejected")
-          "Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has been #{notification.action}"
+          "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has been #{notification.action}</a>
+          <hr class='navbar-divider>"
         else if (notification.action == "started")
-          "Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has #{notification.action}"
+          "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has #{notification.action}</a>
+          <hr class='navbar-divider>"
         else if (notification.action == "overdue")
-          "Your #{notification.notifiable.type} for #{notification.notifiable.itemname} is #{notification.action}"
+          "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} is #{notification.action}</a>
+          <hr class='navbar-divider>"
+    items_mobile = $.map data, (notification) ->
+      if notification.context == "AM"
+        if (notification.action == "returned") or (notification.action == "requested")
+          "<a class='dropdown-item'>#{notification.notifiable.booker} has #{notification.action}: #{notification.notifiable.itemname}</a>
+          <hr class='dropdown-divider>"
+        else if (notification.action == "overdue")
+          "<a class='dropdown-item'>#{notification.notifiable.booker} has not returned #{notification.notifiable.itemname} on time</a>
+          <hr class='dropdown-divider>"
+        else if (notification.action == "started") or (notification.action == "cancelled")
+          "<a class='dropdown-item'>#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}</a>
+          <hr class='dropdown-divider>"
+      else if notification.context == "U"
+        if (notification.action == "approved") or (notification.action == "rejected")
+          "<a class='dropdown-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has been #{notification.action}</a>
+          <hr class='dropdown-divider>"
+        else if (notification.action == "started")
+          "<a class='dropdown-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has #{notification.action}</a>
+          <hr class='dropdown-divider>"
+        else if (notification.action == "overdue")
+          "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} is #{notification.action}</a>
+          <hr class='dropdown-divider>"
 
-    $("[data-behavior='notification-items']").html(items)
-    $("[data-behavior='unread-count']").text(items.length)
     if items.length == 0
+      $("[data-behavior='notification-items']").html("<a class='navbar-item'>No new notifications</a>")
+      $("[data-behavior='notification-items-mobile']").html("<a class='dropdown-item'>No new notifications</a>")
       $("[data-behavior='unread-count']").text("")
+    else
+      $("[data-behavior='notification-items']").html(items_mobile)
+      $("[data-behavior='unread-count']").text(items.length)
+
 
 jQuery ->
   new Notifications

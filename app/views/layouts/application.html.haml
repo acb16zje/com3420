@@ -40,11 +40,19 @@
       .navbar-brand
         = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
           = image_tag("amrc.svg", width: "50")
+        .dropdown.is-active.is-hidden-desktop#mobile_notification_dropdown
+          .dropdown-trigger{"data-behavior" => "notification-link"}
+            %button.button{"aria-haspopup" => "true", "aria-controls" => "dropdown-menu"}
+              %span.icon
+                %i.fas.fa-bell
+                %span{"data-behavior" => "unread-count"}
+          .dropdown-menu#dropdown-menu{"role" => "menu"}
+            .dropdown-content{"data-behavior" => "notification-items-mobile" }
         .navbar-burger.burger{"data-target" => "navbarExampleTransparentExample"}
           %span
           %span
           %span
-      #navbarExampleTransparentExample.navbar-menu{"data-behavior" => "notifications" }
+      #navbarExampleTransparentExample.navbar-menu{"data-behavior" => "notifications"}
         .navbar-start
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
@@ -88,12 +96,12 @@
                 = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
                 - if current_user.permission_id == 3
                   = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
-          .navbar-item.has-dropdown.is-hoverable{"data-behavior" => "notification-link" }
+          .navbar-item.has-dropdown.is-hoverable.is-hidden-touch{"data-behavior" => "notification-link"}
             = link_to requests_bookings_path, class: 'navbar-link' do
               %span.icon
                 %i.fas.fa-bell
                 %span{"data-behavior" => "unread-count"}
-            .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items" }
+            .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items"}
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link
               %span.icon

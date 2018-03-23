@@ -63,9 +63,9 @@
             .field.is-grouped.is-grouped-centered
               - if booking.status < 3
                 %p.control
-                  = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-link' do
+                  = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-danger' do
                     %span.icon
-                      %i.class.fas.fa-edit
+                      %i.class.fas.fa-ban
                     %span Cancel Booking
               - elsif (booking.status == 3) || (booking.status == 7)
                 %p.control

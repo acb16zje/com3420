@@ -12,8 +12,9 @@ class CategoriesController < ApplicationController
     redirect_to categories_path
   end
 
-  # GET /categories/1
+  # GET /categories/filter
   def filter
+    @categories = Category.all
   end
 
   # GET /categories/new

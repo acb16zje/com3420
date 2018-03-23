@@ -42,6 +42,25 @@
           %td.has-text-centered= item.serial_id
           %td.has-text-centered= item.category.name
           %td.has-text-centered= item.manufacturer
-          %td.has-text-centered= item.condition
+          %td.has-text-centered
+            - case item.condition
+            - when 'Like New'
+              %span.tag.is-success.is-medium
+                = item.condition
+            - when 'Good'
+              %span.tag.is-primary.is-medium
+                = item.condition
+            - when 'Adequate'
+              %span.tag.is-warning.is-medium
+                = item.condition
+            - when 'Damaged'
+              %span.tag.is-danger.is-medium
+                = item.condition
+            - when 'Missing'
+              %span.tag.is-danger.is-medium
+                = item.condition
+            - else
+              %span.tag.is-black.is-medium
+                Unknown
           %td.has-text-centered= item.location
           %td.has-text-centered.is-hidden= item.keywords

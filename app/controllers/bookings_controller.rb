@@ -70,15 +70,15 @@ class BookingsController < ApplicationController
 
     # Get the dates that are blocked by consecutive bookings
     block_dates = get_cons_block_dates(check_dates, block_dates)
-    
-    # If the time is after 11.50pm, add to blocked dates 
+
+    # If the time is after 11.50pm, add to blocked dates
     now = DateTime.now
     if (now > DateTime.new(now.year, now.month, now.day, 23, 50, 0))
       block_dates.append(get_array_from_date(now))
     end
 
     gon.block_start_dates = block_dates
-    
+
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
     if !bookings.blank? && !bookings.nil?
@@ -119,6 +119,7 @@ class BookingsController < ApplicationController
           # Set the max time to the earliest booking start time on the day
           gon.max_end_time = get_max_end_time(gon.max_end_time[0])
         end
+
         data = {
           :max_end_time => gon.max_end_time,
         }
@@ -127,7 +128,7 @@ class BookingsController < ApplicationController
       # If the page just refreshed, use todays values to check for times to be blocked
       else
         gon.max_end_date = get_max_end_date(bookings, DateTime.now)
-        
+
         if gon.max_end_date.blank? || gon.max_end_date.nil? || check_before_today(get_date_from_array(gon.max_end_date))
           gon.max_end_date = ''
         end
@@ -136,7 +137,7 @@ class BookingsController < ApplicationController
         date_now = DateTime.now
         date_s = date_now.day.to_s + " " + Date::MONTHNAMES[date_now.month] + " " + date_now.year.to_s
         gon.block_start_time = get_block_times(bookings, date_s)
-        
+
         # Get the limit to the end time
         gon.max_end_time = get_block_times(bookings, date_s)
         if !gon.max_end_time[0].nil? || !gon.max_end_time[0].blank?
@@ -267,18 +268,12 @@ end
 # Check if the provided date time is before the date of today
 def check_before_today(datetime)
   now = DateTime.now
-  if DateTime.parse(datetime.to_time.to_s) < DateTime.new(now.year, now.month, now.day, 0, 0, 0)
-    return true
-  end
-  return false
+  return DateTime.parse(datetime.to_time.to_s) < DateTime.new(now.year, now.month, now.day, 0, 0, 0)
 end
 
 # Check if the provided date time is at the start of the day, ie 12AM
 def check_start_of_day(datetime)
-  if DateTime.parse(datetime.to_time.to_s) == DateTime.new(datetime.year, datetime.month, datetime.day, 0, 0, 0)
-    return true
-  end
-  return false
+  return DateTime.parse(datetime.to_time.to_s) == DateTime.new(datetime.year, datetime.month, datetime.day, 0, 0, 0)
 end
 
 # A loop to get the earliest date that a booking is made in the array from the start of today
@@ -289,7 +284,7 @@ def get_max_end_date(bookings, today)
       if max_end_date.blank? || max_end_date.nil?
         max_end_date = booking.start_date
       else
-        if DateTime.parse(booking.start_datetime.to_time.to_s) < DateTime.parse(max_end_date.to_time.to_s) && 
+        if DateTime.parse(booking.start_datetime.to_time.to_s) < DateTime.parse(max_end_date.to_time.to_s) &&
           max_end_date = booking.start_date
         end
       end
@@ -306,6 +301,7 @@ def get_max_end_time(max_end_time)
     max_end_time[0] = (max_end_time[0].to_i - 1).to_s
     max_end_time[1] = "50"
   end
+
   return max_end_time
 end
 
