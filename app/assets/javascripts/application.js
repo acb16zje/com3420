@@ -189,9 +189,15 @@ $(document).ready(function () {
             var end_time = new Date(end_date + ' ' + endTime.val());
 
             // Prevent same startTime and endTime
-            // if ((end_time <= start_time)) {
-            //     endTime.pickatime('picker').set('clear');
-            // } else {
+            if ((end_time <= start_time)) {
+                temp_end_time = moment(moment(start_time).add(10,'m').toDate()).format('h:mm A');
+                if (temp_end_time === "12:00 AM"){
+                    end_date = moment(end_time).add(1,'days')
+                    endDate.val(end_date.format('DD MMM YYYY'))
+                }
+                endTime.val(moment(moment(start_time).add(10,'m').toDate()).format('h:mm A'));
+            } 
+            // else{
             //     endTime.pickatime('picker').set('clear');
             // }
 

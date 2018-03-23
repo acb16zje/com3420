@@ -92,12 +92,12 @@ class BookingsController < ApplicationController
         end
 
         # Get what times to be blocked for selected date
-        gon.block_start_time = get_block_times(bookings, params[:start_date])
+        gon.block_start_time = get_block_times(bookings, params[:start_date],true)
         if gon.block_start_time.nil? || gon.block_start_time.blank?
           # Set no max time
           gon.max_end_time = ''
         else
-          gon.max_end_time = get_block_times(bookings, params[:start_date])
+          gon.max_end_time = get_block_times(bookings, params[:start_date],true)
           # Set the max time to the earliest booking start time on the day
           gon.max_end_time = get_max_end_time(gon.max_end_time[0])
         end
@@ -112,11 +112,15 @@ class BookingsController < ApplicationController
         render :json => data
         # If end date is changed, then check for times that needed to be blocked
       elsif !params[:end_date].blank?
-        gon.max_end_time = get_block_times(bookings, params[:end_date])
+        gon.max_end_time = get_block_times(bookings, params[:end_date],false)
 
-        if !gon.max_end_time.nil? || !gon.max_end_time.blank?
+        if !gon.max_end_time.nil? && !gon.max_end_time.blank?
           # Set the max end time to the earliest booking start time on the day
+          puts "AAAAAAAA"
+          puts gon.max_end_time[0]
+          puts "AAAAAAAA"
           gon.max_end_time = get_max_end_time(gon.max_end_time[0])
+          puts gon.max_end_time
           # If the max end time is at the start of a day, meaning 00:00, the start date should have that date disabled
           if gon.max_end_time[0].to_i <= 0 && gon.max_end_time[1].to_i <= 0
             gon.max_start_time = ''
@@ -124,8 +128,8 @@ class BookingsController < ApplicationController
           else
             # If not set the max start time to be 10 minutes before the max end time, so you can't book the start and end on the same time.
             gon.date_to_disable = ''
-            gon.max_start_time = DateTime.new(2018,01,02,gon.max_end_time[0].to_i,gon.max_end_time[1].to_i) - 10.minutes
-            gon.max_start_time = [gon.max_start_time.hour,gon.max_start_time.minute]
+            # gon.max_start_time = DateTime.new(2018,01,02,gon.max_end_time[0].to_i,gon.max_end_time[1].to_i) - 10.minutes
+            # gon.max_start_time = [gon.max_start_time.hour,gon.max_start_time.minute]
           end
         else
           # Set no max time
@@ -149,9 +153,9 @@ class BookingsController < ApplicationController
         # Get the times to be blocked on the start time
         date_now = DateTime.now
         date_s = date_now.day.to_s + " " + Date::MONTHNAMES[date_now.month] + " " + date_now.year.to_s
-        gon.block_start_time = get_block_times(bookings, date_s)
+        gon.block_start_time = get_block_times(bookings, date_s,true)
         # Get the limit to the end time
-        gon.max_end_time = get_block_times(bookings, date_s)
+        gon.max_end_time = get_block_times(bookings, date_s,false)
 
         if !gon.max_end_time[0].nil? || !gon.max_end_time[0].blank?
           gon.max_end_time = get_max_end_time(gon.max_end_time[0])
@@ -172,6 +176,9 @@ class BookingsController < ApplicationController
     else
       gon.max_end_date = ''
     end
+    puts "HIHI"
+    puts gon.max_start_time
+    puts "HIHI"
   end
 
   # GET /bookings/1/edit
@@ -326,7 +333,7 @@ def get_max_end_time(max_end_time)
 end
 
 # Get the times to be blocked on the provided date
-def get_block_times(bookings, today)
+def get_block_times(bookings, today,bool)
   block_times = []
   check_times = []
 
@@ -379,7 +386,7 @@ def get_block_times(bookings, today)
 
     # A loop to add the time strings to be blocked from the start to end time, does not add 5 PM to the blocked time
 
-    if !check_start_of_day(temp_start_time)
+    if !check_start_of_day(temp_start_time) && !bool
       temp_start_time += 10.minutes
     end
 
