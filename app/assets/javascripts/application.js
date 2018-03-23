@@ -197,10 +197,11 @@ $(document).ready(function () {
 
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
-            endTime.pickatime('picker').set('val', '');
+            // endTime.pickatime('picker').set('val', '');
             endTime.pickatime('picker').set('min', '');
         }
 
+        // Disable the end date and end time if start date and start time are not filled
         if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
             endDate.prop('disabled', true);
             endTime.prop('disabled', true);
@@ -210,6 +211,7 @@ $(document).ready(function () {
         }
     }
 
+    // Disable the end date and end time if start date and start time are not filled
     if (startDate.pickadate('picker') != undefined) {
         if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
             endDate.prop('disabled', true);
