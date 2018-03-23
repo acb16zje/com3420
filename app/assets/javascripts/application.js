@@ -112,6 +112,7 @@ $(document).ready(function () {
                     // console.log(data.end_date)
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
+                    checkTimes();
 
                     endDate.pickadate('picker').set('enable', true);
                     endDate.pickadate('picker').set('max', data.max_end_date);
@@ -134,13 +135,13 @@ $(document).ready(function () {
                 success: function (data) {
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
+                    checkTimes();
                 }
             })
 
         }
 
         // Prevent user to input smaller endTime than startTime
-        checkTimes();
     });
 
     // Prevent endTime smaller than startTime on the same date
@@ -154,16 +155,19 @@ $(document).ready(function () {
         var start_date = startDate.val();
         var end_date = endDate.val();
         if (start_date === end_date) {
-            console.log("ADOSHASIHDASOIDHAOSIDH")
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
 
             // Prevent same startTime and endTime
-            if (end_time <= start_time){
+            if ((end_time <= start_time)){
                 endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
+            }
+            else {
+                endTime.pickatime('picker').set('val', ''); 
             }
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
+            console.log("asdasd")
             endTime.pickatime('picker').set('val', '');
             endTime.pickatime('picker').set('min', '');
         }

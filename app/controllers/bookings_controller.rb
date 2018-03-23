@@ -296,6 +296,10 @@ def get_max_end_date(bookings, today)
     end
   end
 
+  if max_end_date.blank?
+    return ''
+  end
+
   return get_array_from_date(max_end_date)
 end
 
@@ -303,9 +307,14 @@ def get_max_end_time(max_end_time)
   if max_end_time[1] != "00"
     max_end_time[1] = (max_end_time[1].to_i - 10).to_s
   else
-    max_end_time[0] = (max_end_time[0].to_i - 1).to_s
-    max_end_time[1] = "50"
+    if max_end_time[0] != "00"
+      max_end_time[0] = (max_end_time[0].to_i - 1).to_s
+      max_end_time[1] = "50"
+    else
+      max_end_time[1] = "0"
+    end
   end
+
   return max_end_time
 end
 
