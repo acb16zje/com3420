@@ -294,7 +294,7 @@ def get_max_end_date(bookings, today)
     end
   end
 
-  return get_array_from_date(max_end_date
+  return get_array_from_date(max_end_date)
 end
 
 def get_max_end_time(max_end_time)
