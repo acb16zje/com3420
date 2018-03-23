@@ -13,20 +13,20 @@ $(document).ready(function () {
     var $dropdowns = getAll('.dropdown:not(.is-hoverable)');
 
     if ($dropdowns.length > 0) {
-      $dropdowns.forEach(function ($el) {
-        $el.addEventListener('click', function (event) {
-          event.stopPropagation();
-          $el.classList.toggle('is-active');
-        });
-      });
-
-      document.addEventListener('click', function (event) {
         $dropdowns.forEach(function ($el) {
-            $el.classList.remove('is-active');
-          });
-      });
+            $el.addEventListener('click', function (event) {
+                event.stopPropagation();
+                $el.classList.toggle('is-active');
+            });
+        });
+
+        document.addEventListener('click', function (event) {
+            $dropdowns.forEach(function ($el) {
+                $el.classList.remove('is-active');
+            });
+        });
     }
-    
+
     // Navigation Burger menu
     // Get all "navbar-burger" elements
     var $navbarBurgers = getAll('.navbar-burger');
@@ -69,9 +69,14 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         min: moment(),
-        disable: gon.block_start_dates,
+        max: gon.max_start_date,
         onStart: function () {
             this.set('select', moment());
+            if (gon.date_to_disable === undefined) {
+                this.set('disable', gon.block_start_dates);
+            } else {
+                this.set('disable', gon.block_start_dates.push(gon.date_to_disable));
+            }
         }
     });
 
@@ -80,10 +85,10 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         min: moment(),
+        max: gon.max_end_date,
         disable: gon.block_end_dates,
         onStart: function () {
             this.set('select', moment());
-            this.set('max', gon.max_end_date);
         },
     });
 
@@ -92,7 +97,7 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         interval: 10,
-        disable: gon.block_start_time
+        disable: gon.block_start_time,
     });
 
     // Timepicker endTime on creating booking
@@ -105,7 +110,6 @@ $(document).ready(function () {
 
     $('.datepicker').on('change', function () {
         if ($(this).attr('id') === 'startDate') {
-            // Min end date will be set as start date
             var start_date = new Date(startDate.val());
             var end_date = new Date(endDate.val());
             if (end_date < start_date) {
@@ -124,13 +128,13 @@ $(document).ready(function () {
                 type: "GET",
                 url: "new",
                 data: {
-                    start_date: startDate.val(),
+                    start_date: $('#startDate').val(),
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data.block_start_time)
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.block_start_time);
+                    checkTimes();
 
                     endDate.pickadate('picker').set('enable', true);
                     endDate.pickadate('picker').set('max', data.max_end_date);
@@ -138,6 +142,7 @@ $(document).ready(function () {
 
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
+
                 }
             });
         } else {
@@ -146,19 +151,27 @@ $(document).ready(function () {
                 type: "GET",
                 url: "new",
                 data: {
-                    end_date: endDate.val(),
+                    end_date: $('#endDate').val(),
                 },
                 dataType: 'json',
                 success: function (data) {
+                    if ((data.date_to_disable === undefined) || (data.date_to_disable === null) || (data.date_to_disable === '')) {
+                        startDate.pickadate('picker').set('disable', gon.block_start_dates);
+                    } else {
+                        startDate.pickadate('picker').set('disable', gon.block_start_dates.concat([data.date_to_disable]));
+                    }
+                    if ((data.max_start_time != undefined) && (data.max_start_time != null)) {
+                        startTime.pickatime('picker').set('max', data.max_start_time);
+                    }
                     endTime.pickatime('picker').set('enable', true);
                     endTime.pickatime('picker').set('max', data.max_end_time);
+                    checkTimes();
                 }
             })
 
         }
 
         // Prevent user to input smaller endTime than startTime
-        checkTimes();
     });
 
     // Prevent endTime smaller than startTime on the same date
@@ -176,10 +189,11 @@ $(document).ready(function () {
             var end_time = new Date(end_date + ' ' + endTime.val());
 
             // Prevent same startTime and endTime
-            if (end_time <= start_time){
+            if ((end_time <= start_time)) {
                 endTime.val(moment(moment(start_time).add(10, 'm').toDate()).format('h:mm A'));
+            } else {
+                endTime.pickatime('picker').set('val', '');
             }
-
             endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
         } else {
             endTime.pickatime('picker').set('val', '');
