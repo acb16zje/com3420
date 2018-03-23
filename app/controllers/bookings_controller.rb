@@ -76,9 +76,16 @@ class BookingsController < ApplicationController
     gon.block_start_dates = block_dates
     gon.block_end_dates = block_dates
     gon.max_end_date = get_min_date(block_dates, DateTime.now)
+    puts "TEST"
+    puts block_dates
+    puts "TEST"
+    
     if gon.max_end_date.blank? || gon.max_end_date.nil? || check_before_today(get_date_from_array(gon.max_end_date))
       gon.max_end_date = ''
     end
+    puts "22222"
+    puts gon.max_end_date
+    puts "2222"
     # Dynamic time blocking #
     # If start date is changed, then check for times that needed to be blocked
     if !bookings.blank? && !bookings.nil?
@@ -298,12 +305,13 @@ def get_min_date(full_dates, today)
   min_year_array.each do |date|
     if date[1] == max_end_date[1]
       min_month_array.push(date)
-    else
+    elsif date[1] < max_end_date[1]
       min_month_array = [date]
       max_end_date = date
     end
   end
 
+  puts min_month_array
   # Get the single date with the lowest amount in days
   max_end_date = min_month_array[0]
   min_month_array.each do |date|
