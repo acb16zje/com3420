@@ -25,6 +25,7 @@
 
     %br
     - if @user_home_categories.any?
+      - placeholder = 5 - (@user_home_categories.length % 5)
       - @user_home_categories.each_slice(5) do |slice|
         .columns
           - slice.each do |usercat|
@@ -34,11 +35,11 @@
                   .columns.hero-body
                     .column.has-text-centered
                       - if usercat.category.categoryicon?
-                        .icon.is-large
-                          = image_tag(usercat.category.categoryicon.url, alt: 'Icon')
+                        %span.icon.is-large
+                          = raw "#{usercat.category.categoryicon}"
                       - else
                         %span.icon.is-large
-                          %i.fas.fa-camera.fa-7x
+                          %i.far.fa-question-circle.fa-6x
                 %footer.card-footer
                   %p.card-footer-item
                     %span
@@ -50,12 +51,14 @@
               .card-content.hero.is-small.is-light
                 .columns.hero-body
                   .column.has-text-centered
-                    %span.icon.is-large>
-                      %i.fas.fa-plus.fa-7x
+                    %span.icon.is-large
+                      %i.fas.fa-plus.fa-6x
               %footer.card-footer
                 %p.card-footer-item
                   %span
                     = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
+          - for i in 0...placeholder - 1
+            .column
     - else
       .columns
         .column
@@ -63,11 +66,13 @@
             .card-content.hero.is-small.is-light
               .columns.hero-body
                 .column.has-text-centered
-                  %span.icon.is-large>
+                  %span.icon.is-large
                     %i.fas.fa-plus.fa-7x
             %footer.card-footer
               %p.card-footer-item
                 %span
                   = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
+        - for i in 0..3
+          .column
 
 

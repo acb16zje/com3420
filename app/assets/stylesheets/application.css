@@ -16,6 +16,11 @@ body {
   background: #fefefe;
 }
 
+/*  */
+.material-icons {
+  font-size: 96px !important;
+}
+
 /* Mobile notification style */
 #mobile_notification_dropdown .dropdown-content{
   top: 1px !important;

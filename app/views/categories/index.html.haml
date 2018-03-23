@@ -5,14 +5,18 @@
   - if not notice.nil?
     .columns
       .column.is-4.is-offset-4
-        .notification.is-success.has-text-centered
-          %button.delete
-          = notice
+        - if notice.include? 'Cannot'
+          .notification.is-danger.has-text-centered
+            %button.delete
+            = notice
+        - else
+          .notification.is-success.has-text-centered
+            %button.delete
+            = notice
 
   %p.title.has-text-centered Current categories
   %p.title.has-text-centered
     = link_to 'Create new', new_category_path, class: 'button is-success'
-
 
   %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead

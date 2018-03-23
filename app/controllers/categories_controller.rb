@@ -39,6 +39,11 @@ class CategoriesController < ApplicationController
           @category.name = @category.name.titleize
           @category.tag.upcase!
 
+          # Font awesome icon
+          if !(@category.categoryicon).include? 'material-icons'
+            @category.categoryicon = @category.categoryicon[0...-5] + ' fa-6x"></i>'
+          end
+
           if @category.save
             redirect_to categories_path, notice: 'Category was successfully created.'
           end
@@ -60,8 +65,11 @@ class CategoriesController < ApplicationController
 
   # DELETE /categories/1
   def destroy
-    @category.destroy
-    redirect_to categories_url, notice: 'Category was successfully destroyed.'
+    begin @category.destroy
+      redirect_to categories_url, notice: 'Category was successfully deleted.'
+    rescue
+      redirect_to categories_path, notice: 'Cannot delete category because it is currently in use'
+    end
   end
 
   private
@@ -73,6 +81,6 @@ class CategoriesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def category_params
-    params.require(:category).permit(:name, :tag, :categoryicon)
+    params.require(:category).permit!
   end
 end

@@ -6,9 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Category.create(name: 'Cameras', tag: 'CAM')
-Category.create(name: 'Data Logger', tag: 'DL')
-Category.create(name: 'Laptops', tag: 'LPT')
+Category.create(name: 'Cameras', tag: 'CAM', categoryicon: '<i class="fas fa-camera fa-6x"></i>')
+Category.create(name: 'Data Logger', tag: 'DL', categoryicon: '<i class="material-icons">dock</i>')
+Category.create(name: 'Laptops', tag: 'LPT', categoryicon: '<i class="material-icons">computer</i>')
 
 User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')

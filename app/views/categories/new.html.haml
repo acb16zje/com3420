@@ -34,21 +34,23 @@
                   %p.control.is-expanded
                     = f.input :tag, label: false, required: '', placeholder: 'Tag', input_html: {class: 'input'}
                   %p.help 3-5 characters long, only letters allowed; e.g. CAM for Cameras
+
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Upload Image
+                %label.label Icon
               .field-body
                 .field
-                  .file.has-name.is-fullwidth
-                    %label.file-label
-                      = f.input :categoryicon, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
-                      %span.file-cta
-                        %span.file-icon
-                          %i.fas.fa-upload
-                        %span.file-label
-                          Choose a file…
-                      %span.file-name#file_name
-                        Uploaded file name
+                  %p.control.is-expanded
+                    = f.input :categoryicon, label: false, placeholder: 'Icon tag', input_html: {class: 'input'}
+                  %p.help
+                    Find an icon from the providers below, and copy their HTML tag. e.g. <strong>
+                    :escaped
+                      <i class="fas fa-edit"><i>
+                    </strong>
+                  %p.help
+                    = link_to 'Font Awesome', 'https://fontawesome.com/icons?d=gallery'
+                    or
+                    = link_to 'Material icons', 'https://material.io/icons/'
 
             %br
             .field.is-horizontal
