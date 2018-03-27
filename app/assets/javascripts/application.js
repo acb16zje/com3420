@@ -72,10 +72,8 @@ $(document).ready(function () {
         max: gon.max_start_date,
         onStart: function () {
             this.set('select', moment());
-            if (gon.date_to_disable === undefined) {
-                this.set('disable', gon.block_start_dates);
-            } else {
-                this.set('disable', gon.block_start_dates.push(gon.date_to_disable));
+            if (gon.initial_disable_dates !== undefined) {
+                this.set('disable', gon.initial_disable_dates);
             }
         }
     });
@@ -86,10 +84,11 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         max: gon.max_end_date,
-        disable: gon.block_end_dates,
         onStart: function () {
-            this.set('select', moment());
-        },
+            if (gon.initial_disable_dates !== undefined) {
+                this.set('disable', gon.initial_disable_dates);
+            }
+        }
     });
 
     // Timepicker startTime on creating booking
@@ -97,131 +96,163 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         interval: 10,
-        disable: gon.block_start_time,
+        onStart: function () {
+            if (gon.disable_start_time !== undefined) {
+                this.set('disable', gon.disable_start_time);
+            }
+        }
     });
 
     // Timepicker endTime on creating booking
     endTime.pickatime({
         clear: '',
         min: moment(),
-        interval: 10,
-        max: gon.max_end_time
+        interval: 10
     });
 
-    $('.datepicker').on('change', function () {
+    $('.datepicker').change(function (e) {
         if ($(this).attr('id') === 'startDate') {
             var start_date = new Date(startDate.val());
             var end_date = new Date(endDate.val());
-            if (end_date < start_date) {
-                endDate.val(startDate.val());
-            }
-            endDate.pickadate('picker').set('min', $(this).val());
 
+            // Do not allow endDate to be smaller than start date
+            if (end_date < start_date && endDate.val()) {
+                endDate.pickadate('picker').clear();
+            }
+
+            endDate.pickadate('picker').set('min', start_date);
+
+            // If the start date is today, set the minimum start time to now
             if (moment().format('D MMMM YYYY') === startDate.val()) {
                 startTime.pickatime('picker').set('min', moment());
             } else {
-                startTime.pickatime('picker').set('min', '');
+                startTime.pickatime('picker').set('min', false);
             }
+
+            startTime.pickatime('picker').clear();
 
             // Dynamic disable startTime when startDate is changed
             $.ajax({
                 type: "GET",
-                url: "new",
+                url: "start_date",
                 data: {
-                    start_date: $('#startDate').val(),
+                    start_date: new Date(startDate.val()),
+                    end_date: new Date(endDate.val())
                 },
                 dataType: 'json',
                 success: function (data) {
+                    console.log('Start date ajax');
                     startTime.pickatime('picker').set('enable', true);
-                    startTime.pickatime('picker').set('disable', data.block_start_time);
-                    checkTimes();
+                    startTime.pickatime('picker').set('disable', data.disable_start_time);
 
-                    endDate.pickadate('picker').set('enable', true);
-                    endDate.pickadate('picker').set('max', data.max_end_date);
-                    endDate.pickadate('picker').set('select', data.end_date);
-
-                    endTime.pickatime('picker').set('enable', true);
-                    endTime.pickatime('picker').set('max', data.max_end_time);
+                    if (data.max_end_date.length > 0) {
+                        endDate.pickadate('picker').set('max', data.max_end_date);
+                    } else {
+                        endDate.pickadate('picker').set('max', false);
+                    }
                 }
             });
         } else {
             // Dynamic disable endTime when endDate is changed
-            $.ajax({
-                type: "GET",
-                url: "new",
-                data: {
-                    end_date: $('#endDate').val(),
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if ((data.date_to_disable === undefined) || (data.date_to_disable === null) || (data.date_to_disable === '')) {
-                        startDate.pickadate('picker').set('disable', gon.block_start_dates);
-                    } else {
-                        startDate.pickadate('picker').set('disable', gon.block_start_dates.concat([data.date_to_disable]));
-                    }
-                    if ((data.max_start_time != undefined) && (data.max_start_time != null)) {
-                        startTime.pickatime('picker').set('max', data.max_start_time);
-                    }
-                    endTime.pickatime('picker').set('enable', true);
-                    endTime.pickatime('picker').set('max', data.max_end_time);
-                    checkTimes();
-                }
-            })
+            if (endDate.val()) {
+                $.ajax({
+                    type: "GET",
+                    url: "end_date",
+                    data: {
+                        start_date: new Date(startDate.val()),
+                        end_date: new Date(endDate.val()),
+                        start_time: new Date(startDate.val() + ' ' + startTime.val())
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('End date ajax');
+                        endTime.pickatime('picker').set('enable', true);
+                        endTime.pickatime('picker').set('disable', data.disable_end_time);
 
+                        if (data.max_end_time.length > 0) {
+                            endTime.pickatime('picker').set('max', data.max_end_time)
+                        } else {
+                            endTime.pickatime('picker').set('max', false)
+                        }
+                    }
+                });
+            }
         }
 
         // Prevent user to input smaller endTime than startTime
+        disableEndInput();
         checkTimes();
     });
 
     // Prevent endTime smaller than startTime on the same date
-    $('.timepicker').on('change', function () {
-        if ($(this).attr('id') === 'startTime') {
-            checkTimes();
-        }
+    $('#startTime').change(function () {
+        disableEndInput();
+        checkTimes();
+        endDate.pickadate('picker').clear();
     });
 
+    // Check the time when timepicker is changed
     function checkTimes() {
         var start_date = startDate.val();
         var end_date = endDate.val();
-        if (start_date === end_date) {
+
+        // Check if end time is larger than start time on the same date
+        if (start_date === end_date || end_date === '') {
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
 
-            // Prevent same startTime and endTime
-            if ((end_time <= start_time)) {
-                temp_end_time = moment(moment(start_time).add(10,'m').toDate()).format('h:mm A');
-                if (temp_end_time === "12:00 AM"){
-                    end_date = moment(end_time).add(1,'days')
-                    endDate.val(end_date.format('DD MMM YYYY'))
+            // If start time is 11:50 PM, then end date must be the next day
+            if (startTime.val() === "11:50 PM") {
+                end_date = moment(new Date(start_date)).add(1, 'd');
+                endDate.pickadate('picker').set('min', moment(end_date).toDate());
+
+                if (endDate.val()) {
+                    endDate.pickadate('picker').clear();
                 }
-                endTime.val(moment(moment(start_time).add(10,'m').toDate()).format('h:mm A'));
-            } 
-            // else{
-            //     endTime.pickatime('picker').set('clear');
-            // }
+            } else {
+                endDate.pickadate('picker').set('min', start_date);
+                endDate.pickadate('picker').set('highlight', start_date);
+            }
 
-            endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
+            // Do not allow end time to be smaller than start time on the same date
+            if (end_time <= start_time && end_time) {
+                endTime.pickatime('picker').clear();
+            }
+
+            // If end date is empty, then end time has no minimum
+            if (endDate.val()) {
+                endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
+            } else {
+                endTime.pickatime('picker').set('min', false);
+            }
         } else {
-            // endTime.pickatime('picker').set('val', '');
-            endTime.pickatime('picker').set('min', '');
-        }
+            // Start date is larger than end date
+            endTime.pickatime('picker').set('min', false);
 
+            // If start time is 11:50 PM, disable the option for end date to be start date
+            if (startTime.val() !== "11:50 PM") {
+                endDate.pickadate('picker').set('min', moment(new Date(start_date)).toDate());
+
+                if (endDate.val() === '') {
+                    endDate.pickadate('picker').set('highlight', moment(new Date(start_date)).toDate());
+                }
+            }
+        }
+    }
+
+    // Disable end date and end time input
+    disableEndInput();
+
+    function disableEndInput() {
         // Disable the end date and end time if start date and start time are not filled
-        if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
+        if (startDate.pickadate('picker') != undefined &&
+            (startDate.pickadate('picker').get() == '' ||
+                startTime.pickatime('picker').get() == '')) {
             endDate.prop('disabled', true);
             endTime.prop('disabled', true);
         } else {
             endDate.prop('disabled', false);
-            endTime.prop('disabled', false)
-        }
-    }
-
-    // Disable the end date and end time if start date and start time are not filled
-    if (startDate.pickadate('picker') != undefined) {
-        if (startDate.pickadate('picker').get() == '' || startTime.pickatime('picker').get() == '') {
-            endDate.prop('disabled', true);
-            endTime.prop('disabled', true);
+            endTime.prop('disabled', false);
         }
     }
 
@@ -250,7 +281,7 @@ $(document).ready(function () {
         }
     });
 
-    // Use gon to get ruby variables into JS
+    // Use gon to get ruby variables into JS, for categories filtering
     if (gon.category != null) {
         table.search(gon.category).draw();
     }

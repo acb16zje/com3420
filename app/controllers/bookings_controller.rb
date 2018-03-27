@@ -61,124 +61,10 @@ class BookingsController < ApplicationController
   def new
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
-    bookings = Booking.where("(bookings.status = 2 or bookings.status = 3) and bookings.item_id = ?", params[:item_id])
 
-    # Get the dates that are blocked by a single booking
-    set_of_dates = get_single_block_dates(bookings)
-    block_dates = set_of_dates[0]
-    check_dates = set_of_dates[1]
-
-    # Get the dates that are blocked by consecutive bookings
-    block_dates = get_cons_block_dates(check_dates, block_dates)
-
-    # If the time is after 11.50pm, add to blocked dates
-    now = DateTime.now
-    if (now > DateTime.new(now.year, now.month, now.day, 23, 50, 0))
-      block_dates.append(get_array_from_date(now))
-    end
-
-    gon.block_start_dates = block_dates
-
-    # Dynamic time blocking #
-    # If start date is changed, then check for times that needed to be blocked
-    if !bookings.blank? && !bookings.nil?
-      if !params[:start_date].blank?
-
-        # Get the limit to the end date
-        gon.max_end_date = get_max_end_date(bookings, get_date_from_string(params[:start_date]))
-        # If the the earliest booking is before the selected start date, no max is set for the end date
-        if gon.max_end_date.blank? || gon.max_end_date.nil? || get_date_from_string(params[:start_date]) > get_date_from_array(gon.max_end_date)
-          gon.max_end_date = ''
-        end
-
-        # Get what times to be blocked for selected date
-        gon.block_start_time = get_block_times(bookings, params[:start_date],true)
-        if gon.block_start_time.nil? || gon.block_start_time.blank?
-          # Set no max time
-          gon.max_end_time = ''
-        else
-          gon.max_end_time = get_block_times(bookings, params[:start_date],true)
-          # Set the max time to the earliest booking start time on the day
-          gon.max_end_time = get_max_end_time(gon.max_end_time[0])
-        end
-
-        data = {
-          :end_date => get_array_from_date(get_date_from_string(params[:start_date])),
-          :max_end_date => gon.max_end_date,
-          :block_start_time => gon.block_start_time,
-          :max_end_time => gon.max_end_time,
-        }
-
-        render :json => data
-        # If end date is changed, then check for times that needed to be blocked
-      elsif !params[:end_date].blank?
-        gon.max_end_time = get_block_times(bookings, params[:end_date],false)
-
-        if !gon.max_end_time.nil? && !gon.max_end_time.blank?
-          # Set the max end time to the earliest booking start time on the day
-          puts "AAAAAAAA"
-          puts gon.max_end_time[0]
-          puts "AAAAAAAA"
-          gon.max_end_time = get_max_end_time(gon.max_end_time[0])
-          puts gon.max_end_time
-          # If the max end time is at the start of a day, meaning 00:00, the start date should have that date disabled
-          if gon.max_end_time[0].to_i <= 0 && gon.max_end_time[1].to_i <= 0
-            gon.max_start_time = ''
-            gon.date_to_disable = get_array_from_date(get_date_from_string(params[:end_date]))
-          else
-            # If not set the max start time to be 10 minutes before the max end time, so you can't book the start and end on the same time.
-            gon.date_to_disable = ''
-            # gon.max_start_time = DateTime.new(2018,01,02,gon.max_end_time[0].to_i,gon.max_end_time[1].to_i) - 10.minutes
-            # gon.max_start_time = [gon.max_start_time.hour,gon.max_start_time.minute]
-          end
-        else
-          # Set no max time
-          gon.max_end_time = ''
-        end
-        data = {
-          :date_to_disable => gon.date_to_disable,
-          :max_start_time => gon.max_start_time,
-          :max_end_time => gon.max_end_time,
-        }
-
-        render :json => data
-        # If the page just refreshed, use todays values to check for times to be blocked
-      else
-        gon.max_end_date = get_max_end_date(bookings, DateTime.now)
-
-        if gon.max_end_date.blank? || gon.max_end_date.nil?
-          gon.max_end_date = ''
-        end
-
-        # Get the times to be blocked on the start time
-        date_now = DateTime.now
-        date_s = date_now.day.to_s + " " + Date::MONTHNAMES[date_now.month] + " " + date_now.year.to_s
-        gon.block_start_time = get_block_times(bookings, date_s,true)
-        # Get the limit to the end time
-        gon.max_end_time = get_block_times(bookings, date_s,false)
-
-        if !gon.max_end_time[0].nil? || !gon.max_end_time[0].blank?
-          gon.max_end_time = get_max_end_time(gon.max_end_time[0])
-          # If the max end time is at the start of a day, meaning 00:00, the start date should have that date disabled
-          if gon.max_end_time[0].to_i <= 0 && gon.max_end_time[1].to_i <= 0
-            gon.max_end_time = ''
-            gon.date_to_disable = get_array_from_date(date_now)
-          else
-            # If not set the max start time to be 10 minutes before the max end time, so you can't book the start and end on the same time.
-            gon.max_start_time = DateTime.new(2018,01,02,gon.max_end_time[0].to_i,gon.max_end_time[1].to_i) - 10.minutes
-            gon.max_start_time = [gon.max_start_time.hour,gon.max_start_time.minute]
-          end
-        else
-          # Set no max time
-          gon.max_end_time = ''
-        end
-      end
-    else
-      gon.max_end_date = ''
-    end
-    puts "HIHI"
-    puts gon.max_start_time
-    puts "HIHI"
+    gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
+    gon.max_end_date = max_end_date
+    gon.disable_start_time = disable_start_time
   end
 
   # GET /bookings/1/edit
@@ -260,7 +146,254 @@ class BookingsController < ApplicationController
     end
   end
 
+  def start_date
+    data = {
+      :max_end_date => max_end_date(params[:start_date]),
+      :disable_start_time => disable_start_time(params[:start_date]),
+    }
+
+    render :json => data
+  end
+
+  def end_date
+    data = {
+      :disable_end_time => disable_end_time(params[:end_date]),
+      :max_end_time => max_end_time(params[:start_date], params[:end_date], params[:start_time])
+    }
+
+    render :json => data
+  end
+
   private
+
+  # Fully booked days in a single booking
+  def fully_booked_days_single
+    date_to_disable = []
+    bookings = Booking.where(
+      "(status = 2 or status = 3)
+      AND item_id = ?
+      AND start_date <> end_date
+      AND ((start_time = '2000-01-01 00:00:00 UTC'
+          AND end_time = '2000-01-01 00:00:00 UTC'
+          AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
+        OR
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id])
+
+    bookings.each do |booking|
+      start_date = Date.parse(booking.start_date.to_s)
+      end_date = Date.parse(booking.end_date.to_s)
+      start_time = DateTime.parse(booking.start_datetime.to_s)
+
+      date_array = (start_date...end_date).map(&:to_s)
+
+      # Single booking multiple days
+      if date_array.length > 1
+        # Include the start date if start time is 12:00 AM
+        if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
+          date_array = date_array[0..-1]
+        else
+          date_array = date_array[1..-1]
+        end
+      end
+
+      # Split into [year, month, day]
+      date_array = date_array.map {|n| n.split('-')}
+
+      # Datepicker month format is jan = 0, feb = 1, mar = 2...
+      date_array = date_array.map {|n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2]}
+
+      date_to_disable.concat(date_array)
+    end
+
+    return date_to_disable
+  end
+
+  # Fully booked days in a multiple booking
+  def fully_booked_days_multi
+    date_to_disable = []
+
+    bookings = Booking.find_by_sql(
+      "WITH RECURSIVE linked_bookings AS (
+          SELECT A.start_date AS start_date,
+          A.start_datetime AS start_datetime,
+          B.end_date AS end_date,
+          B.end_datetime AS end_datetime
+          FROM bookings A, bookings B
+          WHERE A.end_datetime = B.start_datetime
+          AND A.id <> B.id
+        UNION ALL
+          SELECT p.start_date, p.start_datetime, pr.end_date, pr.end_datetime
+          FROM bookings p, linked_bookings pr
+          WHERE p.end_datetime = pr.start_datetime
+      )
+      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings")
+
+    bookings.each do |booking|
+      start_date = Date.parse(booking.start_date.to_s)
+      end_date = Date.parse(booking.end_date.to_s)
+      start_time = DateTime.parse(booking.start_datetime.to_s)
+
+      # Multiple booking across many days or Multiple bookings on single day
+      if (end_date - start_date).to_i > 1 || ((start_time.hour.eql? 0) && (start_time.min.eql? 0))
+        date_array = (start_date...end_date).map(&:to_s)
+
+        if date_array.length > 1
+          # Include the start date if start time is 12:00 AM
+          if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
+            date_array = date_array[0..-1]
+          else
+            date_array = date_array[1..-1]
+          end
+        end
+
+        # Split into [year, month, day]
+        date_array = date_array.map {|n| n.split('-')}
+
+        # Datepicker month format is jan = 0, feb = 1, mar = 2...
+        date_array = date_array.map {|n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2]}
+
+        date_to_disable.concat(date_array)
+      end
+    end
+
+    return date_to_disable
+  end
+
+  # Maximum selectable end date
+  def max_end_date(start_date = nil)
+    date_array = []
+
+    if start_date.nil?
+      start_date = Date.today.strftime("%Y-%m-%d")
+    else
+      start_date = Date.parse(start_date)
+    end
+
+    booking = Booking.find_by_sql(
+      "SELECT MIN(start_date) as max_end
+      FROM bookings WHERE start_date >= CAST('#{start_date}' AS DATE)")
+
+    booking.each do |b|
+      if !b.max_end.blank?
+        # Split into [year, month, day]
+        b.max_end = b.max_end.strftime("%Y-%m-%d").split('-')
+
+        # Datepicker month format is jan = 0, feb = 1, mar = 2...
+        b.max_end[1] = b.max_end[1].to_i - 1
+
+        date_array.concat(b.max_end)
+      end
+    end
+
+    return date_array
+  end
+
+  # Disable unavailable start time
+  def disable_start_time(start_date = nil)
+    time_to_disable = []
+
+    if start_date.nil?
+      start_date = Date.today.strftime("%Y-%m-%d")
+    else
+      start_date = Date.parse(start_date)
+    end
+
+    bookings = Booking.find_by_sql(
+      "SELECT start_datetime, end_datetime
+      FROM bookings
+      WHERE start_date = CAST('#{start_date}' AS DATE)
+      OR end_date = CAST('#{start_date}' AS DATE)")
+
+    bookings.each do |booking|
+      start_time = DateTime.parse(booking.start_datetime.to_s)
+      end_time = DateTime.parse(booking.end_datetime.to_s) - 10.minutes
+
+      # Selected start date is booked as start date
+      if start_time.strftime("%Y-%m-%d").eql? start_date.to_s
+        # Start date not equal to end date
+        if end_time.day - start_time.day > 0
+          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]},)
+        else
+          # Start and end on the same day
+          time_to_disable.append(
+            {from: ["#{start_time.hour}", "#{start_time.min}"], to: ["#{end_time.hour}", "#{end_time.min}"]},
+          )
+        end
+      else
+        # Selected start date is booked as end date
+        if end_time.day - start_time.day > 0
+          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]},)
+        end
+      end
+    end
+
+    return time_to_disable
+  end
+
+  # Disable unavailable end time
+  def disable_end_time(end_date = nil)
+    time_to_disable = []
+
+    if end_date.nil?
+      end_date = Date.today.strftime("%Y-%m-%d")
+    else
+      end_date = Date.parse(end_date)
+    end
+
+    bookings = Booking.find_by_sql(
+      "SELECT start_datetime, end_datetime
+      FROM bookings
+      WHERE start_date = CAST('#{end_date}' AS DATE)
+      OR end_date = CAST('#{end_date}' AS DATE)")
+
+    bookings.each do |booking|
+      start_time = DateTime.parse(booking.start_datetime.to_s) + 10.minutes
+      end_time = DateTime.parse(booking.end_datetime.to_s) - 10.minutes
+
+      # Selected start date is booked as start date
+      if start_time.strftime("%Y-%m-%d").eql? end_date.to_s
+        # Start date not equal to end date
+        if end_time.day - start_time.day > 0
+          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]},)
+        else
+          # Start and end on the same day
+          time_to_disable.append(
+            {from: ["#{start_time.hour}", "#{start_time.min}"], to: ["#{end_time.hour}", "#{end_time.min}"]},
+          )
+        end
+      else
+        # Selected start date is booked as end date
+        if end_time.day - start_time.day > 0
+          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]},)
+        end
+      end
+    end
+
+    return time_to_disable
+  end
+
+  # Maximum selectable end time
+  def max_end_time(start_date, end_date, start_time)
+    time_array = []
+
+    start_time = DateTime.parse(start_time).strftime("%H:%M")
+
+    if start_date.eql? end_date
+      start_date = Date.parse(start_date)
+
+      booking = Booking.find_by_sql(
+        "SELECT MIN(start_time) as max_end
+        FROM bookings WHERE start_date = CAST('#{start_date}' AS DATE)")
+
+      booking.each do |b|
+        if !b.max_end.blank? && start_time < b.max_end.strftime("%H:%M")
+          time_array = [b.max_end.hour, b.max_end.min]
+        end
+      end
+    end
+
+    return time_array
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_booking
@@ -271,213 +404,4 @@ class BookingsController < ApplicationController
   def booking_params
     params.require(:booking).permit!
   end
-end
-
-# Convert the datetime object to an array, ie. Date time object with date 22/4/2018 ~> [2018,3,22]
-def get_array_from_date(date_time)
-  block_date = date_time.strftime("%Y-%m-%d").split('-')
-  block_date[1] = (block_date[1].to_i - 1).to_s
-  return block_date
-end
-
-# Convert the array of splitted date to a DateTime object, ie. [2018,3,22] ~> Date time object with date 22/4/2018
-def get_date_from_array(array)
-  return DateTime.new(array[0].to_i, array[1].to_i + 1, array[2].to_i, 0, 0, 0)
-end
-
-# Convert a date string into a DateTime object, ie. "22 March 2018" ~>  Date time object with date 22/3/2018
-def get_date_from_string(s)
-  return DateTime.parse(s + " 00:00:00")
-end
-
-# Check if the provided date time is at the start of the day, ie 12AM
-def check_start_of_day(datetime)
-  return DateTime.parse(datetime.to_time.to_s) == DateTime.new(datetime.year, datetime.month, datetime.day, 0, 0, 0)
-end
-
-# A loop to get the earliest date that a booking is made in the array from the start of today
-def get_max_end_date(bookings, today)
-  max_end_date = []
-  bookings.each do |booking|
-    if DateTime.parse(booking.start_datetime.to_time.to_s) >= today
-      if max_end_date.blank? || max_end_date.nil?
-        max_end_date = booking.start_date
-      else
-        if DateTime.parse(booking.start_datetime.to_time.to_s) < DateTime.parse(max_end_date.to_time.to_s)
-          max_end_date = booking.start_date
-        end
-      end
-    end
-  end
-
-  if max_end_date.blank?
-    return ''
-  end
-
-  return get_array_from_date(max_end_date)
-end
-
-def get_max_end_time(max_end_time)
-  if max_end_time[1] != "00"
-    max_end_time[1] = (max_end_time[1].to_i - 10).to_s
-  else
-    if max_end_time[0] != "00"
-      max_end_time[0] = (max_end_time[0].to_i - 1).to_s
-      max_end_time[1] = "50"
-    else
-      max_end_time[1] = "0"
-    end
-  end
-
-  return max_end_time
-end
-
-# Get the times to be blocked on the provided date
-def get_block_times(bookings, today,bool)
-  block_times = []
-  check_times = []
-
-  # To get the single booking where it may be connected from a previous day
-  block_bookings = bookings.where("bookings.end_date = ? and bookings.start_date != ?", today, today)
-  if !block_bookings.nil? && !block_bookings.blank?
-    block_bookings.each do |booking|
-      check_times.append(booking.start_datetime)
-      check_times.append(booking.end_datetime)
-    end
-  end
-
-  block_bookings = bookings.where("bookings.start_date = ?", today)
-  block_bookings.each do |booking|
-    check_times.append(booking.start_datetime)
-    check_times.append(booking.end_datetime)
-  end
-
-  i = 0
-  while i < check_times.length - 1
-    start_count = i + 1
-    end_count = i + 1
-
-    while !check_times[end_count + 1].nil? && (check_times[start_count].to_time - check_times[end_count + 1].to_time).to_i == 0
-      start_count += 2
-      end_count += 2
-    end
-    # The start of the time chunk to be blocked
-    temp_start_time = check_times[i]
-    # The end of the time chunk to be blocked
-    temp_end_time = check_times[end_count]
-
-    # Comparing the difference between today and the end date
-    today_end_comp = (DateTime.parse(today + " 09:00:00 AM") - DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)).to_i
-    # Comparing the difference between the start and the end date
-    start_end_comp = (DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 9, 0, 0) - DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 9, 0, 0)).to_i
-
-    # If the end date is on a day after today
-    if today_end_comp < 0
-      # Ends the block chunk on the end of the day
-      temp_end_time = DateTime.new(temp_start_time.year, temp_start_time.month, temp_start_time.day, 23, 50, 0)
-    else
-      # If the start date is before the end date
-      if start_end_comp < 0
-        # Start the block chunk at the start of the end date
-        temp_start_time = DateTime.new(temp_end_time.year, temp_end_time.month, temp_end_time.day, 0, 0, 0)
-        block_times.append([0, 0])
-      end
-    end
-
-    # A loop to add the time strings to be blocked from the start to end time, does not add 5 PM to the blocked time
-
-    if !check_start_of_day(temp_start_time) && !bool
-      temp_start_time += 10.minutes
-    end
-
-    while ((temp_start_time.to_time + 10.minutes) - (temp_end_time.to_time + 10.minutes)).to_i < 0
-      block_time_string = temp_start_time.strftime("%H-%M").split('-')
-      block_times.append([block_time_string[0], block_time_string[1]])
-      # So the next time string to be blocked will be 10 minutes after
-      temp_start_time += 10.minutes
-    end
-    # If the booking ended the next day, block 5PM
-    if today_end_comp < 0
-      block_time_string = temp_start_time.strftime("%H-%M").split('-')
-      block_times.append([block_time_string[0], block_time_string[1]])
-    end
-
-    i = end_count + 1
-  end
-
-  return block_times - [[0,0]]
-end
-
-# Get block dates for single bookings
-def get_single_block_dates(bookings)
-  block_dates = []
-  check_dates = []
-  bookings.each do |booking|
-    # If a single booking fills in the entire day
-    if (booking.start_date).eql? booking.end_date
-      if check_start_of_day(booking.start_time)
-        block_dates.append(get_array_from_date(booking.start_datetime))
-      end
-      # If a booking that spans multiple days, it fills up the days in between, and checks if it fills up the start and end date
-    elsif (booking.end_date - booking.start_date).to_i > 1
-      ((Date.parse(booking.start_datetime.to_s) + 1)..(Date.parse(booking.end_datetime.to_s) - 1)).each do |date|
-        block_dates.append(get_array_from_date(date))
-      end
-    end
-
-    check_dates.append(booking.start_datetime)
-    check_dates.append(booking.end_datetime)
-  end
-
-  check_dates.sort!
-
-  return [block_dates, check_dates]
-end
-
-# Get the block dates for consecutive bookings
-def get_cons_block_dates(check_dates, block_dates)
-  i = 0
-
-  while i < check_dates.length - 2
-    # so the start count will point to the correct day
-    start_count = i + 1
-    end_count = i + 1
-
-    prev_day = false
-
-    # Checks for consecutive times and gets the the end of the streak
-    while (check_dates[start_count].to_time - check_dates[end_count + 1].to_time).to_i == 0
-      start_count += 2
-      end_count += 2
-      break if check_dates[end_count + 1].nil?
-    end
-
-    # Checks if the first time of the section is connected to a booking on the previous day
-    if (Date.parse(check_dates[end_count].to_time.to_s) - Date.parse(check_dates[i].to_time.to_s)) > 0
-      prev_day = true
-    end
-
-    # If it is not connected to the previous day, then check whether the start time and end time of the consecutive bookings fills the day
-    # if !prev_day
-    # CHECK IF BROKEN
-
-    # if check_start_of_day(check_dates[i])
-    #   block_dates.append(get_array_from_date(check_dates[i]))
-    # end
-    # else
-    if prev_day
-      # If it is connected, then block dates in between start and end
-      ((Date.parse(check_dates[i].to_time.to_s) + 1)..(Date.parse(check_dates[end_count].to_s) - 1)).each do |date|
-        block_dates.append(get_array_from_date(date))
-      end
-      # Check whether start date needs to be blocked
-      # if check_start_of_day(check_dates[i])
-      #   block_dates.append(get_array_from_date(check_dates[i]))
-      # end
-    end
-
-    i = end_count + 1
-  end
-
-  return block_dates
 end

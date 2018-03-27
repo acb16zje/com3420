@@ -18,12 +18,16 @@ Rails.application.routes.draw do
     get 'completed', on: :collection
     get 'rejected', on: :collection
     get 'late', on: :collection
-    put 'set_booking_cancelled', on: :member
+
     put 'set_booking_returned', on: :member
+    put 'set_booking_cancelled', on: :member
   end
 
   resources :items do
-    resources :bookings
+    resources :bookings do
+      get 'start_date', on: :collection
+      get 'end_date', on: :collection
+    end
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
