@@ -90,10 +90,18 @@ class BookingsController < ApplicationController
       @booking.status = 1
     end
 
-    if @booking.save
+    # Server side validation
+    query = Booking.where(
+      "(status = 2 OR status = 3)
+      AND (start_datetime < CAST ('#{@booking.start_datetime}' AS TIMESTAMP)
+      AND end_datetime > CAST ('#{@booking.start_datetime}' AS TIMESTAMP))
+      OR (start_datetime > CAST ('#{@booking.start_datetime}' AS TIMESTAMP)
+      AND start_datetime < CAST ('#{@booking.end_datetime}' AS TIMESTAMP))").first
+
+    if (query.nil?) && @booking.save
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
-      render :new
+      redirect_to new_item_booking_path(item_id: @booking.item_id), notice: 'Chosen timeslot conflicts with other bookings.'
     end
   end
 
@@ -219,7 +227,8 @@ class BookingsController < ApplicationController
           B.end_date AS end_date,
           B.end_datetime AS end_datetime
           FROM bookings A, bookings B
-          WHERE A.end_datetime = B.start_datetime
+          WHERE (A.status = 2 or A.status = 3)
+          AND A.end_datetime = B.start_datetime
           AND A.id <> B.id
         UNION ALL
           SELECT p.start_date, p.start_datetime, pr.end_date, pr.end_datetime
@@ -271,7 +280,9 @@ class BookingsController < ApplicationController
 
     booking = Booking.find_by_sql(
       "SELECT MIN(start_date) as max_end
-      FROM bookings WHERE start_date >= CAST('#{start_date}' AS DATE)")
+      FROM bookings
+      WHERE (status = 2 or status = 3)
+      AND start_date >= CAST('#{start_date}' AS DATE)")
 
     booking.each do |b|
       if !b.max_end.blank?
@@ -301,7 +312,8 @@ class BookingsController < ApplicationController
     bookings = Booking.find_by_sql(
       "SELECT start_datetime, end_datetime
       FROM bookings
-      WHERE start_date = CAST('#{start_date}' AS DATE)
+      WHERE (status = 2 or status = 3)
+      AND start_date = CAST('#{start_date}' AS DATE)
       OR end_date = CAST('#{start_date}' AS DATE)")
 
     bookings.each do |booking|
@@ -343,7 +355,8 @@ class BookingsController < ApplicationController
     bookings = Booking.find_by_sql(
       "SELECT start_datetime, end_datetime
       FROM bookings
-      WHERE start_date = CAST('#{end_date}' AS DATE)
+      WHERE (status = 2 or status = 3)
+      AND start_date = CAST('#{end_date}' AS DATE)
       OR end_date = CAST('#{end_date}' AS DATE)")
 
     bookings.each do |booking|
@@ -383,7 +396,9 @@ class BookingsController < ApplicationController
 
       booking = Booking.find_by_sql(
         "SELECT MIN(start_time) as max_end
-        FROM bookings WHERE start_date = CAST('#{start_date}' AS DATE)")
+        FROM bookings
+        WHERE (status = 2 or status = 3)
+        AND start_date = CAST('#{start_date}' AS DATE)")
 
       booking.each do |b|
         if !b.max_end.blank? && start_time < b.max_end.strftime("%H:%M")
