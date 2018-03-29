@@ -262,7 +262,7 @@ $(document).ready(function () {
     });
 
     // Datatable
-    $("#users, #categories, #bookings").each(function () {
+    $("#users, #categories, #bookings, #bookings_other").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -272,6 +272,8 @@ $(document).ready(function () {
         });
     });
 
+    $("#bookings_other_wrapper").removeClass("container");
+
     // For searching browse by categories
     var table = $("#assets").DataTable({
         "drawCallback": function (settings) {
@@ -280,6 +282,7 @@ $(document).ready(function () {
             }
         }
     });
+
 
     // Use gon to get ruby variables into JS, for categories filtering
     if (gon.category != null) {
