@@ -40,7 +40,7 @@ class ItemsController < ApplicationController
     (0...(5 - id_str.length)).each do |_i|
       id_str = '0' + id_str
     end
-    @item.serial_id = category.tag + id_str
+    @item.asset_tag = category.tag + id_str
 
     if @item.save
       redirect_to @item, notice: 'Asset was successfully created.'

@@ -6,7 +6,7 @@
 #  name             :string
 #  condition        :string
 #  location         :string
-#  serial_id        :string
+#  asset_tag        :string
 #  manufacturer     :string
 #  model            :string
 #  serial           :string
@@ -21,8 +21,8 @@
 #
 # Indexes
 #
+#  index_items_on_asset_tag    (asset_tag) UNIQUE
 #  index_items_on_category_id  (category_id)
-#  index_items_on_serial_id    (serial_id) UNIQUE
 #  index_items_on_user_id      (user_id)
 #
 # Foreign Keys
