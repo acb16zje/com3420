@@ -22,21 +22,16 @@
               %tr
                 %th Owner
                 %td
-                  - user = User.find_by_id(@item.user_id)
-                  = user.givenname.to_s + ' ' + user.sn.to_s
+                  = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
               - if !@item.parent_asset_serial.nil?
                 %tr
                   %th Parent Item Name
                   %td
-                    = Item.where('serial = ?',@item.parent_asset_serial).first.name
+                    = link_to @parent.name, @parent
               %tr
                 %th Name
                 %td
                   = @item.name
-              %tr
-                %th Asset Tag
-                %td
-                  = @item.asset_tag
               %tr
                 %th Manufacturer
                 %td
@@ -46,21 +41,21 @@
                 %td
                   = @item.model
               %tr
-                %th Category
-                %td
-                  = @item.category.name
-              %tr
                 %th Serial
                 %td
                   = @item.serial
               %tr
-                %th Acquisition Date
+                %th Category
                 %td
-                  = @item.acquisition_date
+                  = @item.category.name
               %tr
                 %th PO Number
                 %td
                   = @item.po_number
+              %tr
+                %th Acquisition Date
+                %td
+                  = @item.acquisition_date
               %tr
                 %th Purchase Price
                 %td
@@ -88,13 +83,17 @@
                     %span.tag.is-black.is-medium
                       Unknown
               %tr
-                %th Location
+                %th Storage Location
                 %td
                   = @item.location
               %tr
                 %th Peripherals
                 %td
-                  = @peripherals
+                  - if @peripherals.blank?
+                    None
+                  - else
+                    - @peripherals.each do |peripheral|
+                      = link_to "#{peripheral.name}", peripheral, class: 'button'
 
       .field.is-horizontal
         .field-body
@@ -105,9 +104,9 @@
                   = link_to 'Edit', edit_item_path(@item), class: 'button is-link', id: "edit_item_#{@item.id}"
               - else
                 .control
-                  = link_to 'Edit', edit_item_path(@item,is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
+                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
               .control
-                = link_to 'Add peripheral', new_item_path(parent_asset_serial: @item.serial,is_peripheral: true), class: 'button is-link'
+                = link_to 'Add peripheral', new_item_path(parent_asset_serial: @item.serial, is_peripheral: true), class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'

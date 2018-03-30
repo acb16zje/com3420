@@ -62,7 +62,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "name"
     t.string "condition"
     t.string "location"
-    t.string "asset_tag"
     t.string "manufacturer"
     t.string "model"
     t.string "serial"
@@ -76,8 +75,8 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "category_id"
-    t.index ["asset_tag"], name: "index_items_on_asset_tag", unique: true
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 

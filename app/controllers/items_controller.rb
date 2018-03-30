@@ -20,25 +20,26 @@ class ItemsController < ApplicationController
   # GET /items/1
   def show
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
-    peripherals = Item.where('parent_asset_serial = ?', @item.serial)
-    if peripherals.blank?
-      @peripherals = "None"
-    else
-      @peripherals = ""
-      peripherals.each do |peripheral|
-        @peripherals = @peripherals + ", " + peripheral.serial
-      end
-      @peripherals = @peripherals[2..-1]
+    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+
+    if !@item.parent_asset_serial.nil?
+      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
   end
 
   # GET /items/new
   def new
     @item = Item.new
+    if params[:is_peripheral]
+      @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
+    end
   end
 
   # GET /items/1/edit
   def edit
+    if params[:is_peripheral]
+      @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
+    end
   end
 
   # POST /items
@@ -46,13 +47,6 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.user_id = current_user.id
     @item.location = params[:item][:location].titleize
-
-    category = Category.find_by_id(@item.category_id)
-    id_str = (Item.where(category_id: @item.category_id).count + 1).to_s
-    (0...(5 - id_str.length)).each do |_i|
-      id_str = '0' + id_str
-    end
-    @item.asset_tag = category.tag + id_str
 
     if @item.save
       redirect_to @item, notice: 'Asset was successfully created.'

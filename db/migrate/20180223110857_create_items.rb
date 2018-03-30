@@ -6,7 +6,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :condition
       t.string :location
-      t.string :asset_tag
       t.string :manufacturer
       t.string :model
       t.string :serial

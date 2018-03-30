@@ -1,13 +1,13 @@
 %p
   Dear #{@manager.givenname},
 %p
-  The item : #{@item.asset_tag}, #{@item.name} has been requested for booking by the user : #{@user.givenname}, for the duration:
-  
+  The item : #{@item.name}, #{@item.serial} has been requested for booking by the user : #{@user.givenname}, for the duration:
+
   %br
   Start Date : #{@booking.start_date}, Start Time: #{@booking.start_time}
   %br
   End Date : #{@booking.end_date}, End Time: #{@booking.end_time}
-  %br  
+  %br
 
   Please respond to the following request.
   Click #{link_to 'here', requests_bookings_url} to view it.

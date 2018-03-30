@@ -21,7 +21,5 @@
       - @categories.each do |category|
         %tr
           %td.has-text-centered
-            = link_to category.tag, items_path(category_name: category.tag)
-          %td.has-text-centered
             = link_to category.name, items_path(category_name: category.name)
 

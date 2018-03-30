@@ -6,7 +6,6 @@
 #  name                :string
 #  condition           :string
 #  location            :string
-#  asset_tag           :string
 #  manufacturer        :string
 #  model               :string
 #  serial              :string
@@ -23,8 +22,8 @@
 #
 # Indexes
 #
-#  index_items_on_asset_tag    (asset_tag) UNIQUE
 #  index_items_on_category_id  (category_id)
+#  index_items_on_serial       (serial) UNIQUE
 #  index_items_on_user_id      (user_id)
 #
 # Foreign Keys
@@ -40,7 +39,6 @@ FactoryBot.define do
     condition 'Like New'
     name'GoPro Hero 5'
     location 'Diamond'
-    asset_tag 'CAM00001'
     manufacturer 'GoPro'
     model 'Hero 5'
     serial 'GPH5'

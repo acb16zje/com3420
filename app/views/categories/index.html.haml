@@ -21,14 +21,11 @@
   %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th Tag
         %th Category
         %th Action
     %tbody
       - @categories.each do |category|
         %tr
-          %td.has-text-centered
-            = category.tag
           %td.has-text-centered
             = category.name
           %td

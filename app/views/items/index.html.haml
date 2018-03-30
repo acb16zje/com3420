@@ -25,13 +25,13 @@
         %th Location
         %th.is-hidden Keywords
     %tbody
-      -@items.each do |item|
+      - @items.each do |item|
         %tr
           %td.has-text-centered= link_to item.name, item
           %td.has-text-centered
             - if item.image?
-              = link_to image_tag(item.image.url, width: '50', height: '50', alt: 'Image', style: 'vertical-align: middle'), '#', 'data-target' => "modal-#{item.asset_tag}", class: 'modal-button'
-              .modal{id: "modal-#{item.asset_tag}"}
+              = link_to image_tag(item.image.url, width: '50', height: '50', alt: 'Image', style: 'vertical-align: middle'), '#', 'data-target' => "modal-#{item.serial}", class: 'modal-button'
+              .modal{id: "modal-#{item.serial}"}
                 .modal-background
                 .modal-content
                   %p.image-modal

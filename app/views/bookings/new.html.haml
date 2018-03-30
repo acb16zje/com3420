@@ -22,13 +22,18 @@
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
               %tr
+                %th Owner
+                %td
+                  = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
+              - if !@item.parent_asset_serial.nil?
+                %tr
+                  %th Parent Item Name
+                  %td
+                    = link_to @parent.name, @parent
+              %tr
                 %th Name
                 %td
                   = @item.name
-              %tr
-                %th Asset Tag
-                %td
-                  = @item.asset_tag
               %tr
                 %th Manufacturer
                 %td
@@ -38,13 +43,17 @@
                 %td
                   = @item.model
               %tr
+                %th Serial
+                %td
+                  = @item.serial
+              %tr
                 %th Category
                 %td
                   = @item.category.name
               %tr
-                %th Serial
+                %th PO Number
                 %td
-                  = @item.serial
+                  = @item.po_number
               %tr
                 %th Acquisition Date
                 %td
@@ -76,13 +85,17 @@
                     %span.tag.is-black.is-medium
                       Unknown
               %tr
-                %th Location
+                %th Storage Location
                 %td
                   = @item.location
               %tr
-                -#%th Peripherals
-                -#  %td
-                -#    = @item.peripherals
+                %th Peripherals
+                %td
+                  - if @peripherals.blank?
+                    None
+                  - else
+                    - @peripherals.each do |peripheral|
+                      = link_to "#{peripheral.name}", peripheral, class: 'button'
 
       = simple_form_for @booking do |f|
         .columns

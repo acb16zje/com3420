@@ -4,56 +4,37 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Editing #{@item.name}
+        - if params[:is_peripheral]
+          %h3.title
+        - else
+          %h3.title Editing #{@item.name}
         .box
           = simple_form_for(@item) do |f|
-            %h4.title
-              Asset Information
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Asset Name
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+            - if params[:is_peripheral]
+              %h4.title Peripheral Information
+            - else
+              %h4.title Asset Information
             - if params[:is_peripheral]
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Parent Asset Serial
                 .field-body
                   .field
-                    - if @item.parent_asset_serial.nil?
-                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input'}
+                    .control
+                      = f.select :parent_asset_serial, Item.all.map { |i| [i.serial] }, {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                - if params[:is_peripheral]
+                  %label.label Peripheral Name
+                - else
+                  %label.label Asset Name
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    - if params[:is_peripheral]
+                      = f.input :name, label: false, required: '', placeholder: 'Peripheral Name', input_html: {class: 'input'}
                     - else
-                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input', value: (@item.parent_asset_serial)}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Owner
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.association :user, label: false, input_html: {class: 'select2'}, label_method: lambda{|u| "#{u.givenname}"}, selected: ''
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Category
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Condition
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.select :condition, ['Like New', 'Good', 'Adequate', 'Damaged', 'Missing'], {}, {class: 'select2'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Default Location
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.input :location, label: false, required: '', placeholder: 'Asset location', input_html: {class: 'input'}
+                      = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Serial
@@ -61,37 +42,6 @@
                 .field
                   %p.control.is-expanded
                     = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Keywords
-              .field-body
-                .field
-                  .control
-                    = f.input :keywords, as: :text, label: false, required: false, placeholder: 'fragile shiny blue_colour', input_html: {class: 'textarea', rows: '2'}
-            
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Upload Image
-              .field-body
-                .field
-                  .file.has-name.is-fullwidth
-                    %label.file-label
-                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*'}
-                      %span.file-cta
-                        %span.file-icon
-                          %i.fas.fa-upload
-                        %span.file-label
-                          Choose a file…
-                      %span.file-name#file_name
-                        #{@item.image.url}
-                  %p.help Max file size: 1MB
-                  %p.help Images < 500x500 px will be invalid
-
-            %br
-            %hr
-            %br
-            %h4.title
-              Purchase Information
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Manufacturer
@@ -108,11 +58,61 @@
                     = f.input :model, label: false, placeholder: 'Model', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
+                %label.label Category
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Condition
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :condition, ['Like New', 'Good', 'Adequate', 'Damaged', 'Missing'], {}, {class: 'select2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Storage Location
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.input :location, label: false, required: '', placeholder: 'Storage location', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Keywords
+              .field-body
+                .field
+                  .control
+                    = f.input :keywords, as: :text, label: false, required: false, placeholder: 'fragile shiny blue_colour', input_html: {class: 'textarea', rows: '2'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Upload Image
+              .field-body
+                .field
+                  .file.has-name.is-fullwidth
+                    %label.file-label
+                      = f.input :image, label: false, input_html: {class: 'file-input', type: 'file', accept: 'image/*', maxfilesize: '1', mindimensions: '500x500'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name#file_name
+                        Uploaded file name
+                  %p.help Max file size: 1MB
+                  %p.help Images < 500x500 px will be invalid
+            %br
+            %hr
+            %br
+            %h4.title
+              Purchase Information
+            .field.is-horizontal
+              .field-label.is-normal
                 %label.label PO Number
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :po_number, label: false, placeholder: 'PO Number', input_html: {class: 'input'}
+                    = f.input :po_number, label: false, placeholder: 'Purchase Order Number', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Acquisition Date
@@ -122,8 +122,10 @@
                     %p.control
                       %a.button.is-static
                         %i.far.fa-calendar-alt
-                    %p.control.is-expanded
-                      = f.input :acquisition_date, as: :text, label: false, placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :acquisition_date, as: :string, label: false, placeholder: 'Select Date DD MMMM YYYY', input_html: {class: 'input', id: 'purchaseDate', style: 'resize: none'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Purchase Price
@@ -133,27 +135,18 @@
                     %p.control
                       %a.button.is-static
                         &pound
-                    %p.control.is-expanded
-                      = f.input :purchase_price, label: false, placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
-            -#.field.is-horizontal
-              .field-label.is-normal
-                %label.label Peripherals
-              .field-body
-                .field
-                  = f.input :peripherals, as: :text, label: false, required: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
+                    .field-body
+                      .field
+                        %p.control.is-expanded
+                          = f.input :purchase_price, label: false, placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
             %br
             %br
             .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
               .field-body
-                .field.is-grouped.is-grouped-left
-                  .control
-                    = link_to item_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "delete_item_#{@item.id}" do
-                      %span.icon
-                        %i.class.fas.fa-trash
-                      %span Delete
-                    = f.hidden_field :bunny, value: '0'
                 .field.is-grouped.is-grouped-right
                   .control
                     = link_to 'Cancel' , items_path, class: 'button is-light'
                   .control
-                    = f.submit 'Save changes', class: 'button is-block is-success'
+                    = f.submit 'Save changes', class: 'button is-block is-success', id: 'submitButton'

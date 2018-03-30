@@ -62,6 +62,10 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
+    if !@item.parent_asset_serial.nil?
+      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    end
+
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
     gon.disable_start_time = disable_start_time

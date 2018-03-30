@@ -1,31 +1,65 @@
-- content_for :title, "Create asset"
+- if params[:is_peripheral]
+  - content_for :title, "Add peripheral for #{@parent.name}"
+- else
+  - content_for :title, "Create asset"
 
 %section.hero
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Create asset
+        - if params[:is_peripheral]
+          %h3.title Add peripheral for #{@parent.name}
+        - else
+          %h3.title Create asset
         .box
           = simple_form_for(@item) do |f|
-            %h4.title
-              Asset Information
+            - if params[:is_peripheral]
+              %h4.title Peripheral Information
+            - else
+              %h4.title Asset Information
+
             - if params[:is_peripheral]
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Parent Asset Serial
                 .field-body
-                  .field
-                    - if params[:parent_asset_serial].nil?
-                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input'}
-                    - else
-                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input', value: (params[:parent_asset_serial])}
+                  .field{style: 'margin: auto'}
+                    .control
+                      = f.select :parent_asset_serial, options_for_select(Item.all.map { |i| [i.serial] }, params[:parent_asset_serial]), {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Asset Name
+                - if params[:is_peripheral]
+                  %label.label Peripheral Name
+                - else
+                  %label.label Asset Name
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+                    - if params[:is_peripheral]
+                      = f.input :name, label: false, required: '', placeholder: 'Peripheral Name', input_html: {class: 'input'}
+                    - else
+                      = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Serial
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Manufacturer
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :manufacturer, label: false, placeholder: 'Manufacturer', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Model
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :model, label: false, placeholder: 'Model', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
@@ -42,18 +76,11 @@
                     = f.select :condition, ['Like New', 'Good', 'Adequate', 'Damaged', 'Missing'], {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Default Location
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.input :location, label: false, required: '', placeholder: 'Asset location', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Serial
+                %label.label Storage Location
               .field-body
                 .field
-                  %p.control.is-expanded
-                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
+                  .control
+                    = f.input :location, label: false, required: '', placeholder: 'Storage location', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Keywords
@@ -85,25 +112,11 @@
               Purchase Information
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Manufacturer
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :manufacturer, label: false, placeholder: 'Manufacturer', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Model
-              .field-body
-                .field
-                  %p.control.is-expanded
-                    = f.input :model, label: false, placeholder: 'Model', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
                 %label.label PO Number
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :po_number, label: false, placeholder: 'PO Number', input_html: {class: 'input'}
+                    = f.input :po_number, label: false, placeholder: 'Purchase Order Number', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Acquisition Date
