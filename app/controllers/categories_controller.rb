@@ -41,7 +41,7 @@ class CategoriesController < ApplicationController
 
           # Font awesome icon
           if !(@category.categoryicon).include? 'material-icons'
-            @category.categoryicon = @category.categoryicon[0...-5] + ' fa-6x"></i>'
+            @category.categoryicon = @category.categoryicon[0..-7] + ' fa-6x"></i>'
           end
 
           if @category.save

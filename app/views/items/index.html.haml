@@ -18,7 +18,7 @@
       %tr
         %th Name
         %th Image
-        %th Asset Tag
+        %th Serial
         %th Category
         %th Manufacturer
         %th Condition
@@ -39,7 +39,7 @@
                 %button.modal-close.is-large{"aria-label" => "close"}
             - else
               = image_tag("amrc.svg", width: "50", alt: 'Default Image, AMRC', style: 'vertical-align: middle')
-          %td.has-text-centered= item.asset_tag
+          %td.has-text-centered= item.serial
           %td.has-text-centered= item.category.name
           %td.has-text-centered= item.manufacturer
           %td.has-text-centered
