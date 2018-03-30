@@ -9,6 +9,16 @@
           = simple_form_for(@item) do |f|
             %h4.title
               Asset Information
+            - if params[:is_peripheral]
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Parent Asset Serial
+                .field-body
+                  .field
+                    - if params[:parent_asset_serial].nil?
+                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input'}
+                    - else
+                      = f.input :parent_asset_serial, as: :string, label: false, required: '', placeholder: 'The parent item''s serial' , input_html: {class: 'input', value: (params[:parent_asset_serial])}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Asset Name
@@ -37,6 +47,13 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.input :location, label: false, required: '', placeholder: 'Asset location', input_html: {class: 'input'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Serial
+              .field-body
+                .field
+                  %p.control.is-expanded
+                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Keywords
@@ -82,11 +99,11 @@
                     = f.input :model, label: false, placeholder: 'Model', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Serial
+                %label.label PO Number
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
+                    = f.input :po_number, label: false, placeholder: 'PO Number', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Acquisition Date
@@ -113,12 +130,6 @@
                       .field
                         %p.control.is-expanded
                           = f.input :purchase_price, label: false, placeholder: 'Purchase Price', input_html: {class: 'input', type:'number', min: '0', step:'0.1', onkeypress:'return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)'}
-            -#.field.is-horizontal
-              .field-label.is-normal
-                %label.label Peripherals
-              .field-body
-                .field
-                  = f.input :peripherals, as: :text, label: false, placeholder: 'Batteries, Extension pole', input_html: {class: 'textarea'}
             %br
             %br
             .field.is-horizontal
