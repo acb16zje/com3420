@@ -1,3 +1,5 @@
+require 'irb'
+
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   authorize_resource
@@ -18,6 +20,16 @@ class ItemsController < ApplicationController
   # GET /items/1
   def show
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
+    peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+    if peripherals.blank?
+      @peripherals = "None"
+    else
+      @peripherals = ""
+      peripherals.each do |peripheral|
+        @peripherals = @peripherals + ", " + peripheral.serial
+      end
+      @peripherals = @peripherals[2..-1]
+    end
   end
 
   # GET /items/new

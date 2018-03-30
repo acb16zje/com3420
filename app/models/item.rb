@@ -2,22 +2,24 @@
 #
 # Table name: items
 #
-#  id               :integer          not null, primary key
-#  name             :string
-#  condition        :string
-#  location         :string
-#  asset_tag        :string
-#  manufacturer     :string
-#  model            :string
-#  serial           :string
-#  acquisition_date :date
-#  purchase_price   :decimal(, )
-#  image            :string
-#  keywords         :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  user_id          :integer
-#  category_id      :integer
+#  id                  :integer          not null, primary key
+#  name                :string
+#  condition           :string
+#  location            :string
+#  asset_tag           :string
+#  manufacturer        :string
+#  model               :string
+#  serial              :string
+#  acquisition_date    :date
+#  purchase_price      :decimal(, )
+#  image               :string
+#  keywords            :string
+#  parent_asset_serial :string
+#  po_number           :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer
+#  category_id         :integer
 #
 # Indexes
 #

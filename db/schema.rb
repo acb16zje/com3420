@@ -70,6 +70,8 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.decimal "purchase_price"
     t.string "image"
     t.string "keywords"
+    t.string "parent_asset_serial"
+    t.string "po_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"

@@ -14,6 +14,8 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.decimal :purchase_price
       t.string :image
       t.string :keywords
+      t.string :parent_asset_serial
+      t.string :po_number
 
       t.timestamps
     end
