@@ -1,5 +1,5 @@
 - if params[:is_peripheral]
-  - content_for :title, "Add peripheral for #{@parent.name}"
+  - content_for :title, "Add peripheral"
 - else
   - content_for :title, "Create asset"
 
@@ -8,17 +8,15 @@
     .container.has-text-centered
       .column.is-10.is-offset-1
         - if params[:is_peripheral]
-          %h3.title Add peripheral for #{@parent.name}
+          %h3.title Add peripheral
         - else
           %h3.title Create asset
         .box
           = simple_form_for(@item) do |f|
-            - if params[:is_peripheral]
-              %h4.title Peripheral Information
-            - else
+            - if !params[:is_peripheral]
               %h4.title Asset Information
-
-            - if params[:is_peripheral]
+            - else
+              %h4.title Peripheral Information
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Parent Asset Serial

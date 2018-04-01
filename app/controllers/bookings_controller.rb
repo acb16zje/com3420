@@ -66,6 +66,8 @@ class BookingsController < ApplicationController
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
 
+    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
     gon.disable_start_time = disable_start_time
@@ -84,6 +86,10 @@ class BookingsController < ApplicationController
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
 
+    if params[:booking][:next_location].nil? || params[:booking][:next_location] == ""
+      @booking.reason = "None"
+    end
+
     item = Item.find_by_id(@booking.item_id)
     if item.user_id == current_user.id
       @booking.status = 2
@@ -94,15 +100,52 @@ class BookingsController < ApplicationController
       @booking.status = 1
     end
 
-    # Server side validation
-    query = Booking.where(
-      "(status = 2 OR status = 3)
-      AND (start_datetime < CAST ('#{@booking.start_datetime}' AS TIMESTAMP)
-      AND end_datetime > CAST ('#{@booking.start_datetime}' AS TIMESTAMP))
-      OR (start_datetime > CAST ('#{@booking.start_datetime}' AS TIMESTAMP)
-      AND start_datetime < CAST ('#{@booking.end_datetime}' AS TIMESTAMP))").first
+    peripherals = params[:booking][:peripherals]
 
-    if (query.nil?) && @booking.save
+    # Changing the peripherals array into a string to be saved
+    if peripherals.blank?
+      @booking.peripherals = null
+    else
+      peripherals_string = ""
+      peripherals.each do |peripheral|
+        next if peripheral == ""
+        peripherals_string = peripherals_string + "," + peripheral
+      end
+      @booking.peripherals = peripherals_string[1..-1]
+    end
+
+    # Server side validation
+    query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
+    peripherals.each do |peripheral|
+      next if peripheral == ""
+      temp_item = Item.where("serial = ?", peripheral).first
+      query = query && booking_validation(temp_item.id, @booking.start_datetime, @booking.end_datetime)
+    end
+
+    if (query) && @booking.save
+      # Making a booking for any peripheral selected
+      peripherals.each do |peripheral|
+        next if peripheral == ""
+        temp_item = Item.where("serial = ?", peripheral).first
+        booking = Booking.new(booking_params)
+
+        if params[:booking][:next_location].nil? || params[:booking][:next_location] == ""
+          booking.reason = "None"
+        end
+        booking.item_id = temp_item.id
+        booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
+        booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+        booking.next_location = params[:booking][:next_location].titleize
+        booking.peripherals = nil
+
+        if item.user_id == current_user.id
+          booking.status = 2
+        else
+          booking.status = 1
+        end
+
+        booking.save
+      end
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), notice: 'Chosen timeslot conflicts with other bookings.'
@@ -177,6 +220,19 @@ class BookingsController < ApplicationController
 
   private
 
+  def booking_validation(item_id, start_datetime, end_datetime)
+    query = Booking.where(
+      "(status = 2 OR status = 3)
+      AND (item_id = '#{item_id}')
+      AND (start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
+      AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
+      OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
+      AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP))"
+    ).first
+
+    return query.nil?
+  end
+
   # Fully booked days in a single booking
   def fully_booked_days_single
     date_to_disable = []
@@ -188,7 +244,8 @@ class BookingsController < ApplicationController
           AND end_time = '2000-01-01 00:00:00 UTC'
           AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
         OR
-          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id])
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id]
+    )
 
     bookings.each do |booking|
       start_date = Date.parse(booking.start_date.to_s)
@@ -208,10 +265,10 @@ class BookingsController < ApplicationController
       end
 
       # Split into [year, month, day]
-      date_array = date_array.map {|n| n.split('-')}
+      date_array = date_array.map { |n| n.split('-') }
 
       # Datepicker month format is jan = 0, feb = 1, mar = 2...
-      date_array = date_array.map {|n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2]}
+      date_array = date_array.map { |n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2] }
 
       date_to_disable.concat(date_array)
     end
@@ -260,10 +317,10 @@ class BookingsController < ApplicationController
         end
 
         # Split into [year, month, day]
-        date_array = date_array.map {|n| n.split('-')}
+        date_array = date_array.map { |n| n.split('-') }
 
         # Datepicker month format is jan = 0, feb = 1, mar = 2...
-        date_array = date_array.map {|n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2]}
+        date_array = date_array.map { |n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2] }
 
         date_to_disable.concat(date_array)
       end
@@ -326,7 +383,7 @@ class BookingsController < ApplicationController
       if start_time.strftime("%Y-%m-%d").eql? start_date.to_s
         # Start date not equal to end date
         if end_time.day - start_time.day > 0
-          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]},)
+          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]})
         else
           # Start and end on the same day
           time_to_disable.append(
@@ -336,7 +393,7 @@ class BookingsController < ApplicationController
       else
         # Selected start date is booked as end date
         if end_time.day - start_time.day > 0
-          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]},)
+          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]})
         end
       end
     end

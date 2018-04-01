@@ -164,12 +164,13 @@
 
             %br
             %br
-            .field.is-horizontal
-              .field-label.has-text-left
+              = f.select :peripherals, @peripherals.map { |i| [i.name, i.serial] }, {}, {class: 'selected-peripherals', multiple:'multiple'}
+              .field.is-horizontal
+                .field-label.has-text-left
                 -#Left empty for spacing
-              .field-body
-                .field.is-grouped.is-grouped-right
-                  .control
-                    = link_to 'Back', @item, class: 'button is-block is-light'
-                  .control
-                    = f.submit 'Confirm booking', class:'button is-link is-block'
+                .field-body
+                  .field.is-grouped.is-grouped-right
+                    .control
+                      = link_to 'Back', @item, class: 'button is-block is-light'
+                    .control
+                      = f.submit 'Confirm booking', class:'button is-link is-block'
