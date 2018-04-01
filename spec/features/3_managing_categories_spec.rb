@@ -12,6 +12,12 @@ describe 'Managing categories' do
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Cameras'
+    visit '/categories/new'
+    fill_in 'category_name', with: 'Alarms'
+    fill_in 'category_icon', with: '<i class="material-icons">alarm</i>'
+    click_button('Create category')
+    expect(page).to have_content 'Category was successfully created.'
+    expect(page).to have_content 'Alarms'
   end
 
   specify 'I cannot create a category that has an invalid name' do

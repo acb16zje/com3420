@@ -39,21 +39,25 @@ class CategoriesController < ApplicationController
         @category.name = @category.name.titleize.strip
 
         # Font awesome icon
-        if !(@category.categoryicon).include? 'material-icons'
-          @category.categoryicon = @category.categoryicon[0..-7] + ' fa-6x"></i>'
+        if (!(@category.categoryicon).include? 'material-icons') && !(@category.categoryicon).empty?
+          @category.categoryicon = @category.categoryicon.chomp('"></i>') + ' fa-6x"></i>'
         end
 
         if @category.save
           # Create a duplicate category for the peripherals
-          category = Category.new(category_params)
-          category.name = category.name.titleize.strip + " - Peripherals"
-          
-          if !(category.categoryicon).include? 'material-icons'
-            category.categoryicon = @category.categoryicon[0..-7] + ' fa-6x">P</i>'
-          else
-            category.categoryicon = @category.categoryicon.chomp('</i>') + 'P</i>'
+          if params[:want_peripheral].to_i == 1
+            category = Category.new(category_params)
+
+            category.name = category.name.titleize.strip + " - Peripherals"
+
+            if !(category.categoryicon).include? 'material-icons'
+              category.categoryicon = @category.categoryicon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
+            else
+              category.categoryicon = @category.categoryicon.chomp('</i>') + 'P</i>'
+            end
+
+            category.save
           end
-          category.save
 
           redirect_to categories_path, notice: 'Category was successfully created.'
         end
@@ -76,7 +80,7 @@ class CategoriesController < ApplicationController
       redirect_to categories_url, notice: 'Category was successfully deleted.'
     rescue
       items = Item.where('category_id = ?', @category.id)
-      if !items.blank? 
+      if !items.blank?
         redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset'
       else
         UserHomeCategory.where('category_id = ?', @category.id).destroy_all

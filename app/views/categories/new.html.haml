@@ -42,16 +42,16 @@
                     = link_to 'Font Awesome', 'https://fontawesome.com/icons?d=gallery'
                     or
                     = link_to 'Material icons', 'https://material.io/icons/'
-            
-            
+
+
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Duplicate peripheral category
               .field-body
                 .field
                   %p.control.is-expanded
                     = f.input :want_peripheral, as: :check_boxes, label: false  do
                       = check_box_tag 'want_peripheral'
+                      %label{:for => "want_peripheral"} Create a peripheral category under this category
             %br
             .field.is-horizontal
               .field-label.has-text-left
