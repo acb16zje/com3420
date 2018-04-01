@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   authorize_resource
+  attr_accessor :want_peripheral
 
   # GET /categories
   def index
@@ -35,7 +36,7 @@ class CategoriesController < ApplicationController
       redirect_to new_category_path, notice: 'Category already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
-        @category.name = @category.name.titleize
+        @category.name = @category.name.titleize.strip
 
         # Font awesome icon
         if !(@category.categoryicon).include? 'material-icons'
@@ -43,6 +44,17 @@ class CategoriesController < ApplicationController
         end
 
         if @category.save
+          # Create a duplicate category for the peripherals
+          category = Category.new(category_params)
+          category.name = category.name.titleize.strip + " - Peripherals"
+          
+          if !(category.categoryicon).include? 'material-icons'
+            category.categoryicon = @category.categoryicon[0..-7] + ' fa-6x">P</i>'
+          else
+            category.categoryicon = @category.categoryicon.chomp('</i>') + 'P</i>'
+          end
+          category.save
+
           redirect_to categories_path, notice: 'Category was successfully created.'
         end
       else
@@ -63,7 +75,17 @@ class CategoriesController < ApplicationController
     begin @category.destroy
       redirect_to categories_url, notice: 'Category was successfully deleted.'
     rescue
-      redirect_to categories_path, notice: 'Cannot delete category because it is currently in use'
+      items = Item.where('category_id = ?', @category.id)
+      if !items.blank? 
+        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset'
+      else
+        UserHomeCategory.where('category_id = ?', @category.id).destroy_all
+        begin @category.destroy
+          redirect_to categories_url, notice: 'Category was successfully deleted.'
+        rescue
+          redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset'
+        end
+      end
     end
   end
 
