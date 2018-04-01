@@ -10,6 +10,7 @@ class CreateBookings < ActiveRecord::Migration[5.1]
       t.string :reason
       t.string :next_location
       t.integer :status
+      t.string :peripherals
 
       t.timestamps
     end

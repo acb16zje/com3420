@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "reason"
     t.string "next_location"
     t.integer "status"
+    t.string "peripherals"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
