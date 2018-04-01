@@ -142,9 +142,14 @@
             %br
             %br
             .field.is-horizontal
-              .field-label.has-text-left
-                -#Left empty for spacing
               .field-body
+                .field.is-grouped.is-grouped-left
+                  .control
+                    = link_to item_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "delete_item_#{@item.id}" do
+                      %span.icon
+                        %i.class.fas.fa-trash
+                      %span Delete
+                    = f.hidden_field :bunny, value: '0'
                 .field.is-grouped.is-grouped-right
                   .control
                     = link_to 'Cancel' , items_path, class: 'button is-light'

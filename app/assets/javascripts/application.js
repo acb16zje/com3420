@@ -72,7 +72,7 @@ $(document).ready(function () {
         max: gon.max_start_date,
         onStart: function () {
             this.set('select', moment());
-            if (gon.initial_disable_dates !== undefined) {
+            if (gon.initial_disable_dates.length !== 0) {
                 this.set('disable', gon.initial_disable_dates);
             }
         }
@@ -83,9 +83,12 @@ $(document).ready(function () {
         format: 'd mmmm yyyy',
         clear: '',
         min: moment(),
-        max: gon.max_end_date,
         onStart: function () {
-            if (gon.initial_disable_dates !== undefined) {
+            if (gon.max_end_date.length !== 0) {
+                this.set('max', gon.max_end_date)
+            }
+
+            if (gon.initial_disable_dates.length !== 0) {
                 this.set('disable', gon.initial_disable_dates);
             }
         }
@@ -97,7 +100,7 @@ $(document).ready(function () {
         min: moment(),
         interval: 10,
         onStart: function () {
-            if (gon.disable_start_time !== undefined) {
+            if (gon.disable_start_time.length !== 0) {
                 this.set('disable', gon.disable_start_time);
             }
         }
@@ -166,8 +169,6 @@ $(document).ready(function () {
                     dataType: 'json',
                     success: function (data) {
                         console.log('End date ajax');
-                        endTime.pickatime('picker').set('enable', true);
-                        endTime.pickatime('picker').set('disable', data.disable_end_time);
 
                         if (data.max_end_time.length > 0) {
                             endTime.pickatime('picker').set('max', data.max_end_time)
@@ -206,6 +207,7 @@ $(document).ready(function () {
                 end_date = moment(new Date(start_date)).add(1, 'd');
                 endDate.pickadate('picker').set('min', moment(end_date).toDate());
 
+                // Clear the endDate when startTime is changed
                 if (endDate.val()) {
                     endDate.pickadate('picker').clear();
                 }
@@ -216,6 +218,11 @@ $(document).ready(function () {
 
             // Do not allow end time to be smaller than start time on the same date
             if (end_time <= start_time && end_time) {
+                endTime.pickatime('picker').clear();
+            }
+
+            // Clear the endTime when startTime is changed
+            if (endTime.val()) {
                 endTime.pickatime('picker').clear();
             }
 

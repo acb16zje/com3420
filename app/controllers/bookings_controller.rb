@@ -169,7 +169,6 @@ class BookingsController < ApplicationController
 
   def end_date
     data = {
-      :disable_end_time => disable_end_time(params[:end_date]),
       :max_end_time => max_end_time(params[:start_date], params[:end_date], params[:start_time])
     }
 
@@ -182,7 +181,7 @@ class BookingsController < ApplicationController
   def fully_booked_days_single
     date_to_disable = []
     bookings = Booking.where(
-      "(status = 2 or status = 3)
+      "(status = 2 OR status = 3)
       AND item_id = ?
       AND start_date <> end_date
       AND ((start_time = '2000-01-01 00:00:00 UTC'
@@ -224,14 +223,15 @@ class BookingsController < ApplicationController
   def fully_booked_days_multi
     date_to_disable = []
 
-    bookings = Booking.find_by_sql(
+    bookings = Booking.find_by_sql [
       "WITH RECURSIVE linked_bookings AS (
           SELECT A.start_date AS start_date,
           A.start_datetime AS start_datetime,
           B.end_date AS end_date,
           B.end_datetime AS end_datetime
           FROM bookings A, bookings B
-          WHERE (A.status = 2 or A.status = 3)
+          WHERE (A.status = 2 OR A.status = 3)
+          AND A.item_id = ?
           AND A.end_datetime = B.start_datetime
           AND A.id <> B.id
         UNION ALL
@@ -239,7 +239,7 @@ class BookingsController < ApplicationController
           FROM bookings p, linked_bookings pr
           WHERE p.end_datetime = pr.start_datetime
       )
-      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings")
+      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings", params[:item_id]]
 
     bookings.each do |booking|
       start_date = Date.parse(booking.start_date.to_s)
@@ -282,22 +282,20 @@ class BookingsController < ApplicationController
       start_date = Date.parse(start_date)
     end
 
-    booking = Booking.find_by_sql(
-      "SELECT MIN(start_date) as max_end
-      FROM bookings
-      WHERE (status = 2 or status = 3)
-      AND start_date >= CAST('#{start_date}' AS DATE)")
+    booking = Booking.where(
+      "(status = 2 OR status = 3)
+      AND item_id = ?
+      AND start_date >= CAST('#{start_date}' AS DATE)", params[:item_id]
+    ).minimum(:start_date)
 
-    booking.each do |b|
-      if !b.max_end.blank?
-        # Split into [year, month, day]
-        b.max_end = b.max_end.strftime("%Y-%m-%d").split('-')
+    if !booking.blank?
+      # Split into [year, month, day]
+      booking = booking.strftime("%Y-%m-%d").split('-')
 
-        # Datepicker month format is jan = 0, feb = 1, mar = 2...
-        b.max_end[1] = b.max_end[1].to_i - 1
+      # Datepicker month format is jan = 0, feb = 1, mar = 2...
+      booking[1] = booking[1].to_i - 1
 
-        date_array.concat(b.max_end)
-      end
+      date_array.concat(booking)
     end
 
     return date_array
@@ -313,12 +311,12 @@ class BookingsController < ApplicationController
       start_date = Date.parse(start_date)
     end
 
-    bookings = Booking.find_by_sql(
-      "SELECT start_datetime, end_datetime
-      FROM bookings
-      WHERE (status = 2 or status = 3)
-      AND start_date = CAST('#{start_date}' AS DATE)
-      OR end_date = CAST('#{start_date}' AS DATE)")
+    bookings = Booking.where(
+      "(status = 2 OR status = 3)
+      AND item_id = ?
+      AND (start_date = CAST('#{start_date}' AS DATE)
+      OR end_date = CAST('#{start_date}' AS DATE))", params[:item_id]
+    ).select(:start_datetime, :end_datetime)
 
     bookings.each do |booking|
       start_time = DateTime.parse(booking.start_datetime.to_s)
@@ -346,68 +344,34 @@ class BookingsController < ApplicationController
     return time_to_disable
   end
 
-  # Disable unavailable end time
-  def disable_end_time(end_date = nil)
-    time_to_disable = []
-
-    if end_date.nil?
-      end_date = Date.today.strftime("%Y-%m-%d")
-    else
-      end_date = Date.parse(end_date)
-    end
-
-    bookings = Booking.find_by_sql(
-      "SELECT start_datetime, end_datetime
-      FROM bookings
-      WHERE (status = 2 or status = 3)
-      AND start_date = CAST('#{end_date}' AS DATE)
-      OR end_date = CAST('#{end_date}' AS DATE)")
-
-    bookings.each do |booking|
-      start_time = DateTime.parse(booking.start_datetime.to_s) + 10.minutes
-      end_time = DateTime.parse(booking.end_datetime.to_s) - 10.minutes
-
-      # Selected start date is booked as start date
-      if start_time.strftime("%Y-%m-%d").eql? end_date.to_s
-        # Start date not equal to end date
-        if end_time.day - start_time.day > 0
-          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]},)
-        else
-          # Start and end on the same day
-          time_to_disable.append(
-            {from: ["#{start_time.hour}", "#{start_time.min}"], to: ["#{end_time.hour}", "#{end_time.min}"]},
-          )
-        end
-      else
-        # Selected start date is booked as end date
-        if end_time.day - start_time.day > 0
-          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]},)
-        end
-      end
-    end
-
-    return time_to_disable
-  end
-
   # Maximum selectable end time
   def max_end_time(start_date, end_date, start_time)
     time_array = []
 
     start_time = DateTime.parse(start_time).strftime("%H:%M")
 
-    if start_date.eql? end_date
-      start_date = Date.parse(start_date)
+    start_date = Date.parse(start_date)
+    end_date = Date.parse(end_date)
 
-      booking = Booking.find_by_sql(
-        "SELECT MIN(start_time) as max_end
-        FROM bookings
-        WHERE (status = 2 or status = 3)
-        AND start_date = CAST('#{start_date}' AS DATE)")
+    if start_date < end_date
+      booking = Booking.where(
+        "(status = 2 OR status = 3)
+        AND item_id = ?
+        AND start_date = CAST('#{end_date}' AS DATE)", params[:item_id]
+      ).minimum(:start_time)
 
-      booking.each do |b|
-        if !b.max_end.blank? && start_time < b.max_end.strftime("%H:%M")
-          time_array = [b.max_end.hour, b.max_end.min]
-        end
+      if !booking.blank?
+        time_array = [booking.hour, booking.min]
+      end
+    else
+      booking = Booking.where(
+        "(status = 2 OR status = 3)
+        AND item_id = ?
+        AND start_date = CAST('#{start_date}' AS DATE)", params[:item_id]
+      ).minimum(:start_time)
+
+      if !booking.blank? && start_time < booking.strftime("%H:%M")
+        time_array = [booking.hour, booking.min]
       end
     end
 

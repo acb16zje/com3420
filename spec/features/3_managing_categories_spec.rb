@@ -9,74 +9,34 @@ describe 'Managing categories' do
 
   specify 'I can create a category that does not exist yet' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
   end
 
   specify 'I cannot create a category that has an invalid name' do
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category name does not meet requirements.'
   end
 
-  specify 'I cannot create a category that has an invalid name' do
-    fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'C1AM'
-    click_button('Create category')
-    expect(page).to have_content 'Category tag does not meet requirements.'
-  end
-
   specify 'I cannot create a category that already exists' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
     visit '/categories/new'
     expect(page).to have_content 'Create category'
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'DoesNotExist'
     click_button('Create category')
-    expect(page).to have_content 'Category or tag already exists.'
-  end
-
-  specify 'I cannot create a category that already exists' do
-    fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
-    fill_in 'category_name', with: 'DoesNotExist'
-    fill_in 'category_tag', with: 'CAM'
-    click_button('Create category')
-    expect(page).to have_content 'Category or tag already exists.'
-  end
-
-  specify 'I cannot create a new category with a tag that already exists' do
-    fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
-    fill_in 'category_name', with: 'DoesNotExist'
-    fill_in 'category_tag', with: 'CAM'
-    click_button('Create category')
-    expect(page).to have_content 'Category or tag already exists.'
+    expect(page).to have_content 'Category already exists.'
   end
 
   specify 'I can update a category' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
     click_link('Edit')
     expect(page).to have_content 'Editing Cameras'
     fill_in 'category_name', with: 'Camera'
@@ -88,21 +48,19 @@ describe 'Managing categories' do
 
   specify 'I can delete a category' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
     click_link('Delete')
-    expect(page).to have_content 'Category was successfully destroyed.'
-    expect(page).to_not have_content 'CAM Cameras'
+    expect(page).to have_content 'Category was successfully deleted.'
+    expect(page).to_not have_content 'Cameras'
   end
 
   specify 'I can add favourite category to home page' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
     visit '/'
     expect(page).to_not have_content 'View Cameras'
     click_link('Add Favourite')
@@ -114,10 +72,9 @@ describe 'Managing categories' do
 
   specify 'I can remove favourite category from home page' do
     fill_in 'category_name', with: 'Cameras'
-    fill_in 'category_tag', with: 'CAM'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'CAM Cameras'
+    expect(page).to have_content 'Cameras'
     visit '/'
     expect(page).to_not have_content 'View Cameras'
     click_link('Add Favourite')
