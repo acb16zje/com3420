@@ -81,13 +81,11 @@ class CategoriesController < ApplicationController
     rescue
       items = Item.where('category_id = ?', @category.id)
       if !items.blank?
-        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset'
+        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
       else
         UserHomeCategory.where('category_id = ?', @category.id).destroy_all
         begin @category.destroy
           redirect_to categories_url, notice: 'Category was successfully deleted.'
-        rescue
-          redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset'
         end
       end
     end

@@ -33,7 +33,7 @@
 #
 
 FactoryBot.define do
-  factory :item, class: 'Item' do
+  factory :gopro, class: 'Item' do
     user_id 1
     category_id '1'
     condition 'Like New'

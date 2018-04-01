@@ -52,6 +52,7 @@ class Ability
       can :read, Item
       can [:read, :new, :create, :edit, :update, :set_booking_cancelled, :set_booking_returned], Booking, id: user.id
       can [:show, :edit, :update, :manager], User, id: user.id
+      can :filter, Category
     end
   end
 end
