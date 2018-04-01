@@ -10,9 +10,11 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can create a booking without time conflict' do
-    page.execute_script("$('#startDate').val('24 March 2018')")
+    page.execute_script("$('#startDate').val('2 April 2018')")
     page.execute_script("$('#startTime').val('9:00 AM')")
-    page.execute_script("$('#endDate').val('25 March 2018')")
+    page.execute_script("$('#endDate').prop('disabled', false)")
+    page.execute_script("$('#endTime').prop('disabled', false)")
+    page.execute_script("$('#endDate').val('3 April 2018')")
     page.execute_script("$('#endTime').val('12:30 PM')")
     fill_in 'booking_next_location', with: 'pam liversidge building'
     fill_in 'booking_reason', with: 'Filming documentary'
@@ -23,5 +25,4 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Filming documentary'
     expect(page).to have_content 'Accepted'
   end
-
 end

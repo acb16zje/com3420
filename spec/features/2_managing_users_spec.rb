@@ -129,4 +129,20 @@ describe 'Managing accounts' do
     click_link 'Asset Managers'
     expect(page).to have_content 'zjeng1@sheffield.ac.uk'
   end
+
+  specify 'I can change the permission of my account to asset manager' do
+    click_link('My Profile')
+    expect(page).to have_content 'Edit Details'
+    click_link('Edit Details')
+    select('Asset Manager', from: 'user_permission_id')
+    click_button('Save changes')
+  end
+
+  specify 'I can change the permission of my account to user' do
+    click_link('My Profile')
+    expect(page).to have_content 'Edit Details'
+    click_link('Edit Details')
+    select('User', from: 'user_permission_id')
+    click_button('Save changes')
+  end
 end

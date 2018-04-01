@@ -302,7 +302,7 @@ $(document).ready(function () {
 
     var $selectedPeripherals = $(".selected-peripherals");
     $selectedPeripherals.select2();
-    
+
     // Phone number validation
     var number = document.getElementById("number");
     if (number != null) {
