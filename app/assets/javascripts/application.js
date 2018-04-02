@@ -300,8 +300,7 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 
-    var $selectedPeripherals = $(".selected-peripherals");
-    $selectedPeripherals.select2();
+    $(".selected-peripherals").select2();
 
     // Phone number validation
     var number = document.getElementById("number");
