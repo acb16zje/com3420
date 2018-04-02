@@ -2,10 +2,10 @@
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
 
-Category.create(name: 'Cameras', icon: '<i class="fas fa-camera fa-6x"></i>')
-Category.create(name: 'Cameras - Peripheral', icon: '<i class="fas fa-camera fa-6x">P</i>')
-Category.create(name: 'Data Logger', icon: '<i class="material-icons">dock</i>')
-Category.create(name: 'Laptops', icon: '<i class="material-icons">computer</i>')
+Category.create(name: 'Cameras', icon: '<i class="fas fa-camera fa-6x"></i>', has_peripheral: 1)
+Category.create(name: 'Cameras - Peripheral', icon: '<i class="fas fa-camera fa-6x">P</i>', has_peripheral: 0)
+Category.create(name: 'Data Logger', icon: '<i class="material-icons">dock</i>', has_peripheral: 0)
+Category.create(name: 'Laptops', icon: '<i class="material-icons">computer</i>', has_peripheral: 0)
 
 User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
@@ -16,6 +16,6 @@ User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Ch
 Item.create(user_id: 1, category_id: '1', condition: 'Like New', name: 'GoPro Hero 5', location: 'Diamond',
     manufacturer: 'GoPro', model: 'Hero 5', serial: 'GPH5', acquisition_date: '2018-02-09', purchase_price: 100.1)
 Item.create(user_id: 1, category_id: '2', condition: 'Like New', name: 'MicroSD Card', location: 'Diamond',
-            manufacturer: 'Kingston', model: 'Flash Card', serial: 'SD322', acquisition_date: '2018-03-09', purchase_price: 10.1)
+            manufacturer: 'Kingston', model: 'Flash Card', serial: 'SD322', acquisition_date: '2018-03-09', purchase_price: 10.1, parent_asset_serial: 'GPH5')
 Item.create(user_id: 2, category_id: '4', condition: 'Like New', name: 'MacBook Pro 15-inch', location: 'Diamond',
             manufacturer: 'Apple', model: 'MacBookPro14,3', serial: 'MPTR212/A', acquisition_date: '2018-03-22', purchase_price: 2349.00)

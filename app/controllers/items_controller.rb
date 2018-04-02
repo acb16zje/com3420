@@ -29,6 +29,16 @@ class ItemsController < ApplicationController
 
   # GET /items/new
   def new
+    # Get items with categories allowing peripherals
+    @items = []
+    categories = Category.where('has_peripheral = TRUE')
+    categories.each do |category|
+      items = Item.where('category_id = ?', category.id)
+      items.each do |i|
+        @items.append(i)
+      end
+    end
+
     @item = Item.new
     if params[:is_peripheral]
       @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
@@ -48,6 +58,12 @@ class ItemsController < ApplicationController
     @item.user_id = current_user.id
     @item.location = params[:item][:location].titleize
 
+    # Getting the category for the attached item
+    if !@item.parent_asset_serial.nil?
+      parent = Item.where('serial = ?', @item.parent_asset_serial).first
+      category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
+      @item.category_id = category.id
+    end
     if @item.save
       redirect_to @item, notice: 'Asset was successfully created.'
     end

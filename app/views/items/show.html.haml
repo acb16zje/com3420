@@ -105,8 +105,12 @@
               - else
                 .control
                   = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
-              .control
-                = link_to 'Add peripheral', new_item_path(parent_asset_serial: @item.serial, is_peripheral: true), class: 'button is-link'
+              - if @item.category.has_peripheral
+                .control
+                  = link_to 'Add peripheral', new_item_path(parent_asset_serial: @item.serial, is_peripheral: true), class: 'button is-link'
+              - else
+                .control
+                  = link_to 'Add peripheral', new_item_path(parent_asset_serial: @item.serial, is_peripheral: true), class: 'button is-link', disabled:''
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'
