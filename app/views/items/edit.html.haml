@@ -21,7 +21,7 @@
                 .field-body
                   .field
                     .control
-                      = f.select :parent_asset_serial, Item.all.map { |i| [i.serial] }, {}, {class: 'select2'}
+                      = f.select :parent_asset_serial, Item.all.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral]
