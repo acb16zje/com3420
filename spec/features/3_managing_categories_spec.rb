@@ -7,14 +7,24 @@ describe 'Managing categories' do
     expect(page).to have_content 'Create category'
   end
 
-  specify 'I can create a category that does not exist yet' do
+  specify 'I can create a category that does not exist yet with no icon' do
     fill_in 'category_name', with: 'Cameras'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Cameras'
-    visit '/categories/new'
+  end
+
+  specify 'I can create a category that does not exist yet with a material icon' do
     fill_in 'category_name', with: 'Alarms'
     fill_in 'category_icon', with: '<i class="material-icons">alarm</i>'
+    click_button('Create category')
+    expect(page).to have_content 'Category was successfully created.'
+    expect(page).to have_content 'Alarms'
+  end
+
+  specify 'I can create a category that does not exist yet with a font awesome icon' do
+    fill_in 'category_name', with: 'Alarms'
+    fill_in 'category_icon', with: '<i class="fas fa-clock"></i>'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Alarms'
@@ -36,6 +46,25 @@ describe 'Managing categories' do
     fill_in 'category_name', with: 'Cameras'
     click_button('Create category')
     expect(page).to have_content 'Category already exists.'
+  end
+
+  specify 'I can create a category with a peripheral category' do
+    fill_in 'category_name', with: 'Cameras'
+    find(:css, "#want_peripheral[value='1']").set(true)
+    click_button('Create category')
+    expect(page).to have_content 'Category was successfully created.'
+    expect(page).to have_content 'Cameras'
+    expect(page).to have_content 'Cameras - Peripherals'
+  end
+
+  specify 'I can create a category with a peripheral category with a font awesomeicon' do
+    fill_in 'category_name', with: 'Cameras'
+    fill_in 'category_icon', with: '<i class="fas fa-camera"></i>'
+    find(:css, "#want_peripheral[value='1']").set(true)
+    click_button('Create category')
+    expect(page).to have_content 'Category was successfully created.'
+    expect(page).to have_content 'Cameras'
+    expect(page).to have_content 'Cameras - Peripherals'
   end
 
   specify 'I can update a category' do
@@ -131,6 +160,4 @@ describe 'Managing categories' do
     expect(page).to have_content 'Laptops'
     expect(page).to have_content 'Cameras'
   end
-
-
 end
