@@ -2,12 +2,12 @@
 #
 # Table name: categories
 #
-#  id           :integer          not null, primary key
-#  name         :string
-#  tag          :string
-#  categoryicon :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id         :integer          not null, primary key
+#  name       :string
+#  tag        :string
+#  icon       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 # Indexes
 #
@@ -18,5 +18,4 @@
 class Category < ApplicationRecord
   has_many :items
   has_many :users, through: :user_home_categories
-  # mount_uploader :categoryicon, CategoryIconUploader
 end

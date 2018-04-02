@@ -39,8 +39,8 @@ class CategoriesController < ApplicationController
         @category.name = @category.name.titleize.strip
 
         # Font awesome icon
-        if (!(@category.categoryicon).include? 'material-icons') && !(@category.categoryicon).empty?
-          @category.categoryicon = @category.categoryicon.chomp('"></i>') + ' fa-6x"></i>'
+        if (!(@category.icon).include? 'material-icons') && !(@category.icon).empty?
+          @category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i>'
         end
 
         if @category.save
@@ -50,10 +50,10 @@ class CategoriesController < ApplicationController
 
             category.name = category.name.titleize.strip + " - Peripherals"
 
-            if !(category.categoryicon).include? 'material-icons'
-              category.categoryicon = @category.categoryicon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
+            if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+              category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
             else
-              category.categoryicon = @category.categoryicon.chomp('</i>') + 'P</i>'
+              category.icon = @category.icon.chomp('</i>') + 'P</i>'
             end
 
             category.save

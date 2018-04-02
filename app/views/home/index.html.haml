@@ -34,9 +34,9 @@
                 .card-content.hero.is-small.is-light
                   .columns.hero-body
                     .column.has-text-centered
-                      - if usercat.category.categoryicon?
+                      - if usercat.category.icon?
                         %span.icon.is-large
-                          = raw "#{usercat.category.categoryicon}"
+                          = raw "#{usercat.category.icon}"
                       - else
                         %span.icon.is-large
                           %i.far.fa-question-circle.fa-6x
