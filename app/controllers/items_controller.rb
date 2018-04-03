@@ -1,9 +1,6 @@
-require 'irb'
-
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   authorize_resource
-  attr_accessor :item_id_list
 
   # GET /items
   def index
@@ -11,7 +8,7 @@ class ItemsController < ApplicationController
     gon.category = params[:category_name]
   end
 
-  #Get /items/manager
+  # GET /items/manager
   def manager
     @items = Item.where('user_id = ?', params[:user_id])
     @manager = User.find_by_id(params[:user_id])
@@ -25,6 +22,30 @@ class ItemsController < ApplicationController
     if !@item.parent_asset_serial.nil?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
+  end
+
+  # GET /items/1/add_peripheral_option
+  def add_peripheral_option
+    @item = Item.find_by_id(params[:id])
+  end
+
+  # GET /items/1/choose_peripheral
+  def choose_peripheral
+    @i = Item.find_by_id(params[:id])
+
+    @item = Item.new
+    @items = Item.all.where('serial <> ?', @i.serial)
+  end
+
+  # POST /items/1/add_peripheral
+  def add_peripheral
+    @item = Item.find_by_id(params[:id])
+
+    @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
+    @peripheral.parent_asset_serial = @item.serial
+    @peripheral.save
+
+    redirect_to @item
   end
 
   # GET /items/new

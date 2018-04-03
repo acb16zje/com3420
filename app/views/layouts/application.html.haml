@@ -79,11 +79,11 @@
               = link_to requests_bookings_path, class: 'navbar-link' do
                 Asset <br class="is-hidden-widescreen"> Requests
               .navbar-dropdown.is-boxed.is-right
-                = link_to 'Requests', requests_bookings_path, class: "navbar-item"
-                = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item"
-                = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item"
-                = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item"
-                = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item"
+                = link_to 'Requests', requests_bookings_path, class: "navbar-item #{current_class?(requests_bookings_path)}"
+                = link_to 'Accepted Bookings', accepted_bookings_path, class: "navbar-item #{current_class?(accepted_bookings_path)}"
+                = link_to 'Ongoing Bookings', ongoing_bookings_path, class: "navbar-item #{current_class?(ongoing_bookings_path)}"
+                = link_to 'Completed Bookings', completed_bookings_path, class: "navbar-item #{current_class?(completed_bookings_path)}"
+                = link_to 'Rejected Bookings', rejected_bookings_path, class: "navbar-item #{current_class?(rejected_bookings_path)}"
             .navbar-item.has-dropdown.is-hoverable
               %a.navbar-link
                 Create

@@ -1,8 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   authorize_resource
-  attr_accessor :want_peripheral
-
+  
   # GET /categories
   def index
     @categories = Category.all
