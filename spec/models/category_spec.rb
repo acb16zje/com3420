@@ -2,12 +2,13 @@
 #
 # Table name: categories
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  tag        :string
-#  icon       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id             :integer          not null, primary key
+#  name           :string
+#  tag            :string
+#  icon           :string
+#  has_peripheral :boolean
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #

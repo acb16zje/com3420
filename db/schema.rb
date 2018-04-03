@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "name"
     t.string "tag"
     t.string "icon"
+    t.boolean "has_peripheral"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
