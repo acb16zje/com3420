@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       get 'start_date', on: :collection
       get 'end_date', on: :collection
     end
+    get 'add_peripheral_option', on: :member
+    get 'choose_peripheral', on: :member
+    post 'add_peripheral', on: :member
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
