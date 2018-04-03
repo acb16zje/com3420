@@ -19,6 +19,7 @@
 #  updated_at          :datetime         not null
 #  user_id             :integer
 #  category_id         :integer
+#  condition_info      :string
 #
 # Indexes
 #

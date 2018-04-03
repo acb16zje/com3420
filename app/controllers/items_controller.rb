@@ -102,6 +102,24 @@ class ItemsController < ApplicationController
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Ownership was successfully transfered.'
   end
 
+  def set_condition
+    @item = Item.new
+  end
+
+  def update_condition
+    puts(params[:id])
+    puts(params[:item][:condition])
+    puts(params[:item][:condition_info])
+
+    item = Item.find_by_id(params[:id])
+    item.condition = params[:item][:condition]
+    item.condition_info = params[:item][:condition_info]
+    if item.save
+      redirect_to item, notice: 'We have logged the issue and your item has been returned'
+    end
+  end
+
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

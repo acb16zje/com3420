@@ -192,10 +192,12 @@ class BookingsController < ApplicationController
   def set_booking_returned
     @booking = Booking.find(params[:id])
     @booking.status = 4
+
     if @booking.save
       Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking, context: "AM")
-      UserMailer.manager_asset_returned(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
-      redirect_to bookings_path, notice: 'Item marked as returned'
+      #UserMailer.manager_asset_returned(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
+    #  redirect_to :controller => 'items', :action => 'set_condition'
+      redirect_to set_condition_item_path(@booking.item.id)
     else
       redirect_to bookings_path, notice: 'Could not be returned'
     end

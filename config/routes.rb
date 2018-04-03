@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
+    get 'set_condition', on: :member
+    put 'update_condition', on: :member
   end
 
   resources :notifications do
