@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :categories do
     get 'filter', on: :collection
+    post 'new_peripheral', on: :member
   end
 
   resources :users do

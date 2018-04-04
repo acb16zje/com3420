@@ -5,6 +5,7 @@ class CreateCategories < ActiveRecord::Migration[5.1]
       t.string :tag
       t.string :icon
       t.boolean :has_peripheral
+      t.boolean :is_peripheral
       
       t.timestamps
     end

@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
   authorize_resource
-  
+
   # GET /categories
   def index
     @categories = Category.all
@@ -20,6 +20,28 @@ class CategoriesController < ApplicationController
   # GET /categories/new
   def new
     @category = Category.new
+  end
+
+  # POST /categories/new
+  def new_peripheral
+    parent_category = Category.find_by_id(params[:id])
+    parent_category.has_peripheral = 1
+
+    category = Category.find_by_id(params[:id]).dup
+    category.name = category.name.titleize.strip + " - Peripherals"
+
+    if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+      category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
+    else
+      category.icon = category.icon.chomp('</i>') + 'P</i>'
+    end
+
+    category.is_peripheral = 1
+    category.has_peripheral = 0
+
+    if category.save && parent_category.save
+      redirect_to categories_path, notice: 'Peripheral category successfully created'
+    end
   end
 
   # GET /categories/1/edit
@@ -42,22 +64,27 @@ class CategoriesController < ApplicationController
           @category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i>'
         end
 
-        if @category.save
-          # Create a duplicate category for the peripherals
-          if params[:want_peripheral].to_i == 1
-            category = Category.new(category_params)
+        @category.is_peripheral = 0
+        @category.has_peripheral = 0
 
-            category.name = category.name.titleize.strip + " - Peripherals"
+        # Create a duplicate category for the peripherals
+        if params[:want_peripheral].to_i == 1
+          @category.has_peripheral = 1
 
-            if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
-              category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
-            else
-              category.icon = @category.icon.chomp('</i>') + 'P</i>'
-            end
+          category = Category.new(category_params)
+          category.name = category.name.titleize.strip + " - Peripherals"
 
-            category.save
+          if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+            category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
+          else
+            category.icon = @category.icon.chomp('</i>') + 'P</i>'
           end
+          category.is_peripheral = 1
+          category.has_peripheral = 0
+          category.save
+        end
 
+        if @category.save
           redirect_to categories_path, notice: 'Category was successfully created.'
         end
       else
@@ -76,18 +103,15 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1
   def destroy
     begin @category.destroy
-      redirect_to categories_url, notice: 'Category was successfully deleted.'
-    rescue
+      redirect_to categories_url, notice: 'Category was successfully deleted.' rescue
       items = Item.where('category_id = ?', @category.id)
       if !items.blank?
-        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
-      else
-        UserHomeCategory.where('category_id = ?', @category.id).destroy_all
-        begin @category.destroy
-          redirect_to categories_url, notice: 'Category was successfully deleted.'
-        end
-      end
-    end
+      redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
+    else
+      UserHomeCategory.where('category_id = ?', @category.id).destroy_all
+      begin @category.destroy
+        redirect_to categories_url, notice: 'Category was successfully deleted.'       end
+    end     end
   end
 
   private

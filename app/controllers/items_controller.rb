@@ -136,13 +136,11 @@ class ItemsController < ApplicationController
   end
 
   def set_condition
-    @item = Item.new
+    @item = Item.find_by_id(params[:id])
+
   end
 
   def update_condition
-    puts(params[:id])
-    puts(params[:item][:condition])
-    puts(params[:item][:condition_info])
 
     item = Item.find_by_id(params[:id])
     item.condition = params[:item][:condition]
