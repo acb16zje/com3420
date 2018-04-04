@@ -144,7 +144,6 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log('Start date ajax');
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.disable_start_time);
 
@@ -168,8 +167,6 @@ $(document).ready(function () {
                     },
                     dataType: 'json',
                     success: function (data) {
-                        console.log('End date ajax');
-
                         if (data.max_end_time.length > 0) {
                             endTime.pickatime('picker').set('max', data.max_end_time)
                         } else {
@@ -189,7 +186,39 @@ $(document).ready(function () {
     $('#startTime').change(function () {
         disableEndInput();
         checkTimes();
-        endDate.pickadate('picker').clear();
+
+        if (endDate.val()) {
+            endDate.pickadate('picker').clear();
+        }
+    });
+
+    // Clear the endTime when endDate is changed, for checking peripherals purposes
+    $('#endDate').change(function () {
+        if (endTime.val()) {
+            endTime.pickatime('picker').clear();
+        }
+    });
+
+    // Prevent peripherals selection unless all dates and times are filled
+    $('#endTime').change(function () {
+        disablePeripherals();
+
+        if (endTime.val()) {
+            $.ajax({
+                type: "GET",
+                url: "",
+                data: {
+                    start_date: new Date(startDate.val()),
+                    end_date: new Date(endDate.val()),
+                    start_time: new Date(startDate.val() + ' ' + startTime.val()),
+                    end_time: new Date(endDate.val() + ' ' + endTime.val())
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log('Peripherals ajax');
+                }
+            });
+        }
     });
 
     // Check the time when timepicker is changed
@@ -263,6 +292,29 @@ $(document).ready(function () {
         }
     }
 
+    // Disable peripherals
+    disablePeripherals();
+
+    function disablePeripherals() {
+        // Disable the peripherals unless all dates and times are filled
+        var peripherals = $('#peripherals');
+
+        if (startDate.pickadate('picker') != undefined &&
+            (startDate.pickadate('picker').get() == '' ||
+            startTime.pickatime('picker').get() == '' ||
+            endDate.pickadate('picker').get() == '' ||
+            endTime.pickatime('picker').get() == '')) {
+
+            peripherals.prop('disabled', true);
+        } else {
+            peripherals.prop('disabled', false);
+        }
+
+        if (peripherals.val()) {
+            peripherals.val(null).trigger('change');
+        }
+    }
+
     // Bulma notification
     $(document).on('click', '.notification > button.delete', function () {
         this.parentNode.remove();
@@ -290,7 +342,6 @@ $(document).ready(function () {
         }
     });
 
-
     // Use gon to get ruby variables into JS, for categories filtering
     if (gon.category != null) {
         table.search(gon.category).draw();
@@ -299,8 +350,6 @@ $(document).ready(function () {
     // Select2
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
-
-    $(".selected-peripherals").select2();
 
     // Phone number validation
     var number = document.getElementById("number");
