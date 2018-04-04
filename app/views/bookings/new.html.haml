@@ -161,16 +161,22 @@
                 .field
                   %p.control.is-expanded
                     = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Peripherals
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.select :peripherals, @peripherals.map { |i| [i.name, i.serial] }, {}, {class: 'select2', id: 'peripherals', multiple: ''}
 
             %br
             %br
-              = f.select :peripherals, @peripherals.map { |i| [i.name, i.serial] }, {}, {class: 'selected-peripherals', multiple:'multiple'}
-              .field.is-horizontal
-                .field-label.has-text-left
-                -#Left empty for spacing
-                .field-body
-                  .field.is-grouped.is-grouped-right
-                    .control
-                      = link_to 'Back', @item, class: 'button is-block is-light'
-                    .control
-                      = f.submit 'Confirm booking', class:'button is-link is-block'
+            .field.is-horizontal
+              .field-label.has-text-left
+              -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Back', @item, class: 'button is-block is-light'
+                  .control
+                    = f.submit 'Confirm booking', class:'button is-link is-block'

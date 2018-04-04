@@ -46,7 +46,7 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
+                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
             - if !params[:is_peripheral]
               .field.is-horizontal
                 .field-label.is-normal
