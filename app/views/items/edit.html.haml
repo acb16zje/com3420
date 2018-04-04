@@ -12,6 +12,11 @@
           = simple_form_for(@item) do |f|
             - if params[:is_peripheral]
               %h4.title Peripheral Information
+              %p.control
+                = link_to remove_parent_item_path, method: :remove_parent, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "remove_parent" do
+                  %span.icon
+                    %i.class.fas.fa-trash
+                  %span Remove parent asset
             - else
               %h4.title Asset Information
             - if params[:is_peripheral]

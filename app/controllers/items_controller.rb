@@ -1,3 +1,4 @@
+require 'irb'
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   authorize_resource
@@ -33,8 +34,7 @@ class ItemsController < ApplicationController
   def choose_peripheral
     @i = Item.find_by_id(params[:id])
 
-    @item = Item.new
-    @items = Item.all.where('serial <> ?', @i.serial)
+    @items = Item.all.where('(serial <> ?) AND (parent_asset_serial IS NULL)', @i.serial)
   end
 
   # POST /items/1/add_peripheral
@@ -70,6 +70,18 @@ class ItemsController < ApplicationController
   def edit
     if params[:is_peripheral]
       @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
+    end
+  end
+
+  # POST /items/1/edit
+  def remove_parent
+    @item = Item.find_by_id(params[:id])
+
+    @item.parent_asset_serial = nil
+    if @item.save
+      redirect_to edit_item_path(@item), notice: 'Successfully removed parent asset.'
+    else
+      redirect_to edit_item_path(@item), notice: 'Unable to remove parent asset.'
     end
   end
 
