@@ -30,6 +30,12 @@
             = category.name
           %td
             .field.is-grouped.is-grouped-centered
+              - if !category.is_peripheral && !category.has_peripheral
+                %p.control
+                  = link_to new_peripheral_category_path(:id => category.id), method: :new_peripheral, data: { confirm: 'Are you sure?' }, class: 'button is-primary', id: "new_peripheral_category_#{category.id}" do
+                    %span.icon
+                      %i.class.fas.fa-plus
+                    %span Create Peripheral Category
               %p.control
                 = link_to edit_category_path(category), class: 'button is-link', id: "edit_category_#{category.id}" do
                   %span.icon

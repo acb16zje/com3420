@@ -7,6 +7,7 @@
 #  tag            :string
 #  icon           :string
 #  has_peripheral :boolean
+#  is_peripheral  :boolean
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #

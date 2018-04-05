@@ -2,10 +2,10 @@
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
 
-Category.create(name: 'Cameras', icon: '<i class="fas fa-camera fa-6x"></i>', has_peripheral: 1)
-Category.create(name: 'Cameras - Peripheral', icon: '<i class="fas fa-camera fa-6x">P</i>', has_peripheral: 0)
-Category.create(name: 'Data Logger', icon: '<i class="material-icons">dock</i>', has_peripheral: 0)
-Category.create(name: 'Laptops', icon: '<i class="material-icons">computer</i>', has_peripheral: 0)
+Category.create(name: 'Cameras', icon: '<i class="fas fa-camera fa-6x"></i>', has_peripheral: 1, is_peripheral: 0)
+Category.create(name: 'Cameras - Peripheral', icon: '<i class="fas fa-camera fa-6x">P</i>', has_peripheral: 0, is_peripheral: 1)
+Category.create(name: 'Data Logger', icon: '<i class="material-icons">dock</i>', has_peripheral: 0, is_peripheral: 0)
+Category.create(name: 'Laptops', icon: '<i class="material-icons">computer</i>', has_peripheral: 0, is_peripheral: 0)
 
 User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')

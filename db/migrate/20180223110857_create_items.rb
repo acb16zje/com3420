@@ -15,7 +15,8 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :keywords
       t.string :parent_asset_serial
       t.string :po_number
-
+      t.string :condition_info
+      
       t.timestamps
     end
     add_reference :items, :user, foreign_key: true
