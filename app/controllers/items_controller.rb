@@ -20,32 +20,45 @@ class ItemsController < ApplicationController
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
     @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
 
-    if !@item.parent_asset_serial.nil?
+    if !@item.parent_asset_serial.blank?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
   end
 
   # GET /items/1/add_peripheral_option
   def add_peripheral_option
+
     @item = Item.find_by_id(params[:id])
+
+    if !@item.category.has_peripheral
+      redirect_to '/404'
+    end
   end
 
   # GET /items/1/choose_peripheral
   def choose_peripheral
     @i = Item.find_by_id(params[:id])
 
-    @items = Item.all.where('(serial <> ?) AND (parent_asset_serial IS NULL)', @i.serial)
+    if !@i.category.has_peripheral
+      redirect_to '/404'
+    else
+      @items = Item.all.where("(serial <> ?) AND (parent_asset_serial IS NULL OR parent_asset_serial = '')", @i.serial)
+    end
   end
 
   # POST /items/1/add_peripheral
   def add_peripheral
     @item = Item.find_by_id(params[:id])
 
-    @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
-    @peripheral.parent_asset_serial = @item.serial
-    @peripheral.save
+    if !@item.category.has_peripheral
+      redirect_to '/404'
+    else
+      @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
+      @peripheral.parent_asset_serial = @item.serial
+      @peripheral.save
 
-    redirect_to @item
+      redirect_to @item
+    end
   end
 
   # GET /items/new
@@ -69,19 +82,7 @@ class ItemsController < ApplicationController
   # GET /items/1/edit
   def edit
     if params[:is_peripheral]
-      @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
-    end
-  end
-
-  # POST /items/1/edit
-  def remove_parent
-    @item = Item.find_by_id(params[:id])
-
-    @item.parent_asset_serial = nil
-    if @item.save
-      redirect_to edit_item_path(@item), notice: 'Successfully removed parent asset.'
-    else
-      redirect_to edit_item_path(@item), notice: 'Unable to remove parent asset.'
+      @items = Item.all.where('id <> ?', params[:id])
     end
   end
 
@@ -92,7 +93,7 @@ class ItemsController < ApplicationController
     @item.location = params[:item][:location].titleize
 
     # Getting the category for the attached item
-    if !@item.parent_asset_serial.nil?
+    if !@item.parent_asset_serial.blank?
       parent = Item.where('serial = ?', @item.parent_asset_serial).first
       category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
       @item.category_id = category.id
@@ -106,6 +107,11 @@ class ItemsController < ApplicationController
   def update
     if @item.update(item_params)
       @item.location = params[:item][:location].titleize
+
+      if params[:item][:parent_asset_serial].eql? 'None'
+        @item.parent_asset_serial = nil
+      end
+
       redirect_to @item, notice: 'Asset was successfully updated.'
     end
   end
@@ -151,7 +157,6 @@ class ItemsController < ApplicationController
       redirect_to item, notice: 'We have logged the issue and your item has been returned'
     end
   end
-
 
   private
 

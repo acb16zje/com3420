@@ -16,6 +16,7 @@ gem 'uglifier'
 gem 'coffee-rails'
 
 gem 'jquery-rails'
+gem 'select2-rails'
 gem 'bootstrap-sass'
 gem 'epi_js'
 gem 'gon'

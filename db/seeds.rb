@@ -15,7 +15,7 @@ User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Ch
 
 Item.create(user_id: 1, category_id: '1', condition: 'Like New', name: 'GoPro Hero 5', location: 'Diamond',
     manufacturer: 'GoPro', model: 'Hero 5', serial: 'GPH5', acquisition_date: '2018-02-09', purchase_price: 100.1)
-Item.create(user_id: 1, category_id: '2', condition: 'Like New', name: 'MicroSD Card', location: 'Diamond',
+Item.create(user_id: 2, category_id: '2', condition: 'Like New', name: 'MicroSD Card', location: 'Diamond',
             manufacturer: 'Kingston', model: 'Flash Card', serial: 'SD322', acquisition_date: '2018-03-09', purchase_price: 10.1, parent_asset_serial: 'GPH5')
 Item.create(user_id: 2, category_id: '4', condition: 'Like New', name: 'MacBook Pro 15-inch', location: 'Diamond',
             manufacturer: 'Apple', model: 'MacBookPro14,3', serial: 'MPTR212/A', acquisition_date: '2018-03-22', purchase_price: 2349.00)

@@ -25,7 +25,7 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.parent_asset_serial.nil?
+              - if !@item.parent_asset_serial.blank?
                 %tr
                   %th Parent Item Name
                   %td
@@ -167,7 +167,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.select :peripherals, @peripherals.map { |i| [i.name, i.serial] }, {}, {class: 'select2', id: 'peripherals', multiple: ''}
+                    = f.select :peripherals, [], {}, {class: 'select2', id: 'peripherals', multiple: ''}
 
             %br
             %br

@@ -2,11 +2,12 @@
 //= require bulma.datatables
 //= require bunny
 //= require inputTypeNumberPolyfill
+//= require notifications
 //= require picker
 //= require picker.date
 //= require picker.time
+//= require select2
 //= require zoom
-//= require notifications
 
 $(document).ready(function () {
     // Dropdowns
@@ -68,12 +69,19 @@ $(document).ready(function () {
     startDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
-        min: moment(),
+        // min: moment(),
         max: gon.max_start_date,
         onStart: function () {
-            this.set('select', moment());
             if (gon.initial_disable_dates.length !== 0) {
                 this.set('disable', gon.initial_disable_dates);
+            }
+
+            if (moment().hour() == 23 && moment().minute() >= 50) {
+                this.set('select', moment().add(1, 'd').toDate());
+                this.set('min', moment().add(1, 'd').toDate());
+            } else {
+                this.set('select', moment());
+                this.set('min', moment());
             }
         }
     });
@@ -183,7 +191,7 @@ $(document).ready(function () {
     });
 
     // Prevent endTime smaller than startTime on the same date
-    $('#startTime').change(function () {
+    startTime.change(function () {
         disableEndInput();
         checkTimes();
 
@@ -193,32 +201,15 @@ $(document).ready(function () {
     });
 
     // Clear the endTime when endDate is changed, for checking peripherals purposes
-    $('#endDate').change(function () {
+    endDate.change(function () {
         if (endTime.val()) {
             endTime.pickatime('picker').clear();
         }
     });
 
     // Prevent peripherals selection unless all dates and times are filled
-    $('#endTime').change(function () {
+    endTime.change(function () {
         disablePeripherals();
-
-        if (endTime.val()) {
-            $.ajax({
-                type: "GET",
-                url: "",
-                data: {
-                    start_date: new Date(startDate.val()),
-                    end_date: new Date(endDate.val()),
-                    start_time: new Date(startDate.val() + ' ' + startTime.val()),
-                    end_time: new Date(endDate.val() + ' ' + endTime.val())
-                },
-                dataType: 'json',
-                success: function (data) {
-                    console.log('Peripherals ajax');
-                }
-            });
-        }
     });
 
     // Check the time when timepicker is changed
@@ -301,9 +292,9 @@ $(document).ready(function () {
 
         if (startDate.pickadate('picker') != undefined &&
             (startDate.pickadate('picker').get() == '' ||
-            startTime.pickatime('picker').get() == '' ||
-            endDate.pickadate('picker').get() == '' ||
-            endTime.pickatime('picker').get() == '')) {
+                startTime.pickatime('picker').get() == '' ||
+                endDate.pickadate('picker').get() == '' ||
+                endTime.pickatime('picker').get() == '')) {
 
             peripherals.prop('disabled', true);
         } else {
@@ -350,6 +341,55 @@ $(document).ready(function () {
     // Select2
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
+    // $('#peripherals').select2({
+    //     ajax: {
+    //         type: "GET",
+    //         url: "peripherals",
+    //         data: {
+    //             start_datetime: startDate.val() + ' ' + startTime.val(),
+    //             end_datetime: endDate.trigger('change').val() + ' ' + endTime.trigger('change').val(),
+    //         },
+    //         dataType: 'json',
+    //         processResults: function (data, page) {
+    //             console.log('Peripherals ajax');
+    //             console.log(data);
+    //             console.log(data.name);
+    //             return {
+    //                 results: $.map(data, function (item, i) {
+    //                     return {
+    //                         id: item.id,
+    //                         text: item.name
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //     }
+    // });
+
+    $('#peripherals').change(function() {
+        $.ajax({
+            type: "GET",
+            url: "peripherals",
+            data: {
+                start_datetime: startDate.val() + ' ' + startTime.val(),
+                end_datetime: endDate.val() + ' ' + endTime.val(),
+            },
+            dataType: 'json',
+            success: function (data, page) {
+                console.log('Peripherals ajax');
+                console.log(data);
+                console.log(data.name);
+                return {
+                    results: $.map(data, function (item, i) {
+                        return {
+                            id: item.id,
+                            text: item.name
+                        }
+                    })
+                }
+            }
+        });
+    });
 
     // Phone number validation
     var number = document.getElementById("number");

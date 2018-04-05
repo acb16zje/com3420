@@ -12,11 +12,6 @@
           = simple_form_for(@item) do |f|
             - if params[:is_peripheral]
               %h4.title Peripheral Information
-              %p.control
-                = link_to remove_parent_item_path, method: :remove_parent, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "remove_parent" do
-                  %span.icon
-                    %i.class.fas.fa-trash
-                  %span Remove parent asset
             - else
               %h4.title Asset Information
             - if params[:is_peripheral]
@@ -24,9 +19,9 @@
                 .field-label.is-normal
                   %label.label Parent Asset Serial
                 .field-body
-                  .field
-                    .control
-                      = f.select :parent_asset_serial, Item.all.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, {}, {class: 'select2'}
+                  .field.is-grouped
+                    .control.is-expanded
+                      = f.select :parent_asset_serial, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, @item.parent_asset_serial), {include_blank: 'None'}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral]

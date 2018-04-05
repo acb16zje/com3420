@@ -23,7 +23,7 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.parent_asset_serial.nil?
+              - if !@item.parent_asset_serial.blank?
                 %tr
                   %th Parent Item Name
                   %td
@@ -99,18 +99,11 @@
         .field-body
           - if current_user.permission_id > 1
             .field.is-grouped.is-grouped-left
-              - if @item.parent_asset_serial.nil?
-                .control
-                  = link_to 'Edit', edit_item_path(@item), class: 'button is-link', id: "edit_item_#{@item.id}"
-              - else
-                .control
-                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
+              .control
+                = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
               - if @item.category.has_peripheral
                 .control
-                  = link_to 'Add peripheral', add_peripheral_option_item_path, class: 'button is-link'
-              - else
-                .control
-                  = link_to 'Add peripheral', add_peripheral_option_item_path, class: 'button is-link', disabled:''
+                  = link_to 'Add / Edit Peripherals', add_peripheral_option_item_path, class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'

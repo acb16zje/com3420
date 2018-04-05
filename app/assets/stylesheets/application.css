@@ -5,6 +5,7 @@
   *= require classic.date
   *= require classic.time
   *= require is-awesome
+  *= require select2
 */
 
 /* Hide vertical scrollbar if not needed */

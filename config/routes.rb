@@ -27,9 +27,9 @@ Rails.application.routes.draw do
     resources :bookings do
       get 'start_date', on: :collection
       get 'end_date', on: :collection
+      get 'peripherals', on: :collection
     end
     get 'add_peripheral_option', on: :member
-    post 'remove_parent', on: :member
     get 'choose_peripheral', on: :member
     post 'add_peripheral', on: :member
     get 'manager', on: :collection

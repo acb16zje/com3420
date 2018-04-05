@@ -62,7 +62,7 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    if !@item.parent_asset_serial.nil?
+    if !@item.parent_asset_serial.blank?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
 
@@ -220,7 +220,41 @@ class BookingsController < ApplicationController
     render :json => data
   end
 
+  def peripherals
+    @item = Item.find_by_id(params[:item_id])
+    puts "TEST"
+    puts params[:start_datetime]
+    puts params[:end_datetime]
+    puts "TEST"
+
+    # @peripherals = Item.where(
+    #   "parent_asset_serial = ?", @item.serial)
+    @peripherals = get_allowed_peripherals(params[:start_datetime],params[:end_datetime],params[:item_id])
+
+    puts @peripherals
+
+    respond_to do |format|
+      format.json {
+        render :json => @peripherals
+      }
+    end
+  end
+
   private
+
+  def get_allowed_peripherals(start_datetime,end_datetime,item_id)
+    item = Item.find_by_id(item_id)
+    peripherals = Item.where('parent_asset_serial = ?', item.serial)
+
+    allowed_peripherals = []
+    peripherals.each do |peripheral|
+      if booking_validation(peripheral.id,start_datetime,end_datetime)
+        allowed_peripherals.append(peripheral)
+      end
+    end
+
+    return allowed_peripherals
+  end
 
   def booking_validation(item_id, start_datetime, end_datetime)
     query = Booking.where(
