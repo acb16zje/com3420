@@ -341,30 +341,37 @@ $(document).ready(function () {
     // Select2
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
-    $('#peripherals').change(function() {
-        $.ajax({
-            type: "GET",
-            url: "peripherals",
-            data: {
-                start_datetime: startDate.val() + ' ' + startTime.val(),
-                end_datetime: endDate.val() + ' ' + endTime.val(),
-            },
-            dataType: 'json',
-            success: function (data, page) {
-                console.log('Peripherals ajax');
-                console.log(data);
-                console.log(data.name);
 
-                $('#peripherals').select2({
-                    data: $.map(data, function (item, i) {
-                        return {
-                            id: item.id,
-                            text: item.name
-                        }
+    endTime.change(function() {
+        $('#peripherals').empty();
+    });
+
+    $('#peripherals').change(function() {
+        if (endTime.val()) {
+            $.ajax({
+                type: "GET",
+                url: "peripherals",
+                data: {
+                    start_datetime: startDate.val() + ' ' + startTime.val(),
+                    end_datetime: endDate.val() + ' ' + endTime.val(),
+                },
+                dataType: 'json',
+                success: function (data, page) {
+                    console.log('Peripherals ajax');
+                    console.log(data);
+                    console.log(data.name);
+                    
+                    $('#peripherals').select2({
+                        data: $.map(data, function (item, i) {
+                            return {
+                                id: item.id,
+                                text: item.serial
+                            }
+                        })
                     })
-                })
-            }
-        });
+                }
+            });
+        }
     });
 
     // Phone number validation

@@ -161,13 +161,14 @@
                 .field
                   %p.control.is-expanded
                     = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Peripherals
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.select :peripherals, [], {}, {class: 'select2', id: 'peripherals', multiple: ''}
+            - if @item.has_peripheral
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Peripherals
+                .field-body
+                  .field{style: 'margin: auto'}
+                    .control
+                      = f.select :peripherals, [], {}, {class: 'select2', id: 'peripherals', multiple: ''}
 
             %br
             %br
