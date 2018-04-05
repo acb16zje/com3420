@@ -293,7 +293,9 @@ class BookingsController < ApplicationController
       # Single booking multiple days
       if date_array.length > 1
         # Include the start date if start time is 12:00 AM
-        if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
+        if (start_time.hour.eql? 0) && (start_time.min.eql? 0) ||
+           (DateTime.now.hour > start_time.hour) ||
+           (DateTime.now.hour == start_time.hour && DateTime.now.min > start_time.min)
           date_array = date_array[0..-1]
         else
           date_array = date_array[1..-1]
