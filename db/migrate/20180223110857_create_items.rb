@@ -16,6 +16,7 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :parent_asset_serial
       t.string :po_number
       t.string :condition_info
+      t.boolean :has_peripheral
       
       t.timestamps
     end

@@ -86,7 +86,7 @@ class BookingsController < ApplicationController
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
 
-    if params[:booking][:next_location].nil? || params[:booking][:next_location] == ""
+    if params[:booking][:reason].nil? || params[:booking][:reason] == ""
       @booking.reason = "None"
     end
 
@@ -109,7 +109,7 @@ class BookingsController < ApplicationController
       peripherals_string = ""
       peripherals.each do |peripheral|
         next if peripheral == ""
-        peripherals_string = peripherals_string + "," + peripheral
+        peripherals_string = peripherals_string + "," + Item.find_by_id(peripheral).serial
       end
       @booking.peripherals = peripherals_string[1..-1]
     end
@@ -118,21 +118,19 @@ class BookingsController < ApplicationController
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
     peripherals.each do |peripheral|
       next if peripheral == ""
-      temp_item = Item.where("serial = ?", peripheral).first
-      query = query && booking_validation(temp_item.id, @booking.start_datetime, @booking.end_datetime)
+      query = query && booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
     end
 
     if (query) && @booking.save
       # Making a booking for any peripheral selected
       peripherals.each do |peripheral|
         next if peripheral == ""
-        temp_item = Item.where("serial = ?", peripheral).first
         booking = Booking.new(booking_params)
 
-        if params[:booking][:next_location].nil? || params[:booking][:next_location] == ""
+        if params[:booking][:reason].nil? || params[:booking][:reason] == ""
           booking.reason = "None"
         end
-        booking.item_id = temp_item.id
+        booking.item_id = peripheral
         booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
         booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
         booking.next_location = params[:booking][:next_location].titleize
@@ -222,16 +220,8 @@ class BookingsController < ApplicationController
 
   def peripherals
     @item = Item.find_by_id(params[:item_id])
-    puts "TEST"
-    puts params[:start_datetime]
-    puts params[:end_datetime]
-    puts "TEST"
 
-    # @peripherals = Item.where(
-    #   "parent_asset_serial = ?", @item.serial)
     @peripherals = get_allowed_peripherals(params[:start_datetime],params[:end_datetime],params[:item_id])
-
-    puts @peripherals
 
     respond_to do |format|
       format.json {
@@ -260,12 +250,12 @@ class BookingsController < ApplicationController
     query = Booking.where(
       "(status = 2 OR status = 3)
       AND (item_id = '#{item_id}')
-      AND (start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
+      AND ((start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
       AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
       OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
-      AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP))"
+      AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP)))"
     ).first
-
+    
     return query.nil?
   end
 

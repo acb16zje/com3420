@@ -56,7 +56,8 @@ class ItemsController < ApplicationController
       @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
       @peripheral.parent_asset_serial = @item.serial
       @peripheral.save
-
+      @item.has_peripheral = true
+      @item.save
       redirect_to @item
     end
   end
@@ -96,6 +97,8 @@ class ItemsController < ApplicationController
     if !@item.parent_asset_serial.blank?
       parent = Item.where('serial = ?', @item.parent_asset_serial).first
       category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
+      parent.has_peripheral = true
+      parent.save
       @item.category_id = category.id
     end
     if @item.save
