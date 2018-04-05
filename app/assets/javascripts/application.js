@@ -341,31 +341,6 @@ $(document).ready(function () {
     // Select2
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
-    // $('#peripherals').select2({
-    //     ajax: {
-    //         type: "GET",
-    //         url: "peripherals",
-    //         data: {
-    //             start_datetime: startDate.val() + ' ' + startTime.val(),
-    //             end_datetime: endDate.trigger('change').val() + ' ' + endTime.trigger('change').val(),
-    //         },
-    //         dataType: 'json',
-    //         processResults: function (data, page) {
-    //             console.log('Peripherals ajax');
-    //             console.log(data);
-    //             console.log(data.name);
-    //             return {
-    //                 results: $.map(data, function (item, i) {
-    //                     return {
-    //                         id: item.id,
-    //                         text: item.name
-    //                     }
-    //                 })
-    //             }
-    //         }
-    //     }
-    // });
-
     $('#peripherals').change(function() {
         $.ajax({
             type: "GET",
@@ -379,14 +354,15 @@ $(document).ready(function () {
                 console.log('Peripherals ajax');
                 console.log(data);
                 console.log(data.name);
-                return {
-                    results: $.map(data, function (item, i) {
+
+                $('#peripherals').select2({
+                    data: $.map(data, function (item, i) {
                         return {
                             id: item.id,
                             text: item.name
                         }
                     })
-                }
+                })
             }
         });
     });
