@@ -33,6 +33,9 @@ class Notifications
         else if (notification.action == "started") or (notification.action == "cancelled")
           "<a class='navbar-item'>#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}</a>
           <hr class='navbar-divider>"
+        else if (notification.action == "reported")
+          "<a class='navbar-item'>An issue has been reported with #{notification.notifiable.itemname}</a>
+          <hr class='navbar-divider>"
       else if notification.context == "U"
         if (notification.action == "approved") or (notification.action == "rejected")
           "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has been #{notification.action}</a>
@@ -53,6 +56,9 @@ class Notifications
           <hr class='dropdown-divider>"
         else if (notification.action == "started") or (notification.action == "cancelled")
           "<a class='dropdown-item'>#{notification.notifiable.booker}'s booking for #{notification.notifiable.itemname} has been #{notification.action}</a>
+          <hr class='dropdown-divider>"
+        else if (notification.action == "reported")
+          "<a class='dropdown-item'>An issue has been reported with #{notification.notifiable.itemname}</a>
           <hr class='dropdown-divider>"
       else if notification.context == "U"
         if (notification.action == "approved") or (notification.action == "rejected")

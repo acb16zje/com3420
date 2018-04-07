@@ -161,6 +161,9 @@ class ItemsController < ApplicationController
     item = Item.find_by_id(params[:id])
     item.condition = params[:item][:condition]
     item.condition_info = params[:item][:condition_info]
+    if item.condition == "Missing" or item.condition == "Damaged"
+      Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
+    end
     if item.save
       if item.user_id == current_user.id
         redirect_to manager_items_path(:tab => "All", :user_id => current_user.id)
