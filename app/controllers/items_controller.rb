@@ -11,8 +11,15 @@ class ItemsController < ApplicationController
 
   # GET /items/manager
   def manager
-    @items = Item.where('user_id = ?', params[:user_id])
+    #@items = Item.where('user_id = ?', params[:user_id])
     @manager = User.find_by_id(params[:user_id])
+    if (params[:tab] == "OnLoan")
+      @items = Item.joins(:bookings).where(:bookings => {:status => "3"}).where(:user_id => current_user.id)
+    elsif (params[:tab] == "Issue")
+      @items = Item.joins(:bookings).where(:user_id => current_user.id, :condition => ['Damaged', 'Missing']).or(Item.joins(:bookings).where("bookings.status = ?", 7))
+    else
+      @items = Item.where('user_id = ?', params[:user_id])
+    end
   end
 
   # GET /items/1
@@ -158,6 +165,7 @@ class ItemsController < ApplicationController
       redirect_to item, notice: 'We have logged the issue and your item has been returned'
     end
   end
+
 
   private
 

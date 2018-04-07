@@ -255,7 +255,7 @@ class BookingsController < ApplicationController
       OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
       AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP)))"
     ).first
-    
+
     return query.nil?
   end
 

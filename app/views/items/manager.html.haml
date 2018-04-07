@@ -13,6 +13,7 @@
   - else
     - content_for :title, "#{@manager.givenname} #{@manager.sn}'s Assets"
     %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
+  = render "tabs"
   = form_tag change_manager_multiple_items_path do
     %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
       %thead
