@@ -162,7 +162,13 @@ class ItemsController < ApplicationController
     item.condition = params[:item][:condition]
     item.condition_info = params[:item][:condition_info]
     if item.save
-      redirect_to item, notice: 'We have logged the issue and your item has been returned'
+      if item.user_id == current_user.id
+        redirect_to manager_items_path(:tab => "All", :user_id => current_user.id)
+      elsif item.condition == "Damaged" or item.condition == "Missing"
+        redirect_to item, notice: 'We have logged the issue and your item has been returned'
+      else
+        redirect_to item, notice: 'Thank you. Your item has been returned'
+      end
     end
   end
 
