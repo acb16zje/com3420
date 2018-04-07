@@ -15,12 +15,11 @@
 #  keywords            :string
 #  parent_asset_serial :string
 #  po_number           :string
-#  condition_info      :string
-#  has_peripheral      :boolean
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  user_id             :integer
 #  category_id         :integer
+#  condition_info      :string
 #
 # Indexes
 #
@@ -33,6 +32,7 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (user_id => users.id)
 #
+
 
 class Item < ApplicationRecord
   belongs_to :category

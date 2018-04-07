@@ -7,7 +7,6 @@
 #  tag            :string
 #  icon           :string
 #  has_peripheral :boolean
-#  is_peripheral  :boolean
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
@@ -16,6 +15,7 @@
 #  index_categories_on_name  (name) UNIQUE
 #  index_categories_on_tag   (tag) UNIQUE
 #
+
 
 FactoryBot.define do
   factory :laptop_category, class: 'Category' do
