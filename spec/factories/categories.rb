@@ -20,10 +20,12 @@
 
 FactoryBot.define do
   factory :laptop_category, class: 'Category' do
-    name "Laptops"
+    name 'Lagtops'
+    tag 'LAP'
   end
 
   factory :camera_category, class: 'Category' do
-    name "Cameras"
+    name 'Cameras'
+    tag 'CAM'
   end
 end

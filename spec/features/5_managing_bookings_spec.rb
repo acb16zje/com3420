@@ -1,11 +1,14 @@
 require 'rails_helper'
-require 'spec_helper'
 
 describe 'Managing bookings', js: true do
   before :each do
-    FactoryBot.create :category
-    FactoryBot.create :item
+    FactoryBot.create :laptop_category
+    FactoryBot.create :gopro
     visit '/items/1/bookings/new'
+    #expect(page).to have_content 'Sign in'
+    #click_button 'Sign in'
+    sign_in_using_uid
+    click_button 'Sign in'
     expect(page).to have_content 'Create booking on GoPro Hero 5'
   end
 
