@@ -104,7 +104,7 @@ class BookingsController < ApplicationController
 
     # Changing the peripherals array into a string to be saved
     if peripherals.blank?
-      @booking.peripherals = null
+      @booking.peripherals = nil
     else
       peripherals_string = ""
       peripherals.each do |peripheral|
@@ -116,33 +116,36 @@ class BookingsController < ApplicationController
 
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
-    peripherals.each do |peripheral|
-      next if peripheral == ""
-      query = query && booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
+    unless peripherals.nil?
+      peripherals.each do |peripheral|
+        next if peripheral == ""
+        query = query && booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
+      end
     end
 
     if (query) && @booking.save
       # Making a booking for any peripheral selected
-      peripherals.each do |peripheral|
-        next if peripheral == ""
-        booking = Booking.new(booking_params)
+      unless peripherals.nil?
+        peripherals.each do |peripheral|
+          next if peripheral == ""
+          booking = Booking.new(booking_params)
 
-        if params[:booking][:reason].nil? || params[:booking][:reason] == ""
-          booking.reason = "None"
+          if params[:booking][:reason].nil? || params[:booking][:reason] == ""
+            booking.reason = "None"
+          end
+          booking.item_id = peripheral
+          booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
+          booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+          booking.next_location = params[:booking][:next_location].titleize
+          booking.peripherals = nil
+
+          if item.user_id == current_user.id
+            booking.status = 2
+          else
+            booking.status = 1
+          end
+          booking.save
         end
-        booking.item_id = peripheral
-        booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
-        booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
-        booking.next_location = params[:booking][:next_location].titleize
-        booking.peripherals = nil
-
-        if item.user_id == current_user.id
-          booking.status = 2
-        else
-          booking.status = 1
-        end
-
-        booking.save
       end
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
