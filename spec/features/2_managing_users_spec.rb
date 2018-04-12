@@ -55,67 +55,65 @@ describe 'Managing accounts' do
   end
 
   specify 'I cannot create an account that already exists' do
+    FactoryBot.create :user2
     fill_in 'user_email', with: 'zjeng1@sheffield.ac.uk'
     select('User', from: 'user_permission_id')
     click_button('Create user')
     expect(page).to have_content 'Account already exists.'
-    visit '/users'
-    expect(page).to_not have_content 'notvalid@sheffield.ac.uk User'
   end
 
   specify 'I can view a list of users that exist in the database' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
-    click_button('Create user')
-    expect(page).to have_content 'User was successfully created.'
+    FactoryBot.create :user
+    FactoryBot.create :user2
     visit '/users'
-    expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Admin'
+    expect(page).to have_content 'atchapman1@sheffield.ac.uk Admin'
     expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
   end
 
   specify 'I can view the details of a user' do
+    FactoryBot.create :user
     visit '/users'
-    expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
+    expect(page).to have_content 'atchapman1@sheffield.ac.uk Admin'
     click_link('View')
-    expect(page).to have_content 'acb16zje'
+    expect(page).to have_content 'aca16atc'
     expect(page).to have_content 'COM'
   end
 
   specify 'I can edit my profile details' do
+    FactoryBot.create :user
     visit '/users'
-    expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
+    expect(page).to have_content 'atchapman1@sheffield.ac.uk Admin'
     click_link('View')
-    expect(page).to have_content 'acb16zje'
-    expect(page).to_not have_content '7874304130'
+    expect(page).to have_content 'aca16atc'
+    expect(page).to_not have_content '07578737404'
     expect(page).to have_content 'COM'
     expect(page).to have_content 'Edit Details'
     click_link('Edit Details')
     expect(page).to have_content 'Edit My Details'
-    fill_in 'number', with: '7874304130'
+    fill_in 'number', with: '07578737404'
     click_button('Save changes')
     expect(page).to have_content 'User was successfully updated'
-    expect(page).to have_content '7874304130'
+    expect(page).to have_content '07578737404'
   end
 
   specify 'I can delete a different user' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
-    click_button('Create user')
-    expect(page).to have_content 'User was successfully created.'
-    click_link('Users')
-    expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Admin'
+    FactoryBot.create :user
+    FactoryBot.create :user2
+    visit '/users'
+    expect(page).to have_content 'atchapman1@sheffield.ac.uk Admin'
     expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
-    click_link('view_user_2')
-    expect(page).to have_content 'aca16wkk'
-    expect(page).to have_content 'COM'
+    click_link('view_user_acb16zje')
+    expect(page).to have_content 'acb16zje'
     click_link('Edit Details')
     expect(page).to have_content 'Delete'
     click_link('Delete')
     expect(page).to have_content 'User was successfully deleted.'
-    expect(page).to_not have_content 'wkkhaw1@sheffield.ac.uk Admin'
+    expect(page).to_not have_content 'zjeng1@sheffield.ac.uk Admin'
   end
 
   specify 'I cannot delete my own account' do
+    FactoryBot.create :user
+
     click_link 'Users'
     expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
     click_link('view_user_1')
@@ -126,6 +124,8 @@ describe 'Managing accounts' do
   end
 
   specify 'I can view the list of asset managers' do
+    FactoryBot.create :user2
+
     click_link 'Asset Managers'
     expect(page).to have_content 'zjeng1@sheffield.ac.uk'
   end
