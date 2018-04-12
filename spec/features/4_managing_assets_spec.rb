@@ -43,8 +43,8 @@ describe 'Managing assets' do
     expect(page).to have_content 'Book or Reserve'
   end
 
-  specify 'I can edit an asset' do
-    FactoryBot.create :laptop_item
+  specify 'I can edit an asset that belongs to me' do
+    FactoryBot.create(:laptop_item, :item_belongs_to_existing_user)
 
     visit '/items'
 
