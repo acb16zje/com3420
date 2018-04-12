@@ -77,7 +77,10 @@ describe 'Managing assets' do
     visit '/items/manager?user_id=2'
     expect(page).to_not have_css("#edit-button-1")
     expect(page).to_not have_content 'Set Condition'
-
+    visit '/items'
+    expect(page).to have_content 'Macbook Pro 13-inch'
+    click_link('Macbook Pro 13-inch')
+    expect(page).to_not have_css("#edit_item_1")
   end
 
   specify 'I can delete an asset' do
