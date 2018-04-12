@@ -3,12 +3,13 @@ require 'spec_helper'
 
 describe 'Managing assets' do
   before :each do
-    FactoryBot.create :category
-    visit '/items/new'
-    expect(page).to have_content 'Create asset'
+
   end
 
   specify 'I can create asset with complete details' do
+    FactoryBot.create :laptop_category
+    visit '/items/new'
+    expect(page).to have_content 'Create asset'
     fill_in 'item_name', with: 'Macbook Pro 15-inch'
     select('Laptops', from: 'item_category_id')
     fill_in 'item_location', with: 'western bank library'
@@ -28,6 +29,9 @@ describe 'Managing assets' do
   end
 
   specify 'I can create an asset with incomplete details' do
+    FactoryBot.create :laptop_category
+    visit '/items/new'
+    expect(page).to have_content 'Create asset'
     fill_in 'item_name', with: 'Macbook Pro 13-inch'
     select('Laptops', from: 'item_category_id')
     fill_in 'item_location', with: 'Western Bank Library'
@@ -40,25 +44,32 @@ describe 'Managing assets' do
   end
 
   specify 'I can edit an asset' do
-    fill_in 'item_name', with: 'Macbook Pro 13-inch'
-    select('Laptops', from: 'item_category_id')
-    fill_in 'item_location', with: 'western bank library'
-    click_button('Create asset')
+    FactoryBot.create :laptop_item
+
     visit '/items'
+
     expect(page).to have_content 'Macbook Pro 13-inch'
     click_link('Macbook Pro 13-inch')
+
     expect(page).to_not have_content 'Apple'
     expect(page).to have_content 'Edit'
+
     click_link('Edit')
+
     expect(page).to have_content 'Editing Macbook Pro 13-inch'
+
     fill_in 'item_manufacturer', with: 'Apple'
     click_button 'Save changes'
+
     expect(page).to have_content 'Asset was successfully updated'
     expect(page).to have_content 'Manufacturer Apple'
     expect(page).to have_content 'Western Bank Library'
   end
 
   specify 'I can delete an asset' do
+    FactoryBot.create :laptop_category
+    visit '/items/new'
+    expect(page).to have_content 'Create asset'
     fill_in 'item_name', with: 'Macbook Pro 13-inch'
     select('Laptops', from: 'item_category_id')
     fill_in 'item_location', with: 'Western Bank Library'
@@ -76,6 +87,9 @@ describe 'Managing assets' do
   end
 
   specify 'I can view the list of my assets' do
+    FactoryBot.create :laptop_category
+    visit '/items/new'
+    expect(page).to have_content 'Create asset'
     fill_in 'item_name', with: 'Macbook Pro 15-inch'
     select('Laptops', from: 'item_category_id')
     fill_in 'item_location', with: 'western bank library'
@@ -98,6 +112,9 @@ describe 'Managing assets' do
   end
 
   specify 'I can transfer the ownership of my asset' do
+    FactoryBot.create :laptop_category
+    visit '/items/new'
+    expect(page).to have_content 'Create asset'
     fill_in 'item_name', with: 'Macbook Pro 15-inch'
     select('Laptops', from: 'item_category_id')
     fill_in 'item_location', with: 'western bank library'

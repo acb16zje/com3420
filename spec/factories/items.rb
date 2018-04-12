@@ -48,4 +48,17 @@ FactoryBot.define do
     acquisition_date '2018-03-09'
     purchase_price 100.1
   end
+
+  factory :laptop_item, class: 'Item' do
+    association :user, factory: :user2
+    association :category, factory: :laptop_category
+    condition 'Like New'
+    name'Macbook Pro 13-inch'
+    location 'Western Bank Library'
+    manufacturer 'Microsoft'
+    model 'Macbook'
+    serial 'GPH5'
+    acquisition_date '2018-03-09'
+    purchase_price 100.1
+  end
 end

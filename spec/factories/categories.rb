@@ -20,7 +20,7 @@
 
 FactoryBot.define do
   factory :laptop_category, class: 'Category' do
-    name 'Lagtops'
+    name 'Laptops'
     tag 'LAP'
   end
 

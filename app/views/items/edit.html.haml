@@ -5,7 +5,7 @@
     .container.has-text-centered
       .column.is-10.is-offset-1
         - if params[:is_peripheral]
-          %h3.title
+          %h3.title Editing #{@item.name}
         - else
           %h3.title Editing #{@item.name}
         .box
