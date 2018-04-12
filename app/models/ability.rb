@@ -41,7 +41,8 @@ class Ability
 
     # Asset Manager
     if user.permission_id == 2
-      can :manage, Item
+      can [:edit, :update], Item, user_id: user.id
+      can [:show, :read, :create], Item
       can :manage, Booking
       can :manage, Category
       can [:show, :edit, :update, :manager], User, id: user.id
@@ -50,6 +51,7 @@ class Ability
     # User
     if user.permission_id == 1
       can :read, Item
+      can :show, Item
       can [:read, :new, :create, :edit, :update, :set_booking_cancelled, :set_booking_returned], Booking, id: user.id
       can [:show, :edit, :update, :manager], User, id: user.id
       can :filter, Category
