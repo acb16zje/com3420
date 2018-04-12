@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'Managing bookings', js: true do
 
   specify 'I can create a booking without time conflict' do
-    FactoryBot.create :gopro
+    FactoryBot.create(:gopro, :)
     visit '/items/1/bookings/new'
     expect(page).to have_content 'Create booking on GoPro Hero 5'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
@@ -28,10 +28,12 @@ describe 'Managing bookings', js: true do
   specify "I cannot see bookings made for other users" do
     FactoryBot.create(:booking_today_all_day)
     visit '/bookings'
-
     expect(page).to have_css("#bookings ", :text => "No data ")
-
-
   end
 
+  specify "I can see bookings made by me" do
+    FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
+    visit '/bookings'
+    expect(page).to have_css("#bookings ", :text => "No data ")
+  end
 end

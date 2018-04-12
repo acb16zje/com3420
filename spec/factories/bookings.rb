@@ -44,8 +44,20 @@ FactoryBot.define do
     next_location "Diamond"
     status "None"
     peripherals ""
+
     association :user, factory: :user
     association :item, factory: :gopro
+
+    trait :booking_belongs_to_existing_user do
+      user {User.find(1)}
+    end
+
+    trait :booking_and_item_belongs_to_same_user do
+      user {User.find(1)}
+      association :item, factory: :gopro do
+        item_belongs_to_existing_user
+      end
+    end
   end
 
 end

@@ -47,6 +47,11 @@ FactoryBot.define do
     serial 'GPH5'
     acquisition_date '2018-03-09'
     purchase_price 100.1
+
+    trait :item_belongs_to_existing_user do
+      user {User.find(1)}
+    end
+
   end
 
   factory :laptop_item, class: 'Item' do
@@ -60,5 +65,10 @@ FactoryBot.define do
     serial 'GPH5'
     acquisition_date '2018-03-09'
     purchase_price 100.1
+
+    trait :item_belongs_to_existing_user do
+      user {User.find(1)}
+    end
+
   end
 end
