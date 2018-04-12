@@ -27,7 +27,7 @@
         %th Action
     %tbody
       - @bookings.each do |booking|
-        %tr
+        %tr{"data-row-id" => "#{booking.id}"}
           %td.has-text-centered= booking.id
           %td.has-text-centered= link_to booking.item.name, booking.item
           %td.has-text-centered= booking.start_date
