@@ -37,8 +37,8 @@
 
 FactoryBot.define do
   factory :gopro, class: 'Item' do
-    user_id 1
-    category_id '1'
+    association :user, factory: :user2
+    association :category, factory: :camera_category
     condition 'Like New'
     name'GoPro Hero 5'
     location 'Diamond'

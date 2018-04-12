@@ -29,6 +29,15 @@
 
 FactoryBot.define do
   factory :user, class: 'User' do
+    sequence(:email) {|n| "atchapman1{n}@sheffield.ac.uk"}
+    givenname 'Alex'
+    sn 'Chapman'
+    permission_id 3
+    username 'aca16atc'
+    phone ''
+  end
+
+  factory :user2, class: 'User' do
     email 'zjeng1@sheffield.ac.uk'
     givenname 'Zer Jun'
     sn 'Eng'

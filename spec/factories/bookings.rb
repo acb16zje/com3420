@@ -30,9 +30,22 @@
 #
 
 FactoryBot.define do
-  factory :booking do
-    # start_date "2018-02-28 16:47:37"
-    # end_date "2018-02-28 16:47:37"
-    # reason "MyString"
+
+  factory :booking_today_all_day, class: "Booking" do
+    start_date {DateTime.now.strftime("%d %B %Y")}
+    start_time {DateTime.now.strftime("%H:%M")}
+    start_datetime {DateTime.now}
+
+    end_date {DateTime.now.strftime("%d %B %Y")}
+    end_time {DateTime.now.change({hour:23, min: 50, sec:0}).strftime("%H:%M")}
+    end_datetime {DateTime.now.change({hour:23, min: 50, sec:0})}
+
+    reason "Reason 1"
+    next_location "Diamond"
+    status "None"
+    peripherals ""
+    association :user, factory: :user
+    association :item, factory: :gopro
   end
+
 end
