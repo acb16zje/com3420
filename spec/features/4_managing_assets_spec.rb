@@ -66,6 +66,20 @@ describe 'Managing assets' do
     expect(page).to have_content 'Western Bank Library'
   end
 
+  specify 'My assets does not show assets that do not belong to me' do
+    FactoryBot.create(:laptop_item)
+    visit '/items/manager?user_id=1'
+    expect(page).to_not have_content 'Macbook Pro 13-inch'
+  end
+
+  specify 'I cannot edit an asset that does not belong to me' do
+    FactoryBot.create(:laptop_item)
+    visit '/items/manager?user_id=2'
+    expect(page).to_not have_css("#edit-button-1")
+    expect(page).to_not have_content 'Set Condition'
+
+  end
+
   specify 'I can delete an asset' do
     FactoryBot.create :laptop_category
     visit '/items/new'

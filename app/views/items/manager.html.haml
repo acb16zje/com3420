@@ -60,7 +60,7 @@
             - if current_user.id == @manager.id
               %td
                 %p.control
-                  = link_to set_condition_item_path(item.id), method: :get, class: 'button is-link' do
+                  = link_to set_condition_item_path(item.id), method: :get, class: 'button is-link edit', id: "edit-button-#{item.id}" do
                     %span.icon
                       %i.class.fas.fa-wrench
                     %span Set Condition
