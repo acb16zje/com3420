@@ -3,14 +3,10 @@ require 'spec_helper'
 
 describe 'Managing bookings', js: true do
 
-  before :each do
-    FactoryBot.create :camera_category
+  specify 'I can create a booking without time conflict' do
     FactoryBot.create :gopro
     visit '/items/1/bookings/new'
     expect(page).to have_content 'Create booking on GoPro Hero 5'
-  end
-
-  specify 'I can create a booking without time conflict' do
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
     test_booking_date_end = test_booking_date_start + 1.days
     page.execute_script("$('#startDate').val('#{test_booking_date_start.strftime("%d %B %Y")}')")
@@ -28,4 +24,14 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Filming documentary'
     expect(page).to have_content 'Accepted'
   end
+
+  specify "I cannot see bookings made for other users" do
+    FactoryBot.create(:booking_today_all_day)
+    visit '/bookings'
+
+    expect(page).to have_css("#bookings ", :text => "No data ")
+
+
+  end
+
 end
