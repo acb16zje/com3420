@@ -98,12 +98,13 @@
       .field.is-horizontal
         .field-body
           - if current_user.permission_id > 1
-            .field.is-grouped.is-grouped-left
-              .control
-                = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
-              - if @item.category.has_peripheral
+            - if current_user == @item.user
+              .field.is-grouped.is-grouped-left
                 .control
-                  = link_to 'Add / Edit Peripherals', add_peripheral_option_item_path, class: 'button is-link'
+                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
+                - if @item.category.has_peripheral
+                  .control
+                    = link_to 'Add / Edit Peripherals', add_peripheral_option_item_path, class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'
