@@ -19,7 +19,7 @@ class UserMailer < ApplicationMailer
     @item = booking.item
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: @user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been approved"
+    mail to: @user.email, subject: "AMRC - Booking Confirmed: #{@item.name}"
   end
 
   def booking_ongoing (booking)
@@ -28,7 +28,7 @@ class UserMailer < ApplicationMailer
     @item = booking.item
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: @user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has started"
+    mail to: @user.email, subject: "AMRC - Booking Started: #{@item.name}"
   end
 
   def user_booking_requested (booking)
@@ -37,7 +37,7 @@ class UserMailer < ApplicationMailer
     @item = booking.item
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: @user.email, subject: "Booking request for asset: " + @item.name + ", " + @item.serial + " is being processed"
+    mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
   end
 
   def manager_booking_requested (booking)
@@ -47,7 +47,7 @@ class UserMailer < ApplicationMailer
     @manager = @item.user
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: @manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been requested for booking."
+    mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
   end
 
   def manager_asset_returned (user, item, manager)
@@ -55,7 +55,7 @@ class UserMailer < ApplicationMailer
     @item = item
     @manager = manager
 
-    mail to: manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been returned."
+    mail to: manager.email, subject: "AMRC - Item Returned: #{@item.name}"
   end
 
   def manager_booking_cancelled (user, item, manager, booking)
@@ -64,14 +64,14 @@ class UserMailer < ApplicationMailer
     @manager = manager
     @booking = booking
 
-    mail to: manager.email, subject: "Booking ID: " + @booking.id + " for asset:" + @item.name + ", " + @item.serial + " has been cancelled."
+    mail to: manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
   end
 
   def booking_rejected (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been rejected."
+    mail to: user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
   end
 
   def asset_due (booking, user, item)
