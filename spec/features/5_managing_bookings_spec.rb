@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing bookings', js: true do
-
   specify 'I can create a booking without time conflict' do
     FactoryBot.create(:gopro)
     visit '/items/1/bookings/new'
@@ -28,7 +27,7 @@ describe 'Managing bookings', js: true do
   specify "I cannot see bookings made for other users" do
     FactoryBot.create(:booking_today_all_day)
     visit '/bookings'
-    expect(page).to have_css("#bookings", :text => "No data ")
+    expect(page).to have_css("#bookings", :text => "No data")
   end
 
   specify "I can see bookings made by me" do

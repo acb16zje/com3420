@@ -103,15 +103,18 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1
   def destroy
     begin @category.destroy
-      redirect_to categories_url, notice: 'Category was successfully deleted.' rescue
+      redirect_to categories_url, notice: 'Category was successfully deleted.'
+    rescue
       items = Item.where('category_id = ?', @category.id)
-      if !items.blank?
-      redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
-    else
-      UserHomeCategory.where('category_id = ?', @category.id).destroy_all
-      begin @category.destroy
-        redirect_to categories_url, notice: 'Category was successfully deleted.'       end
-    end     end
+      if items.blank?
+        UserHomeCategory.where('category_id = ?', @category.id).destroy_all
+        begin @category.destroy
+          redirect_to categories_url, notice: 'Category was successfully deleted.'
+        end
+      else
+        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
+      end
+    end
   end
 
   private

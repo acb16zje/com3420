@@ -2,10 +2,6 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing assets' do
-  before :each do
-
-  end
-
   specify 'I can create asset with complete details' do
     FactoryBot.create :laptop_category
     visit '/items/new'
@@ -67,13 +63,14 @@ describe 'Managing assets' do
   end
 
   specify 'My assets does not show assets that do not belong to me' do
-    FactoryBot.create(:laptop_item)
-    visit '/items/manager?user_id=1'
+    FactoryBot.create :erica
+    FactoryBot.create :laptop_item
+    visit '/items/manager?user_id=2'
     expect(page).to_not have_content 'Macbook Pro 13-inch'
   end
 
   specify 'I cannot edit an asset that does not belong to me' do
-    FactoryBot.create(:laptop_item)
+    FactoryBot.create :laptop_erica
     visit '/items/manager?user_id=2'
     expect(page).to_not have_css("#edit-button-1")
     expect(page).to_not have_content 'Set Condition'

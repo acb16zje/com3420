@@ -37,8 +37,6 @@
 
 FactoryBot.define do
   factory :gopro, class: 'Item' do
-    association :user, factory: :user2
-    association :category, factory: :camera_category
     condition 'Like New'
     name'GoPro Hero 5'
     location 'Diamond'
@@ -47,6 +45,12 @@ FactoryBot.define do
     serial 'GPH5'
     acquisition_date '2018-03-09'
     purchase_price 100.1
+    user_id {User.find(1).id}
+    if Category.find_by_id(1) == []
+      association :category, factory: :camera_category
+    else
+      category_id {Category.find_by_id(1).id}
+    end
 
     trait :item_belongs_to_existing_user do
       user {User.find(1)}
@@ -55,20 +59,37 @@ FactoryBot.define do
   end
 
   factory :laptop_item, class: 'Item' do
-    association :user, factory: :user2
-    association :category, factory: :laptop_category
     condition 'Like New'
-    name'Macbook Pro 13-inch'
+    name 'Macbook Pro 13-inch'
     location 'Western Bank Library'
     manufacturer 'Microsoft'
     model 'Macbook'
     serial 'GPH5'
     acquisition_date '2018-03-09'
     purchase_price 100.1
+    user_id {User.find(1).id}
+    if Category.find_by_id(1) == []
+      association :category, factory: :laptop_category
+    else
+      category_id {Category.find_by_id(1).id}
+    end
 
     trait :item_belongs_to_existing_user do
       user {User.find(1)}
     end
 
+  end
+
+  factory :laptop_erica, class: 'Item' do
+    condition 'Like New'
+    name 'Macbook Pro 13-inch'
+    location 'Western Bank Library'
+    manufacturer 'Microsoft'
+    model 'Macbook'
+    serial 'GPH5'
+    acquisition_date '2018-03-09'
+    purchase_price 100.1
+    association :user, factory: :erica
+    association :category, factory: :laptop_category
   end
 end

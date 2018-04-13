@@ -74,14 +74,6 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :truncation
   end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.append_after(:each) do
-    DatabaseCleaner.clean
-  end
-
   # Automatic login
   config.before(:each) do
     DatabaseCleaner.start
@@ -92,14 +84,11 @@ RSpec.configure do |config|
     expect(page).to have_content 'Sign in'
     sign_in_using_uid
     click_button 'Sign in'
+    ActionMailer::Base.deliveries.clear
   end
 
   config.append_after(:each) do
     DatabaseCleaner.clean
-  end
-
-  config.before(:each) do
-    ActionMailer::Base.deliveries.clear
   end
 
   # The different available types are documented in the features, such as in
