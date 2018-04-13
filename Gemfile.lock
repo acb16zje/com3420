@@ -150,6 +150,8 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
+    css_parser (1.6.0)
+      addressable
     daemons (1.2.6)
     database_cleaner (1.6.2)
     delayed-plugins-airbrake (1.1.0)
@@ -216,6 +218,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
+    htmlentities (4.3.4)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -262,6 +265,13 @@ GEM
       websocket-driver (>= 0.2.0)
     polyamorous (1.3.3)
       activerecord (>= 3.0)
+    premailer (1.11.1)
+      addressable
+      css_parser (>= 1.6.0)
+      htmlentities (>= 4.0.0)
+    premailer-rails (1.10.2)
+      actionmailer (>= 3, < 6)
+      premailer (~> 1.7, >= 1.7.9)
     public_suffix (3.0.2)
     rack (2.0.4)
     rack-test (0.8.3)
@@ -446,6 +456,7 @@ DEPENDENCIES
   pg
   poltergeist
   polyamorous (~> 1.3.1)
+  premailer-rails
   rails (= 5.1.4)
   ransack (~> 1.8.0)
   responders

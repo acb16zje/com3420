@@ -7,41 +7,47 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Welcome to AMRC online resource booking system"
   end
 
-  def booking_approved (user, item)
+  def templateexample (user)
     @user = user
-    @item = item
-
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been approved"
+    puts "here"
+    mail to: user.email, subject: "Test Mail"
   end
 
-  def booking_ongoing (user, item)
-    @user = user
-    @item = item
-
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has started"
-  end
-
-  def booking_late (user, item)
-    @user = user
-    @item = item
-
-    mail to: user.email, subject: "Asset: " + @item.name + ", " + @item.serial + " is due to be returned."
-  end
-
-  def user_booking_requested (user, item)
-    @user = user
-    @item = item
-
-    mail to: user.email, subject: "Booking request for asset: " + @item.name + ", " + @item.serial + " is being processed"
-  end
-
-  def manager_booking_requested (user, item, manager, booking)
-    @user = user
-    @item = item
-    @manager = manager
+  def booking_approved (booking)
     @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been requested for booking."
+    mail to: @user.email, subject: "AMRC - Booking Confirmed: #{@item.name}"
+  end
+
+  def booking_ongoing (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+
+    mail to: @user.email, subject: "AMRC - Booking Started: #{@item.name}"
+  end
+
+  def user_booking_requested (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+
+    mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
+  end
+
+  def manager_booking_requested (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    @manager = @item.user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+
+    mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
   end
 
   def manager_asset_returned (user, item, manager)
@@ -49,7 +55,7 @@ class UserMailer < ApplicationMailer
     @item = item
     @manager = manager
 
-    mail to: manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been returned."
+    mail to: manager.email, subject: "AMRC - Item Returned: #{@item.name}"
   end
 
   def manager_booking_cancelled (user, item, manager, booking)
@@ -58,22 +64,23 @@ class UserMailer < ApplicationMailer
     @manager = manager
     @booking = booking
 
-    mail to: manager.email, subject: "Booking ID: " + @booking.id + " for asset:" + @item.name + ", " + @item.serial + " has been cancelled."
+    mail to: manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
   end
 
   def booking_rejected (user, item)
     @user = user
     @item = item
 
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been rejected."
+    mail to: user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
   end
 
   def asset_due (booking, user, item)
     @booking = booking
     @user = user
     @item = item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Item " + @item.name + "is due return today"
+    mail to: user.email, subject: "AMRC - Return Due Soon: #{@item.name}"
   end
 
 
@@ -81,8 +88,9 @@ class UserMailer < ApplicationMailer
     @booking = booking
     @user = user
     @item = item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Item " + @item.name + "has been due return"
+    mail to: user.email, subject: "AMRC - Late For Return: #{@item.name}"
   end
 
 end

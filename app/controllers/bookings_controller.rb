@@ -33,7 +33,7 @@ class BookingsController < ApplicationController
     to_update.each do |b|
       Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
       Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
-      UserMailer.booking_ongoing(User.find(b.user_id), Item.find(b.item_id)).deliver
+      UserMailer.booking_ongoing(b).deliver
       b.status = 3
       b.save
     end
@@ -95,8 +95,8 @@ class BookingsController < ApplicationController
       @booking.status = 2
     else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
-      UserMailer.user_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
-      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
+      UserMailer.user_booking_requested(@booking).deliver
+      UserMailer.manager_booking_requested(@booking.).deliver
       @booking.status = 1
     end
 
@@ -158,7 +158,7 @@ class BookingsController < ApplicationController
     if @booking.update(booking_params)
       if @booking.status == 2
         Notification.create(recipient: @booking.user, action: "approved", notifiable: @booking, context: "U")
-        UserMailer.booking_approved(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+        UserMailer.booking_approved(@booking).deliver
       elsif @booking.status == 5
         Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking, context: "U")
         UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver

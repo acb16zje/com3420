@@ -46,6 +46,7 @@ gem 'carrierwave'
 gem 'multi_json', '~> 1.13', '>= 1.13.1'
 gem 'jbuilder', '~> 2.7'
 
+gem 'premailer-rails'
 group :development, :test do
   gem 'rspec-rails'
   gem 'byebug'
