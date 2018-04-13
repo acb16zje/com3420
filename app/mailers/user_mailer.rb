@@ -13,32 +13,31 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Test Mail"
   end
 
-  def booking_approved (user, item)
-    @user = user
-    @item = item
+  def booking_approved (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been approved"
+    mail to: @user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has been approved"
   end
 
-  def booking_ongoing (user, item)
-    @user = user
-    @item = item
+  def booking_ongoing (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has started"
+    mail to: @user.email, subject: "Booking for asset: " + @item.name + ", " + @item.serial + " has started"
   end
 
-  def booking_late (user, item)
-    @user = user
-    @item = item
+  def user_booking_requested (booking)
+    @booking = booking
+    @user = booking.user
+    @item = booking.item
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Asset: " + @item.name + ", " + @item.serial + " is due to be returned."
-  end
-
-  def user_booking_requested (user, item)
-    @user = user
-    @item = item
-
-    mail to: user.email, subject: "Booking request for asset: " + @item.name + ", " + @item.serial + " is being processed"
+    mail to: @user.email, subject: "Booking request for asset: " + @item.name + ", " + @item.serial + " is being processed"
   end
 
   def manager_booking_requested (user, item, manager, booking)
@@ -80,7 +79,7 @@ class UserMailer < ApplicationMailer
     @item = item
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "AMRC - Return Due Soon: #{@item.name}" 
+    mail to: user.email, subject: "AMRC - Return Due Soon: #{@item.name}"
   end
 
 
