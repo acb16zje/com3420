@@ -96,7 +96,7 @@ class BookingsController < ApplicationController
     else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
       UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id), @booking).deliver
+      UserMailer.manager_booking_requested(@booking.).deliver
       @booking.status = 1
     end
 

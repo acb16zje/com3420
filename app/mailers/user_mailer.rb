@@ -40,13 +40,14 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "Booking request for asset: " + @item.name + ", " + @item.serial + " is being processed"
   end
 
-  def manager_booking_requested (user, item, manager, booking)
-    @user = user
-    @item = item
-    @manager = manager
+  def manager_booking_requested (booking)
     @booking = booking
+    @user = booking.user
+    @item = booking.item
+    @manager = @item.user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been requested for booking."
+    mail to: @manager.email, subject: "Asset: " + @item.name + ", " + @item.serial + " has been requested for booking."
   end
 
   def manager_asset_returned (user, item, manager)

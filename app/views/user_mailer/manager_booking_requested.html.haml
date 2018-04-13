@@ -1,19 +1,45 @@
-%p
-  Dear #{@manager.givenname},
-%p
-  The item : #{@item.name}, #{@item.serial} has been requested for booking by the user : #{@user.givenname}, for the duration:
-
-  %br
-  Start Date : #{@booking.start_date}, Start Time: #{@booking.start_time}
-  %br
-  End Date : #{@booking.end_date}, End Time: #{@booking.end_time}
-  %br
-
-  Please respond to the following request.
-  Click #{link_to 'here', requests_bookings_url} to view it.
-%p
-  Regards,
-  %br/
-  AMRC
-%p
-  N.B. This is an auto-generated email
+!!!
+%html
+  %head
+    %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    =stylesheet_link_tag :email
+  %body
+    .mail-outer-box
+      .mail-transparent-box
+        .mail-logo
+          = image_tag(attachments['amrc_main.svg'].url)
+        .mail-user-name
+          #{@user.givenname} #{@user.sn}
+      .inner-box
+        %h1.email-header-text
+          Booking Request
+        %h2.email-subheading-text
+          #{@user.givenname} #{@user.sn} has requested #{@item.name}. You can view more details for this booking below.
+        %br
+        %hr
+        %h2
+          Items Requested
+        %table.email-table{:cellspacing => "0", :width => "100%"}
+          %thead
+            %tr
+              %th ID
+              %th Asset
+              %th Start Date
+              %th Start Time
+              %th End Date
+              %th End Time
+              %th Location
+              %th Reason
+            %tbody
+              %td.has-text-centered= @booking.id
+              %td.has-text-centered= link_to @booking.item.name, @booking.item
+              %td.has-text-centered= @booking.start_date
+              %td.has-text-centered= @booking.start_time.strftime("%I:%M %p")
+              %td.has-text-centered= @booking.end_date
+              %td.has-text-centered= @booking.end_time.strftime("%I:%M %p")
+              %td.has-text-centered= @booking.next_location
+              %td.has-text-centered= @booking.reason
+        %br
+        %hr
+        %h2
+          Click #{link_to 'Here', bookings_url} to view the request in full.

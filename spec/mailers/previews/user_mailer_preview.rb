@@ -34,4 +34,8 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.user_booking_requested(b)
   end
 
+  def manager_booking_requested
+    b = Booking.first
+    UserMailer.manager_booking_requested(b)
+  end
 end
