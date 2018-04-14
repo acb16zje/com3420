@@ -49,4 +49,9 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.manager_booking_cancelled(b)
   end
 
+  def booking_rejected
+    b = Booking.first
+    UserMailer.booking_rejected(b)
+  end
+
 end

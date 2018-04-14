@@ -1,12 +1,45 @@
-%p
-  Dear #{@user.givenname},
-%p
-  Your booking request for asset: #{@item.serial}, #{@item.name} has been rejected.
-  %br/
-  Please contact asset manager or AMRC for further details.
-%p
-  Regards,
-  %br/
-  AMRC
-%p
-  N.B. This is an auto-generated email
+!!!
+%html
+  %head
+    %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+    =stylesheet_link_tag :email
+  %body
+    .mail-outer-box
+      .mail-transparent-box
+        .mail-logo
+          = image_tag(attachments['amrc_main.svg'].url)
+        .mail-user-name
+          #{@user.givenname} #{@user.sn}
+      .inner-box
+        %h1.email-header-text
+          Your Booking Has Been Rejected
+        %h2.email-subheading-text
+          Your Booking for #{@item.name} has been rejected. For more information please contact #{@manager.givenname} #{@manager.sn} at: #{@manager.email}
+        %br
+        %hr
+        %h2
+          Rejected Items and Peripherals
+        %table.email-table{:cellspacing => "0", :width => "100%"}
+          %thead
+            %tr
+              %th ID
+              %th Asset
+              %th Start Date
+              %th Start Time
+              %th End Date
+              %th End Time
+              %th Location
+              %th Reason
+            %tbody
+              %td.has-text-centered= @booking.id
+              %td.has-text-centered= link_to @booking.item.name, @booking.item
+              %td.has-text-centered= @booking.start_date
+              %td.has-text-centered= @booking.start_time.strftime("%I:%M %p")
+              %td.has-text-centered= @booking.end_date
+              %td.has-text-centered= @booking.end_time.strftime("%I:%M %p")
+              %td.has-text-centered= @booking.next_location
+              %td.has-text-centered= @booking.reason
+        %br
+        %hr
+        %h2
+          Click #{link_to 'Here', bookings_url} to view your booking in full.

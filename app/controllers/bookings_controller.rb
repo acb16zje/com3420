@@ -161,7 +161,7 @@ class BookingsController < ApplicationController
         UserMailer.booking_approved(@booking).deliver
       elsif @booking.status == 5
         Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking, context: "U")
-        UserMailer.booking_rejected(User.find(@booking.user_id), Item.find(@booking.item_id)).deliver
+        UserMailer.booking_rejected(@booking).deliver
       end
 
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'

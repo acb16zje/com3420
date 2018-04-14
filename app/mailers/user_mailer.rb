@@ -71,11 +71,14 @@ class UserMailer < ApplicationMailer
     mail to: @manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
   end
 
-  def booking_rejected (user, item)
-    @user = user
-    @item = item
+  def booking_rejected (booking)
+    @booking = booking
+    @user = @booking.user
+    @item = @booking.item
+    @manager = @item.user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
   end
 
   def asset_due (booking, user, item)
