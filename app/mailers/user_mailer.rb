@@ -92,13 +92,14 @@ class UserMailer < ApplicationMailer
   end
 
 
-  def asset_overdue (booking, user, item)
+  def asset_overdue (booking)
     @booking = booking
-    @user = user
-    @item = item
+    @user = @booking.user
+    @item = @booking.item
+    @manager = @item.user
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "AMRC - Late For Return: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Late For Return: #{@item.name}"
   end
 
 end

@@ -15,13 +15,13 @@ class UserMailerPreview < ActionMailer::Preview
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/asset_due
   def asset_due
     b = Booking.first
-    UserMailer.asset_due(b, b.user, b.item)
+    UserMailer.asset_due(b)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/asset_overdue
   def asset_overdue
     b = Booking.first
-    UserMailer.asset_overdue(b, b.user, b.item)
+    UserMailer.asset_overdue(b)
   end
 
   def booking_ongoing
@@ -54,9 +54,5 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.booking_rejected(b)
   end
 
-  def asset_due
-    b = Booking.first
-    UserMailer.asset_due(b)
-  end
 
 end
