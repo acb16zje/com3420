@@ -35,27 +35,30 @@ class UserMailer < ApplicationMailer
     @booking = booking
     @user = booking.user
     @item = booking.item
-    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/ap
+      p/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
   end
 
   def manager_booking_requested (booking)
     @booking = booking
-    @user = booking.user
-    @item = booking.item
+    @user = @booking.user
+    @item = @booking.item
     @manager = @item.user
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
   end
 
-  def manager_asset_returned (user, item, manager)
-    @user = user
-    @item = item
-    @manager = manager
+  def manager_asset_returned (booking)
+    @booking = booking
+    @user = @booking.user
+    @item = @booking.item
+    @manager = @item.user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: manager.email, subject: "AMRC - Item Returned: #{@item.name}"
+    mail to: @manager.email, subject: "AMRC - Item Returned: #{@item.name}"
   end
 
   def manager_booking_cancelled (user, item, manager, booking)

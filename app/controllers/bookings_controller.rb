@@ -96,7 +96,7 @@ class BookingsController < ApplicationController
     else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
       UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(@booking.).deliver
+      UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
     end
 
@@ -196,7 +196,7 @@ class BookingsController < ApplicationController
 
     if @booking.save
       Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking, context: "AM")
-      #UserMailer.manager_asset_returned(User.find(@booking.user_id), Item.find(@booking.item_id), User.find((Item.find(@booking.item_id)).user_id)).deliver
+      UserMailer.manager_asset_returned(@booking).deliver
     #  redirect_to :controller => 'items', :action => 'set_condition'
       redirect_to set_condition_item_path(@booking.item.id)
     else
