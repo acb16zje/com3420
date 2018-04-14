@@ -54,4 +54,9 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.booking_rejected(b)
   end
 
+  def asset_due
+    b = Booking.first
+    UserMailer.asset_due(b)
+  end
+
 end
