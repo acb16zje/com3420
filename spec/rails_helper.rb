@@ -79,7 +79,7 @@ RSpec.configure do |config|
     DatabaseCleaner.start
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.start
-    FactoryBot.create :user
+    FactoryBot.create :zerjun
     visit '/users/sign_in'
     expect(page).to have_content 'Sign in'
     sign_in_using_uid

@@ -34,23 +34,13 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-
 FactoryBot.define do
   factory :gopro, class: 'Item' do
-    condition 'Like New'
     name'GoPro Hero 5'
-    location 'Diamond'
-    manufacturer 'GoPro'
-    model 'Hero 5'
     serial 'GPH5'
-    acquisition_date '2018-03-09'
-    purchase_price 100.1
+    location 'Diamond'
     user_id {User.find(1).id}
-    if Category.find_by_id(1) == []
-      association :category, factory: :camera_category
-    else
-      category_id {Category.find_by_id(1).id}
-    end
+    association :category, factory: :camera_category
 
     trait :item_belongs_to_existing_user do
       user {User.find(1)}
@@ -59,20 +49,11 @@ FactoryBot.define do
   end
 
   factory :laptop_item, class: 'Item' do
-    condition 'Like New'
-    name 'Macbook Pro 13-inch'
+    name 'Macbook Pro 15-inch'
+    serial 'MPTR212/A'
     location 'Western Bank Library'
-    manufacturer 'Microsoft'
-    model 'Macbook'
-    serial 'GPH5'
-    acquisition_date '2018-03-09'
-    purchase_price 100.1
     user_id {User.find(1).id}
-    if Category.find_by_id(1) == []
-      association :category, factory: :laptop_category
-    else
-      category_id {Category.find_by_id(1).id}
-    end
+    association :category, factory: :laptop_category
 
     trait :item_belongs_to_existing_user do
       user {User.find(1)}

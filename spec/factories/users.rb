@@ -37,39 +37,12 @@ FactoryBot.define do
     phone ''
   end
 
-  factory :erica, class: 'User' do
-    email 'erica.smith@sheffield.ac.uk'
-    username 'me1eds'
-    givenname 'Erica'
-    sn 'Smith'
-    phone ''
-    permission_id 3
-  end
-
-  factory :zerjun_admin, class: 'User' do
+  factory :zerjun, class: 'User' do
     email 'zjeng1@sheffield.ac.uk'
     username 'acb16zje'
     givenname 'Zer Jun'
     sn 'Eng'
     phone ''
     permission_id 3
-  end
-
-  factory :zerjun_asset_manager, class: 'User' do
-    email 'zjeng1@sheffield.ac.uk'
-    username 'acb16zje'
-    givenname 'Zer Jun'
-    sn 'Eng'
-    phone ''
-    permission_id 2
-  end
-
-  factory :zerjun_user, class: 'User' do
-    email 'zjeng1@sheffield.ac.uk'
-    username 'acb16zje'
-    givenname 'Zer Jun'
-    sn 'Eng'
-    phone ''
-    permission_id 1
   end
 end

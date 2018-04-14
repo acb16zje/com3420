@@ -11,13 +11,11 @@ describe 'Managing login' do
   # Fill in your MUSE username and password to run and also fill your details in factories/users.rb
   specify 'I can login with correct email and password' do
     sign_in_using_email
-    click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
   end
 
   specify 'I can login with correct email and password and then log out' do
     sign_in_using_email
-    click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
     click_link('sign_out')
     expect(page).to_not have_content 'Sign Out'
@@ -27,13 +25,11 @@ describe 'Managing login' do
   # Fill in your MUSE email and password to run and also fill your details in factories/users.rb
   specify 'I can login with correct username and password' do
     sign_in_using_uid
-    click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
   end
 
   specify 'I can login with correct username and password and then log out' do
     sign_in_using_uid
-    click_button 'Sign in'
     expect(page).to_not have_content 'Sign in'
     click_link('sign_out')
     expect(page).to_not have_content 'Sign Out'
@@ -47,14 +43,12 @@ describe 'Managing login' do
 
   specify 'I cannot login with wrong username' do
     sign_in_using_wrong_username
-    click_button 'Sign in'
     expect(page).to have_content 'Invalid username or password.'
     expect(page).to_not have_content 'Sign Out'
   end
 
   specify 'I cannot login with wrong password' do
     sign_in_using_wrong_password
-    click_button 'Sign in'
     expect(page).to have_content 'Invalid username or password.'
     expect(page).to_not have_content 'Sign Out'
   end

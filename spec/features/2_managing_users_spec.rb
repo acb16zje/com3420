@@ -7,36 +7,26 @@ describe 'Managing accounts' do
     expect(page).to have_content 'Create user'
   end
 
-  specify 'I can create an account with a MUSE email with the user permission status' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('User', from: 'user_permission_id')
-    click_button('Create user')
-    expect(page).to have_content 'User was successfully created.'
+  specify 'I can create an account with a MUSE email with user permission' do
+    create_weikin_user
     visit '/users'
     expect(page).to have_content 'wkkhaw1@sheffield.ac.uk User'
   end
 
-  specify 'I can create an account with a MUSE email with the asset manager permission status' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('Asset Manager', from: 'user_permission_id')
-    click_button('Create user')
-    expect(page).to have_content 'User was successfully created.'
+  specify 'I can create an account with a MUSE email with asset manager permission' do
+    create_weikin_asset_manager
     visit '/users'
     expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Asset Manager'
   end
 
-  specify 'I can create an account with a MUSE email with the admin permission status' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
-    click_button('Create user')
-    expect(page).to have_content 'User was successfully created.'
+  specify 'I can create an account with a MUSE email with admin permission' do
+    create_weikin_admin
     visit '/users'
     expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Admin'
   end
 
   specify 'I cannot create an account with a non valid MUSE email' do
     fill_in 'user_email', with: 'notvalid@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
     click_button('Create user')
     expect(page).to have_content 'Not a valid email.'
     visit '/users'
@@ -44,24 +34,19 @@ describe 'Managing accounts' do
   end
 
   specify 'I cannot create an account that already exists' do
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('User', from: 'user_permission_id')
-    click_button('Create user')
-    visit '/users/new'
-    fill_in 'user_email', with: 'wkkhaw1@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
-    click_button('Create user')
+    create_weikin_user
+    create_weikin_admin
     expect(page).to have_content 'Account already exists.'
   end
 
   specify 'I can view a list of users that exist in the database' do
-    FactoryBot.create :erica
+    create_erica
     visit '/users'
     expect(page).to have_content 'erica.smith@sheffield.ac.uk Admin'
   end
 
   specify 'I can view the details of a user' do
-    FactoryBot.create :erica
+    create_erica
     visit '/users'
     expect(page).to have_content 'erica.smith@sheffield.ac.uk Admin'
     click_link('view_user_me1eds')
@@ -83,7 +68,7 @@ describe 'Managing accounts' do
   end
 
   specify 'I can delete a different user' do
-    FactoryBot.create :erica
+    create_erica
     visit '/users'
     click_link('view_user_me1eds')
     expect(page).to have_content 'me1eds'
@@ -96,15 +81,15 @@ describe 'Managing accounts' do
 
   specify 'I cannot delete my own account' do
     click_link 'Users'
-    expect(page).to have_content 'zjeng1@sheffield.ac.uk Admin'
-    click_link('view_user_acb16zje')
+    expect(page).to have_content '@sheffield.ac.uk Admin'
+    click_link('View')
     expect(page).to have_content 'COM'
     click_link('Edit Details')
     expect(page).to_not have_content 'Delete'
   end
 
   specify 'I can view the list of asset managers' do
-    FactoryBot.create :erica
+    create_erica
     click_link 'Asset Managers'
     expect(page).to have_content 'erica.smith@sheffield.ac.uk'
   end

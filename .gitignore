@@ -22,7 +22,6 @@ coverage/assets
 coverage/index.html
 
 .sass-cache/
-spec/support/helpers
 
 *.swp
 *.*~

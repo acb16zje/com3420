@@ -50,8 +50,7 @@ class Ability
 
     # User
     if user.permission_id == 1
-      can :read, Item
-      can :show, Item
+      can [:read, :show], Item
       can [:read, :new, :create, :edit, :update, :set_booking_cancelled, :set_booking_returned], Booking, id: user.id
       can [:show, :edit, :update, :manager], User, id: user.id
       can :filter, Category
