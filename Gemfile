@@ -22,12 +22,9 @@ gem 'epi_js'
 gem 'gon'
 
 gem 'simple_form'
-gem 'draper'
 gem 'ransack', '~> 1.8.0'
 
 gem 'polyamorous', '~> 1.3.1'
-
-gem 'will_paginate', '~> 3.1.5'
 
 gem 'devise'
 gem 'devise_ldap_authenticatable'

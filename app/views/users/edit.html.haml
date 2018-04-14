@@ -54,17 +54,23 @@
             - if current_user.uid.eql? @user.uid
               = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
             - else
-              = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}", disabled: ''}
+              #{@user.ou}
 
           %hr
 
           %label.label Permission:
           %p.control
-            .select
-              - if current_user.permission_id == 3
-                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id), {}, {class: ''}
+            - if current_user.permission_id == 3
+              .select
+                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id)
+            - else
+              - case @user.permission_id
+              - when 1
+                User
+              - when 2
+                Asset Manager
               - else
-                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id), {}, {class: '', disabled: ''}
+                Admin
 
           %br
           %br
@@ -81,6 +87,6 @@
                     = f.hidden_field :bunny, value: '0'
               .field.is-grouped.is-grouped-right
                 .control
-                  = link_to 'Back' , users_path, class: 'button is-block is-light'
+                  = link_to 'Back', users_path, class: 'button is-block is-light'
                 .control
                   = f.submit 'Save changes', class: 'button is-block is-success'
