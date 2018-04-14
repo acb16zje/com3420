@@ -2,15 +2,15 @@ module Helpers
   # Signing in helpers
   def sign_in_using_uid
     visit '/users/sign_in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
+    fill_in 'user_username', with: 'acb16zje'
+    fill_in 'user_password', with: 'Idpuk123'
     click_button 'Sign in'
   end
 
   def sign_in_using_email
     visit '/users/sign_in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
+    fill_in 'user_username', with: 'zjeng1@sheffield.ac.uk'
+    fill_in 'user_password', with: 'Idpuk123'
     click_button 'Sign in'
   end
 
@@ -99,6 +99,7 @@ module Helpers
     select('Cameras', from: 'item_category_id')
     fill_in 'item_location', with: 'Diamond'
     fill_in 'item_serial', with: 'GPH5'
+    attach_file("item_image", Rails.root + 'app/assets/images/assets/gopro.jpg')
     click_button('Create asset')
   end
 end
