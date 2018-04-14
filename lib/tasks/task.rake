@@ -33,7 +33,7 @@ task update_booking_status_to_ongoing: :environment do
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
-    UserMailer.booking_ongoing(User.find(b.user_id), Item.find(b.item_id)).deliver
+    UserMailer.booking_ongoing(b).deliver
     b.status = 3
     b.save
   end
@@ -46,7 +46,26 @@ task update_booking_status_to_late: :environment do
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
+    UserMailer.asset_overdue(b).deliver
     b.status = 7
     b.save
+  end
+end
+
+desc 'Remind user of late loan return'
+task remind_late_booking: :environment do
+  bookings = Booking.where('status = 7')
+  bookings.each do |b|
+    Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
+    Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
+    UserMailer.asset_overdue(b).deliver
+  end
+end
+
+desc 'Remind user their booking ends soon'
+task remind_ending_booking: :environment do
+  bookings = Booking.where('status = 3 AND end_datetime < ?', (DateTime.now + 3.days))
+  bookings.each do |b|
+    UserMailer.asset_due(b).deliver
   end
 end

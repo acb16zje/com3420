@@ -28,4 +28,6 @@ end
 
 every 1.day do
   runner "daily_task.rb"
+  rake "remind_late_booking"
+  rake "remind_ending_booking"
 end
