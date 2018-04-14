@@ -24,10 +24,10 @@ class ApplicationController < ActionController::Base
 
   # Catch NotFound exceptions and handle them neatly, when URLs are mistyped or mislinked
   rescue_from ActiveRecord::RecordNotFound do
-    render template: 'errors/error_404', status: 404
+    render template: 'errors#error_404', status: 404
   end
   rescue_from CanCan::AccessDenied do
-    render template: 'errors/error_403', status: 403
+    render template: 'errors#error_403', status: 403
   end
 
   # IE over HTTPS will not download if browser caching is off, so allow browser caching when sending files

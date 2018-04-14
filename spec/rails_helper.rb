@@ -38,10 +38,6 @@ RSpec.configure do |config|
   config.include Capybara::Select2
   config.include Devise::TestHelpers, type: :controller
 
-  config.after(:each) do
-    Warden.test_reset!
-  end
-
   config.mock_with :rspec
 
   #  This will cause the the javascipt to use, re-test if the one below fail
@@ -61,6 +57,7 @@ RSpec.configure do |config|
   #   expect(current_path).to eq current_path
   # end
 
+  # Do not touch these 3 below
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
@@ -77,18 +74,14 @@ RSpec.configure do |config|
   # Automatic login
   config.before(:each) do
     DatabaseCleaner.start
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.start
     FactoryBot.create :zerjun
-    visit '/users/sign_in'
-    expect(page).to have_content 'Sign in'
     sign_in_using_uid
-    click_button 'Sign in'
     ActionMailer::Base.deliveries.clear
   end
 
   config.append_after(:each) do
-    DatabaseCleaner.clean
+    Warden.test_reset!
+    DatabaseCleaner.clean_with(:truncation)
   end
 
   # The different available types are documented in the features, such as in

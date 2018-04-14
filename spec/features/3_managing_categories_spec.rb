@@ -8,10 +8,14 @@ describe 'Managing categories' do
   end
 
   specify 'I can create a category that does not exist yet with no icon' do
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'Cameras'
+    create_cameras
+  end
+
+  specify 'I can create a category and then add a peripheral category for it later' do
+    create_cameras
+    visit '/categories'
+    click_link('Create Peripheral Category')
+    expect(page).to have_content 'Peripheral category successfully created'
   end
 
   specify 'I can create a category that does not exist yet with a material icon' do
@@ -37,14 +41,8 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot create a category that already exists' do
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'Cameras'
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Create category')
+    create_cameras
+    create_cameras
     expect(page).to have_content 'Category already exists.'
   end
 
@@ -57,7 +55,7 @@ describe 'Managing categories' do
     expect(page).to have_content 'Cameras - Peripherals'
   end
 
-  specify 'I can create a category with a peripheral category with a font awesomeicon' do
+  specify 'I can create a category with a peripheral category with a font awesome icon' do
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_icon', with: '<i class="fas fa-camera"></i>'
     find(:css, "#want_peripheral[value='1']").set(true)
@@ -68,7 +66,7 @@ describe 'Managing categories' do
   end
 
   specify 'I can update a category' do
-    FactoryBot.create :laptop_category
+    create_laptops
     visit '/categories'
     expect(page).to have_content 'Laptops'
     click_link('Edit')
@@ -81,7 +79,7 @@ describe 'Managing categories' do
   end
 
   specify 'I can delete a category that no asset is using' do
-    FactoryBot.create :camera_category
+    create_cameras
     visit '/categories'
     expect(page).to have_content 'Cameras'
     click_link('Delete')
@@ -90,20 +88,17 @@ describe 'Managing categories' do
   end
 
   specify 'I cannot delete a category that an asset is using' do
-    FactoryBot.create :camera_category
+    create_cameras
+    create_gopro
     visit '/categories'
     expect(page).to have_content 'Cameras'
-    FactoryBot.create :gopro
     click_link('Delete')
     expect(page).to have_content 'Cannot delete category because it is currently in use for an asset.'
     expect(page).to have_content 'Cameras'
   end
 
   specify 'I can add favourite category to home page' do
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'Cameras'
+    create_cameras
     visit '/'
     expect(page).to_not have_content 'View Cameras'
     click_link('Add Favourite')
@@ -114,10 +109,7 @@ describe 'Managing categories' do
   end
 
   specify 'I can remove favourite category from home page' do
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Create category')
-    expect(page).to have_content 'Category was successfully created.'
-    expect(page).to have_content 'Cameras'
+    create_cameras
     visit '/'
     expect(page).to_not have_content 'View Cameras'
     click_link('Add Favourite')
@@ -133,7 +125,7 @@ describe 'Managing categories' do
   end
 
   specify 'I can delete a category that a user is using for a favourite, but no asset is using' do
-    FactoryBot.create :camera_category
+    create_cameras
     visit '/categories'
     expect(page).to have_content 'Cameras'
     visit '/'
@@ -150,10 +142,10 @@ describe 'Managing categories' do
   end
 
   specify 'I can view all categories in the filter tab' do
-    FactoryBot.create :camera_category
+    create_cameras
     visit '/categories'
     expect(page).to have_content 'Cameras'
-    FactoryBot.create :laptop_category
+    create_laptops
     visit '/categories'
     expect(page).to have_content 'Laptops'
     visit '/categories/filter'

@@ -4,8 +4,6 @@ require 'spec_helper'
 describe 'Managing login' do
   before :each do
     click_link('sign_out')
-    visit '/users/sign_in'
-    expect(page).to have_content 'Sign in'
   end
 
   # Fill in your MUSE username and password to run and also fill your details in factories/users.rb
