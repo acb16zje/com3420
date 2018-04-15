@@ -33,4 +33,13 @@ RSpec.describe UserHomeCategory, type: :model do
     uhc.user = nil
     expect(uhc).to_not be_valid
   end
+
+  describe "Associations" do
+    it { should belong_to(:user)}
+    it { should belong_to(:category)}
+  end
+
+  describe "Validations" do
+    
+  end
 end
