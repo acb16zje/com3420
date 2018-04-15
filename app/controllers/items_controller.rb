@@ -171,7 +171,7 @@ class ItemsController < ApplicationController
     end
     if item.save
       if item.user_id == current_user.id
-        redirect_to manager_items_path(:tab => "All", :user_id => current_user.id)
+        redirect_to manager_items_path(:user_id => current_user.id)
       elsif item.condition == "Damaged" or item.condition == "Missing"
         redirect_to item, notice: 'We have logged the issue and your item has been returned'
       else

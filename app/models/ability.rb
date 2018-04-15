@@ -33,10 +33,7 @@ class Ability
 
     # Admin
     if user.permission_id == 3
-      can :manage, Item
-      can :manage, Booking
-      can :manage, Category
-      can :manage, User
+      can :manage, :all
     end
 
     # Asset Manager

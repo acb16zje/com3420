@@ -2,11 +2,6 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing accounts' do
-  before :each do
-    visit '/users/new'
-    expect(page).to have_content 'Create user'
-  end
-
   specify 'I can create an account with a MUSE email with user permission' do
     create_weikin_user
     visit '/users'
@@ -26,8 +21,7 @@ describe 'Managing accounts' do
   end
 
   specify 'I cannot create an account with a non valid MUSE email' do
-    fill_in 'user_email', with: 'notvalid@sheffield.ac.uk'
-    click_button('Create user')
+    create_invalid_email
     expect(page).to have_content 'Not a valid email.'
     visit '/users'
     expect(page).to_not have_content 'notvalid@sheffield.ac.uk Admin'
