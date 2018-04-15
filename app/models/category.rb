@@ -16,6 +16,10 @@
 #
 
 class Category < ApplicationRecord
+  validates :name, presence: true
+  validates :has_peripheral, presence: true
+  validates :is_peripheral, presence: true
+
   has_many :items
   has_many :users, through: :user_home_categories
 end
