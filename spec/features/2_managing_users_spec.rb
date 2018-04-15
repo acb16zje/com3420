@@ -2,6 +2,12 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing accounts' do
+  before :each do
+    expect(page).to have_content 'Please sign in to proceed'
+    @username = sign_in_details(true)
+
+  end
+
   specify 'I can create an account with a MUSE email with user permission' do
     create_weikin_user
     visit '/users'
@@ -49,16 +55,15 @@ describe 'Managing accounts' do
 
   specify 'I can edit my profile details' do
     visit '/users'
-    click_link('View')
-    expect(page).to_not have_content '07578737404'
-    expect(page).to have_content 'COM'
+    view_link = page.find("#view_user_#{@username}", visible: :all)
+    view_link.click
     expect(page).to have_content 'Edit Details'
     click_link('Edit Details')
-    expect(page).to have_content 'Edit My Details'
-    fill_in 'number', with: '07578737404'
+    details_title = page.find('#DetailsTitle', visible: :all)
+    fill_in 'number', with: '05050505050'
     click_button('Save changes')
     expect(page).to have_content 'User was successfully updated'
-    expect(page).to have_content '07578737404'
+    expect(page).to have_content '05050505050'
   end
 
   specify 'I can delete a different user' do
@@ -74,10 +79,10 @@ describe 'Managing accounts' do
   end
 
   specify 'I cannot delete my own account' do
-    click_link 'Users'
-    expect(page).to have_content '@sheffield.ac.uk Admin'
-    click_link('View')
-    expect(page).to have_content 'COM'
+    visit '/users'
+    view_link = page.find("#view_user_#{@username}", visible: :all)
+    view_link.click
+    expect(page).to have_content 'Edit Details'
     click_link('Edit Details')
     expect(page).to_not have_content 'Delete'
   end

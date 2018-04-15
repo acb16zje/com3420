@@ -19,19 +19,19 @@ require 'rails_helper'
 
 RSpec.describe Category, type: :model do
   describe "Validations" do
-    describe "#name" do
+    describe "name" do
       it { should validate_presence_of(:name) }
     end
 
-    describe "#icon" do
+    describe "icon" do
 
     end
 
-    describe "#has_peripheral" do
+    describe "has_peripheral" do
       it { should validate_presence_of(:has_peripheral) }
     end
 
-    describe "#is_peripheral" do
+    describe "is_peripheral" do
       it { should validate_presence_of(:is_peripheral) }
     end
   end
@@ -45,4 +45,7 @@ RSpec.describe Category, type: :model do
 
   end
 
+  describe "Instance Methods" do
+    
+  end
 end

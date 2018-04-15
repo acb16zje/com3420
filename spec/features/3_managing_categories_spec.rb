@@ -2,13 +2,8 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing categories' do
-  before :each do
-    visit '/categories/new'
-    expect(page).to have_content 'Create category'
-  end
-
   specify 'I can create a category that does not exist yet with no icon' do
-    create_cameras
+    create_laptops
   end
 
   specify 'I can create a category and then add a peripheral category for it later' do

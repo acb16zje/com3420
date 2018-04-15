@@ -10,7 +10,7 @@
               %button.delete
               = notice
 
-      %h1.title.has-text-centered
+      %h1.title.has-text-centered{:id => "DetailsTitle"}
         - if current_user.uid.eql? @user.uid
           Edit My Details
         - else
@@ -80,7 +80,7 @@
               - if current_user.id != @user.id
                 .field.is-grouped.is-grouped-left
                   %p.control
-                    = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
+                    = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', :id => "delete-account" do
                       %span.icon
                         %i.class.fas.fa-trash
                       %span Delete

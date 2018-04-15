@@ -1,5 +1,29 @@
 module Helpers
   # Signing in helpers
+
+  def sign_in_details(using_email)
+    user = User.new
+    user.email = 'atchapman1@sheffield.ac.uk'
+    user.username = 'aca16atc'
+    user.givenname = 'Alex'
+    user.sn = 'Chapman'
+    user.phone = ''
+    user.permission_id = 3
+    user.save
+
+    visit '/users/sign_in'
+
+    if (using_email == true)
+      fill_in 'user_username', with: 'atchapman1@sheffield.ac.uk'
+    else
+      fill_in 'user_username', with: 'aca16atc'
+    end
+    fill_in 'user_password', with: ''
+    click_button 'Sign in'
+
+    return user.username
+  end
+
   def sign_in_using_uid
     visit '/users/sign_in'
     fill_in 'user_username', with: ''
@@ -13,6 +37,7 @@ module Helpers
     fill_in 'user_password', with: ''
     click_button 'Sign in'
   end
+
 
   def sign_in_using_wrong_username
     visit '/users/sign_in'

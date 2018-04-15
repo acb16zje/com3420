@@ -3,17 +3,17 @@ require 'spec_helper'
 
 describe 'Managing login' do
   before :each do
-    click_link('sign_out')
+    expect(page).to have_content 'Please sign in to proceed'
   end
 
   # Fill in your MUSE username and password to run and also fill your details in factories/users.rb
   specify 'I can login with correct email and password' do
-    sign_in_using_email
+    sign_in_details(true)
     expect(page).to_not have_content 'Sign in'
   end
 
   specify 'I can login with correct email and password and then log out' do
-    sign_in_using_email
+    sign_in_details(true)
     expect(page).to_not have_content 'Sign in'
     click_link('sign_out')
     expect(page).to_not have_content 'Sign Out'
@@ -22,12 +22,12 @@ describe 'Managing login' do
 
   # Fill in your MUSE email and password to run and also fill your details in factories/users.rb
   specify 'I can login with correct username and password' do
-    sign_in_using_uid
+    sign_in_details(false)
     expect(page).to_not have_content 'Sign in'
   end
 
   specify 'I can login with correct username and password and then log out' do
-    sign_in_using_uid
+    sign_in_details(false)
     expect(page).to_not have_content 'Sign in'
     click_link('sign_out')
     expect(page).to_not have_content 'Sign Out'
