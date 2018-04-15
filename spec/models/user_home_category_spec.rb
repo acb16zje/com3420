@@ -22,5 +22,15 @@
 require 'rails_helper'
 
 RSpec.describe UserHomeCategory, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "is not valid without a user" do
+    uhc = FactoryBot.create :user_home_category
+    uhc.user = nil
+    expect(uhc).to_not be_valid
+  end
+
+  it "is not valid without a category" do
+    uhc = FactoryBot.create :user_home_category
+    uhc.user = nil
+    expect(uhc).to_not be_valid
+  end
 end
