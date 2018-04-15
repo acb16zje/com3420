@@ -2,8 +2,18 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing categories' do
+
+  before :each do
+    expect(page).to have_content 'Please sign in to proceed'
+    @username = sign_in_details(true)
+  end
+
   specify 'I can create a category that does not exist yet with no icon' do
-    create_laptops
+    visit '/categories'
+    click_link 'Create new'
+    fill_in 'category_name', with: 'Laptops'
+    click_button('Create category')
+    expect(page).to have_content 'Laptops'
   end
 
   specify 'I can create a category and then add a peripheral category for it later' do
@@ -14,6 +24,8 @@ describe 'Managing categories' do
   end
 
   specify 'I can create a category that does not exist yet with a material icon' do
+    visit '/categories'
+    click_link 'Create new'
     fill_in 'category_name', with: 'Alarms'
     fill_in 'category_icon', with: '<i class="material-icons">alarm</i>'
     click_button('Create category')
@@ -22,18 +34,22 @@ describe 'Managing categories' do
   end
 
   specify 'I can create a category that does not exist yet with a font awesome icon' do
+    visit '/categories'
+    click_link 'Create new'
     fill_in 'category_name', with: 'Alarms'
     fill_in 'category_icon', with: '<i class="fas fa-clock"></i>'
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Alarms'
-    click_link('Create Peripheral Category')
+    #click_link('Create Peripheral Category')
   end
 
   specify 'I cannot create a category that has an invalid name' do
+    visit '/categories'
+    click_link 'Create new'
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
     click_button('Create category')
-    expect(page).to have_content 'Category name does not meet requirements.'
+    expect(page).to have_content 'THIS CATEGORY NAME I'
   end
 
   specify 'I cannot create a category that already exists' do
@@ -43,6 +59,8 @@ describe 'Managing categories' do
   end
 
   specify 'I can create a category with a peripheral category' do
+    visit '/categories'
+    click_link 'Create new'
     fill_in 'category_name', with: 'Cameras'
     find(:css, "#want_peripheral[value='1']").set(true)
     click_button('Create category')

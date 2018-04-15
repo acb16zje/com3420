@@ -5,7 +5,6 @@ describe 'Managing accounts' do
   before :each do
     expect(page).to have_content 'Please sign in to proceed'
     @username = sign_in_details(true)
-
   end
 
   specify 'I can create an account with a MUSE email with user permission' do

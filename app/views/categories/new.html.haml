@@ -23,7 +23,7 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input'}
+                    = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input', maxlength: 20}
                   %p.help Under 20 characters, characters allowed: alpha-numeric & , ; '
 
             .field.is-horizontal
