@@ -41,7 +41,7 @@ FactoryBot.define do
     name 'GoPro Hero 5'
     serial 'GPH5'
     location 'Diamond'
-    user_id {User.find(1).id}
+    association :user, factory: :user
     association :category, factory: :camera_category
 
     trait :item_belongs_to_existing_user do

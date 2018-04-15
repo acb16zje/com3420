@@ -7,12 +7,6 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "Welcome to AMRC online resource booking system"
   end
 
-  def templateexample (user)
-    @user = user
-    puts "here"
-    mail to: user.email, subject: "Test Mail"
-  end
-
   def booking_approved (booking)
     @booking = booking
     @user = booking.user
@@ -35,8 +29,8 @@ class UserMailer < ApplicationMailer
     @booking = booking
     @user = booking.user
     @item = booking.item
-    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/ap
-      p/assets/images/amrc_main.svg")
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+
 
     mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
   end
