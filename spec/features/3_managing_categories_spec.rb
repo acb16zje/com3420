@@ -49,7 +49,7 @@ describe 'Managing categories' do
     click_link 'Create new'
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
     click_button('Create category')
-    expect(page).to have_content 'THIS CATEGORY NAME I'
+    expect(page).to have_content 'This Category Name I'
   end
 
   specify 'I cannot create a category that already exists' do
@@ -70,6 +70,7 @@ describe 'Managing categories' do
   end
 
   specify 'I can create a category with a peripheral category with a font awesome icon' do
+    visit '/categories/new'
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_icon', with: '<i class="fas fa-camera"></i>'
     find(:css, "#want_peripheral[value='1']").set(true)
