@@ -59,6 +59,9 @@
             - when 'Missing'
               %span.tag.is-danger.is-medium
                 = item.condition
+            - when 'Retired'
+              %span.tag.is-danger.is-medium
+                = @item.condition
             - else
               %span.tag.is-black.is-medium
                 Unknown
