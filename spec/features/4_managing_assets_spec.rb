@@ -12,8 +12,21 @@ describe 'Managing assets' do
     expect(page).to have_content 'Book or Reserve'
   end
 
+  specify 'I can create a peripheral for an asset' do
+    create_cameras
+    visit '/categories'
+    click_link('Create Peripheral Category')
+    create_gopro
+    click_link('Add / Edit Peripherals')
+    click_link('Create')
+    create_microsd_gopro
+    visit '/items'
+    click_link('GoPro Hero 5')
+    click_link('MicroSD Card')
+  end
+
   specify 'I can edit an asset that belongs to me' do
-    FactoryBot.create(:laptop_item, :item_belongs_to_existing_user)
+    FactoryBot.create(:macbook_pro, :item_belongs_to_existing_user)
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
     click_link('Macbook Pro 15-inch')
@@ -25,12 +38,11 @@ describe 'Managing assets' do
     click_button 'Save changes'
     expect(page).to have_content 'Asset was successfully updated'
     expect(page).to have_content 'Manufacturer Apple'
-    expect(page).to have_content 'Western Bank Library'
   end
 
   specify 'My assets does not show assets that do not belong to me' do
     FactoryBot.create :erica
-    FactoryBot.create :laptop_item
+    FactoryBot.create :macbook_pro
     visit '/items/manager?user_id=2'
     expect(page).to_not have_content 'Macbook Pro 15-inch'
   end
@@ -65,12 +77,11 @@ describe 'Managing assets' do
     create_macbook_pro
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
-    click_link('Macbook Pro 15-inch')
-    expect(page).to have_content 'Western Bank Library'
-    expect(page).to have_content 'Book or Reserve'
     click_link('My Assets')
     expect(page).to have_content 'My Assets'
     expect(page).to have_content 'Macbook Pro 15-inch'
+    click_link('Out On Booking')
+    click_link('Issue')
   end
 
   specify 'I can transfer the ownership of my asset' do
@@ -79,9 +90,6 @@ describe 'Managing assets' do
     create_weikin_user
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
-    click_link('Macbook Pro 15-inch')
-    expect(page).to have_content 'Western Bank Library'
-    expect(page).to have_content 'Book or Reserve'
     click_link('My Assets')
     expect(page).to have_content 'My Assets'
     expect(page).to have_content 'Macbook Pro 15-inch'

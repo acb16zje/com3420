@@ -28,7 +28,7 @@ class CategoriesController < ApplicationController
     parent_category.has_peripheral = 1
 
     category = Category.find_by_id(params[:id]).dup
-    category.name = category.name.titleize.strip + " - Peripherals"
+    category.name = category.name.titleize.strip + " - Peripheral"
 
     if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'

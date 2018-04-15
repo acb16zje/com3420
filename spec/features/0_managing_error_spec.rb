@@ -17,5 +17,8 @@ describe 'Managing error pages' do
 
     visit '/500'
     expect(page).to have_content('500 Internal Server Error')
+
+    visit '/javascript_warning'
+    expect(page).to have_content('JavaScript Required')
   end
 end

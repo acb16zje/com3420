@@ -103,11 +103,12 @@ class ItemsController < ApplicationController
     # Getting the category for the attached item
     if !@item.parent_asset_serial.blank?
       parent = Item.where('serial = ?', @item.parent_asset_serial).first
-      category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
       parent.has_peripheral = true
       parent.save
+      category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
       @item.category_id = category.id
     end
+
     if @item.save
       redirect_to @item, notice: 'Asset was successfully created.'
     end

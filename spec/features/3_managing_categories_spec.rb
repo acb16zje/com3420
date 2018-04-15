@@ -32,6 +32,7 @@ describe 'Managing categories' do
     click_button('Create category')
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Alarms'
+    click_link('Create Peripheral Category')
   end
 
   specify 'I cannot create a category that has an invalid name' do

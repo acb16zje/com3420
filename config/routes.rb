@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :user_home_categories
   mount EpiCas::Engine, at: '/'
   devise_for :users
 
@@ -11,6 +10,8 @@ Rails.application.routes.draw do
   resources :users do
     get 'manager', on: :collection
   end
+  
+  resources :user_home_categories
 
   resources :bookings do
     get 'requests', on: :collection

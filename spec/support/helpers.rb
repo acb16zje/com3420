@@ -2,15 +2,15 @@ module Helpers
   # Signing in helpers
   def sign_in_using_uid
     visit '/users/sign_in'
-    fill_in 'user_username', with: 'acb16zje'
-    fill_in 'user_password', with: 'Idpuk123'
+    fill_in 'user_username', with: ''
+    fill_in 'user_password', with: ''
     click_button 'Sign in'
   end
 
   def sign_in_using_email
     visit '/users/sign_in'
-    fill_in 'user_username', with: 'zjeng1@sheffield.ac.uk'
-    fill_in 'user_password', with: 'Idpuk123'
+    fill_in 'user_username', with: ''
+    fill_in 'user_password', with: ''
     click_button 'Sign in'
   end
 
@@ -100,6 +100,14 @@ module Helpers
     fill_in 'item_location', with: 'Diamond'
     fill_in 'item_serial', with: 'GPH5'
     attach_file("item_image", Rails.root + 'app/assets/images/assets/gopro.jpg')
+    click_button('Create asset')
+  end
+
+  def create_microsd_gopro
+    select("GPH5 (GoPro Hero 5)", from: 'item_parent_asset_serial')
+    fill_in 'item_name', with: 'MicroSD Card'
+    fill_in 'item_serial', with: 'SD322'
+    fill_in 'item_location', with: 'Diamond'
     click_button('Create asset')
   end
 end

@@ -102,5 +102,7 @@ describe 'Managing accounts' do
     click_link('Edit Details')
     select('User', from: 'user_permission_id')
     click_button('Save changes')
+    visit '/categories'
+    expect(page).to have_content '403'
   end
 end

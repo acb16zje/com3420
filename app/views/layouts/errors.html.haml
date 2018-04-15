@@ -20,9 +20,8 @@
     %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
     %meta{:content => "#ffffff", :name => "theme-color"}/
 
-    / Bulma CSS, Pikaday, DataTable, Select 2
-    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
-    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
+    / Bulma CSS, Pikaday, DataTable
+    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css"
     = stylesheet_link_tag "application"
 
     %title #{@error_message} - AMRC Asset Management System
@@ -90,7 +89,8 @@
             %a.navbar-link
               %span.icon
                 %i.fas.fa-user
-              #{current_user.givenname}
+              %span
+                #{current_user.givenname}
             .navbar-dropdown.is-boxed.is-right
               - if current_user.permission_id != 1
                 = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item"
@@ -114,12 +114,11 @@
                 If you continue to see this message please send a description of the problem to:
                 = mail_to "support@epigenesys.org.uk"
 
-    / jQuery, Pikaday, Font Awesome, Datatable, Select2, bunnyJS, momentJS
+    / jQuery, Font Awesome, Datatable, bunnyJS, momentJS
     = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.10/js/all.js"
     = javascript_include_tag "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
-    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"
     = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
     = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
-    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"
+    = javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.0/moment.min.js"
     = javascript_include_tag "application"

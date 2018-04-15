@@ -47,7 +47,7 @@ FactoryBot.define do
     end
   end
 
-  factory :laptop_item, class: 'Item' do
+  factory :macbook_pro, class: 'Item' do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'

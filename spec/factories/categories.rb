@@ -23,4 +23,9 @@ FactoryBot.define do
   factory :camera_category, class: 'Category' do
     name 'Cameras'
   end
+
+  factory :camera_peripheral_category, class: 'Category' do
+    name 'Cameras - Peripherals'
+    is_peripheral 1
+  end
 end
