@@ -1,4 +1,5 @@
 require 'irb'
+
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   authorize_resource
@@ -34,7 +35,6 @@ class ItemsController < ApplicationController
 
   # GET /items/1/add_peripheral_option
   def add_peripheral_option
-
     @item = Item.find_by_id(params[:id])
 
     if !@item.category.has_peripheral
@@ -122,6 +122,13 @@ class ItemsController < ApplicationController
         @item.parent_asset_serial = nil
       end
 
+      if params[:item][:condition] == 'Retired' && @item.retired_date.blank?
+        @item.retired_date = Date.today
+      elsif params[:item][:condition] != 'Retired' && !@item.retired_date.blank?
+        @item.retired_date = nil
+      end
+
+      @item.save
       redirect_to @item, notice: 'Asset was successfully updated.'
     end
   end
@@ -153,11 +160,9 @@ class ItemsController < ApplicationController
 
   def set_condition
     @item = Item.find_by_id(params[:id])
-
   end
 
   def update_condition
-
     item = Item.find_by_id(params[:id])
     item.condition = params[:item][:condition]
     item.condition_info = params[:item][:condition_info]
@@ -175,7 +180,11 @@ class ItemsController < ApplicationController
     end
   end
 
-
+  def import_file
+    Importers::ItemImporter.new(params[:import_file][:file].tempfile.path).import(current_user)
+    redirect_to root_path
+  end
+  
   private
 
   # Use callbacks to share common setup or constraints between actions.

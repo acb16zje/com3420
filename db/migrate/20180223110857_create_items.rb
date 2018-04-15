@@ -17,7 +17,9 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :po_number
       t.string :condition_info
       t.boolean :has_peripheral
-      
+      t.string :comment
+      t.date :retired_date
+
       t.timestamps
     end
     add_reference :items, :user, foreign_key: true

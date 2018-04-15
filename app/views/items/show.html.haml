@@ -79,6 +79,9 @@
                   - when 'Missing'
                     %span.tag.is-danger.is-medium
                       = @item.condition
+                  - when 'Retired'
+                    %span.tag.is-danger.is-medium
+                      = @item.condition
                   - else
                     %span.tag.is-black.is-medium
                       Unknown
@@ -94,6 +97,16 @@
                   - else
                     - @peripherals.each do |peripheral|
                       = link_to "#{peripheral.name}", peripheral, class: 'button'
+              %tr
+                %th Comments
+                %td
+                  = @item.comment
+              
+              - if !@item.retired_date.blank?
+                %tr
+                  %th Retired Date
+                  %td
+                    = @item.retired_date.strftime("%d %b %Y")
 
       .field.is-horizontal
         .field-body

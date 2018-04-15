@@ -54,10 +54,7 @@ $(document).ready(function () {
     // Pickadate purchaseDate on creating assets
     $("#purchaseDate").pickadate({
         format: 'd mmmm yyyy',
-        clear: '',
-        onStart: function () {
-            this.set('select', moment());
-        }
+        clear: ''
     });
 
     var startDate = $('#startDate');

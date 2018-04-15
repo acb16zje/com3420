@@ -1,0 +1,35 @@
+- content_for :title, "Create category"
+
+%section.hero
+  .hero-body
+    .container.has-text-centered
+      - flash.each do |name, msg|
+        - next unless name == 'alert' || name == 'notice'
+        .columns
+          .column.is-4.is-offset-4
+            .notification.is-danger.has-text-centered
+              %button.delete
+              = msg
+
+      .column.is-10.is-offset-1
+        %h3.title Create category
+        .box
+          = simple_form_for :import_file, url: import_file_items_path, html: { multipart: true } do |f|
+            = f.error_notification
+
+            .field.is-horizontal
+              .field-label.is-normal
+              .field-body
+                .field
+                  %p.control.is-expanded                      
+                    = f.input :file, as: :file, label: false, input_html: {type: 'file', accept: '.xlsx'}
+            %br
+            .field.is-horizontal
+              .field-label.has-text-left
+                -#Left empty for spacing
+              .field-body
+                .field.is-grouped.is-grouped-right
+                  .control
+                    = link_to 'Cancel' , root_path, class: 'button is-block is-light'
+                  .control
+                    = f.submit 'Import assets', class: 'button is-block is-link'

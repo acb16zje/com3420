@@ -17,6 +17,8 @@
 #  po_number           :string
 #  condition_info      :string
 #  has_peripheral      :boolean
+#  comment             :string
+#  retired_date        :date
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  user_id             :integer
