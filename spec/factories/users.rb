@@ -30,8 +30,8 @@
 FactoryBot.define do
   factory :user, class: 'User' do
     sequence(:email) {|n| "exampleuser#{n}@sheffield.ac.uk"}
-    givenname 'Alex'
-    sn 'Chapman'
+    givenname 'Example'
+    sn 'User'
     permission_id 1
     sequence(:username) {|n| "std#{n}usr"}
     phone ''
@@ -49,20 +49,12 @@ FactoryBot.define do
   factory :admin, class: 'User' do
     sequence(:email) {|n| "exampleadminclear#{n}@sheffield.ac.uk"}
     givenname 'Example'
-    sn 'Manager'
+    sn 'Admin'
     permission_id 3
     sequence(:username) {|n| "adm#{n}usr"}
     phone ''
   end
 
-  factory :user, class: 'User' do
-    sequence(:email) {|n| "exampleuser#{n}@sheffield.ac.uk"}
-    givenname 'Alex'
-    sn 'Chapman'
-    permission_id 3
-    username 'aca16atc'
-    phone ''
-  end
   factory :zerjun, class: 'User' do
     email 'zjeng1@sheffield.ac.uk'
     username 'acb16zje'
