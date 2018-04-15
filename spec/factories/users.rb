@@ -29,19 +29,54 @@
 
 FactoryBot.define do
   factory :user, class: 'User' do
-    sequence(:email) {|n| "atchapman1{n}@sheffield.ac.uk"}
+    sequence(:email) {|n| "exampleuser#{n}@sheffield.ac.uk"}
+    givenname 'Alex'
+    sn 'Chapman'
+    permission_id 1
+    sequence(:username) {|n| "std#{n}usr"}
+    phone ''
+  end
+
+  factory :assetmanager, class: 'User' do
+    sequence(:email) {|n| "examplemanager#{n}@sheffield.ac.uk"}
+    givenname 'Example'
+    sn 'Manager'
+    permission_id 2
+    sequence(:username) {|n| "ama#{n}usr"}
+    phone ''
+  end
+
+  factory :admin, class: 'User' do
+    sequence(:email) {|n| "exampleadminclear#{n}@sheffield.ac.uk"}
+    givenname 'Example'
+    sn 'Manager'
+    permission_id 3
+    sequence(:username) {|n| "adm#{n}usr"}
+    phone ''
+  end
+
+  factory :user, class: 'User' do
+    sequence(:email) {|n| "exampleuser#{n}@sheffield.ac.uk"}
     givenname 'Alex'
     sn 'Chapman'
     permission_id 3
     username 'aca16atc'
     phone ''
   end
-
   factory :zerjun, class: 'User' do
     email 'zjeng1@sheffield.ac.uk'
     username 'acb16zje'
     givenname 'Zer Jun'
     sn 'Eng'
+    phone ''
+    permission_id 3
+  end
+
+  factory :alex, class: 'User' do
+    email 'atchapman1@sheffield.ac.uk'
+    username 'aca16atc'
+    givenname 'Alex'
+    sn 'Chapman'
     phone ''
     permission_id 3
   end
