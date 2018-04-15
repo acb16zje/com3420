@@ -25,6 +25,32 @@ describe 'Managing assets' do
     click_link('MicroSD Card')
   end
 
+  specify 'I can choose a peripheral for an asset' do
+    create_cameras
+    visit '/categories'
+    click_link('Create Peripheral Category')
+    create_microsd_gopro_choose
+    create_gopro
+    click_link('Add / Edit Peripherals')
+    click_link('Choose')
+    select("SD322 (MicroSD Card)", from: 'peripheral_asset')
+    click_button('Add as Peripheral')
+  end
+
+  specify "I cannot add peripherals to a category which doesn't have peripheral category" do
+    create_cameras
+    create_gopro
+    visit '/items/1/add_peripheral_option'
+    expect(page).to have_content '404'
+  end
+
+  specify "I cannot choose peripherals to a category which doesn't have peripheral category" do
+    create_cameras
+    create_gopro
+    visit '/items/1/choose_peripheral'
+    expect(page).to have_content '404'
+  end
+
   specify 'I can edit an asset that belongs to me' do
     FactoryBot.create(:macbook_pro, :item_belongs_to_existing_user)
     visit '/items'
@@ -38,6 +64,17 @@ describe 'Managing assets' do
     click_button 'Save changes'
     expect(page).to have_content 'Asset was successfully updated'
     expect(page).to have_content 'Manufacturer Apple'
+  end
+
+  specify 'I can set an asset as retired and unset it' do
+    create_cameras
+    create_gopro
+    click_link 'Edit'
+    select('Retired', from: 'item_condition')
+    click_button 'Save changes'
+    click_link 'Edit'
+    select('Like New', from: 'item_condition')
+    click_button 'Save changes'
   end
 
   specify 'My assets does not show assets that do not belong to me' do

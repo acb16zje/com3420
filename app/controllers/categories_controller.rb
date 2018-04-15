@@ -28,7 +28,7 @@ class CategoriesController < ApplicationController
     parent_category.has_peripheral = 1
 
     category = Category.find_by_id(params[:id]).dup
-    category.name = category.name.titleize.strip + " - Peripheral"
+    category.name = category.name.titleize.strip + " - Peripherals"
 
     if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
@@ -50,51 +50,48 @@ class CategoriesController < ApplicationController
 
   # POST /categories
   def create
-    @category = Category.new(name: params[:category][:name], icon: params[:category][:icon], is_peripheral: 0, has_peripheral: 0)
-
-    #Strips the user name
-    if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
-      @category.name = @category.name.titleize.strip
-    end
+    @category = Category.new(category_params)
 
     # Checks whether the user already exists
     if Category.exists?(name: @category.name)
       redirect_to new_category_path, notice: 'Category already exists.'
-    end
-
-    # Font awesome icon
-    if (!(@category.icon.to_s).include? 'material-icons') && !(@category.icon.to_s).empty?
-      @category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i>'
-    end
-
-    # Create a duplicate category for the peripherals
-    if params[:want_peripheral].to_i == 1
-      @category.has_peripheral = 1
-      category = Category.new(name: "#{params[:category][:name].titleize.strip} - Peripherals", is_peripheral: 1, has_peripheral: 0)
-
-      if (!(category.icon.to_s).include? 'material-icons') && !(category.icon.to_s).empty?
-        category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
-      else
-        category.icon = @category.icon.chomp('</i>') + 'P</i>'
-      end
-
-      if !category.save
-        redirect_to new_category_path, notice: 'Peripheral Category name does not meet requirements.'
-      end
-    end
-
-    #Save new category
-    if @category.save
-      redirect_to categories_path, notice: 'Category was successfully created.'
     else
-      puts @category.name
-      puts @category.icon
-      puts @category.is_peripheral
-      puts @category.has_peripheral
-      redirect_to new_category_path, notice: 'Category name does not meet requirements.'
+      if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
+        @category.name = @category.name.titleize.strip
+
+        # Font awesome icon
+        if (!(@category.icon).include? 'material-icons') && !(@category.icon).empty?
+          @category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i>'
+        end
+
+        @category.is_peripheral = 0
+        @category.has_peripheral = 0
+
+        # Create a duplicate category for the peripherals
+        if params[:want_peripheral].to_i == 1
+          @category.has_peripheral = 1
+
+          category = Category.new(category_params)
+          category.name = category.name.titleize.strip + " - Peripherals"
+
+          if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+            category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
+          else
+            category.icon = @category.icon.chomp('</i>') + 'P</i>'
+          end
+          category.is_peripheral = 1
+          category.has_peripheral = 0
+          category.save
+        end
+
+        if @category.save
+          redirect_to categories_path, notice: 'Category was successfully created.'
+        end
+      else
+        redirect_to new_category_path, notice: 'Category name does not meet requirements.'
+      end
     end
   end
-
 
   # PATCH/PUT /categories/1
   def update

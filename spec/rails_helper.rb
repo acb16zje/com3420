@@ -74,8 +74,7 @@ RSpec.configure do |config|
   # Automatic login
   config.before(:each) do
     DatabaseCleaner.start
-    FactoryBot.create :zerjun
-    sign_in_using_uid
+    sign_in_details
     ActionMailer::Base.deliveries.clear
   end
 

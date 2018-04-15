@@ -57,16 +57,12 @@ class ItemsController < ApplicationController
   def add_peripheral
     @item = Item.find_by_id(params[:id])
 
-    if !@item.category.has_peripheral
-      redirect_to '/404'
-    else
-      @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
-      @peripheral.parent_asset_serial = @item.serial
-      @peripheral.save
-      @item.has_peripheral = true
-      @item.save
-      redirect_to @item
-    end
+    @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
+    @peripheral.parent_asset_serial = @item.serial
+    @peripheral.save
+    @item.has_peripheral = true
+    @item.save
+    redirect_to @item
   end
 
   # GET /items/new
@@ -105,7 +101,7 @@ class ItemsController < ApplicationController
       parent = Item.where('serial = ?', @item.parent_asset_serial).first
       parent.has_peripheral = true
       parent.save
-      category = Category.where('name = ?', (parent.category.name + " - Peripheral")).first
+      category = Category.where('name = ?', (parent.category.name + " - Peripherals")).first
       @item.category_id = category.id
     end
 
@@ -185,7 +181,7 @@ class ItemsController < ApplicationController
     Importers::ItemImporter.new(params[:import_file][:file].tempfile.path).import(current_user)
     redirect_to root_path
   end
-  
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

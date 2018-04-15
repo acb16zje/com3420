@@ -1,43 +1,34 @@
 module Helpers
   # Signing in helpers
 
-  def sign_in_details(using_email)
+  def sign_in_details(using_email=false)
+    @email = '@sheffield.ac.uk'
+    @username = ''
+
     user = User.new
-    user.email = 'atchapman1@sheffield.ac.uk'
-    user.username = 'aca16atc'
-    user.givenname = 'Alex'
-    user.sn = 'Chapman'
-    user.phone = ''
+    user.email = @email
+    user.username = @username
     user.permission_id = 3
-    user.save
+
+    begin
+      user.save
+    rescue
+    end
 
     visit '/users/sign_in'
 
-    if (using_email == true)
-      fill_in 'user_username', with: 'atchapman1@sheffield.ac.uk'
+    if using_email
+      fill_in 'user_username', with: @email
     else
-      fill_in 'user_username', with: 'aca16atc'
+      fill_in 'user_username', with: @username
     end
+
+    # Your password
     fill_in 'user_password', with: ''
     click_button 'Sign in'
 
     return user.username
   end
-
-  def sign_in_using_uid
-    visit '/users/sign_in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
-    click_button 'Sign in'
-  end
-
-  def sign_in_using_email
-    visit '/users/sign_in'
-    fill_in 'user_username', with: ''
-    fill_in 'user_password', with: ''
-    click_button 'Sign in'
-  end
-
 
   def sign_in_using_wrong_username
     visit '/users/sign_in'
@@ -130,6 +121,14 @@ module Helpers
 
   def create_microsd_gopro
     select("GPH5 (GoPro Hero 5)", from: 'item_parent_asset_serial')
+    fill_in 'item_name', with: 'MicroSD Card'
+    fill_in 'item_serial', with: 'SD322'
+    fill_in 'item_location', with: 'Diamond'
+    click_button('Create asset')
+  end
+
+  def create_microsd_gopro_choose
+    visit '/items/new'
     fill_in 'item_name', with: 'MicroSD Card'
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'

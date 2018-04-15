@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe 'Managing accounts' do
   before :each do
-    expect(page).to have_content 'Please sign in to proceed'
+    click_link('Sign Out')
     @username = sign_in_details(true)
   end
 
