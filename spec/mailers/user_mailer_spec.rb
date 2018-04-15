@@ -3,7 +3,20 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   b = FactoryBot.create(:booking_today_all_day)
 
+  describe "welcome" do
 
+    let(:mail) { UserMailer.welcome(b.item.user) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("AMRC - Welcome: #{b.user.givenname} #{b.user.sn}")
+      expect(mail.to).to eq(["#{b.user.email}"])
+      expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.user.givenname}")
+    end
+  end
 
   describe "booking_approved" do
 
@@ -15,6 +28,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "booking_ongoing" do
@@ -27,6 +43,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "user_booking_requested" do
@@ -39,6 +58,24 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
+  end
+
+  describe "manager_booking_requested" do
+
+    let(:mail) { UserMailer.manager_booking_requested(b) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("AMRC - Booking Requested: #{b.item.name}")
+      expect(mail.to).to eq(["#{b.item.user.email}"])
+      expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "manager_asset_returned" do
@@ -51,6 +88,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "manager_booking_cancelled" do
@@ -63,6 +103,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "booking_rejected" do
@@ -75,7 +118,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
-
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "asset_due" do
@@ -88,6 +133,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
   describe "asset_overdue" do
@@ -100,9 +148,9 @@ RSpec.describe UserMailer, type: :mailer do
       expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
     end
 
-    #it "renders the body" do
-    #  expect(mail.body.encoded).to match("Hi")
-    #end
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
   end
 
 end

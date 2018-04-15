@@ -3,8 +3,9 @@ class UserMailer < ApplicationMailer
 
   def welcome (user)
     @user = user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
-    mail to: user.email, subject: "Welcome to AMRC online resource booking system"
+    mail to: user.email, subject: "AMRC - Welcome: #{user.givenname} #{user.sn}"
   end
 
   def booking_approved (booking)
