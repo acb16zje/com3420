@@ -4,6 +4,7 @@ module Helpers
   def sign_in_details(using_email=false)
     @email = '@sheffield.ac.uk'
     @username = ''
+    @password = ''
 
     user = User.new
     user.email = @email
@@ -24,7 +25,7 @@ module Helpers
     end
 
     # Your password
-    fill_in 'user_password', with: ''
+    fill_in 'user_password', with: @password
     click_button 'Sign in'
 
     return user.username
@@ -133,5 +134,18 @@ module Helpers
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'
     click_button('Create asset')
+  end
+
+  def create_peripheral_for_gopro
+    create_cameras
+    visit '/categories'
+    click_link('Create Peripheral Category')
+    create_gopro
+    click_link('Add / Edit Peripherals')
+    click_link('Create')
+    create_microsd_gopro
+    visit '/items'
+    click_link('GoPro Hero 5')
+    click_link('MicroSD Card')
   end
 end

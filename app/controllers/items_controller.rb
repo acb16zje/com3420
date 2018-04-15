@@ -115,7 +115,7 @@ class ItemsController < ApplicationController
     if @item.update(item_params)
       @item.location = params[:item][:location].titleize
 
-      if params[:item][:parent_asset_serial].eql? 'None'
+      if params[:item][:parent_asset_serial].blank?
         @item.parent_asset_serial = nil
       end
 
@@ -125,8 +125,9 @@ class ItemsController < ApplicationController
         @item.retired_date = nil
       end
 
-      @item.save
-      redirect_to @item, notice: 'Asset was successfully updated.'
+      if @item.save
+        redirect_to @item, notice: 'Asset was successfully updated.'
+      end
     end
   end
 
@@ -153,28 +154,6 @@ class ItemsController < ApplicationController
     end
 
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Ownership was successfully transfered.'
-  end
-
-  def set_condition
-    @item = Item.find_by_id(params[:id])
-  end
-
-  def update_condition
-    item = Item.find_by_id(params[:id])
-    item.condition = params[:item][:condition]
-    item.condition_info = params[:item][:condition_info]
-    if item.condition == "Missing" or item.condition == "Damaged"
-      Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
-    end
-    if item.save
-      if item.user_id == current_user.id
-        redirect_to manager_items_path(:user_id => current_user.id)
-      elsif item.condition == "Damaged" or item.condition == "Missing"
-        redirect_to item, notice: 'We have logged the issue and your item has been returned'
-      else
-        redirect_to item, notice: 'Thank you. Your item has been returned'
-      end
-    end
   end
 
   def import_file

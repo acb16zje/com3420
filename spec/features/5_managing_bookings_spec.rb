@@ -2,6 +2,16 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe 'Managing bookings', js: true do
+  specify 'Viewing all booking status pages' do
+    visit 'bookings/requests'
+    visit 'bookings/accepted'
+    FactoryBot.create(:booking_today_all_day_mine)
+    visit 'bookings/ongoing'
+    visit 'bookings/completed'
+    visit 'bookings/rejected'
+    visit 'bookings/late'
+  end
+
   specify 'I can create a booking without time conflict' do
     FactoryBot.create(:gopro)
     visit '/items/1/bookings/new'
@@ -15,13 +25,19 @@ describe 'Managing bookings', js: true do
     page.execute_script("$('#endDate').val('#{test_booking_date_end.strftime("%d %B %Y")}')")
     page.execute_script("$('#endTime').val('#{test_booking_date_end.strftime("%I:%M %p")}')")
     fill_in 'booking_next_location', with: 'pam liversidge building'
-    fill_in 'booking_reason', with: 'Filming documentary'
     click_button('Confirm booking')
     expect(page).to have_content 'Booking was successfully created'
     expect(page).to have_content 'My Bookings'
     expect(page).to have_content 'Pam Liversidge Building'
-    expect(page).to have_content 'Filming documentary'
     expect(page).to have_content 'Accepted'
+  end
+
+  specify 'I can edit my booking' do
+    FactoryBot.create(:booking_today_all_day_mine)
+    visit '/bookings'
+    click_link 'Edit'
+    fill_in 'booking_next_location', with: 'nothing'
+    click_button 'Save changes'
   end
 
   specify "I cannot see bookings made for other users" do
@@ -34,5 +50,42 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
     expect(page).to have_css("#bookings", :text => "1 GoPro")
+  end
+
+  specify 'I can cancel my booking' do
+    FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
+    visit '/bookings'
+    click_link 'Cancel Booking'
+  end
+
+  specify 'I can return my item as like new' do
+    FactoryBot.create(:ongoing_booking)
+    visit '/bookings'
+    click_link 'Return Item'
+    click_button('Save changes')
+  end
+
+  specify 'I can return my item as damaged' do
+    FactoryBot.create(:ongoing_booking)
+    visit '/bookings'
+    click_link 'Return Item'
+    select('Damaged', from: 'item_condition')
+    click_button('Save changes')
+    find(:css, ".notifications-bell").hover
+  end
+
+  specify 'I can return item owned by other' do
+    FactoryBot.create(:ongoing_booking_other)
+    visit '/bookings'
+    click_link 'Return Item'
+    click_button('Save changes')
+  end
+
+  specify 'I can return item owned by other as damaged' do
+    FactoryBot.create(:ongoing_booking_other)
+    visit '/bookings'
+    click_link 'Return Item'
+    select('Damaged', from: 'item_condition')
+    click_button('Save changes')
   end
 end

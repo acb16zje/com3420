@@ -29,7 +29,8 @@ end
 desc 'Update booking status to ongoing'
 task update_booking_status_to_ongoing: :environment do
   # Get current date/time
-  bookings = Booking.where('status = 2 AND start_datetime < ?', DateTime.now)
+  bookings = Booking.where('status = 2 AND start_datetime <= ?', DateTime.now)
+  puts bookings
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")

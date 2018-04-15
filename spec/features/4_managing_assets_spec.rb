@@ -7,34 +7,32 @@ describe 'Managing assets' do
     create_macbook_pro
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
-    click_link('Macbook Pro 15-inch')
+    click_link 'Macbook Pro 15-inch'
     expect(page).to have_content 'Western Bank Library'
     expect(page).to have_content 'Book or Reserve'
   end
 
   specify 'I can create a peripheral for an asset' do
-    create_cameras
-    visit '/categories'
-    click_link('Create Peripheral Category')
-    create_gopro
-    click_link('Add / Edit Peripherals')
-    click_link('Create')
-    create_microsd_gopro
-    visit '/items'
-    click_link('GoPro Hero 5')
-    click_link('MicroSD Card')
+    create_peripheral_for_gopro
   end
 
   specify 'I can choose a peripheral for an asset' do
     create_cameras
     visit '/categories'
-    click_link('Create Peripheral Category')
+    click_link 'Create Peripheral Category'
     create_microsd_gopro_choose
     create_gopro
-    click_link('Add / Edit Peripherals')
-    click_link('Choose')
+    click_link 'Add / Edit Peripherals'
+    click_link 'Choose'
     select("SD322 (MicroSD Card)", from: 'peripheral_asset')
-    click_button('Add as Peripheral')
+    click_button 'Add as Peripheral'
+  end
+
+  specify 'I can remove a peripheral for an asset' do
+    create_peripheral_for_gopro
+    click_link 'Edit'
+    select('None', from: 'item_parent_asset_serial')
+    click_button 'Save changes'
   end
 
   specify "I cannot add peripherals to a category which doesn't have peripheral category" do
@@ -88,7 +86,6 @@ describe 'Managing assets' do
     FactoryBot.create :laptop_erica
     visit '/items/manager?user_id=2'
     expect(page).to_not have_css("#edit-button-1")
-    expect(page).to_not have_content 'Set Condition'
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
     click_link('Macbook Pro 15-inch')

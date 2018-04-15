@@ -60,4 +60,52 @@ FactoryBot.define do
     end
   end
 
+  factory :booking_today_all_day_mine, class: "Booking" do
+    start_date {DateTime.now.strftime("%d %B %Y")}
+    start_time {DateTime.now.strftime("%H:%M")}
+    start_datetime {DateTime.now}
+
+    end_date {DateTime.now.strftime("%d %B %Y")}
+    end_time {DateTime.now.change({hour:23, min: 50, sec:0}).strftime("%H:%M")}
+    end_datetime {DateTime.now.change({hour:23, min: 50, sec:0})}
+
+    next_location "Diamond"
+    status 2
+    peripherals ""
+    user_id 1
+
+    association :item, factory: :gopro
+  end
+
+  factory :ongoing_booking, class: "Booking" do
+    start_date {DateTime.now.strftime("%d %B %Y")}
+    start_time {DateTime.now.strftime("%H:%M")}
+    start_datetime {DateTime.now}
+
+    end_date {DateTime.now.strftime("%d %B %Y")}
+    end_time {DateTime.now.change({hour:23, min: 50, sec:0}).strftime("%H:%M")}
+    end_datetime {DateTime.now.change({hour:23, min: 50, sec:0})}
+
+    next_location "Diamond"
+    status 3
+    user_id 1
+
+    association :item, factory: :gopro
+  end
+
+  factory :ongoing_booking_other, class: "Booking" do
+    start_date {DateTime.now.strftime("%d %B %Y")}
+    start_time {DateTime.now.strftime("%H:%M")}
+    start_datetime {DateTime.now}
+
+    end_date {DateTime.now.strftime("%d %B %Y")}
+    end_time {DateTime.now.change({hour:23, min: 50, sec:0}).strftime("%H:%M")}
+    end_datetime {DateTime.now.change({hour:23, min: 50, sec:0})}
+
+    next_location "Diamond"
+    status 3
+    user_id 1
+
+    association :item, factory: :gopro
+  end
 end

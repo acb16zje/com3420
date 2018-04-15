@@ -1,8 +1,15 @@
-- content_for :title, "Editing Booking on #{@item.name}"
+- content_for :title, "Edit Booking on #{@item.name}"
 
 %section.section
   .container.is-desktop.has-text-centered
-    %h3.title Create booking on #{@item.name}
+    - if not notice.nil?
+      .columns
+        .column.is-4.is-offset-4
+          .notification.is-danger.has-text-centered
+            %button.delete
+            = notice
+
+    %h3.title Edit booking on #{@item.name}
     .box
       .columns
         - if @item.image?
@@ -14,6 +21,15 @@
         .column
           %table.table.is-bordered.is-striped.is-fullwidth
             %tbody
+              %tr
+                %th Owner
+                %td
+                  = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
+              - if !@item.parent_asset_serial.blank?
+                %tr
+                  %th Parent Item Name
+                  %td
+                    = link_to @parent.name, @parent
               %tr
                 %th Name
                 %td
@@ -27,13 +43,17 @@
                 %td
                   = @item.model
               %tr
+                %th Serial
+                %td
+                  = @item.serial
+              %tr
                 %th Category
                 %td
                   = @item.category.name
               %tr
-                %th Serial
+                %th PO Number
                 %td
-                  = @item.serial
+                  = @item.po_number
               %tr
                 %th Acquisition Date
                 %td
@@ -65,13 +85,17 @@
                     %span.tag.is-black.is-medium
                       Unknown
               %tr
-                %th Location
+                %th Storage Location
                 %td
                   = @item.location
               %tr
-                -#%th Peripherals
-                -#  %td
-                -#    = @item.peripherals
+                %th Peripherals
+                %td
+                  - if @peripherals.blank?
+                    None
+                  - else
+                    - @peripherals.each do |peripheral|
+                      = link_to "#{peripheral.name}", peripheral, class: 'button'
 
       = simple_form_for @booking do |f|
         .columns
@@ -86,7 +110,7 @@
                       %a.button.is-static
                         %i.far.fa-calendar-alt
                     %p.control.is-expanded
-                      = f.input :start_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'startDate', style: 'resize: none', disabled: ''}
+                      = f.input :start_date, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.start_date.strftime("%d %B %Y")}"}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Start Time
@@ -97,7 +121,7 @@
                       %a.button.is-static
                         %i.fas.fa-clock
                     %p.control.is-expanded
-                      = f.input :start_time, as: :text, label: false, required: '', input_html: {class: 'input timepicker', id: 'startTime', style: 'resize: none', disabled: ''}
+                      = f.input :end_date, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.end_date.strftime("%d %B %Y")}"}
           .column
             .field.is-horizontal
               .field-label.is-normal
@@ -109,7 +133,7 @@
                       %a.button.is-static
                         %i.far.fa-calendar-alt
                     %p.control.is-expanded
-                      = f.input :end_date, as: :text, label: false, required: '', input_html: {class: 'input datepicker', id: 'endDate', style: 'resize: none', disabled: ''}
+                      = f.input :start_time, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.start_time.strftime("%I:%M %p")}"}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label End Time
@@ -120,7 +144,7 @@
                       %a.button.is-static
                         %i.fas.fa-clock
                     %p.control.is-expanded
-                      = f.input :end_time, as: :text, label: false, required: '', input_html: {class: 'input timepicker', id: 'endTime', style: 'resize: none', disabled: ''}
+                      = f.input :end_time, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.end_time.strftime("%I:%M %p")}"}
                       = f.hidden_field :item_id, value: @item.id
                       = f.hidden_field :user_id, value: current_user.id
             .field.is-horizontal
@@ -137,6 +161,14 @@
                 .field
                   %p.control.is-expanded
                     = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
+            - if @item.has_peripheral
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Peripherals
+                .field-body
+                  .field
+                    %p.control.is-expanded
+                      = f.input :peripherals, label: false, disabled: true, input_html: {class: 'input', value: "#{@booking.peripherals}"}
 
             %br
             %br
@@ -146,7 +178,6 @@
               .field-body
                 .field.is-grouped.is-grouped-right
                   .control
-                    = link_to 'Back', @item, class: 'button is-block is-light'
+                    = link_to 'Back', bookings_path, class: 'button is-block is-light'
                   .control
-                    = f.submit 'Confirm booking', class:'button is-link is-block'
-
+                    = f.submit 'Save changes', class:'button is-success is-block'

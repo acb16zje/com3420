@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :users do
     get 'manager', on: :collection
   end
-  
+
   resources :user_home_categories
 
   resources :bookings do
@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get 'rejected', on: :collection
     get 'late', on: :collection
 
+    get 'booking_returned', on: :member
     put 'set_booking_returned', on: :member
     put 'set_booking_cancelled', on: :member
   end
@@ -39,8 +40,6 @@ Rails.application.routes.draw do
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
-    get 'set_condition', on: :member
-    put 'update_condition', on: :member
   end
 
   resources :notifications do

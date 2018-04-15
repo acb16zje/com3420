@@ -16,7 +16,7 @@
         - else
           Edit #{@user.givenname} #{@user.sn}'s Details
       .box
-        = simple_form_for(@user) do |f|
+        = simple_form_for @user do |f|
           %label.label Username:
           %p
             #{@user.username}

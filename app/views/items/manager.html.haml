@@ -25,8 +25,6 @@
           %th Manufacturer
           %th Condition
           %th Location
-          - if current_user.id == @manager.id
-            %th Action
       %tbody
         - @items.each do |item|
           %tr
@@ -57,14 +55,6 @@
                 %span.tag.is-black.is-medium
                   Unknown
             %td.has-text-centered= item.location
-            - if current_user.id == @manager.id
-              %td
-                .field.is-grouped.is-grouped-centered
-                  %p.control
-                    = link_to set_condition_item_path(item.id), method: :get, class: 'button is-link edit', id: "edit-button-#{item.id}" do
-                      %span.icon
-                        %i.class.fas.fa-wrench
-                      %span Set Condition
     - if current_user.id == @manager.id && @items.any?
       .columns
         .column

@@ -76,6 +76,10 @@ class BookingsController < ApplicationController
   # GET /bookings/1/edit
   def edit
     @item = Item.find_by_id(@booking.item_id)
+
+    if !@item.parent_asset_serial.blank?
+      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    end
   end
 
   # POST /bookings
@@ -170,12 +174,6 @@ class BookingsController < ApplicationController
     end
   end
 
-  # DELETE /bookings/1
-  def destroy
-    @booking.destroy
-    redirect_to bookings_url, notice: 'Booking was successfully destroyed.'
-  end
-
   # Set booking as cancelled
   def set_booking_cancelled
     @booking = Booking.find(params[:id])
@@ -189,7 +187,13 @@ class BookingsController < ApplicationController
     end
   end
 
-  # Set booking as returned
+  # GET /bookings/1/booking_returned
+  def booking_returned
+    @booking = Booking.find_by_id(params[:id])
+    @item = Item.find_by_id(@booking.item.id)
+  end
+
+  # PUT /bookings/1/set_booking_returned
   def set_booking_returned
     @booking = Booking.find(params[:id])
     @booking.status = 4
@@ -197,8 +201,24 @@ class BookingsController < ApplicationController
     if @booking.save
       Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking, context: "AM")
       UserMailer.manager_asset_returned(@booking).deliver
-    #  redirect_to :controller => 'items', :action => 'set_condition'
-      redirect_to set_condition_item_path(@booking.item.id)
+
+      item = Item.find_by_id(@booking.item.id)
+      item.condition = params[:item][:condition]
+      item.condition_info = params[:item][:condition_info]
+
+      if item.condition == "Missing" or item.condition == "Damaged"
+        Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
+      end
+
+      item.save
+
+      if item.user_id == current_user.id
+        redirect_to manager_items_path(:user_id => current_user.id)
+      elsif item.condition == "Damaged" or item.condition == "Missing"
+        redirect_to item, notice: 'We have logged the issue and your item has been returned'
+      else
+        redirect_to item, notice: 'Thank you. Your item has been returned'
+      end
     else
       redirect_to bookings_path, notice: 'Could not be returned'
     end

@@ -39,7 +39,7 @@
           .dropdown-trigger{"data-behavior" => "notification-link"}
             %button.button{"aria-haspopup" => "true", "aria-controls" => "dropdown-menu"}
               %span.icon
-                %i.fas.fa-bell
+                %i.fas.fa-bell.notifications-bell
                 %span{"data-behavior" => "unread-count"}
           .dropdown-menu#dropdown-menu{:role => "menu"}
             .dropdown-content{"data-behavior" => "notification-items-mobile" }
@@ -95,7 +95,7 @@
           .navbar-item.has-dropdown.is-hoverable.is-hidden-touch{"data-behavior" => "notification-link"}
             = link_to requests_bookings_path, class: 'navbar-link' do
               %span.icon
-                %i.fas.fa-bell
+                %i.fas.fa-bell.notifications-bell
                 %span{"data-behavior" => "unread-count"}
             .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items"}
           .navbar-item.has-dropdown.is-hoverable
