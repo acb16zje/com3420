@@ -208,6 +208,7 @@ class BookingsController < ApplicationController
 
       if item.condition == "Missing" or item.condition == "Damaged"
         Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
+        UserMailer.manager_asset_issue(@booking.user, @booking.item.user).deliver
       end
 
       item.save
@@ -215,7 +216,6 @@ class BookingsController < ApplicationController
       if item.user_id == current_user.id
         redirect_to manager_items_path(:user_id => current_user.id)
       elsif item.condition == "Damaged" or item.condition == "Missing"
-        UserMailer.manager_asset_issue(@booking.user, @booking.item.user).deliver
         redirect_to item, notice: 'We have logged the issue and your item has been returned'
       else
         redirect_to item, notice: 'Thank you. Your item has been returned'
