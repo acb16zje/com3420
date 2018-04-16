@@ -44,7 +44,7 @@ end
 desc 'Update booking status to late'
 task update_booking_status_to_late: :environment do
   # Get current date/time
-  bookings = Booking.where('status = 3 AND end_datetime < ?', DateTime.now)
+  bookings = Booking.where('status = 3 AND end_datetime < ?', DateTime.now.strftime("%Y-%m-%d %H:%M:%S"))
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
@@ -66,7 +66,7 @@ end
 
 desc 'Remind user their booking ends soon'
 task remind_ending_booking: :environment do
-  bookings = Booking.where('status = 3 AND end_datetime < ?', (DateTime.now + 3.days))
+  bookings = Booking.where('status = 3 AND end_datetime < ?', (DateTime.now + 3.days).strftime("%Y-%m-%d %H:%M:%S"))
   bookings.each do |b|
     UserMailer.asset_due(b).deliver
   end
