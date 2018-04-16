@@ -118,7 +118,7 @@ $(document).ready(function () {
         interval: 10
     });
 
-    $('.datepicker').change(function (e) {
+    $('.datepicker').change(function () {
         if ($(this).attr('id') === 'startDate') {
             var start_date = new Date(startDate.val());
             var end_date = new Date(endDate.val());
@@ -357,7 +357,7 @@ $(document).ready(function () {
                     console.log('Peripherals ajax');
                     console.log(data);
                     console.log(data.name);
-                    
+
                     $('#peripherals').select2({
                         data: $.map(data, function (item, i) {
                             return {
