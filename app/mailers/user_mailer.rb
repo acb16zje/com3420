@@ -12,6 +12,8 @@ class UserMailer < ApplicationMailer
     @booking = booking
     @user = booking.user
     @item = booking.item
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Booking Confirmed: #{@item.name}"
@@ -21,6 +23,8 @@ class UserMailer < ApplicationMailer
     @booking = booking
     @user = booking.user
     @item = booking.item
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Booking Started: #{@item.name}"
@@ -29,6 +33,8 @@ class UserMailer < ApplicationMailer
   def user_booking_requested (booking)
     @booking = booking
     @user = booking.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
 
@@ -41,15 +47,9 @@ class UserMailer < ApplicationMailer
     @item = @booking.item
     @manager = @item.user
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+    @items = get_peripherals(booking)
 
 
-    @listofitems = [booking.item]
-    if !@booking.peripherals.to_s.empty?
-      peripheral_serials = @listofitems.peripherals.to_s.split
-      peripheral_serials.each do |p|
-        @listofitems.append(Item.where("serial = ?", p))
-      end
-    end
     mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
   end
 
@@ -58,6 +58,8 @@ class UserMailer < ApplicationMailer
     @user = @booking.user
     @item = @booking.item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @manager.email, subject: "AMRC - Item Returned: #{@item.name}"
@@ -67,6 +69,8 @@ class UserMailer < ApplicationMailer
     @user = user
     @item = item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @manager.email, subject: "AMRC - Item Issue: #{@item.name}"
@@ -77,6 +81,8 @@ class UserMailer < ApplicationMailer
     @user = @booking.user
     @item = @booking.item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
@@ -87,6 +93,8 @@ class UserMailer < ApplicationMailer
     @user = @booking.user
     @item = @booking.item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
@@ -97,6 +105,8 @@ class UserMailer < ApplicationMailer
     @user = @booking.user
     @item = @booking.item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Return Due Soon: #{@item.name}"
@@ -108,9 +118,23 @@ class UserMailer < ApplicationMailer
     @user = @booking.user
     @item = @booking.item
     @manager = @item.user
+    @items = get_peripherals(booking)
+
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
     mail to: @user.email, subject: "AMRC - Late For Return: #{@item.name}"
   end
 
+  def get_peripherals(booking)
+    listofitems = [booking.item]
+
+    if !booking.peripherals.to_s.empty?
+      peripheral_serials = listofitems.peripherals.to_s.split
+      peripheral_serials.each do |p|
+        listofitems.append(Item.where("serial = ?", p))
+      end
+    end
+
+    return listofitems
+  end
 end

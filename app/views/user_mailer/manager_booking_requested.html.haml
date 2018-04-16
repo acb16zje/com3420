@@ -52,7 +52,7 @@
                 %th Asset
                 %th Serial
               %tbody
-                - @listofitems.each do |item|
+                - @items.each do |item|
                   %tr
                     %td.has-text-centered= @item.id
                     %td.has-text-centered= link_to item.name, item
