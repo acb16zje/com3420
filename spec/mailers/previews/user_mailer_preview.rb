@@ -44,6 +44,12 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.manager_asset_returned(b)
   end
 
+  def manager_asset_issue
+    u = User.first
+    i = Item.first
+    UserMailer.manager_asset_issue(u, i)
+  end
+
   def manager_booking_cancelled
     b = Booking.first
     UserMailer.manager_booking_cancelled(b)

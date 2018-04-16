@@ -56,6 +56,15 @@ class UserMailer < ApplicationMailer
     mail to: @manager.email, subject: "AMRC - Item Returned: #{@item.name}"
   end
 
+  def manager_asset_issue (user, item)
+    @user = user
+    @item = item
+    @manager = @item.user
+    attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
+
+    mail to: @manager.email, subject: "AMRC - Item Issue: #{@item.name}"
+  end
+
   def manager_booking_cancelled (booking)
     @booking = booking
     @user = @booking.user
