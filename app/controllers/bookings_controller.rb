@@ -208,7 +208,7 @@ class BookingsController < ApplicationController
 
       if item.condition == "Missing" or item.condition == "Damaged"
         Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
-        UserMailer.manager_asset_issue(@booking.user, @booking.item.user).deliver
+        UserMailer.manager_asset_issue(@booking.user, @booking.item).deliver
       end
 
       item.save
