@@ -29,7 +29,6 @@ class UserMailer < ApplicationMailer
   def user_booking_requested (booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
 
@@ -43,6 +42,14 @@ class UserMailer < ApplicationMailer
     @manager = @item.user
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
+
+    @listofitems = [booking.item]
+    if !@booking.peripherals.to_s.empty?
+      peripheral_serials = @listofitems.peripherals.to_s.split
+      peripheral_serials.each do |p|
+        @listofitems.append(Item.where("serial = ?", p))
+      end
+    end
     mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
   end
 
