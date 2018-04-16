@@ -17,24 +17,46 @@
           Your Booking for #{@item.name} is overdue. Please return immediately.
         %br
         %hr
-        %h2
-          Late Items and Peripherals
-        %table.email-table{:cellspacing => "0", :width => "100%"}
-          %thead
-            %tr
-              %th ID
-              %th Asset
-              %th End Date
-              %th End Time
-              %th Location
-              %th Reason
-            %tbody
-              %td.has-text-centered= @booking.id
-              %td.has-text-centered= link_to @booking.item.name, @booking.item
-              %td.has-text-centered= @booking.end_date
-              %td.has-text-centered= @booking.end_time.strftime("%I:%M %p")
-              %td.has-text-centered= @booking.next_location
-              %td.has-text-centered= @booking.reason
+        .body-box
+          %h2
+            Booking Information
+          .email-field
+            %h3.email-body-header
+              Start Time:
+            .email-body-text
+              #{@booking.start_datetime.strftime("%d/%m/%Y at %H:%M")}
+          .email-field
+            %h3.email-body-header
+              End Time:
+            .email-body-text
+              #{@booking.end_datetime.strftime("%d/%m/%Y at %H:%M")}
+          .email-field
+            %h3.email-body-header
+              Location:
+            .email-body-text
+              #{@booking.next_location}
+          .email-field
+            %h3.email-body-header
+              Reason:
+            .email-body-text
+              #{@booking.reason}
+
+          .email-field
+            %h3.email-body-header
+              Items:
+
+          %table.email-table{:cellspacing => "0", :width => "100%"}
+            %thead
+              %tr
+                %th ID
+                %th Asset
+                %th Serial
+              %tbody
+                - @items.each do |item|
+                  %tr
+                    %td.has-text-centered= @item.id
+                    %td.has-text-centered= link_to item.name, item
+                    %td.has-text-centered= item.serial
         %br
         %hr
         %h2
