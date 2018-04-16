@@ -93,6 +93,21 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
+  describe "manager_asset_issue" do
+
+    let(:mail) { UserMailer.manager_asset_returned(b.user, b.item) }
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("AMRC - Item Issue: #{b.item.name}")
+      expect(mail.to).to eq(["#{b.item.user.email}"])
+      expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
+  end
+
   describe "manager_booking_cancelled" do
 
     let(:mail) { UserMailer.manager_booking_cancelled(b) }
