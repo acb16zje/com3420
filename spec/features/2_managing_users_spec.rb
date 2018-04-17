@@ -39,17 +39,17 @@ describe 'Managing accounts' do
   end
 
   specify 'I can view a list of users that exist in the database' do
-    create_erica
+    create_weikin_admin
     visit '/users'
-    expect(page).to have_content 'erica.smith@sheffield.ac.uk Admin'
+    expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Admin'
   end
 
   specify 'I can view the details of a user' do
-    create_erica
+    create_weikin_admin
     visit '/users'
-    expect(page).to have_content 'erica.smith@sheffield.ac.uk Admin'
-    click_link('view_user_me1eds')
-    expect(page).to have_content 'me1eds'
+    expect(page).to have_content 'wkkhaw1@sheffield.ac.uk Admin'
+    click_link('view_user_aca16wkk')
+    expect(page).to have_content 'aca16wkk'
   end
 
   specify 'I can edit my profile details' do
@@ -66,15 +66,15 @@ describe 'Managing accounts' do
   end
 
   specify 'I can delete a different user' do
-    create_erica
+    create_weikin_admin
     visit '/users'
-    click_link('view_user_me1eds')
-    expect(page).to have_content 'me1eds'
+    click_link('view_user_aca16wkk')
+    expect(page).to have_content 'aca16wkk'
     click_link('Edit Details')
     expect(page).to have_content 'Delete'
     click_link('Delete')
     expect(page).to have_content 'User was successfully deleted.'
-    expect(page).to_not have_content 'erica.smith@sheffield.ac.uk Admin'
+    expect(page).to_not have_content 'wkkhaw1@sheffield.ac.uk Admin'
   end
 
   specify 'I cannot delete my own account' do
@@ -87,9 +87,9 @@ describe 'Managing accounts' do
   end
 
   specify 'I can view the list of asset managers' do
-    create_erica
+    create_weikin_admin
     click_link 'Asset Managers'
-    expect(page).to have_content 'erica.smith@sheffield.ac.uk'
+    expect(page).to have_content 'wkkhaw1@sheffield.ac.uk'
   end
 
   specify 'I can change the permission of my account to asset manager' do

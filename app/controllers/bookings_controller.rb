@@ -70,7 +70,6 @@ class BookingsController < ApplicationController
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
-    gon.disable_start_time = disable_start_time
   end
 
   # GET /bookings/1/edit
@@ -169,8 +168,6 @@ class BookingsController < ApplicationController
       end
 
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
-    else
-      render :edit
     end
   end
 
@@ -182,8 +179,6 @@ class BookingsController < ApplicationController
       Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking, context: "AM")
       UserMailer.manager_booking_cancelled(@booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
-    else
-      redirect_to bookings_path, notice: 'Could not cancel booking.'
     end
   end
 
@@ -220,8 +215,6 @@ class BookingsController < ApplicationController
       else
         redirect_to item, notice: 'Thank you. Your item has been returned'
       end
-    else
-      redirect_to bookings_path, notice: 'Could not be returned'
     end
   end
 
@@ -274,13 +267,19 @@ class BookingsController < ApplicationController
     query = Booking.where(
       "(status = 2 OR status = 3)
       AND item_id = '#{item_id}'
-      AND ((start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
-      AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
-      OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
-      AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP)))"
+      AND (
+        (start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
+        AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
+
+        OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
+            AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP))
+
+        OR (start_datetime = CAST ('#{start_datetime}' AS TIMESTAMP)
+            AND end_datetime = CAST ('#{end_datetime}' AS TIMESTAMP))
+      )"
     ).first
 
-    return query.nil?
+    return query.blank?
   end
 
   # Fully booked days in a single booking
@@ -308,8 +307,9 @@ class BookingsController < ApplicationController
       if date_array.length > 1
         # Include the start date if start time is 12:00 AM
         if (start_time.hour.eql? 0) && (start_time.min.eql? 0) ||
-           (DateTime.now.hour > start_time.hour) ||
-           (DateTime.now.hour == start_time.hour && DateTime.now.min > start_time.min)
+           (DateTime.now > booking.start_datetime)
+          #  (DateTime.now.hour > start_time.hour) ||
+          #  (DateTime.now.hour == start_time.hour && DateTime.now.min > start_time.min)
           date_array = date_array[0..-1]
         else
           date_array = date_array[1..-1]
@@ -411,14 +411,10 @@ class BookingsController < ApplicationController
   end
 
   # Disable unavailable start time
-  def disable_start_time(start_date = nil)
+  def disable_start_time(start_date)
     time_to_disable = []
 
-    if start_date.nil?
-      start_date = Date.today.strftime("%Y-%m-%d")
-    else
-      start_date = Date.parse(start_date)
-    end
+    start_date = Date.parse(start_date)
 
     bookings = Booking.where(
       "(status = 2 OR status = 3)

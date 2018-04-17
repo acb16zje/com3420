@@ -31,12 +31,12 @@ class ApplicationController < ActionController::Base
   end
 
   # IE over HTTPS will not download if browser caching is off, so allow browser caching when sending files
-  def send_file(file, opts = {})
-    response.headers['Cache-Control'] = 'private, proxy-revalidate' # Still prevent proxy caching
-    response.headers['Pragma'] = 'cache'
-    response.headers['Expires'] = '0'
-    super(file, opts)
-  end
+  # def send_file(file, opts = {})
+  #   response.headers['Cache-Control'] = 'private, proxy-revalidate' # Still prevent proxy caching
+  #   response.headers['Pragma'] = 'cache'
+  #   response.headers['Expires'] = '0'
+  #   super(file, opts)
+  # end
 
   layout :layout
 

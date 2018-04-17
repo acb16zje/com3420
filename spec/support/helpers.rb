@@ -73,13 +73,6 @@ module Helpers
     click_button('Create user')
   end
 
-  def create_erica
-    visit 'users/new'
-    fill_in 'user_email', with: 'erica.smith@sheffield.ac.uk'
-    select('Admin', from: 'user_permission_id')
-    click_button('Create user')
-  end
-
   # Create categories helpers
   def create_cameras
     visit '/categories/new'

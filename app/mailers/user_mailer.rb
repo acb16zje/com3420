@@ -33,6 +33,7 @@ class UserMailer < ApplicationMailer
   def user_booking_requested (booking)
     @booking = booking
     @user = booking.user
+    @item = booking.item
     @items = get_peripherals(booking)
 
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")

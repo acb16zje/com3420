@@ -53,6 +53,7 @@ FactoryBot.define do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
+    has_peripheral 1
     user_id {User.find(1).id}
     association :category, factory: :laptop_category
 
@@ -61,11 +62,40 @@ FactoryBot.define do
     end
   end
 
-  factory :laptop_erica, class: 'Item' do
+  factory :charging_cable, class: 'Item' do
+    name 'Charging Cable'
+    serial 'CC322'
+    location 'Diamond'
+    has_peripheral 0
+    parent_asset_serial 'MPTR212/A'
+    user_id {User.find(1).id}
+    association :category, factory: :laptop_peripheral_category
+  end
+
+  factory :laptop_admin, class: 'Item' do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
-    association :user, factory: :erica
+    association :user, factory: :admin
     association :category, factory: :laptop_category
+  end
+
+  factory :laptop_admin_has_peripheral, class: 'Item' do
+    name 'Macbook Pro 15-inch'
+    serial 'MPTR212/A'
+    location 'Western Bank Library'
+    has_peripheral 1
+    association :user, factory: :admin
+    association :category, factory: :laptop_category
+  end
+
+  factory :charging_cable_admin, class: 'Item' do
+    name 'Charging Cable'
+    serial 'CC322'
+    location 'Diamond'
+    has_peripheral 0
+    parent_asset_serial 'MPTR212/A'
+    association :user, factory: :admin
+    association :category, factory: :laptop_peripheral_category
   end
 end

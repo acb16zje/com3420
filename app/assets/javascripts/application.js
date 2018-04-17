@@ -66,7 +66,6 @@ $(document).ready(function () {
     startDate.pickadate({
         format: 'd mmmm yyyy',
         clear: '',
-        // min: moment(),
         max: gon.max_start_date,
         onStart: function () {
             if (gon.initial_disable_dates.length !== 0) {
@@ -74,10 +73,10 @@ $(document).ready(function () {
             }
 
             if (moment().hour() == 23 && moment().minute() >= 50) {
-                this.set('select', moment().add(1, 'd').toDate());
+                // this.set('select', moment().add(1, 'd').toDate());
                 this.set('min', moment().add(1, 'd').toDate());
             } else {
-                this.set('select', moment());
+                // this.set('select', moment());
                 this.set('min', moment());
             }
         }
@@ -96,6 +95,8 @@ $(document).ready(function () {
             if (gon.initial_disable_dates.length !== 0) {
                 this.set('disable', gon.initial_disable_dates);
             }
+
+            endDate.prop('disabled', true);
         }
     });
 
@@ -105,9 +106,7 @@ $(document).ready(function () {
         min: moment(),
         interval: 10,
         onStart: function () {
-            if (gon.disable_start_time.length !== 0) {
-                this.set('disable', gon.disable_start_time);
-            }
+            startTime.prop('disabled', true);
         }
     });
 
@@ -115,7 +114,10 @@ $(document).ready(function () {
     endTime.pickatime({
         clear: '',
         min: moment(),
-        interval: 10
+        interval: 10,
+        onStart: function () {
+            endTime.prop('disabled', true);
+        }
     });
 
     $('.datepicker').change(function () {
@@ -137,6 +139,7 @@ $(document).ready(function () {
                 startTime.pickatime('picker').set('min', false);
             }
 
+            startTime.prop('disabled', false);
             startTime.pickatime('picker').clear();
 
             // Dynamic disable startTime when startDate is changed
@@ -265,8 +268,6 @@ $(document).ready(function () {
     }
 
     // Disable end date and end time input
-    disableEndInput();
-
     function disableEndInput() {
         // Disable the end date and end time if start date and start time are not filled
         if (startDate.pickadate('picker') != undefined &&
@@ -354,9 +355,9 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data, page) {
-                    console.log('Peripherals ajax');
-                    console.log(data);
-                    console.log(data.name);
+                    // console.log('Peripherals ajax');
+                    // console.log(data);
+                    // console.log(data.name);
 
                     $('#peripherals').select2({
                         data: $.map(data, function (item, i) {

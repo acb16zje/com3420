@@ -76,14 +76,14 @@ describe 'Managing assets' do
   end
 
   specify 'My assets does not show assets that do not belong to me' do
-    FactoryBot.create :erica
+    FactoryBot.create :admin
     FactoryBot.create :macbook_pro
     visit '/items/manager?user_id=2'
     expect(page).to_not have_content 'Macbook Pro 15-inch'
   end
 
   specify 'I cannot edit an asset that does not belong to me' do
-    FactoryBot.create :laptop_erica
+    FactoryBot.create :laptop_admin
     visit '/items/manager?user_id=2'
     expect(page).to_not have_css("#edit-button-1")
     visit '/items'

@@ -72,13 +72,4 @@ FactoryBot.define do
     phone ''
     permission_id 3
   end
-
-  factory :erica, class: 'User' do
-    email 'erica.smith@sheffield.ac.uk'
-    username 'me1eds'
-    givenname 'Erica'
-    sn 'Smith'
-    phone ''
-    permission_id 3
-  end
 end

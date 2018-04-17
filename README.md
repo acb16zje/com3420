@@ -2,9 +2,10 @@
 
 ## Client E: Asset Management System
 
-#### ZerJun Eng, Alex Chapman, WeiKin Khaw, Ritwesh
+#### Zer Jun Eng, Alex Chapman, Wei Kin Khaw, Ritwesh
 
-![D O N O T W A N T](https://media1.tenor.com/images/a136bc5f7e7c57ba0297fe3ce8aefeca/tenor.gif?itemid=10533630)
+<!-- ![D O N O T W A N T](https://media1.tenor.com/images/a136bc5f7e7c57ba0297fe3ce8aefeca/tenor.gif?itemid=10533630) -->
+![D O N O T W A N T](https://static.boredpanda.com/blog/wp-content/uploads/2017/04/cute-dog-shiba-inu-ryuji-japan-29.jpg)
 
 ---
 

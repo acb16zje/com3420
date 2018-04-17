@@ -77,6 +77,23 @@ FactoryBot.define do
     association :item, factory: :gopro
   end
 
+  factory :booking_today_all_day_not_mine, class: "Booking" do
+    start_date {DateTime.now.strftime("%d %B %Y")}
+    start_time {DateTime.now.strftime("%H:%M")}
+    start_datetime {DateTime.now}
+
+    end_date {DateTime.now.strftime("%d %B %Y")}
+    end_time {DateTime.now.change({hour:23, min: 50, sec:0}).strftime("%H:%M")}
+    end_datetime {DateTime.now.change({hour:23, min: 50, sec:0})}
+
+    next_location "Diamond"
+    status 1
+    peripherals ""
+
+    association :item, factory: :gopro
+    association :user, factory: :user
+  end
+
   factory :ongoing_booking, class: "Booking" do
     start_date {DateTime.now.strftime("%d %B %Y")}
     start_time {DateTime.now.strftime("%H:%M")}
@@ -104,6 +121,40 @@ FactoryBot.define do
 
     next_location "Diamond"
     status 3
+    user_id 1
+
+    association :item, factory: :laptop_admin
+  end
+
+  factory :single_booking_multiple_day_12am, class: 'Booking' do
+    start_date {Date.today - 1}
+    start_time {"2000-01-01 00:00:00 UTC"}
+    start_datetime {(Date.today - 1).to_s + ' ' + "00:00"}
+
+    end_date {Date.tomorrow + 5}
+    end_time {"13:00"}
+    end_datetime {(Date.tomorrow + 5).to_s + ' ' + "13:00"}
+
+    next_location "Diamond"
+    status 2
+    peripherals ""
+    user_id 1
+
+    association :item, factory: :gopro
+  end
+
+  factory :single_booking_multiple_day, class: 'Booking' do
+    start_date {Date.tomorrow}
+    start_time {"2000-01-01 00:37:00 UTC"}
+    start_datetime {Date.tomorrow.to_s + ' ' + "00:37"}
+
+    end_date {Date.tomorrow + 5}
+    end_time {"13:00"}
+    end_datetime {(Date.tomorrow + 5).to_s + ' ' + "13:00"}
+
+    next_location "Diamond"
+    status 2
+    peripherals ""
     user_id 1
 
     association :item, factory: :gopro
