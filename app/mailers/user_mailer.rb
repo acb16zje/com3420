@@ -35,11 +35,11 @@ class UserMailer < ApplicationMailer
     @user = booking.user
     @item = booking.item
     @items = get_peripherals(booking)
-
     attachments.inline["amrc_main.svg"] = File.read("#{Rails.root}/app/assets/images/amrc_main.svg")
 
 
     mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
+    puts @items
   end
 
   def manager_booking_requested (booking)
@@ -126,15 +126,8 @@ class UserMailer < ApplicationMailer
   end
 
   def get_peripherals(booking)
-    listofitems = [booking.item]
-
-    if !booking.peripherals.to_s.empty?
-      peripheral_serials = listofitems.peripherals.to_s.split
-      peripheral_serials.each do |p|
-        listofitems.append(Item.where("serial = ?", p))
-      end
-    end
-
-    return listofitems
+    bookingitem = [Item.find(booking.item.id)]
+    peripherals = Item.where(serial: booking.peripherals.to_s.split)
+    return bookingitem + peripherals
   end
 end

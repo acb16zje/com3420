@@ -98,8 +98,6 @@ class BookingsController < ApplicationController
       @booking.status = 2
     else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
-      UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
     end
 
@@ -150,6 +148,8 @@ class BookingsController < ApplicationController
           booking.save
         end
       end
+      UserMailer.user_booking_requested(@booking).deliver
+      UserMailer.manager_booking_requested(@booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), notice: 'Chosen timeslot conflicts with other bookings.'
