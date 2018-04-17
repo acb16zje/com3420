@@ -13,6 +13,8 @@
   - if current_user.permission_id != 1
     %p.title.has-text-centered
       = link_to 'Create new', new_item_path, class: 'button is-success'
+    %p.title.has-text-centered
+      = link_to 'Import', import_items_path, class: 'button is-success'
   %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr

@@ -156,9 +156,29 @@ class ItemsController < ApplicationController
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Ownership was successfully transfered.'
   end
 
+  # GET /items/import
+  def import
+  end
+
+  # POST /items/import_file
   def import_file
-    Importers::ItemImporter.new(params[:import_file][:file].tempfile.path).import(current_user)
-    redirect_to root_path
+    excel_import = Importers::ItemImporter.new(params[:import_file][:file].tempfile.path)
+    res = excel_import.import(current_user)
+    
+    # Error message 0
+    if res[0] == 0
+      redirect_to import_items_path, notice: "The submitted file is not of file .xlsx format"
+    # Error message 1
+    elsif res[0] == 1
+      redirect_to import_items_path, notice: "Headers of excel sheet do not match appropriate format."
+    elsif res[0] == 2
+      incorrect_rows = res[1]
+      if incorrect_rows.blank?
+        redirect_to import_items_path, notice: "Import was successful and no problems occured"
+      else
+        redirect_to controller: 'items', action: 'import', incorrect_rows: incorrect_rows, notice: "Import was partially successful, view rows that had problems below"
+      end
+    end
   end
 
   private
