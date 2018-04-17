@@ -17,12 +17,12 @@ module Importers
     def import(current_user)
       # To check whether uploaded file is an excel sheet
       if file[-5..-1] != ".xlsx"
-        return [0,[]]
+        return [0, []]
       end
-      
+
       workbook = RubyXL::Parser.parse(file)
       worksheet = workbook[0]
-      
+
       # Gets all the cells of the header into a string
       header = ""
       worksheet[0].cells.each do |head|
@@ -35,8 +35,9 @@ module Importers
       worksheet.delete_row(0) #Delete row of headers so it does not interfere with item creation
 
       incorrect_rows = []
-      
+
       worksheet.each_with_index do |row, index|
+        next if row.nil?
         exit = false
         t_condition = nil
         t_acquisition_date = nil
@@ -47,30 +48,30 @@ module Importers
         t_retired_date = nil
         t_po_number = nil
         t_comment = nil
-
-        t_name = row[0].value.strip
+        t_name = row[0].value.strip if !row[0].nil?
         # Checking if the name cell is in the correct format
         if t_name.nil? || !(t_name.instance_of? String)
-          incorrect_rows.append(["#{index}, 10"])
+          incorrect_rows.append(["#{index}, 0"])
           exit = true
         end
-
-        t_serial = row[1].value.strip
+        
+        t_serial = row[1].value.strip if !row[1].nil?
         # Checking if the serial cell is in the correct format
         if t_serial.nil? || !(t_serial.instance_of? String)
           incorrect_rows.append(["#{index}, 1"])
           exit = true
-        # Checking if the serial has already been used in another item
+          # Checking if the serial has already been used in another item
         elsif Item.exists?(:serial => t_serial)
           incorrect_rows.append(["#{index}, 2"])
+          exit = true
         end
 
-        t_category = row[2].value.strip
+        t_category = row[2].value.strip if !row[2].nil?
         # Checking if the category cell is empty
         if t_category.nil?
           incorrect_rows.append(["#{index}, 3"])
           exit = true
-        # Checking if the category exists within the database
+          # Checking if the category exists within the database
         elsif !Category.exists?(:name => t_category)
           incorrect_rows.append(["#{index}, 4"])
           exit = true
@@ -86,7 +87,7 @@ module Importers
           exit = true
         end
 
-        t_acquisition_date = row[4].value.strip if !row[4].nil?
+        t_acquisition_date = row[4].value if !row[4].nil?
         # Checking if the acquisition_date cell is in the correct format
         if !t_acquisition_date.nil? && !(t_acquisition_date.instance_of? DateTime)
           incorrect_rows.append(["#{index}, 6"])
@@ -95,61 +96,66 @@ module Importers
           t_acquisition_date = Date.parse(t_acquisition_date.to_s)
         end
 
-        t_purchase_price = row[5].value.strip if !row[5].nil?
+        t_purchase_price = row[5].value if !row[5].nil?
         # Checking if the purchase_price cell is in the correct format
         if !t_purchase_price.nil? && (((t_purchase_price.instance_of? Float) && !(t_purchase_price.instance_of? Integer)) || ((!t_purchase_price.instance_of? Float) && (t_purchase_price.instance_of? Integer)))
           incorrect_rows.append(["#{index}, 7"])
           exit = true
         end
 
-        t_location = row[6].strip.value
+        t_location = row[6].value.strip if !row[6].nil?
         # Checking if the location cell is in the correct format
         if t_location.nil? || !(t_location.instance_of? String)
           incorrect_rows.append(["#{index}, 8"])
           exit = true
         end
 
-        t_manufacturer = row[7].strip.value if !row[7].nil?
+        t_manufacturer = row[7].value.strip if !row[7].nil?
         # Checking if the manufacturer cell is in the correct format
         if !t_manufacturer.nil? && !(t_manufacturer.instance_of? String)
           incorrect_rows.append(["#{index}, 9"])
           exit = true
         end
 
-        t_model = row[8].strip.value if !row[8].nil?
+        t_model = row[8].value.strip if !row[8].nil?
         # Checking if the model cell is in the correct format
         if !t_model.nil? && !(t_model.instance_of? String)
           incorrect_rows.append(["#{index}, 10"])
           exit = true
         end
 
-        t_parent_asset_serial = row[9].strip.value if !row[9].nil?
+        t_parent_asset_serial = row[9].value.strip if !row[9].nil?
         # Checking if the parent_asset_serial exists in the database
-        if !t_parent_asset_serial.nil? && !Item.exists?(:serial => t_parent_asset_serial)
-          incorrect_rows.append(["#{index}, 11"])
-          exit = true
+        if !t_parent_asset_serial.nil? 
+          if !Item.exists?(:serial => t_parent_asset_serial)
+            incorrect_rows.append(["#{index}, 11"])
+            exit = true
+          elsif !(Item.where("serial = ?", t_parent_asset_serial).first.category.has_peripheral)
+            incorrect_rows.append(["#{index}, 12"])
+            exit = true
+          end
         end
 
-        t_retired_date = row[10].strip.value if !row[10].nil?
+        t_retired_date = row[10].value if !row[10].nil?
         # Checking if the retired_date cell is in the correct format and if retired_date is filled, condition must be set as Retired
         if !t_retired_date.nil? && !(t_retired_date.instance_of? DateTime) && t_condition != "Retired"
-          incorrect_rows.append(["#{index}, 12"])
+          incorrect_rows.append(["#{index}, 13"])
           exit = true
         elsif !t_retired_date.nil?
           t_retired_date = Date.parse(retired_date.to_s)
         end
 
-        t_po_number = row[11].strip.value if !row[11].nil?
+        t_po_number = row[11].value.strip if !row[11].nil?
         # Checking if the po_number cell is in the correct format
         if !t_po_number.nil? && !(t_po_number.instance_of? String)
-          incorrect_rows.append(["#{index}, 13"])
+          incorrect_rows.append(["#{index}, 14"])
           exit = true
         end
 
-        t_comment = row[12].strip.value if !row[12].nil?
+        t_comment = row[12].value.strip if !row[12].nil?
         # Checking if the comment cell is in the correct format
         if !t_comment.nil? && !(t_comment.instance_of? String)
-          incorrect_rows.append(["#{index}, 14"])
+          incorrect_rows.append(["#{index}, 15"])
           exit = true
         end
 
