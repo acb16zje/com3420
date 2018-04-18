@@ -54,11 +54,7 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    if !@item.parent_asset_serial.blank?
-      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
-    end
-
-    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+    @peripherals = @item.getItemPeripherals
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
@@ -76,75 +72,42 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
+    main_item = Item.find(params[:booking][:main_item])
 
+    # Set booking fields which aren't filled by form
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
 
+    # Make sure not nil for unrequired field.
     if params[:booking][:reason].blank?
       @booking.reason = "None"
     end
 
-    item = Item.find_by_id(@booking.item_id)
-    if item.user_id == current_user.id
+    #Set booking status depending upon its creator
+    if main_item.user_id == current_user.id
       @booking.status = 2
     else
       Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
       @booking.status = 1
     end
 
-    peripherals = params[:booking][:peripherals]
-
-    # Changing the peripherals array into a string to be saved
-    if peripherals.blank?
-      @booking.peripherals = nil
-    else
-      peripherals_string = ""
-      peripherals.each do |peripheral|
-        next if peripheral == ""
-        peripherals_string = peripherals_string + "," + Item.find_by_id(peripheral).serial
-      end
-      @booking.peripherals = peripherals_string[1..-1]
-    end
-
-    # Server side validation
-    query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
-    unless peripherals.nil?
-      peripherals.each do |peripheral|
-        next if peripheral == ""
-        query = query && booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
-      end
-    end
+    b_array = Item.where(id: (params[:booking][:booking_peripheral_items])) + [main_item]
+    query = b_array.all? { |i| booking_validation(i.id, @booking.start_datetime, @booking.end_datetime)}
 
     if (query) && @booking.save
-      # Making a booking for any peripheral selected
-      unless peripherals.nil?
-        peripherals.each do |peripheral|
-          next if peripheral == ""
-          booking = Booking.new(booking_params)
-
-          if params[:booking][:reason].nil? || params[:booking][:reason] == ""
-            booking.reason = "None"
-          end
-          booking.item_id = peripheral
-          booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
-          booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
-          booking.next_location = params[:booking][:next_location].titleize
-          booking.peripherals = nil
-
-          if item.user_id == current_user.id
-            booking.status = 2
-          else
-            booking.status = 1
-          end
-          booking.save
-        end
+      puts "IN IF STATEMENT"
+      bookingitems_to_save = p_array.map {|i| BookingItem.new(booking: @booking, item: i)}
+      puts bookingitems_to_save
+      if bookingitems_to_save.each(&:save)
+        UserMailer.user_booking_requested(@booking).deliver
+        UserMailer.manager_booking_requested(@booking).deliver
+        redirect_to bookings_path, notice: 'Booking was successfully created.'
+      else
+        redirect_to new_item_booking_path(item_id: main_item.id), notice: 'There was an issue adding the chosen peripherals'
       end
-      UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(@booking).deliver
-      redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
-      redirect_to new_item_booking_path(item_id: @booking.item_id), notice: 'Chosen timeslot conflicts with other bookings.'
+      redirect_to new_item_booking_path(item_id:  main_item.id), notice: 'Chosen timeslot conflicts with other bookings.'
     end
   end
 
