@@ -25,7 +25,7 @@ body {
 /* Mobile notification style */
 #mobile_notification_dropdown .dropdown-content{
   top: 1px !important;
-  left: 0px;
+  left: 0;
 }
 
 /* No resize for textarea */

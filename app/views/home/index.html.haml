@@ -57,7 +57,7 @@
                 %p.card-footer-item
                   %span
                     = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
-          - for i in 0...placeholder - 1
+          - for _ in 0...placeholder - 1
             .column
     - else
       .columns
@@ -72,7 +72,7 @@
               %p.card-footer-item
                 %span
                   = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
-        - for i in 0..3
+        - for _ in 0..3
           .column
 
 

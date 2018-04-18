@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  before_action :set_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_category, only: %i[show edit update destroy]
   authorize_resource
 
   # GET /categories
@@ -28,9 +28,9 @@ class CategoriesController < ApplicationController
     parent_category.has_peripheral = 1
 
     category = Category.find_by_id(params[:id]).dup
-    category.name = category.name.titleize.strip + " - Peripherals"
+    category.name = category.name.titleize.strip + ' - Peripherals'
 
-    if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+    if (!category.icon.include? 'material-icons') && !category.icon.empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
     else
       category.icon = category.icon.chomp('</i>') + 'P</i>'
@@ -45,8 +45,7 @@ class CategoriesController < ApplicationController
   end
 
   # GET /categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /categories
   def create
@@ -60,7 +59,7 @@ class CategoriesController < ApplicationController
         @category.name = @category.name.titleize.strip
 
         # Font awesome icon
-        if (!(@category.icon).include? 'material-icons') && !(@category.icon).empty?
+        if (!@category.icon.include? 'material-icons') && !@category.icon.empty?
           @category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i>'
         end
 
@@ -72,9 +71,9 @@ class CategoriesController < ApplicationController
           @category.has_peripheral = 1
 
           category = Category.new(category_params)
-          category.name = category.name.titleize.strip + " - Peripherals"
+          category.name = category.name.titleize.strip + ' - Peripherals'
 
-          if (!(category.icon).include? 'material-icons') && !(category.icon).empty?
+          if (!category.icon.include? 'material-icons') && !category.icon.empty?
             category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
           else
             category.icon = @category.icon.chomp('</i>') + 'P</i>'
@@ -95,21 +94,19 @@ class CategoriesController < ApplicationController
 
   # PATCH/PUT /categories/1
   def update
-    if @category.update(category_params)
-      redirect_to @category, notice: 'Category was successfully updated.'
-    end
+    redirect_to @category, notice: 'Category was successfully updated.' if @category.update(category_params)
   end
 
   # DELETE /categories/1
   def destroy
     begin @category.destroy
-      redirect_to categories_url, notice: 'Category was successfully deleted.'
+      return redirect_to categories_url, notice: 'Category was successfully deleted.'
     rescue
       items = Item.where('category_id = ?', @category.id)
       if items.blank?
         UserHomeCategory.where('category_id = ?', @category.id).destroy_all
         begin @category.destroy
-          redirect_to categories_url, notice: 'Category was successfully deleted.'
+          return redirect_to categories_url, notice: 'Category was successfully deleted.'
         end
       else
         redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'

@@ -29,9 +29,7 @@ end
 desc 'Update booking status to ongoing'
 task update_booking_status_to_ongoing: :environment do
   # Get current date/time
-  puts DateTime.now
   bookings = Booking.where('status = 2 AND start_datetime <= ?', DateTime.now.strftime("%Y-%m-%d %H:%M:%S"))
-  puts bookings
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
@@ -47,7 +45,7 @@ task update_booking_status_to_late: :environment do
   bookings = Booking.where('status = 3 AND end_datetime < ?', DateTime.now.strftime("%Y-%m-%d %H:%M:%S"))
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
-    Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
+    Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
     UserMailer.asset_overdue(b).deliver
     b.status = 7
     b.save
@@ -59,7 +57,7 @@ task remind_late_booking: :environment do
   bookings = Booking.where('status = 7')
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
-    Notification.create(recipient: b.item.user_id, action: "overdue", notifiable: b, context: "AM")
+    Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
     UserMailer.asset_overdue(b).deliver
   end
 end

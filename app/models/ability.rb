@@ -32,24 +32,22 @@ class Ability
     user ||= User.new
 
     # Admin
-    if user.permission_id == 3
-      can :manage, :all
-    end
+    can :manage, :all if user.permission_id == 3
 
     # Asset Manager
     if user.permission_id == 2
-      can [:edit, :update], Item, user_id: user.id
-      can [:show, :read, :create], Item
+      can %i[edit update], Item, user_id: user.id
+      can %i[show read create], Item
       can :manage, Booking
       can :manage, Category
-      can [:show, :edit, :update, :manager], User, id: user.id
+      can %i[show edit update manager], User, id: user.id
     end
 
     # User
     if user.permission_id == 1
-      can [:read, :show], Item
-      can [:read, :new, :create, :edit, :update, :set_booking_cancelled, :set_booking_returned], Booking, id: user.id
-      can [:show, :edit, :update, :manager], User, id: user.id
+      can %i[read show], Item
+      can %i[read new create edit update set_booking_cancelled set_booking_returned], Booking, id: user.id
+      can %i[show edit update manager], User, id: user.id
       can :filter, Category
     end
   end

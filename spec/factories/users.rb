@@ -54,22 +54,4 @@ FactoryBot.define do
     sequence(:username) {|n| "adm#{n}usr"}
     phone ''
   end
-
-  factory :zerjun, class: 'User' do
-    email 'zjeng1@sheffield.ac.uk'
-    username 'acb16zje'
-    givenname 'Zer Jun'
-    sn 'Eng'
-    phone ''
-    permission_id 3
-  end
-
-  factory :alex, class: 'User' do
-    email 'atchapman1@sheffield.ac.uk'
-    username 'aca16atc'
-    givenname 'Alex'
-    sn 'Chapman'
-    phone ''
-    permission_id 3
-  end
 end

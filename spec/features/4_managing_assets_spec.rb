@@ -12,6 +12,16 @@ describe 'Managing assets' do
     expect(page).to have_content 'Book or Reserve'
   end
 
+  specify 'I can import assets from .xlsx file only' do
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test.csv')
+    click_button 'Import assets'
+    expect(page).to have_content 'The submitted file is not of file .xlsx format'
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test.xlsx')
+    click_button 'Import assets'
+  end
+
   specify 'I can create a peripheral for an asset' do
     create_peripheral_for_gopro
   end
