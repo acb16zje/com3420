@@ -15,6 +15,8 @@ require 'rake'
 env :MAILTO, 'systems@epigenesys.org.uk'
 set :output, standard: 'log/whenever.log'
 env :PATH, ENV['PATH']
+set :environment, "development"
+job_type :rake, "cd :path && :environment_variable=:environment :bundle_command rake :task :output"
 
 every :reboot, roles: [:db] do
   runner "require 'delayed/command'; Delayed::Command.new(['-p #{@delayed_job_args_p}', '-n #{@delayed_job_args_n}', 'start']).daemonize"

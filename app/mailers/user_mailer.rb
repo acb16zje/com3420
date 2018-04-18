@@ -97,9 +97,9 @@ class UserMailer < ApplicationMailer
 
   def asset_due(booking)
     @booking = booking
-    @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
+    @user = booking.user
+    @item = booking.item
+    @manager = booking.item.user
     @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
@@ -109,9 +109,9 @@ class UserMailer < ApplicationMailer
 
   def asset_overdue(booking)
     @booking = booking
-    @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
+    @user = booking.user
+    @item = booking.item
+    @manager = booking.item.user
     @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
