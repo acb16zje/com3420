@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Item:
+  = @booking_item.item
+%p
+  %b Booking:
+  = @booking_item.booking
+
+= link_to 'Edit', edit_booking_item_path(@booking_item)
+\|
+= link_to 'Back', booking_items_path

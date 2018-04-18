@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :booking_items
   resources :peripherals
   mount EpiCas::Engine, at: '/'
   devise_for :users

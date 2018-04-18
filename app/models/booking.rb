@@ -33,4 +33,9 @@ class Booking < ApplicationRecord
   belongs_to :item
   belongs_to :user
   has_many :booking_items, class_name: "BookingItem", foreign_key: "booking_id", dependent: :destroy
+
+  def getBookingItems
+    items_for_booking = BookingItem.where(booking: self)
+    items_for_booking.map(&:item)
+  end
 end
