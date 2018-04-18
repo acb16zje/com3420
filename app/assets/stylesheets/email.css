@@ -200,3 +200,20 @@ table.email-table thead th:first-child {
 table.email-table tfoot td {
   font-size: 14px;
 }
+
+tr.dropdown-row{
+  display: none;
+}
+
+tr.itemtablearea{
+  height: 500px;
+  color: red;
+}
+
+.js-dep-chkbx{
+  display: none;
+}
+
+.show-on-load{
+  display: none;
+}

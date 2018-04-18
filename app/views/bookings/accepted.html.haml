@@ -16,7 +16,6 @@
     %thead
       %tr
         %th ID
-        %th Asset
         %th Start Date
         %th Start Time
         %th End Date
@@ -24,11 +23,11 @@
         %th Location
         %th Reason
         %th Booked By
+        %th.show-on-load
     %tbody
-      - @bookings.each do |booking|
-        %tr
+      - @bookings.each_with_index do |booking, index|
+        %tr{:id => "booking-row-#{index}"}
           %td.has-text-centered= booking.id
-          %td.has-text-centered= link_to booking.item.name, booking.item
           %td.has-text-centered= booking.start_date
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
           %td.has-text-centered= booking.end_date
@@ -36,3 +35,9 @@
           %td.has-text-centered= booking.next_location
           %td.has-text-centered= booking.reason
           %td.has-text-centered= link_to booking.user.givenname, booking.user
+          %th.show-on-load
+            %button.bookings-dropdown{:type => "button", :id => "show-items-btn-#{index}"}
+              %i.fas.fa-caret-down
+        %tr.dropdown-row{:id => "items-row-#{index}"}
+          .itemtablearea
+            %p Lorem ipsum...hello

@@ -9,7 +9,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.where("user_id = ?", current_user.id)
+    @bookings = Booking.joins(:items).where("bookings.user_id = ?", current_user.id)
   end
 
   # GET /bookings/1
@@ -23,7 +23,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/accepted
   def accepted
-    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 2", current_user.id)
+    @bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
   end
 
   # GET /bookings/ongoing
