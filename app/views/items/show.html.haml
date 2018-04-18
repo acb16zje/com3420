@@ -110,9 +110,9 @@
               .field.is-grouped.is-grouped-left
                 .control
                   = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
-                - if @item.category.has_peripheral
-                  .control
-                    = link_to 'Add / Edit Peripherals', add_peripheral_option_item_path, class: 'button is-link'
+                .control
+                  - if !@item.peripheral_only
+                    = link_to 'Add Peripheral', new_peripheral_path(:item => @item), class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'

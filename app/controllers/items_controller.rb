@@ -29,15 +29,6 @@ class ItemsController < ApplicationController
     @peripherals = @item.getItemPeripherals
   end
 
-  # GET /items/1/add_peripheral_option
-  def add_peripheral_option
-    @item = Item.find_by_id(params[:id])
-
-    if !@item.category.has_peripheral
-      redirect_to '/404'
-    end
-  end
-
   # GET /items/new
   def new
     # Get items with categories allowing peripherals
@@ -57,11 +48,8 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.user_id = current_user.id
     @item.location = params[:item][:location].titleize
-    puts "ASDJHSDAJASDJJASDASDJADSJG"
-    puts params[:item][:create_peripherals]
     @to_add_peripheral = Item.where(id: params[:item][:create_peripherals])
-    puts @to_add_peripheral
-    params
+
     # Getting the category for the attached item
 
     if @item.save

@@ -4,11 +4,7 @@ class PeripheralsController < ApplicationController
   # GET /peripherals
   # GET /peripherals.json
   def index
-    if (params[:item] != nil)
-      @peripherals = Peripheral.where(parent_item: params[:item])
-    else
-      @peripherals = Peripheral.all
-    end
+    @peripherals = Peripheral.all
   end
 
   # GET /peripherals/1
@@ -34,18 +30,21 @@ class PeripheralsController < ApplicationController
   # POST /peripherals
   # POST /peripherals.json
   def create
-    @peripheral = Peripheral.new(peripheral_params)
+    @p_array = Item.where(id: params[:peripheral][:peripheral_item_id])
+    @parent = Item.find(params[:peripheral][:parent_item_id])
 
-    respond_to do |format|
-      if @peripheral.save
-        format.html { redirect_to peripherals_path(:item => @peripheral.parent_item), notice: 'Peripheral was successfully added.' }
-        format.json { render :show, status: :created, location: @peripheral }
-      else
-        format.html { render :new }
-        format.json { render json: @peripheral.errors, status: :unprocessable_entity }
-      end
+    peripherals_to_save = @p_array.map {|i| Peripheral.new(parent_item: @parent, peripheral_item: i)}
+    puts "GOT ARRAY"
+    puts @p_array
+    puts @parent
+    puts "LLLLL"
+    puts peripherals_to_save
+    if peripherals_to_save.each(&:save)
+      puts "SAVED"
+      redirect_to peripherals_path notice: 'Peripheral was successfully added.'
+    else
+      redirect_to peripherals_path notice: 'Peripheral was not added.'
     end
-
   end
 
   # PATCH/PUT /peripherals/1

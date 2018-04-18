@@ -20,7 +20,7 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.association :peripheral_item, label: false,  input_html: {class: 'select2', id: 'peripheral_selector'}, label_method: lambda{|item| "#{item.name} (#{item.serial})"}, :selected => @default.id
+                    = f.association :peripheral_item, label: false,  input_html: {class: 'select2', id: 'peripheral_selector', multiple: true}, label_method: lambda{|item| "#{item.name} (#{item.serial})"}, :selected => @default.id
             %br
             .field.is-horizontal
               .field-label.has-text-left

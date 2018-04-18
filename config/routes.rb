@@ -36,7 +36,6 @@ Rails.application.routes.draw do
     end
     get 'import', on: :collection
     post 'import_file', on: :collection
-    get 'add_peripheral_option', on: :member
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
