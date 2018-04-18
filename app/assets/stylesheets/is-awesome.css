@@ -1782,4 +1782,12 @@ h2 {
     background-color: whitesmoke !important;
 }
 
+.peripheral-fields{
+  display: none
+}
+
+.js-dep-chkbx{
+  display: none
+}
+
 /*# sourceMappingURL=is-awesome.css.map */

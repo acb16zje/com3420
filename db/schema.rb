@@ -25,16 +25,11 @@ ActiveRecord::Schema.define(version: 20180418121312) do
   end
 
   create_table "bookings", force: :cascade do |t|
-    t.date "start_date"
-    t.time "start_time"
-    t.date "end_date"
-    t.time "end_time"
     t.datetime "start_datetime"
     t.datetime "end_datetime"
     t.string "reason"
     t.string "next_location"
     t.integer "status"
-    t.string "peripherals"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
@@ -79,12 +74,11 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.decimal "purchase_price"
     t.string "image"
     t.string "keywords"
-    t.string "parent_asset_serial"
     t.string "po_number"
     t.string "condition_info"
-    t.boolean "has_peripheral"
     t.string "comment"
     t.date "retired_date"
+    t.boolean "peripheral_only"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
