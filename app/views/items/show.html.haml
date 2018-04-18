@@ -23,11 +23,6 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.parent_asset_serial.blank?
-                %tr
-                  %th Parent Item Name
-                  %td
-                    = link_to @parent.name, @parent
               %tr
                 %th Name
                 %td
@@ -101,7 +96,7 @@
                 %th Comments
                 %td
                   = @item.comment
-              
+
               - if !@item.retired_date.blank?
                 %tr
                   %th Retired Date

@@ -28,10 +28,6 @@ class ItemsController < ApplicationController
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
     peripherals_for_item = Peripheral.where(parent_item: @item)
     @peripherals = @item.getItemPeripherals
-
-    if !@item.parent_asset_serial.blank?
-      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
-    end
   end
 
   # GET /items/1/add_peripheral_option
@@ -41,29 +37,6 @@ class ItemsController < ApplicationController
     if !@item.category.has_peripheral
       redirect_to '/404'
     end
-  end
-
-  # GET /items/1/choose_peripheral
-  def choose_peripheral
-    @i = Item.find_by_id(params[:id])
-
-    if !@i.category.has_peripheral
-      redirect_to '/404'
-    else
-      @items = Item.all.where("(serial <> ?) AND (parent_asset_serial IS NULL OR parent_asset_serial = '')", @i.serial)
-    end
-  end
-
-  # POST /items/1/add_peripheral
-  def add_peripheral
-    @item = Item.find_by_id(params[:id])
-
-    @peripheral = Item.where("serial = ?", params[:peripheral_asset]).first
-    @peripheral.parent_asset_serial = @item.serial
-    @peripheral.save
-    @item.has_peripheral = true
-    @item.save
-    redirect_to @item
   end
 
   # GET /items/new
