@@ -37,10 +37,10 @@
 
 class Item < ApplicationRecord
   belongs_to :category
-  has_many :bookings
 
   has_many :parent_items, :class_name => 'Peripheral', :foreign_key => 'parent_item_id'
   has_many :peripheral_items, :class_name => 'Peripheral', :foreign_key => 'peripheral_item_id'
+  has_many :bookings, through: :booking_items
 
   belongs_to :user
   mount_uploader :image, ImageUploader

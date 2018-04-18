@@ -27,3 +27,7 @@ Item.create(user_id: 2, category_id: '5', condition: 'Like New', name: 'Charging
 Item.create(user_id: 1, category_id: '3', condition: 'Like New', name: 'Flir Thermal Camera', location: 'Diamond',
             manufacturer: 'Apple', model: 'FLIR ONE PRO', serial: 'FLR322', acquisition_date: '2018-03-22', purchase_price: 349.00
           )
+
+Item.create(user_id: 3, category_id: '3', condition: 'Like New', name: 'Thermal Camera ALEX', location: 'Diamond',
+            manufacturer: 'Apple', model: 'FLIR ONE PRO', serial: 'FLR323', acquisition_date: '2018-03-22', purchase_price: 349.00
+          )

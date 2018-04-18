@@ -34,13 +34,7 @@ class PeripheralsController < ApplicationController
     @parent = Item.find(params[:peripheral][:parent_item_id])
 
     peripherals_to_save = @p_array.map {|i| Peripheral.new(parent_item: @parent, peripheral_item: i)}
-    puts "GOT ARRAY"
-    puts @p_array
-    puts @parent
-    puts "LLLLL"
-    puts peripherals_to_save
     if peripherals_to_save.each(&:save)
-      puts "SAVED"
       redirect_to peripherals_path notice: 'Peripheral was successfully added.'
     else
       redirect_to peripherals_path notice: 'Peripheral was not added.'

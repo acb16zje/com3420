@@ -364,7 +364,7 @@ $(document).ready(function () {
                         data: $.map(data, function (item, i) {
                             return {
                                 id: item.id,
-                                text: item.serial
+                                text: item.name + " (" + item.serial + ")"
                             }
                         })
                     })

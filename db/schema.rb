@@ -25,6 +25,10 @@ ActiveRecord::Schema.define(version: 20180418121312) do
   end
 
   create_table "bookings", force: :cascade do |t|
+    t.date "start_date"
+    t.time "start_time"
+    t.date "end_date"
+    t.time "end_time"
     t.datetime "start_datetime"
     t.datetime "end_datetime"
     t.string "reason"
@@ -32,9 +36,7 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "item_id"
     t.bigint "user_id"
-    t.index ["item_id"], name: "index_bookings_on_item_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
@@ -150,7 +152,6 @@ ActiveRecord::Schema.define(version: 20180418121312) do
 
   add_foreign_key "booking_items", "bookings"
   add_foreign_key "booking_items", "items"
-  add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "users"

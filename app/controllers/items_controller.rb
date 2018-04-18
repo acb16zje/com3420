@@ -24,8 +24,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
-    @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
-    peripherals_for_item = Peripheral.where(parent_item: @item)
+    @bookings = BookingItem.where(item: @item).select(:booking_id)
     @peripherals = @item.getItemPeripherals
   end
 
