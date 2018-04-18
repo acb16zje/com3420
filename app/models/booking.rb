@@ -32,4 +32,5 @@
 class Booking < ApplicationRecord
   belongs_to :item
   belongs_to :user
+  has_many :booking_items, class_name: "BookingItem", foreign_key: "booking_id", dependent: :destroy
 end

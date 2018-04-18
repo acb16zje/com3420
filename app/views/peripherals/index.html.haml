@@ -1,0 +1,20 @@
+%h1 Listing peripherals 
+
+%table
+  %thead
+    %tr
+      %th Parent item
+      %th Peripheral item
+      %th
+
+
+  %tbody
+    - @peripherals.each do |peripheral|
+      %tr
+        %td= peripheral.parent_item.name
+        %td= peripheral.peripheral_item.name
+        %td= link_to 'Destroy', peripheral, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Peripheral', new_peripheral_path

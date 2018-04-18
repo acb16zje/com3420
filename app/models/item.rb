@@ -39,6 +39,15 @@
 class Item < ApplicationRecord
   belongs_to :category
   has_many :bookings
+
+  has_many :parent_items, :class_name => 'Peripheral', :foreign_key => 'parent_item_id'
+  has_many :peripheral_items, :class_name => 'Peripheral', :foreign_key => 'peripheral_item_id'
+
   belongs_to :user
   mount_uploader :image, ImageUploader
+
+  def getItemPeripherals
+    peripherals_for_item = Peripheral.where(parent_item: self)
+    peripherals_for_item.map(&:peripheral_item)
+  end
 end

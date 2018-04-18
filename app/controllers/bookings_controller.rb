@@ -243,8 +243,7 @@ class BookingsController < ApplicationController
 
   def get_allowed_peripherals(start_datetime,end_datetime,item_id)
     item = Item.find_by_id(item_id)
-    peripherals = Item.where('parent_asset_serial = ?', item.serial)
-
+    peripherals = item.getItemPeripherals
     allowed_peripherals = []
     peripherals.each do |peripheral|
       if booking_validation(peripheral.id,start_datetime,end_datetime)

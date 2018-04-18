@@ -26,7 +26,8 @@ class ItemsController < ApplicationController
   # GET /items/1
   def show
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
-    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+    peripherals_for_item = Peripheral.where(parent_item: @item)
+    @peripherals = @item.getItemPeripherals
 
     if !@item.parent_asset_serial.blank?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
@@ -164,7 +165,7 @@ class ItemsController < ApplicationController
   def import_file
     excel_import = Importers::ItemImporter.new(params[:import_file][:file].tempfile.path)
     res = excel_import.import(current_user)
-    
+
     # Error message 0
     if res[0] == 0
       redirect_to import_items_path, notice: "The submitted file is not of file .xlsx format"

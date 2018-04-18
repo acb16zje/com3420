@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180320144252) do
+ActiveRecord::Schema.define(version: 20180417210638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,15 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "notifiable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "peripherals", force: :cascade do |t|
+    t.bigint "parent_item_id"
+    t.bigint "peripheral_item_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_item_id"], name: "index_peripherals_on_parent_item_id"
+    t.index ["peripheral_item_id"], name: "index_peripherals_on_peripheral_item_id"
   end
 
   create_table "sessions", force: :cascade do |t|
