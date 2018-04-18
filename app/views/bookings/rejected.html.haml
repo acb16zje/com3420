@@ -2,12 +2,7 @@
 
 %br/
 .container.is-fluid
-  - if not notice.nil?
-    .columns
-      .column.is-4.is-offset-4
-        .notification.is-success.has-text-centered
-          %button.delete
-          = notice
+  = render :partial => 'layouts/flash'
 
   = render "tabs"
 

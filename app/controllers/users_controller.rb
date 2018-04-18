@@ -31,14 +31,14 @@ class UsersController < ApplicationController
 
     # Checks whether the user already exists
     if User.exists?(email: @user.email)
-      redirect_to new_user_path, notice: 'Account already exists.'
+      redirect_to new_user_path, alert: 'Account already exists.'
     else
       # Gets the info for this email from MUSE
       @user.get_info_from_ldap
-      if @user.uid == '' || @user.uid.nil?
-        redirect_to new_user_path, notice: 'Not a valid email.'
+      if @user.uid.blank?
+        redirect_to new_user_path, alert: 'Not a valid email.'
       else
-        @user.phone = '-' if @user.phone == '' || @user.phone.nil?
+        @user.phone = '-' if @user.phone.blank?
 
         if @user.save
           # email new user their details

@@ -25,7 +25,6 @@ class BookingsController < ApplicationController
   # GET /bookings/ongoing
   def ongoing
     # Get current date/time
-
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
   end
 
@@ -116,13 +115,11 @@ class BookingsController < ApplicationController
           next if peripheral == ''
           booking = Booking.new(booking_params)
 
-          if params[:booking][:reason].nil? || params[:booking][:reason] == ''
-            booking.reason = 'None'
-          end
           booking.item_id = peripheral
           booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
           booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
           booking.next_location = params[:booking][:next_location].titleize
+          booking.reason = 'None' if params[:booking][:reason].blank?
           booking.peripherals = nil
 
           booking.status = if item.user_id == current_user.id
@@ -139,7 +136,7 @@ class BookingsController < ApplicationController
 
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
-      redirect_to new_item_booking_path(item_id: @booking.item_id), notice: 'Chosen timeslot conflicts with other bookings.'
+      redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'
     end
   end
 
