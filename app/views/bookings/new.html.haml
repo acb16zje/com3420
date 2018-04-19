@@ -2,12 +2,7 @@
 
 %section.section
   .container.is-desktop.has-text-centered
-    - if not notice.nil?
-      .columns
-        .column.is-4.is-offset-4
-          .notification.is-danger.has-text-centered
-            %button.delete
-            = notice
+    = render :partial => 'layouts/flash'
 
     %h3.title Create booking on #{@item.name}
     .box

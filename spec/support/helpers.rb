@@ -1,9 +1,9 @@
 module Helpers
   # Signing in helpers
   def sign_in_details(using_email=false)
-    @email = 'zjeng1@sheffield.ac.uk'
-    @username = 'acb16zje'
-    @password = 'Idpuk123'
+    @email = '@sheffield.ac.uk'
+    @username = ''
+    @password = ''
 
     user = User.new
     user.email = @email

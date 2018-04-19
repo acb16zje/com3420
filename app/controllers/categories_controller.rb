@@ -53,7 +53,7 @@ class CategoriesController < ApplicationController
 
     # Checks whether the user already exists
     if Category.exists?(name: @category.name)
-      redirect_to new_category_path, notice: 'Category already exists.'
+      redirect_to new_category_path, alert: 'Category already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
         @category.name = @category.name.titleize.strip
@@ -87,7 +87,7 @@ class CategoriesController < ApplicationController
           redirect_to categories_path, notice: 'Category was successfully created.'
         end
       else
-        redirect_to new_category_path, notice: 'Category name does not meet requirements.'
+        redirect_to new_category_path, alert: 'Category name does not meet requirements.'
       end
     end
   end
@@ -99,18 +99,16 @@ class CategoriesController < ApplicationController
 
   # DELETE /categories/1
   def destroy
-    begin @category.destroy
-      return redirect_to categories_url, notice: 'Category was successfully deleted.'
-    rescue
-      items = Item.where('category_id = ?', @category.id)
-      if items.blank?
-        UserHomeCategory.where('category_id = ?', @category.id).destroy_all
-        begin @category.destroy
-          return redirect_to categories_url, notice: 'Category was successfully deleted.'
-        end
-      else
-        redirect_to categories_path, notice: 'Cannot delete category because it is currently in use for an asset.'
+    items = Item.where('category_id = ?', @category.id)
+
+    if items.blank?
+      UserHomeCategory.where('category_id = ?', @category.id).destroy_all
+
+      begin @category.destroy
+        return redirect_to categories_url, notice: 'Category was successfully deleted.'
       end
+    else
+      redirect_to categories_path, alert: 'Cannot delete category because it is currently in use for an asset.'
     end
   end
 

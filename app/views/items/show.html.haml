@@ -2,12 +2,8 @@
 
 %section.section
   .container.is-desktop
-    - if not notice.nil?
-      .columns
-        .column.is-4.is-offset-4
-          .notification.is-success.has-text-centered
-            %button.delete
-            = notice
+    = render :partial => 'layouts/flash'
+
     .box
       .columns
         - if @item.image?
@@ -101,7 +97,7 @@
                 %th Comments
                 %td
                   = @item.comment
-              
+
               - if !@item.retired_date.blank?
                 %tr
                   %th Retired Date

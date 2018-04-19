@@ -1,1 +1,1 @@
-APP_VERSION = '70'.freeze
+APP_VERSION = '71'
