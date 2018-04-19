@@ -332,6 +332,17 @@ $(document).ready(function () {
        serverSide: true,
        ajax: $(this).data('url'),
        columnDefs: [
+         {
+             "targets": 0,
+             "className": 'details-control',
+             "orderable": false,
+             "data": null,
+             "defaultContent": '',
+             "render": function () {
+                 return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+             },
+             width:"15px"
+         },
           { "data": "id" },
           { "data": "start_date" },
           { "data": "start_time" },
