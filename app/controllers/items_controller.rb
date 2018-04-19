@@ -161,7 +161,7 @@ class ItemsController < ApplicationController
       redirect_to import_items_path, notice: 'The submitted file is not of file .xlsx format'
     # Error message 1
     elsif res[0] == 1
-      redirect_to import_items_path, notice: 'Headers of excel sheet do not match appropriate format.'
+      redirect_to import_items_path, notice: 'Headers of excel sheet do not match appropriate format'
     elsif res[0] == 2
       incorrect_rows = res[1]
       if incorrect_rows.blank?

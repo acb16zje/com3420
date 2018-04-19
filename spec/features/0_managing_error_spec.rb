@@ -21,4 +21,10 @@ describe 'Managing error pages' do
     visit '/javascript_warning'
     expect(page).to have_content('JavaScript Required')
   end
+
+  specify 'When visiting a link that does not exist' do
+    visit '/items/pagedoesnotexist'
+    expect(page).to have_content('404 Page not found')
+  end
+
 end
