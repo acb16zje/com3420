@@ -39,4 +39,10 @@ FactoryBot.define do
     has_peripheral 0
     is_peripheral 1
   end
+
+  factory :data_logger_category, class: 'Category' do
+    name 'Data Logger'
+    has_peripheral 0
+    is_peripheral 0
+  end
 end

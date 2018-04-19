@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 # Require gems used by epi_cas
 require 'devise'
 require 'devise_cas_authenticatable'
-require "devise_ldap_authenticatable"
+require 'devise_ldap_authenticatable'
 require 'sheffield_ldap_lookup'
 module Project
   class Application < Rails::Application
@@ -17,14 +17,14 @@ module Project
     config.active_job.queue_adapter = :delayed_job
 
     # This points to our own routes middleware to handle exceptions
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
     config.action_view.automatically_disable_submit_tag = false
 
     I18n.enforce_available_locales = false
     config.generators do |g|
       g.orm :active_record
       g.template_engine :haml
-      g.fixture_replacement    :factory_girl, dir:  'spec/factories'
+      g.fixture_replacement    :factory_girl, dir: 'spec/factories'
       g.test_framework :rspec, fixture:  true,
                                helper_specs:  true,
                                routing_specs:  false,
@@ -38,7 +38,7 @@ module Project
       Devise::SessionsController.layout false
 
       # Or to configure mailer layout
-      Devise::Mailer.layout "email" # email.haml or email.erb
+      Devise::Mailer.layout 'email' # email.haml or email.erb
     end
 
     # Initialize configuration defaults for originally generated Rails version.

@@ -84,6 +84,8 @@
                     This row's PO_NUMBER cell is either empty or does not follow the correct format
                   - when 15
                     This row's COMMENT cell is either empty or does not follow the correct format
+                  - when 16
+                    This row's CATEGORY cell should be a peripheral category of the parent category
                   - else
                     Unknown
                 %td.has-text-centered
@@ -101,7 +103,7 @@
                   - when 5
                     An appropriate NAME should be one of the following: Like New/Good/Adequate/Damaged/Missing/Retired
                   - when 6
-                    An appropriate ACQUIRED_DATE should be in the DATE format
+                    An appropriate ACQUIRED_DATE should be a legit DATE
                   - when 7
                     An appropriate PURCHASE_PRICE should be a FLOAT or INTEGER
                   - when 8
@@ -120,5 +122,7 @@
                     An appropriate PO_NUMBER should be a STRING or TEXT
                   - when 15
                     An appropriate COMMENT should be a STRING or TEXT
+                  - when 16
+                    Change the category of the item to the peripheral category name of the parent asset
                   - else
                     Unknown

@@ -31,14 +31,14 @@ class UsersController < ApplicationController
 
     # Checks whether the user already exists
     if User.exists?(email: @user.email)
-      redirect_to new_user_path, notice: 'Account already exists.'
+      redirect_to new_user_path, alert: 'Account already exists.'
     else
       # Gets the info for this email from MUSE
       @user.get_info_from_ldap
-      if @user.uid == '' || @user.uid.nil?
-        redirect_to new_user_path, notice: 'Not a valid email.'
+      if @user.uid.blank?
+        redirect_to new_user_path, alert: 'Not a valid email.'
       else
-        @user.phone = '-' if @user.phone == '' || @user.phone.nil?
+        @user.phone = '-' if @user.phone.blank?
 
         if @user.save
           # email new user their details
@@ -51,15 +51,12 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
-    end
+    redirect_to @user, notice: 'User was successfully updated.' if @user.update(user_params)
   end
 
   # DELETE /users/1
   def destroy
-    @user.destroy
-    redirect_to users_path, notice: 'User was successfully deleted.'
+    redirect_to users_path, notice: 'User was successfully deleted.' if @user.destroy
   end
 
   private

@@ -30,8 +30,7 @@ class UserHomeCategoriesController < ApplicationController
   end
 
   # PATCH/PUT /user_home_categories/1
-  def update
-  end
+  def update; end
 
   # DELETE /user_home_categories/1
   def destroy

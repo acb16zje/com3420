@@ -3,12 +3,7 @@
 %section.section
   .columns
     .column.is-4.is-offset-4
-      - if not notice.nil?
-        .columns
-          .column.is-8.is-offset-2
-            .notification.is-success.has-text-centered
-              %button.delete
-              = notice
+      = render :partial => 'layouts/flash'
 
       %h1.title.has-text-centered{:id => "DetailsTitle"}
         - if current_user.uid.eql? @user.uid

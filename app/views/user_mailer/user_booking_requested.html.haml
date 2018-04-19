@@ -2,12 +2,12 @@
 %html
   %head
     %meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
-    =stylesheet_link_tag :email
+    = stylesheet_link_tag :email
   %body
     .mail-outer-box
       .mail-transparent-box
         .mail-logo
-          = image_tag(attachments['amrc_main.svg'].url)
+          = image_tag(attachments['amrc_main.png'].url)
         .mail-user-name
           #{@user.givenname} #{@user.sn}
       .inner-box

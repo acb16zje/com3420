@@ -2,12 +2,8 @@
 
 %section.section
   .container.is-desktop
-    - if not notice.nil?
-      .columns
-        .column.is-4.is-offset-4
-          .notification.is-success.has-text-centered
-            %button.delete
-            = notice
+    = render :partial => 'layouts/flash'
+
     .box
       .columns
         - if @item.image?
@@ -165,3 +161,7 @@
                 - when 7
                   %span.tag.is-danger.is-medium
                     Late
+                - else
+                  %span.tag.is-black.is-medium
+                    Unknown
+

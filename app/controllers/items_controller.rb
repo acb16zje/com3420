@@ -1,7 +1,7 @@
 require 'irb'
 
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_item, only: %i[show edit update destroy]
   authorize_resource
   # GET /items
   def index
@@ -11,12 +11,12 @@ class ItemsController < ApplicationController
 
   # GET /items/manager
   def manager
-    #@items = Item.where('user_id = ?', params[:user_id])
+    # @items = Item.where('user_id = ?', params[:user_id])
     @manager = User.find_by_id(params[:user_id])
-    if (params[:tab] == "OnLoan")
-      @items = Item.joins(:bookings).where(:bookings => {:status => "3"}).where(:user_id => current_user.id)
-    elsif (params[:tab] == "Issue")
-      @items = Item.joins(:bookings).where(:user_id => current_user.id, :condition => ['Damaged', 'Missing']).or(Item.joins(:bookings).where("bookings.status = ?", 7))
+    if params[:tab] == 'OnLoan'
+      @items = Item.joins(:bookings).where(bookings: { status: '3' }).where(user_id: current_user.id)
+    elsif params[:tab] == 'Issue'
+      @items = Item.joins(:bookings).where(user_id: current_user.id, condition: %w[Damaged Missing]).or(Item.joins(:bookings).where('bookings.status = ?', 7))
     else
       @items = Item.where('user_id = ?', params[:user_id])
     end
@@ -37,9 +37,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-    if params[:is_peripheral]
-      @items = Item.all.where('id <> ?', params[:id])
-    end
+    @items = Item.all.where('id <> ?', params[:id]) if params[:is_peripheral]
   end
 
   # POST /items
@@ -77,9 +75,7 @@ class ItemsController < ApplicationController
         @item.retired_date = nil
       end
 
-      if @item.save
-        redirect_to @item, notice: 'Asset was successfully updated.'
-      end
+      redirect_to @item, notice: 'Asset was successfully updated.' if @item.save
     end
   end
 
@@ -109,8 +105,7 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/import
-  def import
-  end
+  def import; end
 
   # POST /items/import_file
   def import_file
@@ -118,17 +113,17 @@ class ItemsController < ApplicationController
     res = excel_import.import(current_user)
 
     # Error message 0
-    if res[0] == 0
-      redirect_to import_items_path, notice: "The submitted file is not of file .xlsx format"
+    if res[0].zero?
+      redirect_to import_items_path, notice: 'The submitted file is not of file .xlsx format'
     # Error message 1
     elsif res[0] == 1
-      redirect_to import_items_path, notice: "Headers of excel sheet do not match appropriate format."
+      redirect_to import_items_path, notice: 'Headers of excel sheet do not match appropriate format'
     elsif res[0] == 2
       incorrect_rows = res[1]
       if incorrect_rows.blank?
-        redirect_to import_items_path, notice: "Import was successful and no problems occured"
+        redirect_to import_items_path, notice: 'Import was successful and no problems occured'
       else
-        redirect_to controller: 'items', action: 'import', incorrect_rows: incorrect_rows, notice: "Import was partially successful, view rows that had problems below"
+        redirect_to controller: 'items', action: 'import', incorrect_rows: incorrect_rows, notice: 'Import was partially successful, view rows that had problems below'
       end
     end
   end

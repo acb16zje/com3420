@@ -32,13 +32,15 @@ hr {
 }
 
 .mail-logo img {
-  display: inline;
+  display: block;
+  margin: auto;
+  width: 50%;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
-  float: left;
+  /* float: left;
   height: 5.5em;
-  width: auto;
+  width: auto; */
   overflow: hidden;
   border: none;
   font: normal 16px/1 "Times New Roman", Times, serif;

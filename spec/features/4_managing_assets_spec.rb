@@ -135,4 +135,59 @@ describe 'Managing assets' do
     expect(page).to have_content 'Ownership was successfully transfered'
     expect(page).to_not have_content 'Macbook Pro 15-inch'
   end
+
+  specify 'I can import assets from .xlsx file only' do
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test.csv')
+    click_button 'Import assets'
+    expect(page).to have_content 'The submitted file is not of file .xlsx format'
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test.xlsx')
+    click_button 'Import assets'
+    expect(page).to_not have_content 'The submitted file is not of file .xlsx format'
+  end
+
+  specify 'I cannot import excel sheets with the wrong header formats' do
+    FactoryBot.create(:camera_category)
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test1.xlsx')
+    click_button 'Import assets'
+    expect(page).to have_content 'Headers of excel sheet do not match appropriate format'
+  end
+
+  specify 'I can import assets that are in the correct format successfully' do
+    FactoryBot.create(:camera_category)
+    FactoryBot.create(:camera_peripheral_category)
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test.xlsx')
+    click_button 'Import assets'
+    expect(page).to have_content 'Import was successful and no problems occured'
+  end
+
+  specify 'I cannot import assets that are not in the correct format sucessfully' do
+    FactoryBot.create(:camera_category)
+    FactoryBot.create(:camera_peripheral_category)
+    FactoryBot.create(:data_logger_category)
+    visit '/items/import'
+    attach_file("import_file_file", Rails.root + 'public/test2.xlsx')
+    click_button 'Import assets'
+    expect(page).to have_content 'Import Errors'
+    expect(page).to have_content "2 This row's NAME cell is either empty or does not follow the correct format"
+    expect(page).to have_content "3 This row's SERIAL cell is either empty or does not follow the correct format"
+    expect(page).to have_content "4 This row's CATEGORY cell is empty"
+    expect(page).to have_content "5 This row's CATEGORY cell does not exist in the database"
+    expect(page).to have_content "6 This row's CONDITION cell is either empty or does not follow the correct format"
+    expect(page).to have_content "7 This row's ACQUISITION_DATE cell is either empty or does not follow the correct format"
+    expect(page).to have_content "8 This row's PURCHASE_PRICE cell does not follow the correct format"
+    expect(page).to have_content "9 This row's LOCATION cell does not follow the correct format"
+    expect(page).to have_content "10 This row's MANUFACTURER cell does not follow the correct format"
+    expect(page).to have_content "11 This row's MODEL cell does not follow the correct format"
+    expect(page).to have_content "12 This row's PARENT_ASSET_SERIAL cell does not exist in the database"
+    expect(page).to have_content "13 This row's RETIRED_DATE cell either does not follow the correct format or CONDITION is not set to Retired"
+    expect(page).to have_content "14 This row's PO_NUMBER cell is either empty or does not follow the correct format"
+    expect(page).to have_content "15 This row's COMMENT cell is either empty or does not follow the correct format"
+    expect(page).to have_content "17 This row's SERIAL cell already exists in the database and is not unique"
+    expect(page).to have_content "18 The selected parent asset's category does not have a peripheral category"
+    expect(page).to have_content "20 This row's CATEGORY cell should be a peripheral category of the parent category"
+  end
 end

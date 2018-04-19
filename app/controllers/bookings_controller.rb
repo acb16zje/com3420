@@ -18,7 +18,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 1", current_user.id)
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
   end
 
   # GET /bookings/accepted
@@ -34,24 +34,22 @@ class BookingsController < ApplicationController
   # GET /bookings/ongoing
   def ongoing
     # Get current date/time
-
-    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 3", current_user.id)
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
   end
 
   # GET /bookings/completed
   def completed
-    # @bookings = Booking.joins(:item).where("bookings.item_id = items.id and items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
-    @bookings = Booking.joins(:item).where("items.user_id = ? and (bookings.status = 4 or bookings.status = 6)", current_user.id)
+    @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
   end
 
   # GET /bookings/rejected
   def rejected
-    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 5", current_user.id)
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
   end
 
   # GET /bookings/late
   def late
-    @bookings = Booking.joins(:item).where("items.user_id = ? and bookings.status = 7", current_user.id)
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
   end
 
   # GET /bookings/new
@@ -67,9 +65,9 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/edit
   def edit
-    @item = Item.find_by_id(@booking.item_id)
+    @item = @booking.item
 
-    if !@item.parent_asset_serial.blank?
+    unless @item.parent_asset_serial.blank?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
   end
@@ -83,6 +81,7 @@ class BookingsController < ApplicationController
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
+    @booking.reason = 'None' if params[:booking][:reason].blank?
 
     # Make sure not nil for unrequired field.
     if params[:booking][:reason].blank?
@@ -93,7 +92,7 @@ class BookingsController < ApplicationController
     if main_item.user_id == current_user.id
       @booking.status = 2
     else
-      Notification.create(recipient: @booking.item.user, action: "requested", notifiable: @booking, context: "AM")
+      Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       @booking.status = 1
     end
 
@@ -120,10 +119,10 @@ class BookingsController < ApplicationController
   def update
     if @booking.update(booking_params)
       if @booking.status == 2
-        Notification.create(recipient: @booking.user, action: "approved", notifiable: @booking, context: "U")
+        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
         UserMailer.booking_approved(@booking).deliver
       elsif @booking.status == 5
-        Notification.create(recipient: @booking.user, action: "rejected", notifiable: @booking, context: "U")
+        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
         UserMailer.booking_rejected(@booking).deliver
       end
 
@@ -136,7 +135,7 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 6
     if @booking.save
-      Notification.create(recipient: @booking.user, action: "cancelled", notifiable: @booking, context: "AM")
+      Notification.create(recipient: @booking.user, action: 'cancelled', notifiable: @booking, context: 'AM')
       UserMailer.manager_booking_cancelled(@booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     end
@@ -145,7 +144,7 @@ class BookingsController < ApplicationController
   # GET /bookings/1/booking_returned
   def booking_returned
     @booking = Booking.find_by_id(params[:id])
-    @item = Item.find_by_id(@booking.item.id)
+    @item = @booking.item
   end
 
   # PUT /bookings/1/set_booking_returned
@@ -154,23 +153,23 @@ class BookingsController < ApplicationController
     @booking.status = 4
 
     if @booking.save
-      Notification.create(recipient: @booking.user, action: "returned", notifiable: @booking, context: "AM")
+      Notification.create(recipient: @booking.user, action: 'returned', notifiable: @booking, context: 'AM')
       UserMailer.manager_asset_returned(@booking).deliver
 
-      item = Item.find_by_id(@booking.item.id)
+      item = @booking.item
       item.condition = params[:item][:condition]
       item.condition_info = params[:item][:condition_info]
 
-      if item.condition == "Missing" or item.condition == "Damaged"
-        Notification.create(recipient: item.user, action: "reported", notifiable: item, context: "AM")
-        UserMailer.manager_asset_issue(@booking.user, @booking.item).deliver
+      if (item.condition == 'Missing') || (item.condition == 'Damaged')
+        Notification.create(recipient: item.user, action: 'reported', notifiable: item, context: 'AM')
+        UserMailer.manager_asset_issue(@booking.user, item).deliver
       end
 
       item.save
 
       if item.user_id == current_user.id
-        redirect_to manager_items_path(:user_id => current_user.id)
-      elsif item.condition == "Damaged" or item.condition == "Missing"
+        redirect_to manager_items_path(user_id: current_user.id)
+      elsif (item.condition == 'Damaged') || (item.condition == 'Missing')
         redirect_to item, notice: 'We have logged the issue and your item has been returned'
       else
         redirect_to item, notice: 'Thank you. Your item has been returned'
@@ -180,46 +179,46 @@ class BookingsController < ApplicationController
 
   def start_date
     data = {
-      :max_end_date => max_end_date(params[:start_date]),
-      :disable_start_time => disable_start_time(params[:start_date]),
+      max_end_date: max_end_date(params[:start_date]),
+      disable_start_time: disable_start_time(params[:start_date])
     }
 
-    render :json => data
+    render json: data
   end
 
   def end_date
     data = {
-      :max_end_time => max_end_time(params[:start_date], params[:end_date], params[:start_time])
+      max_end_time: max_end_time(params[:start_date], params[:end_date], params[:start_time])
     }
 
-    render :json => data
+    render json: data
   end
 
   def peripherals
     @item = Item.find_by_id(params[:item_id])
 
-    @peripherals = get_allowed_peripherals(params[:start_datetime],params[:end_datetime],params[:item_id])
+    @peripherals = get_allowed_peripherals(params[:start_datetime], params[:end_datetime], params[:item_id])
 
     respond_to do |format|
-      format.json {
-        render :json => @peripherals
-      }
+      format.json do
+        render json: @peripherals
+      end
     end
   end
 
   private
 
-  def get_allowed_peripherals(start_datetime,end_datetime,item_id)
+  def get_allowed_peripherals(start_datetime, end_datetime, item_id)
     item = Item.find_by_id(item_id)
     peripherals = item.getItemPeripherals
     allowed_peripherals = []
     peripherals.each do |peripheral|
-      if booking_validation(peripheral.id,start_datetime,end_datetime)
+      if booking_validation(peripheral.id, start_datetime, end_datetime)
         allowed_peripherals.append(peripheral)
       end
     end
 
-    return allowed_peripherals
+    allowed_peripherals
   end
 
   def booking_validation(item_id, start_datetime, end_datetime)
@@ -238,7 +237,7 @@ class BookingsController < ApplicationController
       )"
     ).first}
 
-    return query.blank?
+    query.blank?
   end
 
   # Fully booked days in a single booking
@@ -286,7 +285,7 @@ class BookingsController < ApplicationController
       date_to_disable.concat(date_array)
     end
 
-    return date_to_disable
+    date_to_disable
   end
 
   # Fully booked days in a multiple booking
@@ -320,40 +319,39 @@ class BookingsController < ApplicationController
       start_time = DateTime.parse(booking.start_datetime.to_s)
 
       # Multiple booking across many days or Multiple bookings on single day
-      if (end_date - start_date).to_i > 1 || ((start_time.hour.eql? 0) && (start_time.min.eql? 0))
-        date_array = (start_date...end_date).map(&:to_s)
+      next unless (end_date - start_date).to_i > 1 || ((start_time.hour.eql? 0) && (start_time.min.eql? 0))
+      date_array = (start_date...end_date).map(&:to_s)
 
-        if date_array.length > 1
-          # Include the start date if start time is 12:00 AM
-          if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
-            date_array = date_array[0..-1]
-          else
-            date_array = date_array[1..-1]
-          end
-        end
-
-        # Split into [year, month, day]
-        date_array = date_array.map { |n| n.split('-') }
-
-        # Datepicker month format is jan = 0, feb = 1, mar = 2...
-        date_array = date_array.map { |n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2] }
-
-        date_to_disable.concat(date_array)
+      if date_array.length > 1
+        # Include the start date if start time is 12:00 AM
+        date_array = if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
+                       date_array[0..-1]
+                     else
+                       date_array[1..-1]
+                     end
       end
+
+      # Split into [year, month, day]
+      date_array = date_array.map { |n| n.split('-') }
+
+      # Datepicker month format is jan = 0, feb = 1, mar = 2...
+      date_array = date_array.map { |n| n[0] = n[0], n[1] = n[1].to_i - 1, n[2] = n[2] }
+
+      date_to_disable.concat(date_array)
     end
 
-    return date_to_disable
+    date_to_disable
   end
 
   # Maximum selectable end date
   def max_end_date(start_date = nil)
     date_array = []
 
-    if start_date.nil?
-      start_date = Date.today.strftime("%Y-%m-%d")
-    else
-      start_date = Date.parse(start_date)
-    end
+    start_date = if start_date.nil?
+                   Date.today.strftime('%Y-%m-%d')
+                 else
+                   Date.parse(start_date)
+                 end
 
     bi = BookingItem.where(item_id: params[:item_id]).map {|b| b.booking}
     booking = bi.each {|b| b.where(
@@ -363,7 +361,7 @@ class BookingsController < ApplicationController
 
     if !booking.empty?
       # Split into [year, month, day]
-      booking = booking.strftime("%Y-%m-%d").split('-')
+      booking = booking.strftime('%Y-%m-%d').split('-')
 
       # Datepicker month format is jan = 0, feb = 1, mar = 2...
       booking[1] = booking[1].to_i - 1
@@ -371,7 +369,7 @@ class BookingsController < ApplicationController
       date_array.concat(booking)
     end
 
-    return date_array
+    date_array
   end
 
   # Disable unavailable start time
@@ -392,32 +390,30 @@ class BookingsController < ApplicationController
       end_time = DateTime.parse(booking.end_datetime.to_s) - 10.minutes
 
       # Selected start date is booked as start date
-      if start_time.strftime("%Y-%m-%d").eql? start_date.to_s
+      if start_time.strftime('%Y-%m-%d').eql? start_date.to_s
         # Start date not equal to end date
         if end_time.day - start_time.day > 0
-          time_to_disable.append({from: ["#{start_time.hour}", "#{start_time.min}"], to: [23, 50]})
+          time_to_disable.append(from: [start_time.hour.to_s, start_time.min.to_s], to: [23, 50])
         else
           # Start and end on the same day
           time_to_disable.append(
-            {from: ["#{start_time.hour}", "#{start_time.min}"], to: ["#{end_time.hour}", "#{end_time.min}"]},
+            from: [start_time.hour.to_s, start_time.min.to_s], to: [end_time.hour.to_s, end_time.min.to_s]
           )
         end
-      else
+      elsif end_time.day - start_time.day > 0
         # Selected start date is booked as end date
-        if end_time.day - start_time.day > 0
-          time_to_disable.append({from: [0, 0], to: ["#{end_time.hour}", "#{end_time.min}"]})
-        end
+        time_to_disable.append(from: [0, 0], to: [end_time.hour.to_s, end_time.min.to_s])
       end
     end
 
-    return time_to_disable
+    time_to_disable
   end
 
   # Maximum selectable end time
   def max_end_time(start_date, end_date, start_time)
     time_array = []
 
-    start_time = DateTime.parse(start_time).strftime("%H:%M")
+    start_time = DateTime.parse(start_time).strftime('%H:%M')
 
     start_date = Date.parse(start_date)
     end_date = Date.parse(end_date)
@@ -430,21 +426,19 @@ class BookingsController < ApplicationController
         AND start_date = CAST('#{end_date}' AS DATE)", params[:item_id]
       ).minimum(:start_time)}
 
-      if !booking.blank?
-        time_array = [booking.hour, booking.min]
-      end
+      time_array = [booking.hour, booking.min] unless booking.blank?
     else
       booking = bi.each {|b| b.where(
         "(status = 2 OR status = 3)
         AND start_date = CAST('#{start_date}' AS DATE)", params[:item_id]
       ).minimum(:start_time)}
 
-      if !booking.blank? && start_time < booking.strftime("%H:%M")
+      if !booking.blank? && start_time < booking.strftime('%H:%M')
         time_array = [booking.hour, booking.min]
       end
     end
 
-    return time_array
+    time_array
   end
 
   # Use callbacks to share common setup or constraints between actions.

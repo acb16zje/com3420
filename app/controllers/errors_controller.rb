@@ -24,8 +24,7 @@ class ErrorsController < ApplicationController
     @error_message = 'Internal Server Error'
   end
 
-  def ie_warning
-  end
+  def ie_warning; end
 
   def javascript_warning
     render layout: false
