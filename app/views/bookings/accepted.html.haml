@@ -3,7 +3,7 @@
 %br/
 .container.is-fluid
   = render :partial => 'layouts/flash'
-  
+
   = render "tabs"
 
   %p.title.has-text-centered Accepted Bookings
@@ -11,7 +11,7 @@
   = content_tag :table, role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
     %thead
       %tr
-        %th ID
+        %th id
         %th Start Date
         %th Start Time
         %th End Date

@@ -330,7 +330,19 @@ $(document).ready(function () {
       $(this).DataTable({
        processing: true,
        serverSide: true,
-       ajax: $(this).data('url')
+       ajax: $(this).data('url'),
+       columnDefs: [
+          { "data": "id" },
+          { "data": "start_date" },
+          { "data": "start_time" },
+          { "data": "end_date" },
+          { "data": "end_time" },
+          { "data": "reason" },
+          { "data": "next_location" },
+          { "data": "status" },
+          { "data": "user_id" }
+        ],
+        order: [[1, 'asc']]
      });
     });
 
