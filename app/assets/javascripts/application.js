@@ -325,12 +325,14 @@ $(document).ready(function () {
     });
 
 
+    function format ( d ) {
+    return 'The child row can contain any data you wish, including links, images, inner tables etc.';
+    }
 
-    $("table[role='datatable']").each(function(){
-      $(this).DataTable({
+    var dt = $('#example').DataTable( {
        processing: true,
        serverSide: true,
-       ajax: $(this).data('url'),
+       ajax: $('#example').data('url'),
        columnDefs: [
          {
              "targets": 0,
@@ -355,7 +357,49 @@ $(document).ready(function () {
         ],
         order: [[1, 'asc']]
      });
-    });
+
+    // Array to track the ids of the details displayed rows
+    var detailRows = [];
+
+    $('#example tbody').on( 'click', 'tr td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = dt.row( tr );
+        var idx = $.inArray( tr.attr('id'), detailRows );
+
+        if ( row.child.isShown() ) {
+            tr.removeClass( 'details' );
+            row.child.hide();
+
+            // Remove from the 'open' array
+            detailRows.splice( idx, 1 );
+        }
+        else {
+            tr.addClass( 'details' );
+            row.child( format( row.data() ) ).show();
+
+            // Add to the 'open' array
+            if ( idx === -1 ) {
+                detailRows.push( tr.attr('id') );
+            }
+        }
+    } );
+
+    // On each draw, loop over the `detailRows` array and show any child rows
+    dt.on( 'draw', function () {
+        $.each( detailRows, function ( i, id ) {
+            $('#'+id+' td.details-control').trigger( 'click' );
+        } );
+    } );
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -461,24 +505,24 @@ $(document).ready(function () {
     }
 
     // Close modal when Esc is pressed
-//    $(document).keydown(function () {
-//        var e = event || window.event;
-//        if (e.keyCode === 27) {
-//            closeModals();
-//        }
-//    });
+   $(document).keydown(function () {
+       var e = event || window.event;
+       if (e.keyCode === 27) {
+           closeModals();
+       }
+   });
 
     // Close modal when click outside of image
-//    $(document).click(function (e) {
-//        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
-//            closeModals();
-//        }
-//    });
+   $(document).click(function (e) {
+       if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
+           closeModals();
+       }
+   });
 
     // closeModals function
-//    function closeModals() {
-//        modals.forEach(function ($el) {
-//            $el.classList.remove('is-active');
-//        });
-//    }
+   function closeModals() {
+       modals.forEach(function ($el) {
+           $el.classList.remove('is-active');
+       });
+   }
 });

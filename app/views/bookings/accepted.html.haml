@@ -8,7 +8,7 @@
 
   %p.title.has-text-centered Accepted Bookings
   -# %table#bookings_other.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%", :role => 'datatable'}
-  = content_tag :table, role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
+  = content_tag :table, :id => "example", role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
     %thead
       %tr
         %th id
