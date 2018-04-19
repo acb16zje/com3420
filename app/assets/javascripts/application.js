@@ -1,3 +1,5 @@
+//= require jquery
+//= require datatables
 //= require jquery_ujs
 //= require bulma.datatables
 //= require bunny
@@ -9,6 +11,7 @@
 //= require picker.time
 //= require select2
 //= require zoom
+
 
 $(document).ready(function () {
     // Dropdowns
@@ -311,7 +314,7 @@ $(document).ready(function () {
     });
 
     // Datatable
-    $("#users, #categories, #bookings, #bookings_other").each(function () {
+    $("#users, #categories, #bookings").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -320,6 +323,18 @@ $(document).ready(function () {
             }
         });
     });
+
+
+
+    $("table[role='datatable']").each(function(){
+      $(this).DataTable({
+       processing: true,
+       serverSide: true,
+       ajax: $(this).data('url')
+     });
+    });
+
+
 
     $("#bookings_other_wrapper").removeClass("container");
 
@@ -331,6 +346,8 @@ $(document).ready(function () {
             }
         }
     });
+
+
 
     // Use gon to get ruby variables into JS, for categories filtering
     if (gon.category != null) {
@@ -421,24 +438,24 @@ $(document).ready(function () {
     }
 
     // Close modal when Esc is pressed
-    $(document).keydown(function () {
-        var e = event || window.event;
-        if (e.keyCode === 27) {
-            closeModals();
-        }
-    });
+//    $(document).keydown(function () {
+//        var e = event || window.event;
+//        if (e.keyCode === 27) {
+//            closeModals();
+//        }
+//    });
 
     // Close modal when click outside of image
-    $(document).click(function (e) {
-        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
-            closeModals();
-        }
-    });
+//    $(document).click(function (e) {
+//        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
+//            closeModals();
+//        }
+//    });
 
     // closeModals function
-    function closeModals() {
-        modals.forEach(function ($el) {
-            $el.classList.remove('is-active');
-        });
-    }
+//    function closeModals() {
+//        modals.forEach(function ($el) {
+//            $el.classList.remove('is-active');
+//        });
+//    }
 });

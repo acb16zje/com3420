@@ -12,7 +12,8 @@
   = render "tabs"
 
   %p.title.has-text-centered Accepted Bookings
-  %table#bookings_other.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  -# %table#bookings_other.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%", :role => 'datatable'}
+  = content_tag :table, role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
     %thead
       %tr
         %th ID
@@ -20,24 +21,8 @@
         %th Start Time
         %th End Date
         %th End Time
-        %th Location
         %th Reason
+        %th Location
+        %th Status
         %th Booked By
-        %th.show-on-load
     %tbody
-      - @bookings.each_with_index do |booking, index|
-        %tr{:id => "booking-row-#{index}"}
-          %td.has-text-centered= booking.id
-          %td.has-text-centered= booking.start_date
-          %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.end_date
-          %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.next_location
-          %td.has-text-centered= booking.reason
-          %td.has-text-centered= link_to booking.user.givenname, booking.user
-          %th.show-on-load
-            %button.bookings-dropdown{:type => "button", :id => "show-items-btn-#{index}"}
-              %i.fas.fa-caret-down
-        %tr.dropdown-row{:id => "items-row-#{index}"}
-          .itemtablearea
-            %p Lorem ipsum...hello

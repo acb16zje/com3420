@@ -23,8 +23,13 @@ class BookingsController < ApplicationController
 
   # GET /bookings/accepted
   def accepted
-    @bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
+    #@bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ render json: BookingDatatable.new(view_context)}
+    end
   end
+
 
   # GET /bookings/ongoing
   def ongoing

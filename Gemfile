@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby '2.3.1'
+ruby '2.3.3'
 gem 'rails', '5.1.4'
 gem 'responders'
 gem 'activerecord-session_store', git: 'https://github.com/epigenesys/activerecord-session_store.git', branch: 'rails-5-generator'
@@ -43,6 +43,10 @@ gem 'rubyXL'
 
 gem 'multi_json', '~> 1.13', '>= 1.13.1'
 gem 'jbuilder', '~> 2.7'
+
+gem 'rails-assets-jquery', source: 'https://rails-assets.org'
+gem 'rails-assets-datatables', source: 'https://rails-assets.org'
+gem 'kaminari'
 
 gem 'premailer-rails'
 group :development, :test do
