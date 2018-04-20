@@ -115,3 +115,15 @@ tr.shown td.details-control {
   text-align:center;
   color:red;
 }
+
+.row-details {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  margin: 10%;
+  border: none;
+  font: normal normal bold 1em/1 Arial, Helvetica, sans-serif;
+  color: black;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}

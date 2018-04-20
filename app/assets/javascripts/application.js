@@ -326,7 +326,8 @@ $(document).ready(function () {
 
 
     function format ( d ) {
-      var html = (
+      var html = ('<div class="row-details">' +
+  '<h3>Items On Booking:</h3>'+
     '<table>' +
       '<thead>' +
         '<tr>' +
@@ -343,7 +344,7 @@ $(document).ready(function () {
         }
         html += (
       '</tbody>' +
-    '</table> ' + '<p>'+ d.items[0].item_name+'</p>');
+    '</table> ' + '</div>');
     return html
     }
 

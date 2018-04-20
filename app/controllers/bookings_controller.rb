@@ -10,6 +10,11 @@ class BookingsController < ApplicationController
   # GET /bookings
   def index
     @bookings = Booking.joins(:items).where("bookings.user_id = ?", current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{render @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/1
@@ -19,16 +24,19 @@ class BookingsController < ApplicationController
   # GET /bookings/requests
   def requests
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/accepted
   def accepted
     @bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
-    puts "AHGADGYGYIDAGJYADYGDAGY"
-    puts view_context
     respond_to do |format|
       format.html
-      format.json{render @booking} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
 
     end
   end
@@ -38,21 +46,41 @@ class BookingsController < ApplicationController
   def ongoing
     # Get current date/time
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/completed
   def completed
     @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/rejected
   def rejected
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/late
   def late
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
+    respond_to do |format|
+      format.html
+      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+
+    end
   end
 
   # GET /bookings/new
