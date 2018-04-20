@@ -13,7 +13,7 @@
         %h1.email-header-text
           Your Booking Is Overdue
         %h2.email-subheading-text
-          Your Booking for #{@item.name} is overdue. Please return immediately.
+          Your Booking is overdue. Please return your loaned items immediately.
         %br
         %hr
         .body-box
@@ -53,7 +53,7 @@
               %tbody
                 - @items.each do |item|
                   %tr
-                    %td.has-text-centered= @item.id
+                    %td.has-text-centered= item.id
                     %td.has-text-centered= link_to item.name, item
                     %td.has-text-centered= item.serial
         %br

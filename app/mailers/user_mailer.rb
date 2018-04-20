@@ -9,7 +9,8 @@ class UserMailer < ApplicationMailer
   def booking_approved(booking)
     @booking = booking
     @user = booking.user
-    @items = get_peripherals(booking)
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -19,7 +20,8 @@ class UserMailer < ApplicationMailer
   def booking_ongoing(booking)
     @booking = booking
     @user = booking.user
-    @items = get_peripherals(booking)
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -29,7 +31,9 @@ class UserMailer < ApplicationMailer
   def user_booking_requested(booking)
     @booking = booking
     @user = booking.user
-    @items = get_peripherals(booking)
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
     mail to: @user.email, subject: "AMRC - Booking Recieved"
@@ -38,9 +42,10 @@ class UserMailer < ApplicationMailer
   def manager_booking_requested(booking)
     @booking = booking
     @user = @booking.user
-    @manager = @booking.items[0].user
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
-    @items = get_peripherals(booking)
 
     mail to: @manager.email, subject: "AMRC - Booking Requested"
   end
@@ -48,8 +53,8 @@ class UserMailer < ApplicationMailer
   def manager_asset_returned(booking)
     @booking = booking
     @user = @booking.user
-    @manager = @booking.items[0].user
-    @items = get_peripherals(booking)
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -69,8 +74,9 @@ class UserMailer < ApplicationMailer
   def manager_booking_cancelled(booking)
     @booking = booking
     @user = @booking.user
-    @manager = @booking.items[0].user
-    @items = get_peripherals(booking)
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -80,8 +86,8 @@ class UserMailer < ApplicationMailer
   def booking_rejected(booking)
     @booking = booking
     @user = @booking.user
-    @manager = @booking.getBookingItems[0].user
     @items = @booking.getBookingItems
+    @manager = @items[0].user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -89,13 +95,10 @@ class UserMailer < ApplicationMailer
   end
 
   def asset_due(booking)
-    puts "TEASSDDSADSSD"
-    puts  booking.getBookingItems
     @booking = booking
     @user = booking.user
     @items = @booking.getBookingItems
-    @manager = nil
-
+    @manager = @items[0].user
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
     mail to: @user.email, subject: "AMRC - Return Due Soon"
@@ -104,8 +107,8 @@ class UserMailer < ApplicationMailer
   def asset_overdue(booking)
     @booking = booking
     @user = booking.user
-    @manager = @booking.items[0].user
     @items = @booking.getBookingItems
+    @manager = @items[0].user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 

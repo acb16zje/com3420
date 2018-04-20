@@ -27,14 +27,14 @@
 
 class Booking < ApplicationRecord
   belongs_to :user
-  has_many :booking_items, class_name: "BookingItem", foreign_key: "booking_id", dependent: :destroy
+  has_many :booking_items, class_name: "BookingItem", foreign_key: "booking_id"
   has_many :items, through: :booking_items
 
   attr_accessor :booking_peripheral_items
   attr_accessor :main_item
+
   def getBookingItems
-    items_for_booking = BookingItem.where(booking: self)
-    puts items_for_booking
-    items_for_booking.map(&:item)
+    items_for_booking = Item.joins(:bookings)
   end
+
 end

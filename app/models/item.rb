@@ -40,6 +40,8 @@ class Item < ApplicationRecord
 
   has_many :parent_items, :class_name => 'Peripheral', :foreign_key => 'parent_item_id'
   has_many :peripheral_items, :class_name => 'Peripheral', :foreign_key => 'peripheral_item_id'
+
+  has_many :booking_items, class_name: "BookingItem", foreign_key: "item_id"
   has_many :bookings, through: :booking_items
 
   belongs_to :user

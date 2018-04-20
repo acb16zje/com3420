@@ -36,6 +36,10 @@ class User < ApplicationRecord
     super # This needs to be left in so the default fields are also set
   end
 
+  def return_full_name
+    "#{self.givenname} #{self.sn}"
+  end
+
   has_many :bookings
   has_many :items
   has_many :categories, through: :user_home_categories
