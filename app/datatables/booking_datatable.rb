@@ -14,6 +14,11 @@ class BookingDatatable < ApplicationDatatable
         column << booking.next_location
         column << booking.status
         column << booking.user_id
+        column << booking.items.map do |bookingitem|
+            [].tap do |column|
+              column << bookingitem.name
+            end
+        end
       end
     end
   end

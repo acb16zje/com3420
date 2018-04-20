@@ -326,34 +326,35 @@ $(document).ready(function () {
 
 
     function format ( d ) {
-    return 'The child row can contain any data you wish, including links, images, inner tables etc.';
+    return 'The child row can contain any data you wish, including links, images, inner tables etc.'  + d.items[0].item_name;
     }
 
     var dt = $('#example').DataTable( {
        processing: true,
        serverSide: true,
        ajax: $('#example').data('url'),
-       columnDefs: [
+       aoColumns: [
          {
+             "title": "Details",
              "targets": 0,
              "className": 'details-control',
              "orderable": false,
-             "data": null,
+             // "data": null,
              "defaultContent": '',
              "render": function () {
                  return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
              },
              width:"15px"
          },
-          { "data": "id" },
-          { "data": "start_date" },
-          { "data": "start_time" },
-          { "data": "end_date" },
-          { "data": "end_time" },
-          { "data": "reason" },
-          { "data": "next_location" },
-          { "data": "status" },
-          { "data": "user_id" }
+          { "mDataProp": "id" },
+          { "mDataProp": "start_date" },
+          { "mDataProp": "start_time" },
+          { "mDataProp": "end_date" },
+          { "mDataProp": "end_time" },
+          { "mDataProp": "reason" },
+          { "mDataProp": "next_location" },
+          { "mDataProp": "status" },
+          { "mDataProp": "user_id" }
         ],
         order: [[1, 'asc']]
      });

@@ -11,6 +11,7 @@
   = content_tag :table, :id => "example", role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
     %thead
       %tr
+        %th
         %th id
         %th Start Date
         %th Start Time
@@ -21,3 +22,6 @@
         %th Status
         %th Booked By
     %tbody
+
+
+%div#debugoutput
