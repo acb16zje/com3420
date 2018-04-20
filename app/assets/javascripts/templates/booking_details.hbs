@@ -1,0 +1,19 @@
+<div class="row-details">
+  <h3>Items On Booking:</h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#items}}
+      <tr>
+        <td>{{item_name}}</td>
+        <td>{{item_id}}</td>
+      </tr>
+      {{/items}}
+    </tbody>
+  </table>
+</div>

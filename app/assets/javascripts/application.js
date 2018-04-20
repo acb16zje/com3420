@@ -11,7 +11,8 @@
 //= require picker.time
 //= require select2
 //= require zoom
-
+//= require handlebars
+//= require_tree ./templates
 
 $(document).ready(function () {
     // Dropdowns
@@ -326,25 +327,29 @@ $(document).ready(function () {
 
 
     function format ( d ) {
-      var html = ('<div class="row-details">' +
-  '<h3>Items On Booking:</h3>'+
-    '<table>' +
-      '<thead>' +
-        '<tr>' +
-          '<th> ID </th>' +
-          '<th> Name </th>' +
-        '</tr>' +
-      '</thead>' +
-      '<tbody>');
-        for (var i in d.items){
-          html += ('<tr>' +
-            '<td>'+ d.items[i].item_id +'</td>' +
-            '<td>'+ d.items[i].item_name +'</td>' +
-          '</tr>');
-        }
-        html += (
-      '</tbody>' +
-    '</table> ' + '</div>');
+      console.log(d.items)
+      var html = HandlebarsTemplates['booking_details']({
+        items: d.items
+      });
+  //     var html = ('<div class="row-details">' +
+  // '<h3>Items On Booking:</h3>'+
+  //   '<table>' +
+  //     '<thead>' +
+  //       '<tr>' +
+  //         '<th> ID </th>' +
+  //         '<th> Name </th>' +
+  //       '</tr>' +
+  //     '</thead>' +
+  //     '<tbody>');
+  //       for (var i in d.items){
+  //         html += ('<tr>' +
+  //           '<td>'+ d.items[i].item_id +'</td>' +
+  //           '<td>'+ d.items[i].item_name +'</td>' +
+  //         '</tr>');
+  //       }
+  //       html += (
+  //     '</tbody>' +
+  //   '</table> ' + '</div>');
     return html
     }
 
