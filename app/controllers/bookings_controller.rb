@@ -12,7 +12,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where("bookings.user_id = ?", current_user.id)
     respond_to do |format|
       format.html
-      format.json{render @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{render @bookings}
 
     end
   end
@@ -26,7 +26,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 1', current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings}
 
     end
   end
@@ -36,7 +36,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings}
 
     end
   end
@@ -48,7 +48,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 3', current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings}
 
     end
   end
@@ -59,7 +59,7 @@ class BookingsController < ApplicationController
     puts @bookings
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings}
 
     end
   end
@@ -69,7 +69,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings}
 
     end
   end
@@ -79,7 +79,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 7', current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
+      format.json{ @bookings} 
 
     end
   end
@@ -151,11 +151,11 @@ class BookingsController < ApplicationController
   def update
     if @booking.update(booking_params)
       if @booking.status == 2
-        #Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        #UserMailer.booking_approved(@booking).deliver
+        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
+        UserMailer.booking_approved(@booking).deliver
       elsif @booking.status == 5
-        #Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        #UserMailer.booking_rejected(@booking).deliver
+        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
+        UserMailer.booking_rejected(@booking).deliver
       end
 
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
