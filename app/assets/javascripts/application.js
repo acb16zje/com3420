@@ -326,7 +326,25 @@ $(document).ready(function () {
 
 
     function format ( d ) {
-    return 'The child row can contain any data you wish, including links, images, inner tables etc.'  + d.items[0].item_name;
+      var html = (
+    '<table>' +
+      '<thead>' +
+        '<tr>' +
+          '<th> ID </th>' +
+          '<th> Name </th>' +
+        '</tr>' +
+      '</thead>' +
+      '<tbody>');
+        for (var i in d.items){
+          html += ('<tr>' +
+            '<td>'+ d.items[i].item_id +'</td>' +
+            '<td>'+ d.items[i].item_name +'</td>' +
+          '</tr>');
+        }
+        html += (
+      '</tbody>' +
+    '</table> ' + '<p>'+ d.items[0].item_name+'</p>');
+    return html
     }
 
     var dt = $('#example').DataTable( {
@@ -356,7 +374,8 @@ $(document).ready(function () {
           { "mDataProp": "status" },
           { "mDataProp": "user_id" }
         ],
-        order: [[1, 'asc']]
+        order: [[1, 'asc']],
+        searching: false
      });
 
     // Array to track the ids of the details displayed rows
