@@ -56,6 +56,7 @@ class BookingsController < ApplicationController
   # GET /bookings/completed
   def completed
     @bookings = Booking.joins(:items).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
+    puts @bookings
     respond_to do |format|
       format.html
       format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
@@ -150,11 +151,11 @@ class BookingsController < ApplicationController
   def update
     if @booking.update(booking_params)
       if @booking.status == 2
-        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        UserMailer.booking_approved(@booking).deliver
+        #Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
+        #UserMailer.booking_approved(@booking).deliver
       elsif @booking.status == 5
-        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        UserMailer.booking_rejected(@booking).deliver
+        #Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
+        #UserMailer.booking_rejected(@booking).deliver
       end
 
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'

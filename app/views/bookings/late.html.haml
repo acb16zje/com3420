@@ -7,7 +7,7 @@
   = render "tabs"
 
   %p.title.has-text-centered Late Returns
-  = content_tag :table, :id => "example", role: :datatable, data: {url: accepted_bookings_path(format: :json)} do
+  = content_tag :table, :id => "example", role: :datatable, data: {url: late_bookings_path(format: :json)} do
     %thead
       %tr
         %th
