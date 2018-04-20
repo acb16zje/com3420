@@ -34,6 +34,7 @@ class Booking < ApplicationRecord
   attr_accessor :main_item
   def getBookingItems
     items_for_booking = BookingItem.where(booking: self)
+    puts items_for_booking
     items_for_booking.map(&:item)
   end
 end

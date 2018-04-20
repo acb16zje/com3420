@@ -23,7 +23,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
+    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 1', current_user.id)
     respond_to do |format|
       format.html
       format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
@@ -45,7 +45,7 @@ class BookingsController < ApplicationController
   # GET /bookings/ongoing
   def ongoing
     # Get current date/time
-    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
+    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 3', current_user.id)
     respond_to do |format|
       format.html
       format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
@@ -55,7 +55,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/completed
   def completed
-    @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
+    @bookings = Booking.joins(:items).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
     respond_to do |format|
       format.html
       format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
@@ -75,7 +75,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/late
   def late
-    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
+    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 7', current_user.id)
     respond_to do |format|
       format.html
       format.json{ @bookings} #render json: BookingDatatable.new(view_context)}
