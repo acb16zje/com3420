@@ -327,8 +327,9 @@ $(document).ready(function () {
 
 
     function format ( d ) {
-      console.log(d.items)
       var html = HandlebarsTemplates['booking_details']({
+        booking_id: d.id
+        method: d.method,
         items: d.items
       });
   //     var html = ('<div class="row-details">' +

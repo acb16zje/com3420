@@ -76,10 +76,11 @@ class BookingsController < ApplicationController
 
   # GET /bookings/late
   def late
+    @method = "late"
     @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 7', current_user.id)
     respond_to do |format|
       format.html
-      format.json{ @bookings} 
+      format.json{ @bookings}
 
     end
   end
