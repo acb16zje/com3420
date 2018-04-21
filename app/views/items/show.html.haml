@@ -130,16 +130,16 @@
             %th Booked By
             %th Status
         %tbody
-          - @bookings.each do |booking|
+          - @bookings.each do |bi|
             %tr
-              %td.has-text-centered= booking.id
-              %td.has-text-centered= booking.start_datetime.strftime("%d/%m/%Y - %I:%M %p")
-              %td.has-text-centered= booking.end_datetime.strftime("%d/%m/%Y - %I:%M %p")
-              %td.has-text-centered= booking.next_location
-              %td.has-text-centered= booking.reason
-              %td.has-text-centered= link_to booking.user.givenname, booking.user
+              %td.has-text-centered= bi.id
+              %td.has-text-centered= bi.booking.start_datetime.strftime("%d/%m/%Y - %I:%M %p")
+              %td.has-text-centered= bi.booking.end_datetime.strftime("%d/%m/%Y - %I:%M %p")
+              %td.has-text-centered= bi.booking.next_location
+              %td.has-text-centered= bi.booking.reason
+              %td.has-text-centered= link_to bi.booking.user.givenname, bi.booking.user
               %td.has-text-centered
-                - case booking.status
+                - case bi.booking.status
                 - when 1
                   %span.tag.is-warning.is-medium
                     Pending
@@ -164,4 +164,3 @@
                 - else
                   %span.tag.is-black.is-medium
                     Unknown
-
