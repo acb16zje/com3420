@@ -1,28 +1,31 @@
-- content_for :title, "Create category"
+- content_for :title, "Import assets from file"
 
 %section.hero
   .hero-body
     .container.has-text-centered
-      - flash.each do |name, msg|
-        - next unless name == 'alert' || name == 'notice'
-        .columns
-          .column.is-4.is-offset-4
-            .notification.is-danger.has-text-centered
-              %button.delete
-              = msg
+      = render :partial => 'layouts/flash'
 
       .column.is-10.is-offset-1
-        %h3.title Create category
+        %h3.title Import assets
         .box
           = simple_form_for :import_file, url: import_file_items_path, html: { multipart: true } do |f|
             = f.error_notification
 
             .field.is-horizontal
               .field-label.is-normal
+                %label.label Upload Image
               .field-body
                 .field
-                  %p.control.is-expanded                      
-                    = f.input :file, as: :file, label: false, input_html: {type: 'file', accept: '.xlsx'}
+                  .file.has-name.is-fullwidth
+                    %label.file-label
+                      = f.input :file, label: false, input_html: {class: 'file-input', type: 'file', accept: '.xlsx'}
+                      %span.file-cta
+                        %span.file-icon
+                          %i.fas.fa-upload
+                        %span.file-label
+                          Choose a file…
+                      %span.file-name#file_name
+                        Uploaded file name
             %br
             .field.is-horizontal
               .field-label.has-text-left

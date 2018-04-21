@@ -94,9 +94,9 @@
                   = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
           .navbar-item.has-dropdown.is-hoverable.is-hidden-touch{"data-behavior" => "notification-link"}
             = link_to requests_bookings_path, class: 'navbar-link' do
-              %span.icon
-                %i.fas.fa-bell.notifications-bell
-                %span{"data-behavior" => "unread-count"}
+              %span.badge.is-badge-danger{"data-behavior" => "unread-count"}
+                %span.icon
+                  %i.fas.fa-bell.notifications-bell
             .navbar-dropdown.is-boxed.is-right{"data-behavior" => "notification-items"}
           .navbar-item.has-dropdown.is-hoverable
             %a.navbar-link

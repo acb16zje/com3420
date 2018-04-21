@@ -18,7 +18,7 @@ class Notifications
       dataType: "JSON"
       method: "POST"
       success: ->
-        $("[data-behavior='unread-count']").text("")
+        $("[data-behavior='unread-count']").removeAttr('data-badge')
     )
 
   handleSuccess: (data) =>
@@ -77,10 +77,10 @@ class Notifications
     if items.length == 0
       $("[data-behavior='notification-items']").html("<a class='navbar-item'>No new notifications</a>")
       $("[data-behavior='notification-items-mobile']").html("<a class='dropdown-item'>No new notifications</a>")
-      $("[data-behavior='unread-count']").text("")
+      $("[data-behavior='unread-count']").removeAttr('data-badge')
     else
       $("[data-behavior='notification-items']").html(items_mobile)
-      $("[data-behavior='unread-count']").text(items.length)
+      $("[data-behavior='unread-count']").attr('data-badge', items.length)
 
 
 jQuery ->

@@ -84,6 +84,8 @@ module Importers
         if t_condition.nil? || !(t_condition.instance_of? String) || !def_conditions.include?(t_condition.titleize.strip)
           incorrect_rows.append(["#{index}, 5"])
           exit = true
+        else
+          t_condition.titleize
         end
 
         t_acquisition_date = row[4].value if !row[4].nil? && !row[4].value.nil?
@@ -98,7 +100,7 @@ module Importers
         t_purchase_price = row[5].value if !row[5].nil? && !row[5].value.nil?
         # Checking if the purchase_price cell is in the correct format
         if !t_purchase_price.nil? && !(((t_purchase_price.instance_of? Float) && (!t_purchase_price.instance_of? Integer) && (!t_purchase_price.instance_of? Fixnum)) ||
-          ((!t_purchase_price.instance_of? Float) && (t_purchase_price.instance_of? Integer) && (!t_purchase_price.instance_of? Fixnum)) || 
+          ((!t_purchase_price.instance_of? Float) && (t_purchase_price.instance_of? Integer) && (!t_purchase_price.instance_of? Fixnum)) ||
           ((!t_purchase_price.instance_of? Float) && (!t_purchase_price.instance_of? Integer) && (t_purchase_price.instance_of? Fixnum)))
           incorrect_rows.append(["#{index}, 7"])
           exit = true

@@ -22,7 +22,7 @@
 
     / Bulma CSS, Google Open Sans font
     = stylesheet_link_tag "//fonts.googleapis.com/css?family=Open+Sans:300,400,700"
-    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.0/css/bulma.min.css"
     = stylesheet_link_tag "application"
     :css
       html,body {
@@ -83,7 +83,7 @@
                   .field
                     %p.control
                       %label.label Username or Email
-                      = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus:''}
+                      = f.input :username, label: false, required: '', input_html: {class: 'input is-large', autofocus: ''}
                   .field
                     %p.control
                       %label.label Password
@@ -95,4 +95,7 @@
                 = link_to 'Forgot Password', "https://www.sheffield.ac.uk/cics/account/problems"
 
     = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.6/js/all.js"
+    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.10/js/all.js"
+    = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
+    = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"
+    = javascript_include_tag 'application'

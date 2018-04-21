@@ -531,9 +531,9 @@ $(document).ready(function () {
     }
 
     // Image upload show file name
-    $('#item_image').change(function () {
+    $('.file-input').change(function () {
         var i = $(this).prev('label').clone();
-        var file = $('#item_image')[0].files[0].name;
+        var file = $('.file-input')[0].files[0].name;
         $("#file_name").text(file);
     });
 
@@ -587,9 +587,9 @@ $(document).ready(function () {
    });
 
     // closeModals function
-   function closeModals() {
-       modals.forEach(function ($el) {
-           $el.classList.remove('is-active');
-       });
-   }
+    function closeModals() {
+        modals.forEach(function ($el) {
+            $el.classList.remove('is-active');
+        });
+    }
 });
