@@ -86,11 +86,6 @@ class BookingsController < ApplicationController
     end
   end
 
-  def late_send_reminder
-    b = Booking.find(params[:id])
-    UserMailer.asset_overdue(b).deliver_now
-  end
-
   # GET /bookings/new
   def new
     @booking = Booking.new
@@ -156,17 +151,7 @@ class BookingsController < ApplicationController
 
   # PATCH/PUT /bookings/1
   def update
-    if @booking.update(booking_params)
-      if @booking.status == 2
-        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        UserMailer.booking_approved(@booking).deliver
-      elsif @booking.status == 5
-        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        UserMailer.booking_rejected(@booking).deliver
-      end
-
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
-    end
   end
 
   # Set booking as cancelled
@@ -180,17 +165,6 @@ class BookingsController < ApplicationController
     end
   end
 
-  # GET /bookings/1/booking_returned
-  def manager_booking_returned
-    booking = Booking.find(params[:id])
-    booking.status = 4
-
-    if booking.save
-      render :json => { :success => true }
-    else
-      render :json => { :success => false }
-    end
-  end
 
   # PUT /bookings/1/set_booking_returned
   def set_booking_returned
@@ -221,6 +195,69 @@ class BookingsController < ApplicationController
       end
     end
   end
+
+
+  def manager_accepted
+    booking = Booking.find(params[:id])
+    booking.status = 2
+
+    if booking.save
+      Notification.create(recipient: booking.user, action: 'approved', notifiable: booking, context: 'U')
+      UserMailer.booking_approved(booking).deliver
+      render :json => { :success => true }
+    else
+      render :json => { :success => false }
+    end
+  end
+
+  def manager_rejected
+    booking = Booking.find(params[:id])
+    booking.status = 5
+
+    if booking.save
+      Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'U')
+      UserMailer.booking_rejected(booking).deliver
+      render :json => { :success => true }
+    else
+      render :json => { :success => false }
+    end
+  end
+
+  def manager_chase
+    b = Booking.find(params[:id])
+    UserMailer.asset_overdue(b).deliver_now
+  end
+
+  def manager_return
+    booking = Booking.find(params[:id])
+    booking.status = 4
+
+    if booking.save
+      Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'U')
+      UserMailer.user_asset_returned(booking).deliver
+      render :json => { :success => true }
+    else
+      render :json => { :success => false }
+    end
+  end
+
+  def cancel
+    booking = Booking.find(params[:id])
+    booking.status = 6
+
+    if booking.save
+      Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'U')
+      UserMailer.user_booking_cancelled(booking).deliver
+      render :json => { :success => true }
+    else
+      render :json => { :success => false }
+    end
+  end
+
+
+
+
+
 
   def start_date
     data = {

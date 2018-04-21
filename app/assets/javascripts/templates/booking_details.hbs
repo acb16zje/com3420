@@ -7,7 +7,7 @@
     <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_rejected"> Reject Booking </button>
   {{/if}}
   {{#if chase}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/late_send_reminder"> Send Reminder </button>
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_chase"> Send Reminder </button>
   {{/if}}
   {{#if return}}
     <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_return"> Booking Returned </button>

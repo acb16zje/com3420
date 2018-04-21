@@ -115,6 +115,39 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Late For Return"
   end
 
+  def manager_booking_overdue(booking)
+    @booking = booking
+    @user = booking.user
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
+    attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
+
+    mail to: @user.email, subject: "AMRC - Late For Return"
+  end
+
+  def user_asset_returned(booking)
+    @booking = booking
+    @user = booking.user
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
+    attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
+
+    mail to: @user.email, subject: "AMRC - Booking Recieved"
+  end
+
+  def user_booking_cancelled(booking)
+    @booking = booking
+    @user = booking.user
+    @items = @booking.getBookingItems
+    @manager = @items[0].user
+
+    attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
+
+    mail to: @user.email, subject: "AMRC - Booking Recieved"
+  end
+
   def get_peripherals(booking)
     bookingitem = [Item.find(booking.item.id)]
     peripherals = Item.where(serial: booking.peripherals.to_s.split)

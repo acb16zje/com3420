@@ -47,10 +47,9 @@ task update_booking_status_to_late: :environment do
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.getBookingItems[0].user, action: "overdue", notifiable: b, context: "AM")
     UserMailer.asset_overdue(b).deliver_now
+    UserMailer.manager_booking_overdue(b).deliver_now
     b.status = 7
-    if b.save
-      puts "Sent"
-    end
+    b.save
   end
 end
 
@@ -61,6 +60,7 @@ task remind_late_booking: :environment do
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.getBookingItems[0].user, action: "overdue", notifiable: b, context: "AM")
     UserMailer.asset_overdue(b).deliver
+    UserMailer.manager_booking_overdue(b).deliver
   end
 end
 
