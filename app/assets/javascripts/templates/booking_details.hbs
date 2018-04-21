@@ -1,6 +1,21 @@
 <div class="row-details">
+  <h3> Booking Options: </h3>
+  {{#if accept}}
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_accepted"> Accept Booking </button>
+  {{/if}}
+  {{#if reject}}
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_rejected"> Reject Booking </button>
+  {{/if}}
+  {{#if chase}}
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/late_send_reminder"> Send Reminder </button>
+  {{/if}}
+  {{#if return}}
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_return"> Booking Returned </button>
+  {{/if}}
+  {{#if cancel}}
+    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/cancel"> Cancel </button>
+  {{/if}}
   <h3>Items On Booking: {{method}}</h3>
-  <a href="/bookings/{{id}}/">Test Anchor</a>
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
@@ -11,8 +26,8 @@
     <tbody>
       {{#items}}
       <tr>
-        <td>{{item_name}}</td>
         <td>{{item_id}}</td>
+        <td>{{item_name}}</td>
       </tr>
       {{/items}}
     </tbody>

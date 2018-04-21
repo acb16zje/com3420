@@ -23,9 +23,16 @@ Rails.application.routes.draw do
     get 'rejected', on: :collection
     get 'late', on: :collection
 
-    get 'booking_returned', on: :member
-    put 'set_booking_returned', on: :member
-    put 'set_booking_cancelled', on: :member
+    post 'manager_chase', on: :member
+    post 'manager_accepted', on: :member
+    post 'manager_rejected', on: :member
+    post 'manager_return', on: :member
+    post 'cancel', on: :member
+
+
+    post 'set_booking_returned', on: :member
+    post 'set_booking_cancelled', on: :member
+
   end
 
   resources :items do

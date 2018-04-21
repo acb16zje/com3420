@@ -327,30 +327,43 @@ $(document).ready(function () {
 
 
     function format ( d ) {
+      var show_accept
+      var show_reject
+      var show_cancel
+      var show_return
+      var show_debug
+      var show_chase
+
+
+      switch (d.status){
+        case "1":
+          show_accept = "true"
+          show_reject = "true"
+          break;
+        case "2":
+          show_cancel = "true"
+          break;
+        case "3":
+          show_return = "true"
+           break;
+        case "4":
+           break;
+        case "7":
+          show_return = "true"
+          show_chase = "true"
+          break;
+      }
       var html = HandlebarsTemplates['booking_details']({
-        booking_id: d.id
+        accept: show_accept,
+        reject: show_reject,
+        cancel: show_cancel,
+        return: show_return,
+        chase: show_chase,
+        booking_id: d.id,
+        booking_status: d.status,
         method: d.method,
         items: d.items
       });
-  //     var html = ('<div class="row-details">' +
-  // '<h3>Items On Booking:</h3>'+
-  //   '<table>' +
-  //     '<thead>' +
-  //       '<tr>' +
-  //         '<th> ID </th>' +
-  //         '<th> Name </th>' +
-  //       '</tr>' +
-  //     '</thead>' +
-  //     '<tbody>');
-  //       for (var i in d.items){
-  //         html += ('<tr>' +
-  //           '<td>'+ d.items[i].item_id +'</td>' +
-  //           '<td>'+ d.items[i].item_name +'</td>' +
-  //         '</tr>');
-  //       }
-  //       html += (
-  //     '</tbody>' +
-  //   '</table> ' + '</div>');
     return html
     }
 
@@ -358,7 +371,7 @@ $(document).ready(function () {
        processing: true,
        serverSide: true,
        ajax: $('#example').data('url'),
-       aoColumns: [
+       columns: [
          {
              "title": "Details",
              "targets": 0,
@@ -420,16 +433,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
     $("#bookings_other_wrapper").removeClass("container");
 
     // For searching browse by categories
@@ -441,6 +444,26 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('click', '.booking_post', function () {
+        console.log("HERE")
+        var bookingId = $(this).attr('data-booking-id');
+        var bookingPath = $(this).attr('data-booking-action');
+        $.ajax({
+          method: 'POST',
+          url: bookingPath,
+          success: function succ() {
+            setTimeout(function(){
+              location.reload();
+            }, 5000)
+          },
+          error: function succ() {
+            setTimeout(function(){
+              console.log("ERROR")
+              location.reload();
+            }, 5000)
+          }
+      });
+    });
 
 
     // Use gon to get ruby variables into JS, for categories filtering

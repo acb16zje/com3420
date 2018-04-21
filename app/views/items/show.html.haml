@@ -132,7 +132,7 @@
         %tbody
           - @bookings.each do |bi|
             %tr
-              %td.has-text-centered= bi.id
+              %td.has-text-centered= bi.booking.id
               %td.has-text-centered= bi.booking.start_datetime.strftime("%d/%m/%Y - %I:%M %p")
               %td.has-text-centered= bi.booking.end_datetime.strftime("%d/%m/%Y - %I:%M %p")
               %td.has-text-centered= bi.booking.next_location
