@@ -34,7 +34,11 @@ class Booking < ApplicationRecord
   attr_accessor :main_item
 
   def getBookingItems
-    items_for_booking = Item.joins(:bookings)
+    puts "GBI============="
+    puts self.id
+    items_for_booking = Item.joins(:bookings).where("bookings.id = ?", self.id)
+    puts items_for_booking
+    items_for_booking
   end
 
 end
