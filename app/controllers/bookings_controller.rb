@@ -12,8 +12,7 @@ class BookingsController < ApplicationController
     @bookings = Booking.joins(:items).where("bookings.user_id = ?", current_user.id)
     respond_to do |format|
       format.html
-      format.json{render @bookings}
-
+      format.json{ @bookings}
     end
   end
 
@@ -57,7 +56,6 @@ class BookingsController < ApplicationController
   # GET /bookings/completed
   def completed
     @bookings = Booking.joins(:items).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
-    puts @bookings
     respond_to do |format|
       format.html
       format.json{ @bookings}
@@ -77,7 +75,6 @@ class BookingsController < ApplicationController
 
   # GET /bookings/late
   def late
-    @method = "late"
     @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 7', current_user.id)
     respond_to do |format|
       format.html

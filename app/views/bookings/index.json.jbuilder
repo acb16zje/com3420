@@ -2,8 +2,9 @@ json.recordsTotal @bookings.length.to_s
 json.recordsFiltered @bookings.length.to_s
 json.data do
   json.array! @bookings do |booking|
-      json.method @method
+      json.perm current_user.permission_id
       json.id booking.id.to_s
+      json.perm current_user.permission_id
       json.start_date booking.start_date
       json.start_time booking.start_time
       json.end_date booking.end_date

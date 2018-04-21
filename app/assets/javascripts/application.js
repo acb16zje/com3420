@@ -334,24 +334,41 @@ $(document).ready(function () {
       var show_debug
       var show_chase
 
-
-      switch (d.status){
-        case "1":
-          show_accept = "true"
-          show_reject = "true"
-          break;
-        case "2":
-          show_cancel = "true"
-          break;
-        case "3":
-          show_return = "true"
-           break;
-        case "4":
-           break;
-        case "7":
-          show_return = "true"
-          show_chase = "true"
-          break;
+      if (d.perm >= 2){
+        switch (d.status){
+          case "1":
+            show_accept = "true"
+            show_reject = "true"
+            break;
+          case "2":
+            show_cancel = "true"
+            break;
+          case "3":
+            show_return = "true"
+             break;
+          case "4":
+             break;
+          case "7":
+            show_return = "true"
+            show_chase = "true"
+            break;
+        }
+      } else
+      {
+        switch (d.status){
+          case "1":
+            show_cancel = "true"
+            break;
+          case "2":
+            show_cancel = "true"
+            break;
+          case "3":
+            show_return = "true"
+             break;
+          case "7":
+            show_return = "true"
+            break;
+        }
       }
       var html = HandlebarsTemplates['booking_details']({
         accept: show_accept,
