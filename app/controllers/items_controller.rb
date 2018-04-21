@@ -158,16 +158,16 @@ class ItemsController < ApplicationController
 
     # Error message 0
     if res[0].zero?
-      redirect_to import_items_path, notice: 'The submitted file is not of file .xlsx format'
+      redirect_to import_items_path, alert: 'The submitted file is not of file .xlsx format'
     # Error message 1
     elsif res[0] == 1
-      redirect_to import_items_path, notice: 'Headers of excel sheet do not match appropriate format'
+      redirect_to import_items_path, alert: 'Headers of excel sheet do not match appropriate format'
     elsif res[0] == 2
       incorrect_rows = res[1]
       if incorrect_rows.blank?
         redirect_to import_items_path, notice: 'Import was successful and no problems occured'
       else
-        redirect_to controller: 'items', action: 'import', incorrect_rows: incorrect_rows, notice: 'Import was partially successful, view rows that had problems below'
+        redirect_to controller: 'items', action: 'import', incorrect_rows: incorrect_rows, alert: 'Import was partially successful, view rows that had problems below'
       end
     end
   end
