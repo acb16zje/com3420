@@ -3,8 +3,6 @@
 %section.section
   .columns
     .column.is-4.is-offset-4
-      = render :partial => 'layouts/flash'
-
       %h1.title.has-text-centered{:id => "DetailsTitle"}
         - if current_user.uid.eql? @user.uid
           Edit My Details

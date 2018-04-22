@@ -6,11 +6,10 @@
   *= require classic.time
   *= require is-awesome
   *= require select2
-  *= require datatables
-
 */
 
 /* Hide vertical scrollbar if not needed */
+
 html {
   overflow: auto;
 }
@@ -20,61 +19,79 @@ body {
 }
 
 /*  */
+
 .material-icons {
   font-size: 96px !important;
 }
 
 /* Mobile notification style */
-#mobile_notification_dropdown .dropdown-content{
+
+#mobile_notification_dropdown .dropdown-content {
   top: 1px !important;
   left: 0;
 }
 
 /* No resize for textarea */
+
 .textarea {
   resize: none;
 }
 
 /* Home page card fixes on mobile resolution */
+
 .columns {
   margin-left: 0;
   margin-right: 0;
 }
 
 /* Center the date picker date */
-table.picker__table tbody td, table.picker__table thead th {
+
+table.picker__table tbody td,
+table.picker__table thead th {
   text-align: center !important;
 }
 
+table.is-striped.is-bordered {
+  width: 100%;
+}
+
 /* Vertical align the table td content */
+
 td.has-text-centered {
   vertical-align: middle;
 }
 
 /* Modal cross fix */
+
 .modal-close:before {
   width: 42% !important;
 }
 
 /* Select2 fixes for Bulma */
+
 .select2-container .select2-selection--single {
   height: auto !important;
   padding: 3px 0 !important;
   border: 1px solid #dbdbdb !important;
 }
+
 .select2-container .select2-selection--single .select2-selection__arrow {
   top: 5px !important;
 }
+
 .select2-container .select2-selection--single .select2-selection__placeholder {
   color: #dbdbdb !important;
 }
+
 .select2-container .select2-dropdown {
   border: 1px solid #dbdbdb !important;
   border-top: 0 !important;
 }
+
 .select2-container .select2-dropdown .select2-search {
   margin: 5px;
 }
+
 .select2-container .select2-dropdown .select2-search__field {
   padding: 10px !important;
   border-radius: 3px !important;
@@ -84,21 +101,23 @@ td.has-text-centered {
   max-width: 100%;
   width: 100%;
 }
+
 .select2-container .select2-dropdown .select2-results__options {
   max-height: 200px !important;
 }
+
 .select2-container .select2-dropdown .select2-results__options .select2-results__option {
   padding: 0.37em 0.75em !important;
   font-size: 1rem;
 }
 
 /* Navbar responsive adjust */
+
 @media screen and (min-width: 1024px) and (max-width: 1070px) {
   /* Categories and Users */
   .is-hidden-custom {
     display: none !important;
   }
-
   /* More dropdown */
   .is-hidden.is-show-custom {
     display: flex !important;
@@ -106,24 +125,10 @@ td.has-text-centered {
 }
 
 td.details-control {
-  text-align:center;
-  color:forestgreen;
+  background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
   cursor: pointer;
 }
 
 tr.shown td.details-control {
-  text-align:center;
-  color:red;
-}
-
-.row-details {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  margin: 10%;
-  border: none;
-  font: normal normal bold 1em/1 Arial, Helvetica, sans-serif;
-  color: black;
-  -o-text-overflow: ellipsis;
-  text-overflow: ellipsis;
+  background: url('https://datatables.net/examples/resources/details_close.png')  no-repeat center center;
 }

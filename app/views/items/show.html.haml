@@ -119,10 +119,10 @@
     %br
     - if @item.user_id == current_user.id || current_user.permission_id == 3
       %p.title.has-text-centered Bookings History
-      %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+      %table#bookings.table.is-striped.is-bordered
         %thead
           %tr
-            %th Booking ID
+            %th ID
             %th Start Date
             %th End Date
             %th Location
@@ -133,8 +133,8 @@
           - @bookings.each do |bi|
             %tr
               %td.has-text-centered= bi.booking.id
-              %td.has-text-centered= bi.booking.start_datetime.strftime("%d/%m/%Y - %I:%M %p")
-              %td.has-text-centered= bi.booking.end_datetime.strftime("%d/%m/%Y - %I:%M %p")
+              %td.has-text-centered= bi.booking.start_datetime.strftime("%d %B %Y - %I:%M %p")
+              %td.has-text-centered= bi.booking.end_datetime.strftime("%d %B %Y - %I:%M %p")
               %td.has-text-centered= bi.booking.next_location
               %td.has-text-centered= bi.booking.reason
               %td.has-text-centered= link_to bi.booking.user.givenname, bi.booking.user

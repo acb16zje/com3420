@@ -1,36 +1,34 @@
-<div class="row-details">
-  <h3> Booking Options: </h3>
-  {{#if accept}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_accepted"> Accept Booking </button>
-  {{/if}}
-  {{#if reject}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_rejected"> Reject Booking </button>
-  {{/if}}
-  {{#if chase}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_chase"> Send Reminder </button>
-  {{/if}}
-  {{#if return}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_return"> Booking Returned </button>
-  {{/if}}
-  {{#if cancel}}
-    <button class = "booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/cancel"> Cancel </button>
-  {{/if}}
-  <h3>Items On Booking: {{method}}</h3>
-  <table class="table table-bordered table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#items}}
-      <tr>
-        <td>{{item_id}}</td>
-        <td>{{item_name}}</td>
-      </tr>
-      {{/items}}
-    </tbody>
-  </table>
-  <a href=""></a>
-</div>
+<h3> Booking Options: </h3>
+{{#if accept}}
+<button class="booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_accepted">
+  Accept Booking </button>
+{{/if}} {{#if reject}}
+<button class="booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_rejected">
+  Reject Booking </button>
+{{/if}} {{#if chase}}
+<button class="booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_chase">
+  Send Reminder </button>
+{{/if}} {{#if return}}
+<button class="booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/manager_return">
+  Booking Returned </button>
+{{/if}} {{#if cancel}}
+<button class="booking_post" data-booking-id="{{booking_id}}" data-booking-action="/bookings/{{booking_id}}/cancel"> Cancel </button>
+{{/if}}
+<h3>Items On Booking: {{method}}</h3>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#items}}
+    <tr>
+      <td>{{item_id}}</td>
+      <td>{{item_name}}</td>
+    </tr>
+    {{/items}}
+  </tbody>
+</table>
+<a href=""></a>

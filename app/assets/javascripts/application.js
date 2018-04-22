@@ -1,5 +1,3 @@
-//= require jquery
-//= require datatables
 //= require jquery_ujs
 //= require bulma.datatables
 //= require bunny
@@ -326,128 +324,136 @@ $(document).ready(function () {
     });
 
 
-    function format ( d ) {
-      var show_accept
-      var show_reject
-      var show_cancel
-      var show_return
-      var show_debug
-      var show_chase
+    // ******************************************************************************************************************************************************
+    function format(d) {
+        var show_accept
+        var show_reject
+        var show_cancel
+        var show_return
+        var show_debug
+        var show_chase
 
-      if (d.perm >= 2){
-        switch (d.status){
-          case "1":
-            show_accept = "true"
-            show_reject = "true"
-            break;
-          case "2":
-            show_cancel = "true"
-            break;
-          case "3":
-            show_return = "true"
-             break;
-          case "4":
-             break;
-          case "7":
-            show_return = "true"
-            show_chase = "true"
-            break;
-        }
-      } else
-      {
-        switch (d.status){
-          case "1":
-            show_cancel = "true"
-            break;
-          case "2":
-            show_cancel = "true"
-            break;
-          case "3":
-            show_return = "true"
-             break;
-          case "7":
-            show_return = "true"
-            break;
-        }
-      }
-      var html = HandlebarsTemplates['booking_details']({
-        accept: show_accept,
-        reject: show_reject,
-        cancel: show_cancel,
-        return: show_return,
-        chase: show_chase,
-        booking_id: d.id,
-        booking_status: d.status,
-        method: d.method,
-        items: d.items
-      });
-    return html
-    }
-
-    var dt = $('#example').DataTable( {
-       processing: true,
-       serverSide: true,
-       ajax: $('#example').data('url'),
-       columns: [
-         {
-             "title": "Details",
-             "targets": 0,
-             "className": 'details-control',
-             "orderable": false,
-             // "data": null,
-             "defaultContent": '',
-             "render": function () {
-                 return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
-             },
-             width:"15px"
-         },
-          { "mDataProp": "id" },
-          { "mDataProp": "start_date" },
-          { "mDataProp": "start_time" },
-          { "mDataProp": "end_date" },
-          { "mDataProp": "end_time" },
-          { "mDataProp": "reason" },
-          { "mDataProp": "next_location" },
-          { "mDataProp": "status" },
-          { "mDataProp": "user_id" }
-        ],
-        order: [[1, 'asc']],
-        searching: false
-     });
-
-    // Array to track the ids of the details displayed rows
-    var detailRows = [];
-
-    $('#example tbody').on( 'click', 'tr td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = dt.row( tr );
-        var idx = $.inArray( tr.attr('id'), detailRows );
-
-        if ( row.child.isShown() ) {
-            tr.removeClass( 'details' );
-            row.child.hide();
-
-            // Remove from the 'open' array
-            detailRows.splice( idx, 1 );
-        }
-        else {
-            tr.addClass( 'details' );
-            row.child( format( row.data() ) ).show();
-
-            // Add to the 'open' array
-            if ( idx === -1 ) {
-                detailRows.push( tr.attr('id') );
+        if (d.perm >= 2) {
+            switch (d.status) {
+                case "1":
+                    show_accept = "true"
+                    show_reject = "true"
+                    break;
+                case "2":
+                    show_cancel = "true"
+                    break;
+                case "3":
+                    show_return = "true"
+                    break;
+                case "4":
+                    break;
+                case "7":
+                    show_return = "true"
+                    show_chase = "true"
+                    break;
+            }
+        } else {
+            switch (d.status) {
+                case "1":
+                    show_cancel = "true"
+                    break;
+                case "2":
+                    show_cancel = "true"
+                    break;
+                case "3":
+                    show_return = "true"
+                    break;
+                case "7":
+                    show_return = "true"
+                    break;
             }
         }
-    } );
+        var html = HandlebarsTemplates['booking_details']({
+            accept: show_accept,
+            reject: show_reject,
+            cancel: show_cancel,
+            return: show_return,
+            chase: show_chase,
+            booking_id: d.id,
+            booking_status: d.status,
+            method: d.method,
+            items: d.items
+        });
+        return html
+    }
 
-    // On each draw, loop over the `detailRows` array and show any child rows
-    dt.on( 'draw', function () {
-        $.each( detailRows, function ( i, id ) {
-            $('#'+id+' td.details-control').trigger( 'click' );
-        } );
-    } );
+    var dt = $('#example').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: $('#example').data('url'),
+        columns: [
+            {
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
+            {
+                "data": "id"
+            },
+            {
+                "data": "start_date"
+            },
+            {
+                "data": "start_time"
+            },
+            {
+                "data": "end_date"
+            },
+            {
+                "data": "end_time"
+            },
+            {
+                "data": "reason"
+            },
+            {
+                "data": "next_location"
+            },
+            {
+                "data": "status"
+            }
+        ]
+    });
 
+    $('#example tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = dt.row(tr);
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            tr.addClass('shown');
+            row.child(format(row.data())).show();
+        }
+    });
+
+    $(document).on('click', '.booking_post', function () {
+        console.log("HERE")
+        var bookingId = $(this).attr('data-booking-id');
+        var bookingPath = $(this).attr('data-booking-action');
+        $.ajax({
+            method: 'POST',
+            url: bookingPath,
+            success: function succ() {
+                setTimeout(function () {
+                    location.reload();
+                }, 5000)
+            },
+            error: function succ() {
+                setTimeout(function () {
+                    console.log("ERROR")
+                    location.reload();
+                }, 5000)
+            }
+        });
+    });
+    // ******************************************************************************************************************************************************
 
 
     $("#bookings_other_wrapper").removeClass("container");
@@ -461,28 +467,6 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.booking_post', function () {
-        console.log("HERE")
-        var bookingId = $(this).attr('data-booking-id');
-        var bookingPath = $(this).attr('data-booking-action');
-        $.ajax({
-          method: 'POST',
-          url: bookingPath,
-          success: function succ() {
-            setTimeout(function(){
-              location.reload();
-            }, 5000)
-          },
-          error: function succ() {
-            setTimeout(function(){
-              console.log("ERROR")
-              location.reload();
-            }, 5000)
-          }
-      });
-    });
-
-
     // Use gon to get ruby variables into JS, for categories filtering
     if (gon.category != null) {
         table.search(gon.category).draw();
@@ -492,11 +476,11 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 
-    endTime.change(function() {
+    endTime.change(function () {
         $('#peripherals').empty();
     });
 
-    $('#peripherals').change(function() {
+    $('#peripherals').change(function () {
         if (endTime.val()) {
             $.ajax({
                 type: "GET",
@@ -572,19 +556,19 @@ $(document).ready(function () {
     }
 
     // Close modal when Esc is pressed
-   $(document).keydown(function () {
-       var e = event || window.event;
-       if (e.keyCode === 27) {
-           closeModals();
-       }
-   });
+    $(document).keydown(function () {
+        var e = event || window.event;
+        if (e.keyCode === 27) {
+            closeModals();
+        }
+    });
 
     // Close modal when click outside of image
-   $(document).click(function (e) {
-       if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
-           closeModals();
-       }
-   });
+    $(document).click(function (e) {
+        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
+            closeModals();
+        }
+    });
 
     // closeModals function
     function closeModals() {

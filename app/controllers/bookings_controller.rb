@@ -9,11 +9,11 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.joins(:items).where("bookings.user_id = ?", current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-    end
+    @bookings = Booking.where("bookings.user_id = ?", current_user.id)
+    # respond_to do |format|
+    #   format.html
+    #   format.json{ @bookings }
+    # end
   end
 
   # GET /bookings/1
@@ -40,7 +40,6 @@ class BookingsController < ApplicationController
 
     end
   end
-
 
   # GET /bookings/ongoing
   def ongoing
@@ -69,7 +68,6 @@ class BookingsController < ApplicationController
     respond_to do |format|
       format.html
       format.json{ @bookings}
-
     end
   end
 
@@ -251,11 +249,6 @@ class BookingsController < ApplicationController
     end
   end
 
-
-
-
-
-
   def start_date
     data = {
       max_end_date: max_end_date(params[:start_date]),
@@ -301,7 +294,8 @@ class BookingsController < ApplicationController
   end
 
   def booking_validation(item_id, start_datetime, end_datetime)
-    bi = Booking.joins(:items).where("items.id = ?", item_id)
+    bi = Booking.joins(:booking_items).where("item_id = ?", item_id)
+
     query = bi.where(
       "(status = 2 OR status = 3)
       AND (
@@ -322,7 +316,7 @@ class BookingsController < ApplicationController
   # Fully booked days in a single booking
   def fully_booked_days_single
     date_to_disable = []
-    bi = Booking.joins(:items).where("items.id = ?", params[:id])
+    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
     bookings = bi.where(
       "(status = 2 OR status = 3)
       AND start_date <> end_date
@@ -330,10 +324,8 @@ class BookingsController < ApplicationController
           AND end_time = '2000-01-01 00:00:00 UTC'
           AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
         OR
-          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:id]
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))"
     )
-
-
 
     bookings.each do |booking|
       start_date = Date.parse(booking.start_date.to_s)
@@ -371,9 +363,7 @@ class BookingsController < ApplicationController
   def fully_booked_days_multi
     date_to_disable = []
 
-
-    date_to_disable = []
-    bi = Booking.joins(:items).where("items.id = ?", params[:id])
+    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
     bookings = bi.find_by_sql [
       "WITH RECURSIVE linked_bookings AS (
           SELECT A.start_date AS start_date,
@@ -389,7 +379,7 @@ class BookingsController < ApplicationController
           FROM bookings p, linked_bookings pr
           WHERE p.end_datetime = pr.start_datetime
       )
-      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings", params[:id]]
+      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings"]
 
 
     bookings.each do |booking|
@@ -432,7 +422,8 @@ class BookingsController < ApplicationController
                    Date.parse(start_date)
                  end
 
-    bi = Booking.joins(:items).where("items.id = ?", params[:id])
+    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
+
     booking = bi.where(
       "(status = 2 OR status = 3)
       AND start_date >= CAST('#{start_date}' AS DATE)", params[:id]
@@ -457,11 +448,11 @@ class BookingsController < ApplicationController
 
     start_date = Date.parse(start_date)
 
-    bi = Booking.joins(:items).where("items.id = ?", params[:id])
+    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
     bookings = bi.where(
       "(status = 2 OR status = 3)
       AND (start_date = CAST('#{start_date}' AS DATE)
-      OR end_date = CAST('#{start_date}' AS DATE))", params[:id]
+      OR end_date = CAST('#{start_date}' AS DATE))"
     ).select(:start_datetime, :end_datetime)
 
     bookings.each do |booking|
@@ -497,19 +488,19 @@ class BookingsController < ApplicationController
     start_date = Date.parse(start_date)
     end_date = Date.parse(end_date)
 
-    bi = Booking.joins(:items).where("items.id = ?", params[:id])
+    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
 
     if start_date < end_date
       booking = bi.where(
         "(status = 2 OR status = 3)
-        AND start_date = CAST('#{end_date}' AS DATE)", params[:id]
+        AND start_date = CAST('#{end_date}' AS DATE)"
       ).minimum(:start_time)
 
       time_array = [booking.hour, booking.min] unless booking.blank?
     else
       booking = bi.where(
         "(status = 2 OR status = 3)
-        AND start_date = CAST('#{start_date}' AS DATE)", params[:id]
+        AND start_date = CAST('#{start_date}' AS DATE)"
       ).minimum(:start_time)
 
       if !booking.blank? && start_time < booking.strftime('%H:%M')
