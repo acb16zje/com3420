@@ -2,12 +2,12 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Current categories
   %p.title.has-text-centered
     = link_to 'Create new', new_category_path, class: 'button is-success'
-  %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#categories.table.is-striped.is-bordered
     %thead
       %tr
         %th Category

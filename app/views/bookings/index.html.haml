@@ -2,12 +2,12 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   %p.title.has-text-centered My Bookings
   %p.title.has-text-centered
     = link_to 'Book an asset', items_path, class: 'button is-success'
-  %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#bookings.table.is-striped.is-bordered
     %thead
       %tr
         %th ID
@@ -61,17 +61,17 @@
                   = link_to 'Edit', edit_booking_path(booking.id), class: 'button is-link'
                   = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-danger' do
                     %span.icon
-                      %i.class.fas.fa-ban
+                      %i.fas.fa-ban
                     %span Cancel Booking
               - elsif (booking.status == 3) || (booking.status == 7)
                 %p.control
                   = link_to booking_returned_booking_path(booking), class: 'button is-link' do
                     %span.icon
-                      %i.class.fas.fa-redo
+                      %i.fas.fa-redo
                     %span Return Item
               - elsif (booking.status == 4) || (booking.status == 5) || (booking.status == 6)
                 %p.control
                   = link_to new_item_booking_path(booking.item.id), class: 'button is-link' do
                     %span.icon
-                      %i.class.fas.fa-sync
+                      %i.fas.fa-sync
                     %span Book Again

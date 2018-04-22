@@ -13,13 +13,17 @@ class ItemsController < ApplicationController
   # GET /items/manager
   def manager
     # @items = Item.where('user_id = ?', params[:user_id])
-    @manager = User.find_by_id(params[:user_id])
-    if params[:tab] == 'OnLoan'
-      @items = Item.joins(:bookings).where(bookings: { status: '3' }).where(user_id: current_user.id)
-    elsif params[:tab] == 'Issue'
-      @items = Item.joins(:bookings).where(user_id: current_user.id, condition: %w[Damaged Missing]).or(Item.joins(:bookings).where('bookings.status = ?', 7))
+    if params[:user_id].to_i == current_user.id && current_user.permission_id == 1
+      render 'errors/error_404'
     else
-      @items = Item.where('user_id = ?', params[:user_id])
+      @manager = User.find_by_id(params[:user_id])
+      if params[:tab] == 'OnLoan'
+        @items = Item.joins(:bookings).where(bookings: { status: '3' }).where(user_id: current_user.id)
+      elsif params[:tab] == 'Issue'
+        @items = Item.joins(:bookings).where(user_id: current_user.id, condition: %w[Damaged Missing]).or(Item.joins(:bookings).where('bookings.status = ?', 7))
+      else
+        @items = Item.where('user_id = ?', params[:user_id])
+      end
     end
   end
 
@@ -37,7 +41,7 @@ class ItemsController < ApplicationController
   def add_peripheral_option
     @item = Item.find_by_id(params[:id])
 
-    redirect_to '/404' unless @item.category.has_peripheral
+    render 'errors/error_404' unless @item.category.has_peripheral
   end
 
   # GET /items/1/choose_peripheral
@@ -45,7 +49,7 @@ class ItemsController < ApplicationController
     @i = Item.find_by_id(params[:id])
 
     if !@i.category.has_peripheral
-      redirect_to '/404'
+      render 'errors/error_404'
     else
       @items = Item.all.where("(serial <> ?) AND (parent_asset_serial IS NULL OR parent_asset_serial = '')", @i.serial)
     end

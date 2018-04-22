@@ -49,6 +49,11 @@ td.has-text-centered {
   vertical-align: middle;
 }
 
+/* Set the datatable to max width, for responsive */
+table.is-striped.is-bordered {
+  width: 100%;
+}
+
 /* Modal cross fix */
 .modal-close:before {
   width: 42% !important;

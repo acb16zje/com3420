@@ -2,10 +2,10 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Asset Managers
-  %table#users.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#users.table.is-striped.is-bordered
     %thead
       %tr
         %th Name
@@ -13,7 +13,7 @@
         %th Action
     %tbody
       - @users.each do |user|
-        - if user.permission_id != 1
+        - if user.permission_id > 1
           %tr
             %td.has-text-centered= user.givenname.to_s + ' ' + user.sn.to_s
             %td.has-text-centered= user.email
@@ -22,5 +22,5 @@
                 %p.control
                   = link_to manager_items_path(user_id: user.id), class: 'button is-primary' do
                     %span.icon
-                      %i.class.fas.fa-eye
+                      %i.fas.fa-eye
                     %span View Assets

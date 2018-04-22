@@ -2,13 +2,13 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
 %p.title.has-text-centered My Favourites Category
 %p.title.has-text-centered
   = link_to 'Add new', new_user_home_category_path, class: 'button is-success'
 
-%table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+%table#categories.table.is-striped.is-bordered
   %thead
     %tr
       %th Category
@@ -23,5 +23,5 @@
             %p.control
               = link_to user_home_category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
                 %span.icon
-                  %i.class.fas.fa-trash
+                  %i.fas.fa-trash
                 %span Remove

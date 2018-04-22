@@ -92,6 +92,16 @@ describe 'Managing accounts' do
     expect(page).to have_content 'wkkhaw1@sheffield.ac.uk'
   end
 
+  specify 'I cannot view my assets if my permission is user' do
+    click_link('My Profile')
+    expect(page).to have_content 'Edit Details'
+    click_link('Edit Details')
+    select('User', from: 'user_permission_id')
+    click_button('Save changes')
+    visit '/items/manager?user_id=1'
+    expect(page).to have_content '404'
+  end
+
   specify 'I can change the permission of my account to asset manager' do
     click_link('My Profile')
     expect(page).to have_content 'Edit Details'

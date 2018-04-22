@@ -2,7 +2,7 @@
 
 %section.section
   .container.is-desktop.has-text-centered
-    = render :partial => 'layouts/flash'
+    = render partial: 'layouts/flash'
 
     %h3.title Create booking on #{@item.name}
     .box
@@ -52,7 +52,7 @@
               %tr
                 %th Acquisition Date
                 %td
-                  = @item.acquisition_date
+                  = @item.acquisition_date.strftime("%d %B %Y") unless @item.acquisition_date.blank?
               %tr
                 %th Purchase Price
                 %td

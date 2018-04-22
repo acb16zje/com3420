@@ -1,6 +1,6 @@
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   - if @manager.givenname.eql? current_user.givenname and @manager.sn.eql? current_user.sn
     - content_for :title, "My Assets"
@@ -10,7 +10,7 @@
     %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
   = render "tabs"
   = form_tag change_manager_multiple_items_path do
-    %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+    %table#assets.table.is-striped.is-bordered
       %thead
         %tr
           - if current_user.id == @manager.id

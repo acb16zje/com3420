@@ -6,11 +6,8 @@ describe 'Managing error pages' do
     visit '/403'
     expect(page).to have_content('403 Access Denied')
 
-    visit '/403'
-    expect(page).to have_content('403 Access Denied')
-
     visit '/404'
-    expect(page).to have_content('404 Page not found')
+    expect(page).to have_content('404 Page Not Found')
 
     visit '/422'
     expect(page).to have_content('422 Change Rejected')
@@ -24,7 +21,7 @@ describe 'Managing error pages' do
 
   specify 'When visiting a link that does not exist' do
     visit '/items/pagedoesnotexist'
-    expect(page).to have_content('404 Page not found')
+    expect(page).to have_content('404 Page Not Found')
   end
 
 end

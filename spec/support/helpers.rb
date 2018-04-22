@@ -133,7 +133,7 @@ module Helpers
     visit '/categories'
     click_link('Create Peripheral Category')
     create_gopro
-    click_link('Add / Edit Peripherals')
+    find(:css, '#add_peripheral').click
     click_link('Create')
     create_microsd_gopro
     visit '/items'

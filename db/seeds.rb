@@ -20,9 +20,10 @@ Item.create(user_id: 1, category_id: '2', condition: 'Like New', name: 'MicroSD 
             manufacturer: 'Kingston', model: 'Flash Card', serial: 'SD322', acquisition_date: '2018-03-09', purchase_price: 10.1, parent_asset_serial: 'GPH5', has_peripheral: 0)
 Item.create(user_id: 1, category_id: '2', condition: 'Like New', name: 'MicroSD Card', location: 'Diamond',
             manufacturer: 'Kingston', model: 'Flash Card', serial: 'SD644', acquisition_date: '2018-03-09', purchase_price: 10.1, parent_asset_serial: 'GPH5', has_peripheral: 0)
+Item.create(user_id: 1, category_id: '3', condition: 'Like New', name: 'Flir Thermal Camera', location: 'Diamond',
+            manufacturer: 'Apple', model: 'FLIR ONE PRO', serial: 'FLR322', acquisition_date: '2018-03-22', purchase_price: 349.00, has_peripheral: 0)
 Item.create(user_id: 2, category_id: '4', condition: 'Like New', name: 'MacBook Pro 15-inch', location: 'Diamond',
             manufacturer: 'Apple', model: 'MacBookPro14,3', serial: 'MPTR212/A', acquisition_date: '2018-03-22', purchase_price: 2349.00, has_peripheral: 1)
 Item.create(user_id: 2, category_id: '5', condition: 'Like New', name: 'Charging Cable', location: 'Diamond',
             manufacturer: 'Apple', model: 'Cable', serial: 'CC322', acquisition_date: '2018-03-22', purchase_price: 9.00, has_peripheral: 0)
-Item.create(user_id: 1, category_id: '3', condition: 'Like New', name: 'Flir Thermal Camera', location: 'Diamond',
-            manufacturer: 'Apple', model: 'FLIR ONE PRO', serial: 'FLR322', acquisition_date: '2018-03-22', purchase_price: 349.00, has_peripheral: 0)
+

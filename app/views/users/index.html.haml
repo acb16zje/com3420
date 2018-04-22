@@ -2,12 +2,12 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Current users
   %p.title.has-text-centered
     = link_to 'Create new', new_user_path, class: 'button is-success'
-  %table#users.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#users.table.is-striped.is-bordered
     %thead
       %tr
         %th Name
@@ -33,10 +33,10 @@
               %p.control
                 = link_to user, class: "button is-primary", id: "view_user_#{user.username}" do
                   %span.icon
-                    %i.class.fas.fa-eye
+                    %i.fas.fa-eye
                   %span View
               %p.control
-                = link_to edit_user_path(user), class: 'button is-link', id: "edit_user_#{user.username}"  do
+                = link_to edit_user_path(user), class: 'button is-link' do
                   %span.icon
-                    %i.class.fas.fa-edit
+                    %i.fas.fa-edit
                   %span Edit

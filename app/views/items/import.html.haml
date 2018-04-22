@@ -3,7 +3,7 @@
 %section.hero
   .hero-body
     .container.has-text-centered
-      = render :partial => 'layouts/flash'
+      = render partial: 'layouts/flash'
 
       .column.is-10.is-offset-1
         %h3.title Import assets
@@ -42,7 +42,7 @@
         %br
         %br
         %p.title.has-text-centered Import Errors
-        %table#categories.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+        %table#categories.table.is-striped.is-bordered
           %thead
             %tr
               %th Row

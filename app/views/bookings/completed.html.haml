@@ -2,12 +2,12 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   = render "tabs"
 
   %p.title.has-text-centered Completed Bookings
-  %table#bookings_other.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#bookings_other.table.is-striped.is-bordered
     %thead
       %tr
         %th ID

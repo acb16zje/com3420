@@ -2,7 +2,7 @@
 
 %section.section
   .container.is-desktop
-    = render :partial => 'layouts/flash'
+    = render partial: 'layouts/flash'
 
     .box
       .columns
@@ -51,7 +51,7 @@
               %tr
                 %th Acquisition Date
                 %td
-                  = @item.acquisition_date
+                  = @item.acquisition_date.strftime("%d %B %Y") unless @item.acquisition_date.blank?
               %tr
                 %th Purchase Price
                 %td
@@ -88,21 +88,23 @@
               %tr
                 %th Peripherals
                 %td
-                  - if @peripherals.blank?
-                    None
-                  - else
+                  - unless @peripherals.blank?
                     - @peripherals.each do |peripheral|
                       = link_to "#{peripheral.name}", peripheral, class: 'button'
+                  - if current_user == @item.user && current_user.permission_id > 1 && @item.category.has_peripheral
+                    = link_to add_peripheral_option_item_path, class: 'button is-link', id: 'add_peripheral' do
+                      %span.icon
+                        %i.fas.fa-plus
               %tr
                 %th Comments
                 %td
                   = @item.comment
 
-              - if !@item.retired_date.blank?
+              - unless @item.retired_date.blank?
                 %tr
                   %th Retired Date
                   %td
-                    = @item.retired_date.strftime("%d %b %Y")
+                    = @item.retired_date.strftime("%d %B %Y")
 
       .field.is-horizontal
         .field-body
@@ -110,10 +112,7 @@
             - if current_user == @item.user
               .field.is-grouped.is-grouped-left
                 .control
-                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link', id: "edit_item_#{@item.id}"
-                - if @item.category.has_peripheral
-                  .control
-                    = link_to 'Add / Edit Peripherals', add_peripheral_option_item_path, class: 'button is-link'
+                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'
@@ -124,7 +123,7 @@
     %br
     - if @item.user_id == current_user.id || current_user.permission_id == 3
       %p.title.has-text-centered Bookings History
-      %table#bookings.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+      %table#bookings.table.is-striped.is-bordered
         %thead
           %tr
             %th ID
@@ -175,4 +174,3 @@
                 - else
                   %span.tag.is-black.is-medium
                     Unknown
-

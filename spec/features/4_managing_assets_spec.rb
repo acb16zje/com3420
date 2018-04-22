@@ -22,7 +22,7 @@ describe 'Managing assets' do
     click_link 'Create Peripheral Category'
     create_microsd_gopro_choose
     create_gopro
-    click_link 'Add / Edit Peripherals'
+    find(:css, '#add_peripheral').click
     click_link 'Choose'
     select("SD322 (MicroSD Card)", from: 'peripheral_asset')
     click_button 'Add as Peripheral'
@@ -85,11 +85,9 @@ describe 'Managing assets' do
   specify 'I cannot edit an asset that does not belong to me' do
     FactoryBot.create :laptop_admin
     visit '/items/manager?user_id=2'
-    expect(page).to_not have_css("#edit-button-1")
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
     click_link('Macbook Pro 15-inch')
-    expect(page).to_not have_css("#edit_item_1")
   end
 
   specify 'I can delete an asset' do

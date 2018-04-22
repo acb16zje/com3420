@@ -2,7 +2,7 @@
 
 %br/
 .container.is-fluid
-  = render :partial => 'layouts/flash'
+  = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Current assets
   - if current_user.permission_id != 1
@@ -12,7 +12,7 @@
       %p.control
         = link_to 'Import', import_items_path, class: 'button is-info'
 
-  %table#assets.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
+  %table#assets.table.is-striped.is-bordered
     %thead
       %tr
         %th Name
