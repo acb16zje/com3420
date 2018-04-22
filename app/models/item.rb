@@ -2,26 +2,27 @@
 #
 # Table name: items
 #
-#  id               :integer          not null, primary key
-#  name             :string
-#  condition        :string
-#  location         :string
-#  manufacturer     :string
-#  model            :string
-#  serial           :string
-#  acquisition_date :date
-#  purchase_price   :decimal(, )
-#  image            :string
-#  keywords         :string
-#  po_number        :string
-#  condition_info   :string
-#  comment          :string
-#  retired_date     :date
-#  peripheral_only  :boolean
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  user_id          :integer
-#  category_id      :integer
+#  id                  :integer          not null, primary key
+#  name                :string
+#  condition           :string
+#  location            :string
+#  manufacturer        :string
+#  model               :string
+#  serial              :string
+#  acquisition_date    :date
+#  purchase_price      :decimal(, )
+#  image               :string
+#  keywords            :string
+#  parent_asset_serial :string
+#  po_number           :string
+#  condition_info      :string
+#  has_peripheral      :boolean
+#  comment             :string
+#  retired_date        :date
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer
+#  category_id         :integer
 #
 # Indexes
 #
@@ -37,20 +38,7 @@
 
 class Item < ApplicationRecord
   belongs_to :category
-
-  has_many :parent_items, :class_name => 'Peripheral', :foreign_key => 'parent_item_id'
-  has_many :peripheral_items, :class_name => 'Peripheral', :foreign_key => 'peripheral_item_id'
-
-  has_many :booking_items, class_name: "BookingItem", foreign_key: "item_id"
-  has_many :bookings, through: :booking_items
-
+  has_many :bookings
   belongs_to :user
   mount_uploader :image, ImageUploader
-
-  attr_accessor :create_peripherals
-
-  def getItemPeripherals
-    peripherals_for_item = Peripheral.where(parent_item: self)
-    peripherals_for_item.map(&:peripheral_item)
-  end
 end

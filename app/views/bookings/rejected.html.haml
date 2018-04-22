@@ -7,17 +7,27 @@
   = render "tabs"
 
   %p.title.has-text-centered Rejected Bookings
-  = content_tag :table, :id => "example", role: :datatable, data: {url: rejected_bookings_path(format: :json)} do
+  %table#bookings_other.table.is-striped.is-bordered{:cellspacing => "0", :width => "100%"}
     %thead
       %tr
-        %th
-        %th id
+        %th ID
+        %th Asset
         %th Start Date
         %th Start Time
         %th End Date
         %th End Time
-        %th Reason
         %th Location
-        %th Status
+        %th Reason
         %th Booked By
     %tbody
+      - @bookings.each do |booking|
+        %tr
+          %td.has-text-centered= booking.id
+          %td.has-text-centered= link_to booking.item.name, booking.item
+          %td.has-text-centered= booking.start_date
+          %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
+          %td.has-text-centered= booking.end_date
+          %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+          %td.has-text-centered= booking.next_location
+          %td.has-text-centered= booking.reason
+          %td.has-text-centered= link_to booking.user.givenname, booking.user

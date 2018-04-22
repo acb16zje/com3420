@@ -46,9 +46,6 @@ class Notifications
         else if (notification.action == "overdue")
           "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} is #{notification.action}</a>
           <hr class='navbar-divider>"
-        else if (notification.action == "returned") or (notification.action == "cancelled")
-          "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} has been #{notification.action}</a>
-          <hr class='navbar-divider>"
     items_mobile = $.map data, (notification) ->
       if notification.context == "AM"
         if (notification.action == "returned") or (notification.action == "requested")

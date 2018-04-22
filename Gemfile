@@ -44,11 +44,6 @@ gem 'rubyXL'
 gem 'multi_json', '~> 1.13', '>= 1.13.1'
 gem 'jbuilder', '~> 2.7'
 
-gem 'rails-assets-jquery', source: 'https://rails-assets.org'
-gem 'rails-assets-datatables', source: 'https://rails-assets.org'
-gem 'kaminari'
-gem 'handlebars_assets'
-
 gem 'premailer-rails'
 group :development, :test do
   gem 'rspec-rails'

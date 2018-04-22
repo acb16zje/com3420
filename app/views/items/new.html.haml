@@ -1,20 +1,42 @@
-- content_for :title, "Create asset"
+- if params[:is_peripheral]
+  - content_for :title, "Add peripheral"
+- else
+  - content_for :title, "Create asset"
 
 %section.hero
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Add Asset
+        - if params[:is_peripheral]
+          %h3.title Add peripheral
+        - else
+          %h3.title Create asset
         .box
           = simple_form_for(@item) do |f|
-            %h4.title Asset Information
+            - if !params[:is_peripheral]
+              %h4.title Asset Information
+            - else
+              %h4.title Peripheral Information
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Parent Asset Serial*
+                .field-body
+                  .field{style: 'margin: auto'}
+                    .control
+                      = f.select :parent_asset_serial, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, params[:parent_asset_serial]), {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Asset Name*
+                - if params[:is_peripheral]
+                  %label.label Peripheral Name*
+                - else
+                  %label.label Asset Name*
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
+                    - if params[:is_peripheral]
+                      = f.input :name, label: false, required: '', placeholder: 'Peripheral Name', input_html: {class: 'input'}
+                    - else
+                      = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Serial*
@@ -22,13 +44,14 @@
                 .field
                   %p.control.is-expanded
                     = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
-            .field.is-horizontal
-              .field-label.is-normal
-                %label.label Category*
-              .field-body
-                .field{style: 'margin: auto'}
-                  .control
-                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
+            - if !params[:is_peripheral]
+              .field.is-horizontal
+                .field-label.is-normal
+                  %label.label Category*
+                .field-body
+                  .field{style: 'margin: auto'}
+                    .control
+                      = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Storage Location*
@@ -127,25 +150,6 @@
                 .field
                   .control
                     = f.input :comment, as: :text, label: false, required: false, placeholder: 'Place your comment here', input_html: {class: 'textarea', rows: '2'}
-            %br
-            %hr
-            %br
-            .js-dep-chkbx
-              .field.is-horizontal
-                .field-label.is-normal
-                  %label.label This Item Can Only Be Booked As A Peripheral:
-                .field-body
-                  .field
-                    %p.control.is-expanded
-                      = f.input :peripheral_only, label: false, required: '', input_html: {id: 'p-check'}
-            .peripheral-fields
-              .field.is-horizontal
-                .field-label.is-normal
-                  %label.label This Item Belongs To
-                .field-body
-                  .field{style: 'margin: auto'}
-                    .control
-                      = f.input :create_peripherals, collection: @items, input_html: {class: 'select2', multiple: true}, label_method: lambda{|item| "#{item.name} (#{item.serial})"}
             %br
             %br
             .field.is-horizontal

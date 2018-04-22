@@ -3,14 +3,11 @@
 //= require bunny
 //= require inputTypeNumberPolyfill
 //= require notifications
-//= require peripherals
 //= require picker
 //= require picker.date
 //= require picker.time
 //= require select2
 //= require zoom
-//= require handlebars
-//= require_tree ./templates
 
 $(document).ready(function () {
     // Dropdowns
@@ -313,7 +310,7 @@ $(document).ready(function () {
     });
 
     // Datatable
-    $("#users, #categories, #bookings").each(function () {
+    $("#users, #categories, #bookings, #bookings_other").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -322,139 +319,6 @@ $(document).ready(function () {
             }
         });
     });
-
-
-    // ******************************************************************************************************************************************************
-    function format(d) {
-        var show_accept
-        var show_reject
-        var show_cancel
-        var show_return
-        var show_debug
-        var show_chase
-
-        if (d.perm >= 2) {
-            switch (d.status) {
-                case "1":
-                    show_accept = "true"
-                    show_reject = "true"
-                    break;
-                case "2":
-                    show_cancel = "true"
-                    break;
-                case "3":
-                    show_return = "true"
-                    break;
-                case "4":
-                    break;
-                case "7":
-                    show_return = "true"
-                    show_chase = "true"
-                    break;
-            }
-        } else {
-            switch (d.status) {
-                case "1":
-                    show_cancel = "true"
-                    break;
-                case "2":
-                    show_cancel = "true"
-                    break;
-                case "3":
-                    show_return = "true"
-                    break;
-                case "7":
-                    show_return = "true"
-                    break;
-            }
-        }
-        var html = HandlebarsTemplates['booking_details']({
-            accept: show_accept,
-            reject: show_reject,
-            cancel: show_cancel,
-            return: show_return,
-            chase: show_chase,
-            booking_id: d.id,
-            booking_status: d.status,
-            method: d.method,
-            items: d.items
-        });
-        return html
-    }
-
-    var dt = $('#example').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: $('#example').data('url'),
-        columns: [
-            {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            {
-                "data": "id"
-            },
-            {
-                "data": "start_date"
-            },
-            {
-                "data": "start_time"
-            },
-            {
-                "data": "end_date"
-            },
-            {
-                "data": "end_time"
-            },
-            {
-                "data": "reason"
-            },
-            {
-                "data": "next_location"
-            },
-            {
-                "data": "status"
-            }
-        ]
-    });
-
-    $('#example tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = dt.row(tr);
-
-        if (row.child.isShown()) {
-            row.child.hide();
-            tr.removeClass('shown');
-        } else {
-            tr.addClass('shown');
-            row.child(format(row.data())).show();
-        }
-    });
-
-    $(document).on('click', '.booking_post', function () {
-        console.log("HERE")
-        var bookingId = $(this).attr('data-booking-id');
-        var bookingPath = $(this).attr('data-booking-action');
-        $.ajax({
-            method: 'POST',
-            url: bookingPath,
-            success: function succ() {
-                setTimeout(function () {
-                    location.reload();
-                }, 5000)
-            },
-            error: function succ() {
-                setTimeout(function () {
-                    console.log("ERROR")
-                    location.reload();
-                }, 5000)
-            }
-        });
-    });
-    // ******************************************************************************************************************************************************
-
 
     $("#bookings_other_wrapper").removeClass("container");
 
@@ -476,11 +340,11 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 
-    endTime.change(function () {
+    endTime.change(function() {
         $('#peripherals').empty();
     });
 
-    $('#peripherals').change(function () {
+    $('#peripherals').change(function() {
         if (endTime.val()) {
             $.ajax({
                 type: "GET",
@@ -499,7 +363,7 @@ $(document).ready(function () {
                         data: $.map(data, function (item, i) {
                             return {
                                 id: item.id,
-                                text: item.name + " (" + item.serial + ")"
+                                text: item.serial
                             }
                         })
                     })

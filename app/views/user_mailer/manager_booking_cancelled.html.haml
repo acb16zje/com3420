@@ -14,7 +14,7 @@
         %h1.email-header-text
           Booking Cancelled
         %h2.email-subheading-text
-          #{@user.givenname} #{@user.sn} has cancelled their booking.
+          #{@user.givenname} #{@user.sn} has cancelled their booking for #{@item.name}.
         %br
         %hr
         .body-box
@@ -54,7 +54,7 @@
               %tbody
                 - @items.each do |item|
                   %tr
-                    %td.has-text-centered= item.id
+                    %td.has-text-centered= @item.id
                     %td.has-text-centered= link_to item.name, item
                     %td.has-text-centered= item.serial
         %br

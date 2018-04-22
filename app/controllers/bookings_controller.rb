@@ -9,76 +9,38 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @bookings = Booking.where("bookings.user_id = ?", current_user.id)
-    # respond_to do |format|
-    #   format.html
-    #   format.json{ @bookings }
-    # end
-  end
-
-  # GET /bookings/1
-  def show
+    @bookings = Booking.where('user_id = ?', current_user.id)
   end
 
   # GET /bookings/requests
   def requests
-    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 1', current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-
-    end
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
   end
 
   # GET /bookings/accepted
   def accepted
-    @bookings = Booking.joins(:items).where("items.user_id = ? and bookings.status = 2", current_user.id)
-    puts @bookings
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-
-    end
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 2', current_user.id)
   end
 
   # GET /bookings/ongoing
   def ongoing
     # Get current date/time
-    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 3', current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-
-    end
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
   end
 
   # GET /bookings/completed
   def completed
-    @bookings = Booking.joins(:items).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-
-    end
+    @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
   end
 
   # GET /bookings/rejected
   def rejected
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-    end
   end
 
   # GET /bookings/late
   def late
-    @bookings = Booking.joins(:items).where('items.user_id = ? and bookings.status = 7', current_user.id)
-    respond_to do |format|
-      format.html
-      format.json{ @bookings}
-
-    end
+    @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
   end
 
   # GET /bookings/new
@@ -86,7 +48,11 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    @peripherals = @item.getItemPeripherals
+    unless @item.parent_asset_serial.blank?
+      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    end
+
+    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
@@ -104,49 +70,88 @@ class BookingsController < ApplicationController
   # POST /bookings
   def create
     @booking = Booking.new(booking_params)
-    main_item = Item.find(params[:booking][:main_item])
 
-    # Set booking fields which aren't filled by form
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
     @booking.reason = 'None' if params[:booking][:reason].blank?
 
-    # Make sure not nil for unrequired field.
-    if params[:booking][:reason].blank?
-      @booking.reason = "None"
-    end
+    item = @booking.item
 
-    #Set booking status depending upon its creator
-    if main_item.user_id == current_user.id
+    if item.user_id == current_user.id
       @booking.status = 2
     else
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
+      UserMailer.user_booking_requested(@booking).deliver
+      UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
     end
 
-    b_array = Item.where(id: (params[:booking][:booking_peripheral_items])) + [main_item]
-    query = b_array.all? { |i| booking_validation(i.id, @booking.start_datetime, @booking.end_datetime)}
+    peripherals = params[:booking][:peripherals]
 
-    if (query) && @booking.save
-      puts "IN IF STATEMENT"
-      bookingitems_to_save = b_array.map {|i| BookingItem.new(booking: @booking, item: i)}
-      puts bookingitems_to_save
-      if bookingitems_to_save.each(&:save)
-        UserMailer.user_booking_requested(@booking).deliver
-        UserMailer.manager_booking_requested(@booking).deliver
-        redirect_to bookings_path, notice: 'Booking was successfully created.'
-      else
-        redirect_to new_item_booking_path(item_id: main_item.id), notice: 'There was an issue adding the chosen peripherals'
-      end
+    # Changing the peripherals array into a string to be saved
+    if peripherals.blank?
+      @booking.peripherals = nil
     else
-      redirect_to new_item_booking_path(item_id:  main_item.id), notice: 'Chosen timeslot conflicts with other bookings.'
+      peripherals_string = ''
+      peripherals.each do |peripheral|
+        next if peripheral == ''
+        peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
+      end
+      @booking.peripherals = peripherals_string[1..-1]
+    end
+
+    # Server side validation
+    query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
+    unless peripherals.nil?
+      peripherals.each do |peripheral|
+        next if peripheral == ''
+        query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
+      end
+    end
+
+    if query && @booking.save
+      # Making a booking for any peripheral selected
+      unless peripherals.nil?
+        peripherals.each do |peripheral|
+          next if peripheral == ''
+          booking = Booking.new(booking_params)
+
+          booking.item_id = peripheral
+          booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
+          booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+          booking.next_location = params[:booking][:next_location].titleize
+          booking.reason = 'None' if params[:booking][:reason].blank?
+          booking.peripherals = nil
+
+          booking.status = if item.user_id == current_user.id
+                             2
+                           else
+                             1
+                           end
+          booking.save
+        end
+      end
+
+      redirect_to bookings_path, notice: 'Booking was successfully created.'
+    else
+      redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'
     end
   end
 
   # PATCH/PUT /bookings/1
   def update
+    if @booking.update(booking_params)
+      if @booking.status == 2
+        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
+        UserMailer.booking_approved(@booking).deliver
+      elsif @booking.status == 5
+        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
+        UserMailer.booking_rejected(@booking).deliver
+      end
+
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
+    end
   end
 
   # Set booking as cancelled
@@ -160,6 +165,11 @@ class BookingsController < ApplicationController
     end
   end
 
+  # GET /bookings/1/booking_returned
+  def booking_returned
+    @booking = Booking.find_by_id(params[:id])
+    @item = @booking.item
+  end
 
   # PUT /bookings/1/set_booking_returned
   def set_booking_returned
@@ -191,64 +201,6 @@ class BookingsController < ApplicationController
     end
   end
 
-
-  def manager_accepted
-    booking = Booking.find(params[:id])
-    booking.status = 2
-
-    if booking.save
-      Notification.create(recipient: booking.user, action: 'approved', notifiable: booking, context: 'U')
-      UserMailer.booking_approved(booking).deliver
-      render :json => { :success => true }
-    else
-      render :json => { :success => false }
-    end
-  end
-
-  def manager_rejected
-    booking = Booking.find(params[:id])
-    booking.status = 5
-
-    if booking.save
-      Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'U')
-      UserMailer.booking_rejected(booking).deliver
-      render :json => { :success => true }
-    else
-      render :json => { :success => false }
-    end
-  end
-
-  def manager_chase
-    b = Booking.find(params[:id])
-    UserMailer.asset_overdue(b).deliver_now
-  end
-
-  def manager_return
-    booking = Booking.find(params[:id])
-    booking.status = 4
-
-    if booking.save
-      Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'U')
-      UserMailer.user_asset_returned(booking).deliver
-      render :json => { :success => true }
-    else
-      render :json => { :success => false }
-    end
-  end
-
-  def cancel
-    booking = Booking.find(params[:id])
-    booking.status = 6
-
-    if booking.save
-      Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'U')
-      UserMailer.user_booking_cancelled(booking).deliver
-      render :json => { :success => true }
-    else
-      render :json => { :success => false }
-    end
-  end
-
   def start_date
     data = {
       max_end_date: max_end_date(params[:start_date]),
@@ -267,7 +219,7 @@ class BookingsController < ApplicationController
   end
 
   def peripherals
-    @item = Item.find_by_id(params[:id])
+    @item = Item.find_by_id(params[:item_id])
 
     @peripherals = get_allowed_peripherals(params[:start_datetime], params[:end_datetime], params[:item_id])
 
@@ -282,7 +234,8 @@ class BookingsController < ApplicationController
 
   def get_allowed_peripherals(start_datetime, end_datetime, item_id)
     item = Item.find_by_id(item_id)
-    peripherals = item.getItemPeripherals
+    peripherals = Item.where('parent_asset_serial = ?', item.serial)
+
     allowed_peripherals = []
     peripherals.each do |peripheral|
       if booking_validation(peripheral.id, start_datetime, end_datetime)
@@ -294,17 +247,14 @@ class BookingsController < ApplicationController
   end
 
   def booking_validation(item_id, start_datetime, end_datetime)
-    bi = Booking.joins(:booking_items).where("item_id = ?", item_id)
-
-    query = bi.where(
+    query = Booking.where(
       "(status = 2 OR status = 3)
+      AND item_id = '#{item_id}'
       AND (
         (start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
         AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
-
         OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
             AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP))
-
         OR (start_datetime = CAST ('#{start_datetime}' AS TIMESTAMP)
             AND end_datetime = CAST ('#{end_datetime}' AS TIMESTAMP))
       )"
@@ -316,15 +266,15 @@ class BookingsController < ApplicationController
   # Fully booked days in a single booking
   def fully_booked_days_single
     date_to_disable = []
-    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
-    bookings = bi.where(
+    bookings = Booking.where(
       "(status = 2 OR status = 3)
+      AND item_id = ?
       AND start_date <> end_date
       AND ((start_time = '2000-01-01 00:00:00 UTC'
           AND end_time = '2000-01-01 00:00:00 UTC'
           AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
         OR
-          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))"
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id]
     )
 
     bookings.each do |booking|
@@ -363,8 +313,7 @@ class BookingsController < ApplicationController
   def fully_booked_days_multi
     date_to_disable = []
 
-    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
-    bookings = bi.find_by_sql [
+    bookings = Booking.find_by_sql [
       "WITH RECURSIVE linked_bookings AS (
           SELECT A.start_date AS start_date,
           A.start_datetime AS start_datetime,
@@ -372,6 +321,7 @@ class BookingsController < ApplicationController
           B.end_datetime AS end_datetime
           FROM bookings A, bookings B
           WHERE (A.status = 2 OR A.status = 3)
+          AND A.item_id = ?
           AND A.end_datetime = B.start_datetime
           AND A.id <> B.id
         UNION ALL
@@ -379,8 +329,8 @@ class BookingsController < ApplicationController
           FROM bookings p, linked_bookings pr
           WHERE p.end_datetime = pr.start_datetime
       )
-      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings"]
-
+      SELECT start_date, start_datetime, end_date, end_datetime FROM linked_bookings", params[:item_id]
+    ]
 
     bookings.each do |booking|
       start_date = Date.parse(booking.start_date.to_s)
@@ -422,14 +372,13 @@ class BookingsController < ApplicationController
                    Date.parse(start_date)
                  end
 
-    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
-
-    booking = bi.where(
+    booking = Booking.where(
       "(status = 2 OR status = 3)
-      AND start_date >= CAST('#{start_date}' AS DATE)", params[:id]
+      AND item_id = ?
+      AND start_date >= CAST('#{start_date}' AS DATE)", params[:item_id]
     ).minimum(:start_date)
 
-    if !booking.blank?
+    unless booking.blank?
       # Split into [year, month, day]
       booking = booking.strftime('%Y-%m-%d').split('-')
 
@@ -448,11 +397,11 @@ class BookingsController < ApplicationController
 
     start_date = Date.parse(start_date)
 
-    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
-    bookings = bi.where(
+    bookings = Booking.where(
       "(status = 2 OR status = 3)
+      AND item_id = ?
       AND (start_date = CAST('#{start_date}' AS DATE)
-      OR end_date = CAST('#{start_date}' AS DATE))"
+      OR end_date = CAST('#{start_date}' AS DATE))", params[:item_id]
     ).select(:start_datetime, :end_datetime)
 
     bookings.each do |booking|
@@ -488,19 +437,19 @@ class BookingsController < ApplicationController
     start_date = Date.parse(start_date)
     end_date = Date.parse(end_date)
 
-    bi = Booking.joins(:booking_items).where("item_id = ?", params[:item_id])
-
     if start_date < end_date
-      booking = bi.where(
+      booking = Booking.where(
         "(status = 2 OR status = 3)
-        AND start_date = CAST('#{end_date}' AS DATE)"
+        AND item_id = ?
+        AND start_date = CAST('#{end_date}' AS DATE)", params[:item_id]
       ).minimum(:start_time)
 
       time_array = [booking.hour, booking.min] unless booking.blank?
     else
-      booking = bi.where(
+      booking = Booking.where(
         "(status = 2 OR status = 3)
-        AND start_date = CAST('#{start_date}' AS DATE)"
+        AND item_id = ?
+        AND start_date = CAST('#{start_date}' AS DATE)", params[:item_id]
       ).minimum(:start_time)
 
       if !booking.blank? && start_time < booking.strftime('%H:%M')

@@ -10,19 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180418121312) do
+ActiveRecord::Schema.define(version: 20180320144252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "booking_items", force: :cascade do |t|
-    t.bigint "item_id"
-    t.bigint "booking_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["booking_id"], name: "index_booking_items_on_booking_id"
-    t.index ["item_id"], name: "index_booking_items_on_item_id"
-  end
 
   create_table "bookings", force: :cascade do |t|
     t.date "start_date"
@@ -34,9 +25,12 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.string "reason"
     t.string "next_location"
     t.integer "status"
+    t.string "peripherals"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "item_id"
     t.bigint "user_id"
+    t.index ["item_id"], name: "index_bookings_on_item_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
@@ -76,11 +70,12 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.decimal "purchase_price"
     t.string "image"
     t.string "keywords"
+    t.string "parent_asset_serial"
     t.string "po_number"
     t.string "condition_info"
+    t.boolean "has_peripheral"
     t.string "comment"
     t.date "retired_date"
-    t.boolean "peripheral_only"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
@@ -99,15 +94,6 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.string "notifiable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "peripherals", force: :cascade do |t|
-    t.bigint "parent_item_id"
-    t.bigint "peripheral_item_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["parent_item_id"], name: "index_peripherals_on_parent_item_id"
-    t.index ["peripheral_item_id"], name: "index_peripherals_on_peripheral_item_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -150,8 +136,7 @@ ActiveRecord::Schema.define(version: 20180418121312) do
     t.index ["username"], name: "index_users_on_username"
   end
 
-  add_foreign_key "booking_items", "bookings"
-  add_foreign_key "booking_items", "items"
+  add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "users"

@@ -20,6 +20,11 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
+              - if !@item.parent_asset_serial.blank?
+                %tr
+                  %th Parent Item Name
+                  %td
+                    = link_to @parent.name, @parent
               %tr
                 %th Name
                 %td
@@ -81,7 +86,7 @@
               %tr
                 %th Peripherals
                 %td
-                  - if @peripherals.empty?
+                  - if @peripherals.blank?
                     None
                   - else
                     - @peripherals.each do |peripheral|
@@ -135,7 +140,7 @@
                         %i.fas.fa-clock
                     %p.control.is-expanded
                       = f.input :end_time, as: :text, label: false, required: '', input_html: {class: 'input timepicker', id: 'endTime', style: 'resize: none'}
-                      = f.hidden_field :main_item, value: @item.id
+                      = f.hidden_field :item_id, value: @item.id
                       = f.hidden_field :user_id, value: current_user.id
             .field.is-horizontal
               .field-label.is-normal
@@ -151,14 +156,14 @@
                 .field
                   %p.control.is-expanded
                     = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
-            - if !@peripherals.empty?
+            - if @item.has_peripheral
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Peripherals
                 .field-body
                   .field{style: 'margin: auto'}
                     .control
-                      = f.select :booking_peripheral_items, [], {}, {class: 'select2', id: 'peripherals', multiple: ''}
+                      = f.select :peripherals, [], {}, {class: 'select2', id: 'peripherals', multiple: ''}
 
             %br
             %br

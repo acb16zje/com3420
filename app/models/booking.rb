@@ -12,33 +12,24 @@
 #  reason         :string
 #  next_location  :string
 #  status         :integer
+#  peripherals    :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  item_id        :integer
 #  user_id        :integer
 #
 # Indexes
 #
+#  index_bookings_on_item_id  (item_id)
 #  index_bookings_on_user_id  (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (item_id => items.id)
 #  fk_rails_...  (user_id => users.id)
 #
 
 class Booking < ApplicationRecord
+  belongs_to :item
   belongs_to :user
-  has_many :booking_items, class_name: "BookingItem", foreign_key: "booking_id"
-  has_many :items, through: :booking_items
-
-  attr_accessor :booking_peripheral_items
-  attr_accessor :main_item
-
-  def getBookingItems
-    puts "GBI============="
-    puts self.id
-    items_for_booking = Item.joins(:bookings).where("bookings.id = ?", self.id)
-    puts items_for_booking
-    items_for_booking
-  end
-
 end

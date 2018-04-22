@@ -3,6 +3,7 @@ require 'irb'
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
   authorize_resource
+
   # GET /items
   def index
     @items = Item.all
@@ -24,15 +25,60 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
-    @bookings = BookingItem.where(item: @item).select(:booking_id)
-    @peripherals = @item.getItemPeripherals
+    @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
+    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+
+    unless @item.parent_asset_serial.blank?
+      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    end
+  end
+
+  # GET /items/1/add_peripheral_option
+  def add_peripheral_option
+    @item = Item.find_by_id(params[:id])
+
+    redirect_to '/404' unless @item.category.has_peripheral
+  end
+
+  # GET /items/1/choose_peripheral
+  def choose_peripheral
+    @i = Item.find_by_id(params[:id])
+
+    if !@i.category.has_peripheral
+      redirect_to '/404'
+    else
+      @items = Item.all.where("(serial <> ?) AND (parent_asset_serial IS NULL OR parent_asset_serial = '')", @i.serial)
+    end
+  end
+
+  # POST /items/1/add_peripheral
+  def add_peripheral
+    @item = Item.find_by_id(params[:id])
+
+    @peripheral = Item.where('serial = ?', params[:peripheral_asset]).first
+    @peripheral.parent_asset_serial = @item.serial
+    @peripheral.save
+    @item.has_peripheral = true
+    @item.save
+    redirect_to @item
   end
 
   # GET /items/new
   def new
     # Get items with categories allowing peripherals
+    @items = []
+    categories = Category.where('has_peripheral = TRUE')
+    categories.each do |category|
+      items = Item.where('category_id = ?', category.id)
+      items.each do |i|
+        @items.append(i)
+      end
+    end
+
     @item = Item.new
-    @items = Item.all
+    if params[:is_peripheral]
+      @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
+    end
   end
 
   # GET /items/1/edit
@@ -45,19 +91,17 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.user_id = current_user.id
     @item.location = params[:item][:location].titleize
-    @to_add_peripheral = Item.where(id: params[:item][:create_peripherals])
 
     # Getting the category for the attached item
-
-    if @item.save
-      @to_add_peripheral.each do |p|
-        puts @item
-        peripheral = Peripheral.new(parent_item: p, peripheral_item: @item)
-        peripheral.save
-      end
-
-      redirect_to @item, notice: 'Asset was successfully created.'
+    unless @item.parent_asset_serial.blank?
+      parent = Item.where('serial = ?', @item.parent_asset_serial).first
+      parent.has_peripheral = true
+      parent.save
+      category = Category.where('name = ?', (parent.category.name + ' - Peripherals')).first
+      @item.category_id = category.id
     end
+
+    redirect_to @item, notice: 'Asset was successfully created.' if @item.save
   end
 
   # PATCH/PUT /items/1

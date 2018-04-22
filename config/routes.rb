@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :booking_items
-  resources :peripherals
   mount EpiCas::Engine, at: '/'
   devise_for :users
 
@@ -23,16 +21,9 @@ Rails.application.routes.draw do
     get 'rejected', on: :collection
     get 'late', on: :collection
 
-    post 'manager_chase', on: :member
-    post 'manager_accepted', on: :member
-    post 'manager_rejected', on: :member
-    post 'manager_return', on: :member
-    post 'cancel', on: :member
-
-
-    post 'set_booking_returned', on: :member
-    post 'set_booking_cancelled', on: :member
-
+    get 'booking_returned', on: :member
+    put 'set_booking_returned', on: :member
+    put 'set_booking_cancelled', on: :member
   end
 
   resources :items do
@@ -43,6 +34,9 @@ Rails.application.routes.draw do
     end
     get 'import', on: :collection
     post 'import_file', on: :collection
+    get 'add_peripheral_option', on: :member
+    get 'choose_peripheral', on: :member
+    post 'add_peripheral', on: :member
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection

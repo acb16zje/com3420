@@ -10,9 +10,11 @@ class CreateBookings < ActiveRecord::Migration[5.1]
       t.string :reason
       t.string :next_location
       t.integer :status
+      t.string :peripherals
 
       t.timestamps
     end
+    add_reference :bookings, :item, foreign_key: true
     add_reference :bookings, :user, foreign_key: true
   end
 end

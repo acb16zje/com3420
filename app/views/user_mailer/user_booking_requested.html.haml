@@ -14,7 +14,7 @@
         %h1.email-header-text
           Your Booking Has Recieved
         %h2.email-subheading-text
-          Your Booking has been registered. You will recieve another email when this has been confirmed.
+          Your Booking for #{@item.name} has been registered. You will recieve another email when this has been confirmed.
         %br
         %hr
         .body-box
@@ -52,11 +52,11 @@
                 %th Asset
                 %th Serial
               %tbody
-                - @items.each do |item|
+                - @items.each do |itm|
                   %tr
-                    %td.has-text-centered= item.id
-                    %td.has-text-centered= link_to item.name, item
-                    %td.has-text-centered= item.serial
+                    %td.has-text-centered= itm.id
+                    %td.has-text-centered= link_to itm.name, itm
+                    %td.has-text-centered= itm.serial
         %br
         %hr
         %h2
