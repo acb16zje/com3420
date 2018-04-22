@@ -37,7 +37,7 @@ class Ability
     # Asset Manager
     if user.permission_id == 2
       can %i[edit update], Item, user_id: user.id
-      can %i[show read create], Item
+      can %i[read create], Item
       can :manage, Booking
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
@@ -45,8 +45,8 @@ class Ability
 
     # User
     if user.permission_id == 1
-      can %i[read show manager], Item
-      can %i[read new create edit update set_booking_cancelled set_booking_returned], Booking, user_id: user.id
+      can %i[read manager], Item
+      can %i[read new create edit update set_booking_cancelled set_booking_returned start_date end_date peripherals], Booking, user_id: user.id
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
     end

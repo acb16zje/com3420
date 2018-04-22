@@ -5,7 +5,7 @@
   = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Current assets
-  - if current_user.permission_id != 1
+  - if can?(:create, Item)
     .field.is-grouped{style: 'justify-content: center'}
       %p.control
         = link_to 'Create new', new_item_path, class: 'button is-success'

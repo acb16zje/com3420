@@ -58,21 +58,21 @@
                 = link_to 'View All', filter_categories_path, class: "navbar-item"
             = link_to 'Assets', items_path, class: "navbar-item #{current_class?(items_path)}"
             = link_to 'Asset Managers', manager_users_path, class: "navbar-item #{current_class?(manager_users_path)}"
-            - if current_user.permission_id != 1
+            - if can?(:read, Category)
               = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)} is-hidden-custom"
-              - if current_user.permission_id == 3
+              - if can?(:read, User)
                 = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)} is-hidden-custom"
-            - if current_user.permission_id != 1
+            - if can?(:read, Category)
               .navbar-item.has-dropdown.is-hoverable.is-hidden.is-show-custom
                 %a.navbar-link
                   %p More
                 .navbar-dropdown.is-boxed
                   = link_to 'Categories', categories_path, class: "navbar-item #{current_class?(categories_path)}"
-                  - if current_user.permission_id == 3
+                  - if can?(:read, User)
                     = link_to 'Users', users_path, class: "navbar-item #{current_class?(users_path)}"
 
           .navbar-end
-            - if current_user.permission_id != 1
+            - if can?(:manage, Booking)
               .navbar-item.has-dropdown.is-hoverable
                 = link_to requests_bookings_path, class: 'navbar-link' do
                   Asset <br class="is-hidden-widescreen"> Requests
@@ -89,10 +89,10 @@
                   = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
                   = link_to 'Peripheral', new_item_path(is_peripheral: true), class: "navbar-item #{current_class?(new_item_path(is_peripheral: true))}"
                   = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
-                  - if current_user.permission_id == 3
+                  - if can?(:manage, User)
                     = link_to 'User', new_user_path, class: "navbar-item #{current_class?(new_user_path)}"
             .navbar-item.has-dropdown.is-hoverable.is-hidden-touch{"data-behavior" => "notification-link"}
-              = link_to requests_bookings_path, class: 'navbar-link' do
+              %a.navbar-link
                 %span.badge.is-badge-danger{"data-behavior" => "unread-count"}
                   %span.icon
                     %i.fas.fa-bell.notifications-bell
@@ -104,7 +104,7 @@
                 %span
                   #{current_user.givenname}
               .navbar-dropdown.is-boxed.is-right
-                - if current_user.permission_id != 1
+                - if can?(:create, Item)
                   = link_to 'My Assets', manager_items_path(user_id: current_user.id), class: "navbar-item #{current_class?(manager_items_path(user_id: current_user.id))}"
                 = link_to 'My Bookings', bookings_path, class: "navbar-item #{current_class?(bookings_path)}"
                 = link_to 'My Profile', current_user, class: "navbar-item #{current_class?("/users/#{current_user.id}")}"

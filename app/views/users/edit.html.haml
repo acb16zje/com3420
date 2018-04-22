@@ -53,7 +53,7 @@
 
           %label.label Permission:
           %p.control
-            - if current_user.permission_id == 3
+            - if can?(:manage, User)
               .select
                 = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id)
             - else

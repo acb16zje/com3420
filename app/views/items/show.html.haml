@@ -108,11 +108,10 @@
 
       .field.is-horizontal
         .field-body
-          - if current_user.permission_id > 1
-            - if current_user == @item.user
-              .field.is-grouped.is-grouped-left
-                .control
-                  = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link'
+          - if current_user.permission_id > 1 && current_user == @item.user
+            .field.is-grouped.is-grouped-left
+              .control
+                = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link'
           .field.is-grouped.is-grouped-right
             .control
               = link_to 'Back', items_path, class: 'button is-block is-light'
