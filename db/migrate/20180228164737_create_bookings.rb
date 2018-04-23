@@ -1,6 +1,7 @@
 class CreateBookings < ActiveRecord::Migration[5.1]
   def change
     create_table :bookings do |t|
+      t.integer :combined_booking_id
       t.date :start_date
       t.time :start_time
       t.date :end_date

@@ -23,7 +23,7 @@
     %tbody
       - @bookings.each do |booking|
         %tr{"data-row-id" => "#{booking.id}"}
-          %td.has-text-centered= booking.id
+          %td.has-text-centered= booking.combined_booking_id
           %td.has-text-centered= link_to booking.item.name, booking.item
           %td.has-text-centered= booking.start_date
           %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
