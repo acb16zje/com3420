@@ -13,7 +13,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.decimal :purchase_price
       t.string :image
       t.string :keywords
-      t.string :parent_asset_serial
       t.string :po_number
       t.string :condition_info
       t.boolean :has_peripheral
@@ -24,5 +23,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
     end
     add_reference :items, :user, foreign_key: true
     add_reference :items, :category, foreign_key: true
+    add_reference :items, :items, foreign_key: true
   end
 end

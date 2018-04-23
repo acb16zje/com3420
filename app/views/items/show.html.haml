@@ -19,11 +19,11 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.parent_asset_serial.blank?
+              - if !@item.items_id.blank?
                 %tr
-                  %th Parent Item Name
+                  %th Parent Asset Name
                   %td
-                    = link_to @parent.name, @parent
+                    = link_to @item.parent.name, @item.parent
               %tr
                 %th Name
                 %td

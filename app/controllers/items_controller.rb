@@ -30,11 +30,8 @@ class ItemsController < ApplicationController
   # GET /items/1
   def show
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
-    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+    @peripherals = Item.where('items_id = ?', @item.id)
 
-    unless @item.parent_asset_serial.blank?
-      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
-    end
   end
 
   # GET /items/1/add_peripheral_option

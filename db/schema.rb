@@ -70,7 +70,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.decimal "purchase_price"
     t.string "image"
     t.string "keywords"
-    t.string "parent_asset_serial"
     t.string "po_number"
     t.string "condition_info"
     t.boolean "has_peripheral"
@@ -80,7 +79,9 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "category_id"
+    t.bigint "items_id"
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["items_id"], name: "index_items_on_items_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
@@ -139,6 +140,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "items", "categories"
+  add_foreign_key "items", "items", column: "items_id"
   add_foreign_key "items", "users"
   add_foreign_key "user_home_categories", "categories"
   add_foreign_key "user_home_categories", "users"
