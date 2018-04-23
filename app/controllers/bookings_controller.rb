@@ -65,10 +65,14 @@ class BookingsController < ApplicationController
     unless @item.parent_asset_serial.blank?
       @parent = Item.where('serial = ?', @item.parent_asset_serial).first
     end
+    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
   end
 
   # POST /bookings
   def create
+    # ActiveRecord::Base.connection.execute("LOCK TABLES table_name WRITE")
+    # ActiveRecord::Base.connection.execute("UNLOCK TABLES")
+
     @booking = Booking.new(booking_params)
 
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
@@ -90,16 +94,16 @@ class BookingsController < ApplicationController
     peripherals = params[:booking][:peripherals]
 
     # Changing the peripherals array into a string to be saved
-    if peripherals.blank?
-      @booking.peripherals = nil
-    else
-      peripherals_string = ''
-      peripherals.each do |peripheral|
-        next if peripheral == ''
-        peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
-      end
-      @booking.peripherals = peripherals_string[1..-1]
-    end
+    # if peripherals.blank?
+    #   @booking.peripherals = nil
+    # else
+    #   peripherals_string = ''
+    #   peripherals.each do |peripheral|
+    #     next if peripheral == ''
+    #     peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
+    #   end
+    #   @booking.peripherals = peripherals_string[1..-1]
+    # end
 
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
@@ -108,6 +112,12 @@ class BookingsController < ApplicationController
         next if peripheral == ''
         query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
       end
+    end
+
+    if Booking.exists?
+      @booking.combined_booking_id = Booking.maximum(:combined_booking_id) + 1
+    else 
+      @booking.combined_booking_id = 1
     end
 
     if query && @booking.save
@@ -122,13 +132,13 @@ class BookingsController < ApplicationController
           booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
           booking.next_location = params[:booking][:next_location].titleize
           booking.reason = 'None' if params[:booking][:reason].blank?
-          booking.peripherals = nil
-
+          # booking.peripherals = nil
+          booking.combined_booking_id = @booking.combined_booking_id
           booking.status = if item.user_id == current_user.id
-                             2
-                           else
-                             1
-                           end
+                              2
+                            else
+                              1
+                            end
           booking.save
         end
       end
