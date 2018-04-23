@@ -70,14 +70,19 @@ class Notifications
         else if (notification.action == "overdue")
           "<a class='navbar-item'>Your #{notification.notifiable.type} for #{notification.notifiable.itemname} is #{notification.action}</a>
           <hr class='dropdown-divider>"
-
+    unread_count = $.map data, (notification) ->
+      if !notification.read
+        "1"
     if items.length == 0
       $("[data-behavior='notification-items']").html("<a class='navbar-item'>No new notifications</a>")
       $("[data-behavior='notification-items-mobile']").html("<a class='dropdown-item'>No new notifications</a>")
       $("[data-behavior='unread-count']").removeAttr('data-badge')
     else
       $("[data-behavior='notification-items']").html(items_mobile)
-      $("[data-behavior='unread-count']").attr('data-badge', items.length)
+      if unread_count.length == 0
+        $("[data-behavior='unread-count']").removeAttr('data-badge')
+      else
+        $("[data-behavior='unread-count']").attr('data-badge', unread_count.length)
 
 
 jQuery ->

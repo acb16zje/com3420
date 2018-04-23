@@ -3,6 +3,7 @@ json.array! @notifications do |notification|
     json.recipient  "#{notification.recipient.givenname} #{notification.recipient.sn}"
     json.action notification.action
     json.context notification.context
+    json.read !notification.read_at.blank?
     json.notifiable do
       if notification.notifiable.class == Booking
         json.type "#{notification.notifiable.class.to_s.underscore.humanize.downcase}"

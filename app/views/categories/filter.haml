@@ -5,8 +5,9 @@
   = render partial: 'layouts/flash'
 
   %p.title.has-text-centered Current categories
-  %p.title.has-text-centered
-    = link_to 'Create new', new_category_path, class: 'button is-success'
+  - if can?(:create, Category)
+    %p.title.has-text-centered
+      = link_to 'Create new', new_category_path, class: 'button is-success'
   %table#categories.table.is-striped.is-bordered
     %thead
       %tr

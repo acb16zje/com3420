@@ -41,6 +41,7 @@ class Ability
       can :manage, Booking
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
+      can :manage, UserHomeCategory
     end
 
     # User
@@ -49,6 +50,7 @@ class Ability
       can %i[read new create edit update set_booking_cancelled set_booking_returned start_date end_date peripherals], Booking, user_id: user.id
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
+      can :manage, UserHomeCategory
     end
   end
 end
