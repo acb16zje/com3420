@@ -1,9 +1,9 @@
 module Helpers
   # Signing in helpers
   def sign_in_details(using_email=false)
-    @email = 'zjeng1@sheffield.ac.uk'
-    @username = 'acb16zje'
-    @password = 'Idpuk123'
+    @email = '@sheffield.ac.uk'
+    @username = ''
+    @password = ''
 
     user = User.new
     user.email = @email
@@ -121,7 +121,7 @@ module Helpers
   end
 
   def create_microsd_gopro_choose
-    visit '/items/new'  
+    visit '/items/new'
     fill_in 'item_name', with: 'MicroSD Card'
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'

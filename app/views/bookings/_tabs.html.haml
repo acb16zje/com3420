@@ -10,5 +10,5 @@
       = link_to 'Completed', completed_bookings_path
     %li{class:"#{current_class?(rejected_bookings_path)}"}
       = link_to 'Rejected', rejected_bookings_path
-    %li{class:"#{current_class?(rejected_bookings_path)}"}
+    %li{class:"#{current_class?(late_bookings_path)}"}
       = link_to 'Late', late_bookings_path

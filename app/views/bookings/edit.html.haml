@@ -116,7 +116,7 @@
                       %a.button.is-static
                         %i.fas.fa-clock
                     %p.control.is-expanded
-                      = f.input :end_date, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.end_date.strftime("%d %B %Y")}"}
+                      = f.input :start_time, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.start_time.strftime("%I:%M %p")}"}
           .column
             .field.is-horizontal
               .field-label.is-normal
@@ -128,7 +128,7 @@
                       %a.button.is-static
                         %i.far.fa-calendar-alt
                     %p.control.is-expanded
-                      = f.input :start_time, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.start_time.strftime("%I:%M %p")}"}
+                      = f.input :end_date, as: :text, label: false, disabled: true, input_html: {class: 'input', style: 'resize:none', value: "#{@booking.end_date.strftime("%d %B %Y")}"}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label End Time
