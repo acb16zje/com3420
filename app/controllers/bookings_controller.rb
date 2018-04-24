@@ -49,11 +49,11 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    unless @item.parent_asset_serial.blank?
-      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    unless @item.items_id.blank?
+      @parent = Item.where('id = ?', @item.items_id).first
     end
 
-    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+    @peripherals = Item.where('items_id = ?', @item.id)
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
@@ -63,10 +63,11 @@ class BookingsController < ApplicationController
   def edit
     @item = @booking.item
 
-    unless @item.parent_asset_serial.blank?
-      @parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    unless @item.items_id.blank?
+      @parent = Item.where('id = ?', @item.items_id).first
     end
-    @peripherals = Item.where('parent_asset_serial = ?', @item.serial)
+
+    @peripherals = Item.where('items_id = ?', @item.id)
   end
 
   # POST /bookings
@@ -74,13 +75,20 @@ class BookingsController < ApplicationController
     # ActiveRecord::Base.connection.execute("LOCK TABLES table_name WRITE")
     # ActiveRecord::Base.connection.execute("UNLOCK TABLES")
 
-    @booking = Booking.new(booking_params)
 
+    if Booking.exists?
+      combined_booking_id = Booking.maximum(:combined_booking_id) + 1
+    else
+      combined_booking_id = 1
+    end
+
+    @booking = Booking.new(booking_params)
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
     @booking.reason = 'None' if params[:booking][:reason].blank?
 
+    @booking.combined_booking_id = combined_booking_id
     item = @booking.item
 
     if item.user_id == current_user.id
@@ -113,12 +121,6 @@ class BookingsController < ApplicationController
         next if peripheral == ''
         query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
       end
-    end
-
-    if Booking.exists?
-      @booking.combined_booking_id = Booking.maximum(:combined_booking_id) + 1
-    else
-      @booking.combined_booking_id = 1
     end
 
     if query && @booking.save
@@ -245,7 +247,7 @@ class BookingsController < ApplicationController
 
   def get_allowed_peripherals(start_datetime, end_datetime, item_id)
     item = Item.find_by_id(item_id)
-    peripherals = Item.where('parent_asset_serial = ?', item.serial)
+    peripherals = Item.where('items_id = ?', item.id)
 
     allowed_peripherals = []
     peripherals.each do |peripheral|

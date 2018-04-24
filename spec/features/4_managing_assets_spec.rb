@@ -31,7 +31,7 @@ describe 'Managing assets' do
   specify 'I can remove a peripheral for an asset' do
     create_peripheral_for_gopro
     click_link 'Edit'
-    select('None', from: 'item_parent_asset_serial')
+    select('None', from: 'item_items_id')
     click_button 'Save changes'
   end
 

@@ -92,6 +92,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:laptop_admin_has_peripheral)
     FactoryBot.create(:charging_cable_admin)
     visit '/items/1/bookings/new'
+    expect(page).to have_content 'MPTR212/A'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
     test_booking_date_end = test_booking_date_start + 1.days
     page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}')")
