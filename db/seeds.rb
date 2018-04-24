@@ -14,6 +14,7 @@ User.create(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman
 User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Chatterjee', permission_id: 3, username: 'aca16rc')
 # User.create(email: 'erica.smith@sheffield.ac.uk', permission_id: 3)
 
+# 1
 Item.create!(user_id: 1,
             category_id: 1,
             condition: 'Like New',
@@ -26,6 +27,7 @@ Item.create!(user_id: 1,
             purchase_price: 100.1,
             has_peripheral: 1)
 
+# 2
 Item.create(user_id: 1,
             category_id: 2,
             items_id: 1,
@@ -39,6 +41,7 @@ Item.create(user_id: 1,
             purchase_price: 10.1,
             has_peripheral: 0)
 
+# 3
 Item.create(user_id: 1,
             category_id: 2,
             items_id: 1,
@@ -52,6 +55,7 @@ Item.create(user_id: 1,
             purchase_price: 10.1,
             has_peripheral: 0)
 
+# 4
 Item.create(user_id: 1,
             category_id: 3,
             condition: 'Like New',
@@ -64,6 +68,7 @@ Item.create(user_id: 1,
             purchase_price: 349.00,
             has_peripheral: 0)
 
+# 5
 Item.create(user_id: 2,
             category_id: 4,
             condition: 'Like New',
@@ -76,8 +81,10 @@ Item.create(user_id: 2,
             purchase_price: 2349.00,
             has_peripheral: 1)
 
+# 6
 Item.create(user_id: 2,
             category_id: 5,
+            items_id: 5,
             condition: 'Like New',
             name: 'Charging Cable',
             location: 'Diamond',

@@ -9,6 +9,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
+    @combined_bookings = Booking.select(:combined_booking_id, :start_datetime, :end_datetime, :reason, :next_location).distinct
     @bookings = Booking.where('user_id = ?', current_user.id)
   end
 
@@ -116,7 +117,7 @@ class BookingsController < ApplicationController
 
     if Booking.exists?
       @booking.combined_booking_id = Booking.maximum(:combined_booking_id) + 1
-    else 
+    else
       @booking.combined_booking_id = 1
     end
 

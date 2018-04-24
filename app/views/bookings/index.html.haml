@@ -10,65 +10,76 @@
   %table#bookings.table.is-striped.is-bordered
     %thead
       %tr
+        %th Details
         %th ID
-        %th Asset
-        %th Start Date
-        %th Start Time
-        %th End Date
-        %th End Time
+        %th Start Date - Start Time
+        %th End Date - End Time
         %th Location
         %th Reason
-        %th Status
-        %th Action
     %tbody
-      - @bookings.each do |booking|
-        %tr{"data-row-id" => "#{booking.id}"}
-          %td.has-text-centered= booking.combined_booking_id
-          %td.has-text-centered= link_to booking.item.name, booking.item
-          %td.has-text-centered= booking.start_date
-          %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.end_date
-          %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.next_location
-          %td.has-text-centered= booking.reason
-          %td.has-text-centered
-            - case booking.status
-            - when 1
-              %span.tag.is-warning.is-medium
-                Pending
-            - when 2
-              %span.tag.is-success.is-medium
-                Accepted
-            - when 3
-              %span.tag.is-info.is-medium
-                Ongoing
-            - when 4
-              %span.tag.is-success.is-medium
-                Completed
-            - when 5
-              %span.tag.is-danger.is-medium
-                Rejected
-            - when 6
-              %span.tag.is-danger.is-medium
-                Cancelled
-            - when 7
-              %span.tag.is-danger.is-medium
-                Late
-          %td
-            .buttons.is-centered
-              - if booking.status < 3
-                = link_to 'Edit', edit_booking_path(booking.id), class: 'button is-link'
-                = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-danger' do
-                  %span.icon
-                    %i.fas.fa-ban
-                  %span Cancel Booking
-              - elsif (booking.status == 3) || (booking.status == 7)
-                = link_to booking_returned_booking_path(booking), class: 'button is-link' do
-                  %span.icon
-                    %i.fas.fa-redo
-                  %span Return Item
-              - elsif (booking.status == 4) || (booking.status == 5) || (booking.status == 6)
-                = link_to new_item_booking_path(booking.item.id), class: 'button is-link' do
-                  %span.icon
-                    %i.fas.fa-sync
-                  %span Book Again
+      - @combined_bookings.each do |combined_booking|
+        %tr
+          %td.details-control{"data-row-id" => "#{combined_booking.id}"}
+          %td.has-text-centered= combined_booking.combined_booking_id
+          %td.has-text-centered= combined_booking.start_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.end_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.next_location
+          %td.has-text-centered= combined_booking.reason
+        %tr
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td{:colspan => 6}
+            %table.table.is-striped.is-bordered
+              %thead
+                %tr
+                  %th Asset Name
+                  %th Status
+                  %th Action
+              %tbody
+                - @bookings.each do |booking|
+                  %tr
+                    %td.has-text-centered= link_to booking.item.name, booking.item
+                    %td.has-text-centered
+                      - case booking.status
+                      - when 1
+                        %span.tag.is-warning.is-medium
+                          Pending
+                      - when 2
+                        %span.tag.is-success.is-medium
+                          Accepted
+                      - when 3
+                        %span.tag.is-info.is-medium
+                          Ongoing
+                      - when 4
+                        %span.tag.is-success.is-medium
+                          Completed
+                      - when 5
+                        %span.tag.is-danger.is-medium
+                          Rejected
+                      - when 6
+                        %span.tag.is-danger.is-medium
+                          Cancelled
+                      - when 7
+                        %span.tag.is-danger.is-medium
+                          Late
+                    %td
+                      .buttons.is-centered
+                        - if booking.status < 3
+                          = link_to 'Edit', edit_booking_path(booking.id), class: 'button is-link'
+                          = link_to set_booking_cancelled_booking_path(booking), method: :put, class: 'button is-danger' do
+                            %span.icon
+                              %i.fas.fa-ban
+                            %span Cancel Booking
+                        - elsif (booking.status == 3) || (booking.status == 7)
+                          = link_to booking_returned_booking_path(booking), class: 'button is-link' do
+                            %span.icon
+                              %i.fas.fa-redo
+                            %span Return Item
+                        - elsif (booking.status == 4) || (booking.status == 5) || (booking.status == 6)
+                          = link_to new_item_booking_path(booking.item.id), class: 'button is-link' do
+                            %span.icon
+                              %i.fas.fa-sync
+                            %span Book Again

@@ -54,6 +54,16 @@ table.is-striped.is-bordered {
   width: 100%;
 }
 
+/* Show details in all bookings related table */
+td.details-control {
+  background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+  cursor: pointer;
+}
+
+tr.shown td.details-control {
+  background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+}
+
 /* Modal cross fix */
 .modal-close:before {
   width: 42% !important;
