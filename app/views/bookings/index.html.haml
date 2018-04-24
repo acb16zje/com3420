@@ -19,13 +19,13 @@
     %tbody
       - @combined_bookings.each do |combined_booking|
         %tr
-          %td.details-control{"data-row-id" => "#{combined_booking.id}"}
+          %td.details-control{"data-target" => "row-#{combined_booking.combined_booking_id}"}
           %td.has-text-centered= combined_booking.combined_booking_id
           %td.has-text-centered= combined_booking.start_datetime.strftime("%d/%m/%y - %I:%M %p")
           %td.has-text-centered= combined_booking.end_datetime.strftime("%d/%m/%y - %I:%M %p")
           %td.has-text-centered= combined_booking.next_location
           %td.has-text-centered= combined_booking.reason
-        %tr
+        %tr.is-hidden{id: "row-#{combined_booking.combined_booking_id}"}
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
@@ -39,7 +39,7 @@
                   %th Status
                   %th Action
               %tbody
-                - @bookings.each do |booking|
+                - @bookings.where(combined_booking_id: combined_booking.combined_booking_id).each do |booking|
                   %tr
                     %td.has-text-centered= link_to booking.item.name, booking.item
                     %td.has-text-centered

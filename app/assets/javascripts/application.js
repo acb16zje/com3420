@@ -322,6 +322,26 @@ $(document).ready(function () {
 
     $("#bookings_other_wrapper").removeClass("container");
 
+    // Datatable details dropdown
+    var details = getAll('.details');
+    var detailsButtons = getAll('.details-control');
+
+    if (detailsButtons.length > 0) {
+        detailsButtons.forEach(function ($el) {
+            $el.addEventListener('click', function () {
+                var target = $el.dataset.target;
+                var $target = document.getElementById(target);
+                if ($target.classList.contains('is-hidden')) {
+                    $target.previousSibling.classList.add('shown');
+                    $target.classList.remove('is-hidden');
+                } else {
+                    $target.previousSibling.classList.remove('shown');
+                    $target.classList.add('is-hidden');
+                }
+            });
+        });
+    }
+
     // For searching browse by categories
     var table = $("#assets").DataTable({
         "drawCallback": function (settings) {

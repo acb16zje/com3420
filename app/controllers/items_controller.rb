@@ -110,7 +110,7 @@ class ItemsController < ApplicationController
 
   # PATCH/PUT /items/1
   def update
-    if @item.update(item_params)
+    begin @item.update(item_params)
       @item.location = params[:item][:location].titleize
 
       if params[:item][:items_id].blank?
@@ -124,6 +124,8 @@ class ItemsController < ApplicationController
       end
 
       redirect_to @item, notice: 'Asset was successfully updated.' if @item.save
+    rescue
+      redirect_to request.referrer, alert: 'Serial already exist'
     end
   end
 

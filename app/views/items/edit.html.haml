@@ -3,6 +3,8 @@
 %section.hero
   .hero-body
     .container.has-text-centered
+      = render partial: 'layouts/flash'
+      
       .column.is-10.is-offset-1
         - if params[:is_peripheral] == "true"
           %h3.title Editing #{@item.name}
