@@ -18,4 +18,4 @@
             %p.subtitle Create a new asset
           %footer.card-footer
             %p.card-footer-item
-              = link_to 'Create', new_item_path(parent_asset_serial: @item.serial, is_peripheral: true), class: 'button is-primary'
+              = link_to 'Create', new_item_path(items_id: @item.id, is_peripheral: true), class: 'button is-primary'

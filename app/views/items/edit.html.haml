@@ -4,34 +4,34 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        - if params[:is_peripheral]
+        - if params[:is_peripheral] == "true"
           %h3.title Editing #{@item.name}
         - else
           %h3.title Editing #{@item.name}
         .box
           = simple_form_for(@item) do |f|
-            - if params[:is_peripheral]
+            - if params[:is_peripheral] == "true"
               %h4.title Peripheral Information
             - else
               %h4.title Asset Information
-            - if params[:is_peripheral]
+            - if params[:is_peripheral] == "true"
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Parent Asset Serial
                 .field-body
                   .field.is-grouped
                     .control.is-expanded
-                      = f.select :parent_asset_serial, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, @item.parent_asset_serial), {include_blank: 'None'}, {class: 'select2'}
+                      = f.select :items_id, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, @item.parent.serial), {include_blank: 'None'}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
-                - if params[:is_peripheral]
+                - if params[:is_peripheral] == "true"
                   %label.label Peripheral Name
                 - else
                   %label.label Asset Name
               .field-body
                 .field
                   %p.control.is-expanded
-                    - if params[:is_peripheral]
+                    - if params[:is_peripheral] == "true"
                       = f.input :name, label: false, required: '', placeholder: 'Peripheral Name', input_html: {class: 'input'}
                     - else
                       = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}

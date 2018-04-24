@@ -1,9 +1,9 @@
 module Helpers
   # Signing in helpers
   def sign_in_details(using_email=false)
-    @email = '@sheffield.ac.uk'
-    @username = ''
-    @password = ''
+    @email = 'zjeng1@sheffield.ac.uk'
+    @username = 'acb16zje'
+    @password = 'Idpuk123'
 
     user = User.new
     user.email = @email
@@ -113,7 +113,7 @@ module Helpers
   end
 
   def create_microsd_gopro
-    select("GPH5 (GoPro Hero 5)", from: 'item_parent_asset_serial')
+    select("GPH5 (GoPro Hero 5)", from: 'item_items_id')
     fill_in 'item_name', with: 'MicroSD Card'
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'
@@ -121,7 +121,7 @@ module Helpers
   end
 
   def create_microsd_gopro_choose
-    visit '/items/new'
+    visit '/items/new'  
     fill_in 'item_name', with: 'MicroSD Card'
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'

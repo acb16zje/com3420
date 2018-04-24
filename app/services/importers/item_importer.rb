@@ -175,7 +175,7 @@ module Importers
                         condition: t_condition, acquisition_date: t_acquisition_date,
                         purchase_price: t_purchase_price, location: t_location,
                         manufacturer: t_manufacturer, model: t_model,
-                        parent_asset_serial: t_parent_asset_serial, retired_date: t_retired_date,
+                        items_id: Item.where('serial = ?',t_parent_asset_serial), retired_date: t_retired_date,
                         po_number: t_po_number, comment: t_comment, user_id: t_user_id)
         item.save
       end

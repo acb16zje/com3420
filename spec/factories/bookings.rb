@@ -33,6 +33,7 @@
 FactoryBot.define do
 
   factory :booking_today_all_day, class: "Booking" do
+    combined_booking_id 1
     start_date {DateTime.now.strftime("%d %B %Y")}
     start_time {DateTime.now.strftime("%H:%M")}
     start_datetime {DateTime.now}

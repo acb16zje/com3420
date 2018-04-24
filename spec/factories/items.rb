@@ -69,7 +69,7 @@ FactoryBot.define do
     serial 'CC322'
     location 'Diamond'
     has_peripheral 0
-    parent_asset_serial 'MPTR212/A'
+    items_id 1
     user_id {User.find(1).id}
     association :category, factory: :laptop_peripheral_category
   end
@@ -96,7 +96,7 @@ FactoryBot.define do
     serial 'CC322'
     location 'Diamond'
     has_peripheral 0
-    parent_asset_serial 'MPTR212/A'
+    items_id 1
     association :user, factory: :admin
     association :category, factory: :laptop_peripheral_category
   end

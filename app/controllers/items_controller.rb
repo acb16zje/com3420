@@ -48,7 +48,7 @@ class ItemsController < ApplicationController
     if !@i.category.has_peripheral
       render 'errors/error_404'
     else
-      @items = Item.all.where("(serial <> ?) AND (parent_asset_serial IS NULL OR parent_asset_serial = '')", @i.serial)
+      @items = Item.where("(serial <> ?) AND (items_id IS NULL)", @i.serial)
     end
   end
 
@@ -57,7 +57,7 @@ class ItemsController < ApplicationController
     @item = Item.find_by_id(params[:id])
 
     @peripheral = Item.where('serial = ?', params[:peripheral_asset]).first
-    @peripheral.parent_asset_serial = @item.serial
+    @peripheral.items_id = @item.id
     @peripheral.save
     @item.has_peripheral = true
     @item.save
@@ -77,14 +77,14 @@ class ItemsController < ApplicationController
     end
 
     @item = Item.new
-    if params[:is_peripheral]
-      @parent = Item.where('serial = ?', params[:parent_asset_serial]).first
+    if params[:is_peripheral] == "true"
+      @parent = Item.where('id = ?', params[:items_id]).first
     end
   end
 
   # GET /items/1/edit
   def edit
-    @items = Item.all.where('id <> ?', params[:id]) if params[:is_peripheral]
+    @items = Item.all.where('id <> ?', params[:id]) if params[:is_peripheral] == "true"
   end
 
   # POST /items
@@ -92,10 +92,13 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @item.user_id = current_user.id
     @item.location = params[:item][:location].titleize
+    if !params[:item][:items_id].blank?
+      @item.items_id = Item.where('serial = ?',params[:item][:items_id]).first.id
+    end
 
     # Getting the category for the attached item
-    unless @item.parent_asset_serial.blank?
-      parent = Item.where('serial = ?', @item.parent_asset_serial).first
+    unless @item.items_id.blank?
+      parent = Item.where('id = ?', @item.items_id).first
       parent.has_peripheral = true
       parent.save
       category = Category.where('name = ?', (parent.category.name + ' - Peripherals')).first
@@ -110,8 +113,8 @@ class ItemsController < ApplicationController
     if @item.update(item_params)
       @item.location = params[:item][:location].titleize
 
-      if params[:item][:parent_asset_serial].blank?
-        @item.parent_asset_serial = nil
+      if params[:item][:items_id].blank?
+        @item.items_id = nil
       end
 
       if params[:item][:condition] == 'Retired' && @item.retired_date.blank?
