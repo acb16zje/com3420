@@ -35,6 +35,7 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Booking was successfully created'
     expect(page).to have_content 'My Bookings'
     expect(page).to have_content 'Pam Liversidge Building'
+    find(:css, ".details-control").click
     expect(page).to have_content 'Accepted'
   end
 
@@ -53,6 +54,7 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Booking was successfully created'
     expect(page).to have_content 'My Bookings'
     expect(page).to have_content 'Pam Liversidge Building'
+    find(:css, ".details-control").click
     expect(page).to have_content 'Accepted'
 
     visit '/items/1/bookings/new'
@@ -85,6 +87,7 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Booking was successfully created'
     expect(page).to have_content 'My Bookings'
     expect(page).to have_content 'Pam Liversidge Building'
+    find(:css, ".details-control").click
     expect(page).to have_content 'Pending'
   end
 
@@ -105,6 +108,7 @@ describe 'Managing bookings', js: true do
     expect(page).to have_content 'Booking was successfully created'
     expect(page).to have_content 'My Bookings'
     expect(page).to have_content 'Pam Liversidge Building'
+    find(:css, ".details-control").click
     expect(page).to have_content 'Pending'
   end
 
@@ -121,6 +125,7 @@ describe 'Managing bookings', js: true do
     fill_in 'booking_next_location', with: 'pam liversidge building'
     select('CC322', from: 'peripherals')
     click_button('Confirm booking')
+    find(:css, ".details-control").click
     expect(page).to have_content 'Accepted'
   end
 
@@ -143,6 +148,7 @@ describe 'Managing bookings', js: true do
   specify 'I can edit my booking' do
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Edit'
     fill_in 'booking_next_location', with: 'nothing'
     click_button 'Save changes'
@@ -157,12 +163,14 @@ describe 'Managing bookings', js: true do
   specify "I can see bookings made by me" do
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
-    expect(page).to have_content '1 GoPro'
+    find(:css, ".details-control").click
+    expect(page).to have_content 'GoPro'
   end
 
   specify 'I can cancel my booking' do
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Cancel Booking'
   end
 
@@ -175,6 +183,7 @@ describe 'Managing bookings', js: true do
   specify 'I can return my item as like new' do
     FactoryBot.create(:ongoing_booking)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Return Item'
     click_button('Save changes')
   end
@@ -182,6 +191,7 @@ describe 'Managing bookings', js: true do
   specify 'I can return my item as damaged' do
     FactoryBot.create(:ongoing_booking)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Return Item'
     select('Damaged', from: 'item_condition')
     click_button('Save changes')
@@ -191,6 +201,7 @@ describe 'Managing bookings', js: true do
   specify 'I can return item owned by other' do
     FactoryBot.create(:ongoing_booking_other)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Return Item'
     click_button('Save changes')
   end
@@ -198,6 +209,7 @@ describe 'Managing bookings', js: true do
   specify 'I can return item owned by other as damaged' do
     FactoryBot.create(:ongoing_booking_other)
     visit '/bookings'
+    find(:css, ".details-control").click
     click_link 'Return Item'
     select('Damaged', from: 'item_condition')
     click_button('Save changes')

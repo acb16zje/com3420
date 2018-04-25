@@ -82,6 +82,17 @@ describe 'Managing assets' do
     expect(page).to_not have_content 'Macbook Pro 15-inch'
   end
 
+  specify 'I cannot edit an asset serial to the one already exist' do
+    FactoryBot.create :macbook_pro
+    FactoryBot.create :charging_cable
+    visit '/items'
+    click_link('Macbook Pro 15-inch')
+    click_link('Edit')
+    fill_in 'item_serial', with: 'CC322'
+    click_button 'Save changes'
+    expect(page).to have_content 'Serial already exist'
+  end
+
   specify 'I cannot edit an asset that does not belong to me' do
     FactoryBot.create :laptop_admin
     visit '/items/manager?user_id=2'

@@ -9,7 +9,10 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @combined_bookings = Booking.select(:combined_booking_id, :start_datetime, :end_datetime, :reason, :next_location).distinct
+    @combined_bookings =
+      Booking.where(
+        user_id: current_user.id).select(
+          :combined_booking_id, :start_datetime, :end_datetime, :reason, :next_location).distinct
     @bookings = Booking.where('user_id = ?', current_user.id)
   end
 

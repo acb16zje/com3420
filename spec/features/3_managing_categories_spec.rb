@@ -80,13 +80,28 @@ describe 'Managing categories' do
     expect(page).to_not have_content 'Laptops'
   end
 
-  specify 'I can delete a category that no asset is using' do
+  specify 'I can update a category' do
+    create_laptops
+    visit '/categories'
+    expect(page).to have_content 'Laptops'
+    click_link('Edit')
+    expect(page).to have_content 'Editing Laptops'
+    fill_in 'category_name', with: 'Cameras'
+    click_button('Save changes')
+    expect(page).to have_content 'Category was successfully updated'
+    expect(page).to have_content 'Cameras'
+    expect(page).to_not have_content 'Laptops'
+  end
+
+  specify 'I cannot update a category name to the one already exist' do
     create_cameras
+    create_laptops
     visit '/categories'
     expect(page).to have_content 'Cameras'
-    click_link('Delete')
-    expect(page).to have_content 'Category was successfully deleted.'
-    expect(page).to_not have_content 'Cameras'
+    click_link('Edit')
+    fill_in 'category_name', with: 'Laptops'
+    click_button('Save changes')
+    expect(page).to have_content 'Category already exist'
   end
 
   specify 'I cannot delete a category that an asset is using' do
