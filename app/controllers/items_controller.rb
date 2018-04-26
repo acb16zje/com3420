@@ -105,7 +105,11 @@ class ItemsController < ApplicationController
       @item.category_id = category.id
     end
 
-    redirect_to @item, notice: 'Asset was successfully created.' if @item.save
+    if @item.save
+      redirect_to @item, notice: 'Asset was successfully created.'
+    else
+      redirect_to request.referrer, alert: 'The serial is already in use'
+    end
   end
 
   # PATCH/PUT /items/1
