@@ -21,7 +21,7 @@
               %h4.title Peripheral Information
               .field.is-horizontal
                 .field-label.is-normal
-                  %label.label Parent Asset Serial*
+                  %label.label Parent Asset*
                 .field-body
                   .field{style: 'margin: auto'}
                     .control
@@ -46,7 +46,7 @@
                 .field
                   %p.control.is-expanded
                     = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
-            - if params[:is_peripheral] == "false"
+            - unless params[:is_peripheral] == "true"
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Category*
