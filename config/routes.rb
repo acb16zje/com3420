@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       get 'end_date', on: :collection
       get 'peripherals', on: :collection
     end
+
     get 'import', on: :collection
     post 'import_file', on: :collection
     get 'add_peripheral_option', on: :member

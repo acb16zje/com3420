@@ -52,7 +52,7 @@ class CategoriesController < ApplicationController
     @category = Category.new(category_params)
 
     # Checks whether the category already exists
-    if Category.exists?(name: @category.name.titleize)
+    if Category.exists?(name: @category.name.titleize.strip)
       redirect_to request.referrer, alert: 'Category already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
@@ -95,7 +95,7 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1
   def update
     begin @category.update(category_params)
-      redirect_to @category, notice: 'Category was successfully updated.'
+          redirect_to @category, notice: 'Category was successfully updated.'
     rescue
       redirect_to request.referrer, alert: 'Category already exist.'
     end
@@ -108,8 +108,9 @@ class CategoriesController < ApplicationController
     if items.blank?
       UserHomeCategory.where('category_id = ?', @category.id).destroy_all
 
-      begin @category.destroy
-        return redirect_to categories_url, notice: 'Category was successfully deleted.'
+      begin
+        @category.destroy
+        redirect_to categories_url, notice: 'Category was successfully deleted.'
       end
     else
       redirect_to categories_path, alert: 'Cannot delete category because it is currently in use for an asset.'

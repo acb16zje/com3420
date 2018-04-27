@@ -22,8 +22,8 @@
         %tr
           %td.details-control{"data-target" => "row-#{combined_booking.id}"}
           %td.has-text-centered= combined_booking.id
-          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d/%m/%y - %I:%M %p")
-          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d %b %Y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.next_location
           %td.has-text-centered= combined_booking.bookings.first.reason
           %td
@@ -50,7 +50,7 @@
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td.is-hidden  
+          %td.is-hidden
           %td{:colspan => 7}
             %table.table.is-striped.is-bordered
               %thead
