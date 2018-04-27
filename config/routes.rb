@@ -13,6 +13,11 @@ Rails.application.routes.draw do
 
   resources :user_home_categories
 
+  resources :combined_bookings do
+    put 'set_booking_returned', on: :member
+    put 'set_booking_cancelled', on: :member
+  end
+
   resources :bookings do
     get 'requests', on: :collection
     get 'accepted', on: :collection

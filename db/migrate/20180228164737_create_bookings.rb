@@ -1,7 +1,6 @@
 class CreateBookings < ActiveRecord::Migration[5.1]
   def change
     create_table :bookings do |t|
-      t.integer :combined_booking_id
       t.date :start_date
       t.time :start_time
       t.date :end_date
@@ -16,6 +15,7 @@ class CreateBookings < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_reference :bookings, :item, foreign_key: true
+    add_reference :bookings, :combined_booking, foreign_key: true
     add_reference :bookings, :user, foreign_key: true
   end
 end

@@ -16,32 +16,54 @@
         %th End Date - End Time
         %th Location
         %th Reason
+        %th Action
     %tbody
       - @combined_bookings.each do |combined_booking|
         %tr
-          %td.details-control{"data-target" => "row-#{combined_booking.combined_booking_id}"}
-          %td.has-text-centered= combined_booking.combined_booking_id
-          %td.has-text-centered= combined_booking.start_datetime.strftime("%d/%m/%y - %I:%M %p")
-          %td.has-text-centered= combined_booking.end_datetime.strftime("%d/%m/%y - %I:%M %p")
-          %td.has-text-centered= combined_booking.next_location
-          %td.has-text-centered= combined_booking.reason
-        %tr.is-hidden{id: "row-#{combined_booking.combined_booking_id}"}
+          %td.details-control{"data-target" => "row-#{combined_booking.id}"}
+          %td.has-text-centered= combined_booking.id
+          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.next_location
+          %td.has-text-centered= combined_booking.bookings.first.reason
+          %td
+            .buttons.is-centered
+              - if combined_booking.status < 3
+                = link_to set_booking_cancelled_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
+                  %span.icon
+                    %i.fas.fa-ban
+                  %span Cancel Booking
+              - elsif (combined_booking.status == 3) || (combined_booking.status == 7)
+                = link_to set_booking_returned_combined_booking_path(combined_booking), data: { confirm: 'Are you sure? If you would like to change any item conditions, please return them separately.' }, method: :put, class: 'button is-link' do
+                  %span.icon
+                    %i.fas.fa-redo
+                  %span Return remaining items
+              - elsif (combined_booking.status == 4) || (combined_booking.status == 5) || (combined_booking.status == 6)
+                = link_to items_path, class: 'button is-link' do
+                  %span.icon
+                    %i.fas.fa-sync
+                  %span Book Again
+
+        %tr.is-hidden{id: "row-#{combined_booking.id}"}
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td{:colspan => 6}
+          %td.is-hidden  
+          %td{:colspan => 7}
             %table.table.is-striped.is-bordered
               %thead
                 %tr
                   %th Asset Name
+                  %th Serial
                   %th Status
                   %th Action
               %tbody
-                - @bookings.where(combined_booking_id: combined_booking.combined_booking_id).each do |booking|
+                - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
                   %tr
                     %td.has-text-centered= link_to booking.item.name, booking.item
+                    %td.has-text-centered= link_to booking.item.serial, booking.item
                     %td.has-text-centered
                       - case booking.status
                       - when 1

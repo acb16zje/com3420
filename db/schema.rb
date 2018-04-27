@@ -16,7 +16,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   enable_extension "plpgsql"
 
   create_table "bookings", force: :cascade do |t|
-    t.integer "combined_booking_id"
     t.date "start_date"
     t.time "start_time"
     t.date "end_date"
@@ -30,7 +29,9 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "item_id"
+    t.bigint "combined_booking_id"
     t.bigint "user_id"
+    t.index ["combined_booking_id"], name: "index_bookings_on_combined_booking_id"
     t.index ["item_id"], name: "index_bookings_on_item_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -43,6 +44,12 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
+  end
+
+  create_table "combined_bookings", force: :cascade do |t|
+    t.integer "status"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_combined_bookings_on_user_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -138,8 +145,10 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  add_foreign_key "bookings", "combined_bookings"
   add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
+  add_foreign_key "combined_bookings", "users"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "items", column: "items_id"
   add_foreign_key "items", "users"

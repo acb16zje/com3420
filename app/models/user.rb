@@ -36,6 +36,7 @@ class User < ApplicationRecord
     super # This needs to be left in so the default fields are also set
   end
 
+  has_many :combined_bookings, :dependent => :destroy
   has_many :bookings, :dependent => :destroy
   has_many :items, :dependent => :destroy
   has_many :user_home_categories, :dependent => :destroy

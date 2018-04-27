@@ -48,7 +48,7 @@ class ItemsController < ApplicationController
     if !@i.category.has_peripheral
       render 'errors/error_404'
     else
-      @items = Item.where("(serial <> ?) AND (items_id IS NULL)", @i.serial)
+      @items = Item.where("(serial <> ?) AND (items_id IS NULL) AND (user_id = ?)", @i.serial, current_user.id)
     end
   end
 

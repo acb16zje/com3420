@@ -9,11 +9,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @combined_bookings =
-      Booking.where(
-        user_id: current_user.id).select(
-          :combined_booking_id, :start_datetime, :end_datetime, :reason, :next_location).distinct
-    @bookings = Booking.where('user_id = ?', current_user.id)
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id)@bookings = Booking.where('user_id = ?', current_user.id)
   end
 
   # GET /bookings/requests
@@ -78,31 +74,28 @@ class BookingsController < ApplicationController
     # ActiveRecord::Base.connection.execute("LOCK TABLES table_name WRITE")
     # ActiveRecord::Base.connection.execute("UNLOCK TABLES")
 
-
-    if Booking.exists?
-      combined_booking_id = Booking.maximum(:combined_booking_id) + 1
-    else
-      combined_booking_id = 1
-    end
-
     @booking = Booking.new(booking_params)
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
     @booking.reason = 'None' if params[:booking][:reason].blank?
 
-    @booking.combined_booking_id = combined_booking_id
     item = @booking.item
 
     if item.user_id == current_user.id
       @booking.status = 2
+      combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id)
+      combined_booking.save
     else
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       UserMailer.user_booking_requested(@booking).deliver
       UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
+      combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id)
+      combined_booking.save
     end
 
+    @booking.combined_booking_id = combined_booking.id
     peripherals = params[:booking][:peripherals]
 
     # Changing the peripherals array into a string to be saved
@@ -116,7 +109,7 @@ class BookingsController < ApplicationController
     #   end
     #   @booking.peripherals = peripherals_string[1..-1]
     # end
-
+    
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
     unless peripherals.nil?
@@ -125,7 +118,7 @@ class BookingsController < ApplicationController
         query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
       end
     end
-
+    
     if query && @booking.save
       # Making a booking for any peripheral selected
       unless peripherals.nil?
@@ -139,7 +132,7 @@ class BookingsController < ApplicationController
           booking.next_location = params[:booking][:next_location].titleize
           booking.reason = 'None' if params[:booking][:reason].blank?
           # booking.peripherals = nil
-          booking.combined_booking_id = @booking.combined_booking_id
+          booking.combined_booking_id = combined_booking.id
           booking.status = if item.user_id == current_user.id
                               2
                             else
@@ -208,11 +201,12 @@ class BookingsController < ApplicationController
       item.save
 
       if item.user_id == current_user.id
-        redirect_to manager_items_path(user_id: current_user.id)
+        # redirect_to manager_items_path(user_id: current_user.id)
+        redirect_to bookings_path
       elsif (item.condition == 'Damaged') || (item.condition == 'Missing')
-        redirect_to item, notice: 'We have logged the issue and your item has been returned'
+        redirect_to bookings_path, notice: 'We have logged the issue and your item has been returned'
       else
-        redirect_to item, notice: 'Thank you. Your item has been returned'
+        redirect_to ibookings_pathtem, notice: 'Thank you. Your item has been returned'
       end
     end
   end
