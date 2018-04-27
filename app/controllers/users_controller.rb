@@ -23,7 +23,16 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1/edit
-  def edit; end
+  def edit
+    item_list = Item.where(user: @user)
+    @item_count = item_list.size
+    @options = []
+    if ((@user.permission_id > 1 && @item_count == 0) || (@user.permission_id == 1))
+      @options << ['User', 1]
+    end
+      @options << ['Asset Manager', 2]
+      @options << ['Administrator', 3]
+  end
 
   # POST /users
   def create

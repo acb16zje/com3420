@@ -51,11 +51,11 @@
 
           %hr
 
-          %label.label Permission:
+          %label.label Permission #{@item_count}:
           %p.control
             - if can?(:manage, User)
               .select
-                = f.select :permission_id, options_for_select([['User', 1], ['Asset Manager', 2], ['Administrator', 3]], @user.permission_id)
+                = f.select :permission_id, options_for_select(@options, @user.permission_id)
             - else
               - case @user.permission_id
               - when 1
