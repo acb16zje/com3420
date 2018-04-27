@@ -40,7 +40,7 @@
 
 class Item < ApplicationRecord
   belongs_to :category
-  has_many :bookings
+  has_many :bookings 
   belongs_to :user
   belongs_to :parent, class_name: 'Item', foreign_key: :items_id, optional: true
   mount_uploader :image, ImageUploader

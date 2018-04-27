@@ -158,6 +158,37 @@ class ItemsController < ApplicationController
     redirect_to manager_items_path(user_id: current_user.id), notice: 'Ownership was successfully transfered.'
   end
 
+  # GET /items/change_manager_multiple
+  def change_manager_multiple_and_delete
+    @item = Item.new
+    @users = User.where('permission_id > ?', 1)
+  end
+
+  # POST /items/change_manager_multiple
+  def update_manager_multiple_and_delete
+    @items = Item.where(user_id: params[:item][:old_id])
+
+    @items.each do |item|
+      item.user_id = params[:item][:user_id]
+      if !item.save
+        redirect_to manager_items_path(user_id: params[:item][:old_id]), notice: 'Not All Items Could Be Moved'
+      end
+    end
+    puts ("Here----------------------------------")
+    puts (params[:item][:user_id])
+    @user = User.find(params[:item][:old_id])
+    if @user.destroy
+      puts "DELETED"
+      redirect_to users_path, notice: 'User was successfully deleted.'
+
+    else
+      puts "NOT DELETED"
+
+      redirect_to users_path, notice: 'User was not deleted.'
+
+    end
+  end
+
   # GET /items/import
   def import; end
 

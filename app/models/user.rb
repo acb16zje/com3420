@@ -36,8 +36,10 @@ class User < ApplicationRecord
     super # This needs to be left in so the default fields are also set
   end
 
-  has_many :bookings
-  has_many :items
+  has_many :bookings, :dependent => :destroy
+  has_many :items, :dependent => :destroy
+  has_many :user_home_categories, :dependent => :destroy
   has_many :categories, through: :user_home_categories
-  has_many :notifications, foreign_key: :recipient_id
+  has_many :notifications, foreign_key: :recipient_id, :dependent => :destroy
+
 end
