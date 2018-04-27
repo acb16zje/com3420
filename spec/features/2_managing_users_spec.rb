@@ -86,6 +86,18 @@ describe 'Managing accounts' do
     expect(page).to_not have_content 'Delete'
   end
 
+  specify 'I cannot delete account that has more than 1 asset, asset must be transferred first' do
+    FactoryBot.create(:laptop_admin)
+    visit '/users'
+    click_link('view_user_adm1usr')
+    expect(page).to have_content 'adm1usr'
+    click_link('Edit Details')
+    expect(page).to have_content 'Delete'
+    click_link('Delete')
+    expect(page).to have_content 'Transfer'
+    click_button 'Save changes'
+  end
+
   specify 'I can view the list of asset managers' do
     create_weikin_admin
     click_link 'Asset Managers'

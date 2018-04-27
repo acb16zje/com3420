@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
     put 'update_manager_multiple_and_delete', on: :collection
-    post 'change_manager_multiple_and_delete', on: :collection
+    get 'change_manager_multiple_and_delete', on: :collection
   end
 
   resources :notifications do

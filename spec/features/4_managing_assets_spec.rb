@@ -12,6 +12,12 @@ describe 'Managing assets' do
     expect(page).to have_content 'Book or Reserve'
   end
 
+  specify 'I cannot two assets with same serial' do
+    FactoryBot.create :laptop_category
+    create_macbook_pro
+    create_macbook_pro
+  end
+
   specify 'I can create a peripheral for an asset' do
     create_peripheral_for_gopro
   end

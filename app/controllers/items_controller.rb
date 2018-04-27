@@ -91,6 +91,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @item.user_id = current_user.id
+    @item.serial = params[:item][:serial].upcase
     @item.location = params[:item][:location].titleize
     if !params[:item][:items_id].blank?
       @item.items_id = Item.where('serial = ?',params[:item][:items_id]).first.id
@@ -105,9 +106,9 @@ class ItemsController < ApplicationController
       @item.category_id = category.id
     end
 
-    if @item.save
+    begin @item.save
       redirect_to @item, notice: 'Asset was successfully created.'
-    else
+    rescue
       redirect_to request.referrer, alert: 'The serial is already in use'
     end
   end
@@ -161,6 +162,8 @@ class ItemsController < ApplicationController
   # GET /items/change_manager_multiple
   def change_manager_multiple_and_delete
     @item = Item.new
+    @user = User.find_by_id(params[:id])
+    @allowed_user = User.where('id <> ?', params[:id])
     @users = User.where('permission_id > ?', 1)
   end
 

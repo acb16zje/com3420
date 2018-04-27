@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+require 'irb'
 
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
@@ -27,11 +27,13 @@ class UsersController < ApplicationController
     item_list = Item.where(user: @user)
     @item_count = item_list.size
     @options = []
+
     if ((@user.permission_id > 1 && @item_count == 0) || (@user.permission_id == 1))
       @options << ['User', 1]
     end
-      @options << ['Asset Manager', 2]
-      @options << ['Administrator', 3]
+
+    @options << ['Asset Manager', 2]
+    @options << ['Administrator', 3]
   end
 
   # POST /users
@@ -65,7 +67,13 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    redirect_to users_path, notice: 'User was successfully deleted.' if @user.destroy
+    @items = Item.where(user_id: @user.id)
+
+    if @items.blank?
+      redirect_to users_path, notice: 'User was successfully deleted.' if @user.destroy
+    else
+      redirect_to change_manager_multiple_and_delete_items_path(id: @user.id)
+    end
   end
 
   private
