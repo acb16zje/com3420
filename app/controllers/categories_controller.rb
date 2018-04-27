@@ -51,9 +51,9 @@ class CategoriesController < ApplicationController
   def create
     @category = Category.new(category_params)
 
-    # Checks whether the user already exists
-    if Category.exists?(name: @category.name)
-      redirect_to new_category_path, alert: 'Category already exists.'
+    # Checks whether the category already exists
+    if Category.exists?(name: @category.name.titleize)
+      redirect_to request.referrer, alert: 'Category already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
         @category.name = @category.name.titleize.strip

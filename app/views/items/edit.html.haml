@@ -4,7 +4,7 @@
   .hero-body
     .container.has-text-centered
       = render partial: 'layouts/flash'
-      
+
       .column.is-10.is-offset-1
         - if params[:is_peripheral] == "true"
           %h3.title Editing #{@item.name}
@@ -19,7 +19,7 @@
             - if params[:is_peripheral] == "true"
               .field.is-horizontal
                 .field-label.is-normal
-                  %label.label Parent Asset Serial
+                  %label.label Parent Asset
                 .field-body
                   .field.is-grouped
                     .control.is-expanded
