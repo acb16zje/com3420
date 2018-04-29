@@ -1,6 +1,6 @@
 class UserHomeCategoriesController < ApplicationController
   before_action :set_user_home_category, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # GET /user_home_categories
   def index

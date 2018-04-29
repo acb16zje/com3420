@@ -2,7 +2,7 @@ require 'irb'
 
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # GET /users
   def index

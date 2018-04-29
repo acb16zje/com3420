@@ -90,8 +90,8 @@
                 %td
                   - unless @peripherals.blank?
                     - @peripherals.each do |peripheral|
-                      = link_to "#{peripheral.name+': '+peripheral.serial }", peripheral, class: 'button'
-                  - if current_user == @item.user && current_user.permission_id > 1 && @item.category.has_peripheral
+                      = link_to "#{peripheral.name + ' (' + peripheral.serial + ')' }", peripheral, class: 'button'
+                  - if (current_user == @item.user && @item.category.has_peripheral ) || can?(:manage, Item)
                     = link_to add_peripheral_option_item_path, class: 'button is-link', id: 'add_peripheral' do
                       %span.icon
                         %i.fas.fa-plus
@@ -108,7 +108,7 @@
 
       .field.is-horizontal
         .field-body
-          - if current_user.permission_id > 1 && current_user == @item.user
+          - if can?(:manage, Item) || current_user == @item.user
             .field.is-grouped.is-grouped-left
               .control
                 - if @item.items_id.blank?
@@ -123,7 +123,7 @@
 
     %br
     %br
-    - if @item.user_id == current_user.id || can?(:manage, :all)
+    - if @item.user_id == current_user.id || current_user.permission_id == 3
       %p.title.has-text-centered Bookings History
       %table#bookings.table.is-striped.is-bordered
         %thead

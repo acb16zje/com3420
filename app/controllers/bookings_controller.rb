@@ -2,7 +2,7 @@ require 'irb'
 
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
   # 5: Rejected, 6: Cancelled, 7: Late}
@@ -10,7 +10,7 @@ class BookingsController < ApplicationController
   # GET /bookings
   def index
     @combined_bookings = CombinedBooking.where(user_id: current_user.id)
-    @bookings = Booking.where('user_id = ?', current_user.id)
+    @bookings = Booking.where(user_id: current_user.id)
   end
 
   # GET /bookings/requests
@@ -51,7 +51,7 @@ class BookingsController < ApplicationController
     @item = Item.find_by_id(params[:item_id])
 
     unless @item.items_id.blank?
-      @parent = Item.where('id = ?', @item.items_id).first
+      @parent = Item.find_by_id(@item.items_id)
     end
 
     @peripherals = Item.where('items_id = ?', @item.id)
@@ -65,7 +65,7 @@ class BookingsController < ApplicationController
     @item = @booking.item
 
     unless @item.items_id.blank?
-      @parent = Item.where('id = ?', @item.items_id).first
+      @parent = Item.find_by_id(@item.items_id)
     end
 
     @peripherals = Item.where('items_id = ?', @item.id)
@@ -111,7 +111,7 @@ class BookingsController < ApplicationController
     #   end
     #   @booking.peripherals = peripherals_string[1..-1]
     # end
-    
+
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
     unless peripherals.nil?
@@ -120,7 +120,7 @@ class BookingsController < ApplicationController
         query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
       end
     end
-    
+
     if query && @booking.save
       # Making a booking for any peripheral selected
       unless peripherals.nil?
@@ -135,11 +135,7 @@ class BookingsController < ApplicationController
           booking.reason = 'None' if params[:booking][:reason].blank?
           # booking.peripherals = nil
           booking.combined_booking_id = combined_booking.id
-          booking.status = if item.user_id == current_user.id
-                              2
-                            else
-                              1
-                            end
+          booking.status = item.user_id == current_user.id ? 2 : 1
           booking.save
         end
       end
@@ -286,7 +282,7 @@ class BookingsController < ApplicationController
           AND end_time = '2000-01-01 00:00:00 UTC'
           AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
         OR
-          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id]
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) >= 1))", params[:item_id]
     )
 
     bookings.each do |booking|

@@ -2,7 +2,7 @@ require 'irb'
 
 class CombinedBookingsController < ApplicationController
   # before_action :set_user, only: %i[show edit update destroy]
-  # authorize_resource
+  # load_and_authorize_resource
 
   # Set booking as accepted
   def set_booking_accepted
@@ -60,7 +60,7 @@ class CombinedBookingsController < ApplicationController
   # PUT /bookings/1/set_booking_returned
   def set_booking_returned
     bookings = Booking.where(combined_booking_id: params[:id])
-    
+
     bookings.each do |booking|
       next if booking.status != 3
       booking.status = 4

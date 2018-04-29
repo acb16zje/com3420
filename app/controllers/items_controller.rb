@@ -2,7 +2,7 @@ require 'irb'
 
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # GET /items
   def index
@@ -116,7 +116,7 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   def update
     begin @item.update(item_params)
-      @item.location = params[:item][:location].titleize
+      @item.location = params[:item][:location].titleize.strip
 
       if params[:item][:items_id].blank?
         @item.items_id = nil

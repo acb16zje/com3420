@@ -1,3 +1,5 @@
+require 'irb'
+
 class Ability
   include CanCan::Ability
 
@@ -32,13 +34,19 @@ class Ability
     user ||= User.new
 
     # Admin
-    can :manage, :all if user.permission_id == 3
+    if user.permission_id == 3
+      can :manage, Item
+      can :manage, Category
+      can :manage, UserHomeCategory
+      can :manage, User
+      can :manage, Booking, user_id: user.id
+    end
 
     # Asset Manager
     if user.permission_id == 2
       can %i[edit update], Item, user_id: user.id
       can %i[read create], Item
-      can :manage, Booking
+      can :manage, Booking, user_id: user.id
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
       can :manage, UserHomeCategory
@@ -47,7 +55,7 @@ class Ability
     # User
     if user.permission_id == 1
       can %i[read manager], Item
-      can %i[read new create edit update set_booking_cancelled set_booking_returned start_date end_date peripherals], Booking, user_id: user.id
+      can %i[read new create edit update set_booking_cancelled booking_returned set_booking_returned start_date end_date peripherals], Booking, user_id: user.id
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
       can :manage, UserHomeCategory
