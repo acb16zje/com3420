@@ -12,34 +12,105 @@
       %tr
         %th ID
         %th Asset
-        %th Start Date
-        %th Start Time
-        %th End Date
-        %th End Time
+        %th Start Date - Start Time
+        %th End Date - End Time
         %th Location
         %th Reason
         %th Booked By
         %th Action
     %tbody
-      - @bookings.each do |booking|
+      - @combined_bookings.each do |combined_booking|
         %tr
-          %td.has-text-centered= booking.id
-          %td.has-text-centered= link_to booking.item.name, booking.item
-          %td.has-text-centered= booking.start_date
-          %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.end_date
-          %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
-          %td.has-text-centered= booking.next_location
-          %td.has-text-centered= booking.reason
-          %td.has-text-centered= link_to booking.user.givenname, booking.user
+          %td.details-control{"data-target" => "row-#{combined_booking.id}"}
+          %td.has-text-centered= combined_booking.id
+          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.next_location
+          %td.has-text-centered= combined_booking.bookings.first.reason
+          %td.has-text-centered= link_to combined_booking.user.givenname, combined_booking.user
           %td
-            .field.is-grouped.is-grouped-centered
-              %p.control
-                = simple_form_for(booking) do |f|
-                  = f.submit 'Accept', class: 'button is-block is-success'
-                  = f.hidden_field :status, value: 2
-              %p.control
-                = simple_form_for(booking) do |f|
-                  = f.submit 'Reject  ', class: 'button is-block is-danger'
-                  = f.hidden_field :status, value: 5
+            .buttons.is-centered
+              = link_to set_booking_accepted_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
+                %span.icon
+                  %i.fas.fa-ban
+                %span Accept remaining bookings
+              = link_to set_booking_rejected_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-link' do
+                %span.icon
+                  %i.fas.fa-redo
+                %span Reject remaining bookings
+
+        %tr.is-hidden{id: "row-#{combined_booking.id}"}
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden
+          %td.is-hidden  
+          %td{:colspan => 7}
+            %table.table.is-striped.is-bordered
+              %thead
+                %tr
+                  %th Asset Name
+                  %th Serial
+                  %th Status
+                  %th Action
+              %tbody
+                - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
+                  %tr
+                    %td.has-text-centered= link_to booking.item.name, booking.item
+                    %td.has-text-centered= link_to booking.item.serial, booking.item
+                    %td.has-text-centered
+                      - case booking.status
+                      - when 1
+                        %span.tag.is-warning.is-medium
+                          Pending
+                      - when 2
+                        %span.tag.is-success.is-medium
+                          Accepted
+                      - when 3
+                        %span.tag.is-info.is-medium
+                          Ongoing
+                      - when 4
+                        %span.tag.is-success.is-medium
+                          Completed
+                      - when 5
+                        %span.tag.is-danger.is-medium
+                          Rejected
+                      - when 6
+                        %span.tag.is-danger.is-medium
+                          Cancelled
+                      - when 7
+                        %span.tag.is-danger.is-medium
+                          Late
+                    %td
+                      .field.is-grouped.is-grouped-centered
+                        %p.control
+                          = simple_form_for(booking) do |f|
+                            = f.submit 'Accept', class: 'button is-block is-success'
+                            = f.hidden_field :status, value: 2
+                        %p.control
+                          = simple_form_for(booking) do |f|
+                            = f.submit 'Reject', class: 'button is-block is-danger'
+                            = f.hidden_field :status, value: 5
+      -# - @bookings.each do |booking|
+      -#   %tr
+      -#     %td.has-text-centered= booking.id
+      -#     %td.has-text-centered= link_to booking.item.name, booking.item
+      -#     %td.has-text-centered= booking.start_date
+      -#     %td.has-text-centered= booking.start_time.strftime("%I:%M %p")
+      -#     %td.has-text-centered= booking.end_date
+      -#     %td.has-text-centered= booking.end_time.strftime("%I:%M %p")
+      -#     %td.has-text-centered= booking.next_location
+      -#     %td.has-text-centered= booking.reason
+      -#     %td.has-text-centered= link_to booking.user.givenname, booking.user
+      -#     %td
+      -#       .field.is-grouped.is-grouped-centered
+      -#         %p.control
+      -#           = simple_form_for(booking) do |f|
+      -#             = f.submit 'Accept', class: 'button is-block is-success'
+      -#             = f.hidden_field :status, value: 2
+      -#         %p.control
+      -#           = simple_form_for(booking) do |f|
+      -#             = f.submit 'Reject  ', class: 'button is-block is-danger'
+      -#             = f.hidden_field :status, value: 5
 

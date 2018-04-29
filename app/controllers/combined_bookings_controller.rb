@@ -4,11 +4,46 @@ class CombinedBookingsController < ApplicationController
   # before_action :set_user, only: %i[show edit update destroy]
   # authorize_resource
 
+  # Set booking as accepted
+  def set_booking_accepted
+    @bookings = Booking.where(combined_booking_id: params[:id])
+    @bookings.each do |booking|
+      next if booking.status != 1
+      booking.status = 2
+      if booking.save
+        Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
+        UserMailer.booking_approved(booking).deliver
+      end
+    end
+    combined_booking = CombinedBooking.find(params[:id])
+    combined_booking.status = 2
+    if combined_booking.save
+      redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
+    end
+  end
+
+  # Set booking as rejected
+  def set_booking_rejected
+    @bookings = Booking.where(combined_booking_id: params[:id])
+    @bookings.each do |booking|
+      next if booking.status != 1
+      booking.status = 5
+      if booking.save
+        Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'AM')
+        UserMailer.booking_rejected(booking).deliver
+      end
+    end
+    combined_booking = CombinedBooking.find(params[:id])
+    combined_booking.status = 5
+    if combined_booking.save
+      redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
+    end
+  end
+
   # Set booking as cancelled
   def set_booking_cancelled
     @bookings = Booking.where(combined_booking_id: params[:id])
     @bookings.each do |booking|
-      puts booking.id
       booking.status = 6
       if booking.save
         Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'AM')
@@ -18,16 +53,8 @@ class CombinedBookingsController < ApplicationController
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 6
     if combined_booking.save
-      redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
+      redirect_to bookings_path, notice: 'Remaining bookings were successfully cancelled.'
     end
-  end
-
-  # GET /bookings/1/booking_returned
-  def booking_returned
-    @booking = Booking.find_by_id(params[:id])
-    @bookings = Booking.where(combined_booking_id: params[:id])
-    @booking_nums = @bookings.length
-    @item = @bookings.first.item
   end
 
   # PUT /bookings/1/set_booking_returned
@@ -45,7 +72,7 @@ class CombinedBookingsController < ApplicationController
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 4
     if combined_booking.save
-      redirect_to bookings_path, notice: 'Remaining items were returned'
+      redirect_to bookings_path, notice: 'Remaining items were successfully returned.'
     end
   end
 

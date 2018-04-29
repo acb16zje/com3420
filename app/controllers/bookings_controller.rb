@@ -9,11 +9,13 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @combined_bookings = CombinedBooking.where(user_id: current_user.id)@bookings = Booking.where('user_id = ?', current_user.id)
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id)
+    @bookings = Booking.where('user_id = ?', current_user.id)
   end
 
   # GET /bookings/requests
   def requests
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id,status: 1)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
   end
 
