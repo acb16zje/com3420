@@ -38,7 +38,7 @@ class Ability
     if user.permission_id == 2
       can %i[edit update], Item, user_id: user.id
       can %i[read create], Item
-      can :manage, Booking
+      can :manage, Booking, user_id: user.id
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
       can :manage, UserHomeCategory

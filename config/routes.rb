@@ -40,14 +40,15 @@ Rails.application.routes.draw do
 
     get 'import', on: :collection
     post 'import_file', on: :collection
-    get 'add_peripheral_option', on: :member
-    get 'choose_peripheral', on: :member
-    post 'add_peripheral', on: :member
     get 'manager', on: :collection
     put 'update_manager_multiple', on: :collection
     post 'change_manager_multiple', on: :collection
     put 'update_manager_multiple_and_delete', on: :collection
     get 'change_manager_multiple_and_delete', on: :collection
+
+    get 'add_peripheral_option', on: :member
+    get 'choose_peripheral', on: :member
+    post 'add_peripheral', on: :member
   end
 
   resources :notifications do
