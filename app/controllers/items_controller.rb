@@ -2,7 +2,7 @@ require 'irb'
 
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # GET /items
   def index

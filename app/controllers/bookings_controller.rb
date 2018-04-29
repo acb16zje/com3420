@@ -2,7 +2,7 @@ require 'irb'
 
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # Booking status {1: Pending, 2: Accepted, 3: Ongoing, 4: Completed,
   # 5: Rejected, 6: Cancelled, 7: Late}

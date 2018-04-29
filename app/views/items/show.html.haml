@@ -123,7 +123,7 @@
 
     %br
     %br
-    - if @item.user_id == current_user.id || can?(:manage, :all)
+    - if @item.user_id == current_user.id || current_user.permission_id == 3
       %p.title.has-text-centered Bookings History
       %table#bookings.table.is-striped.is-bordered
         %thead
