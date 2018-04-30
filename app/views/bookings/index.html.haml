@@ -32,7 +32,7 @@
                 = link_to set_booking_cancelled_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
                   %span.icon
                     %i.fas.fa-ban
-                  %span Cancel Booking
+                  %span Cancel remaining items
               - elsif (combined_booking.status == 3) || (combined_booking.status == 7)
                 = link_to set_booking_returned_combined_booking_path(combined_booking), data: { confirm: 'Are you sure? If you would like to change any item conditions, please return them separately.' }, method: :put, class: 'button is-link' do
                   %span.icon

@@ -40,6 +40,8 @@ class Ability
       can :manage, UserHomeCategory
       can :manage, User
       can :manage, Booking, user_id: user.id
+      can :update, Booking
+      can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking
     end
 
     # Asset Manager
@@ -50,6 +52,7 @@ class Ability
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
       can :manage, UserHomeCategory
+      can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking
     end
 
     # User
@@ -59,6 +62,7 @@ class Ability
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
       can :manage, UserHomeCategory
+      can %i[set_booking_returned set_booking_cancelled], CombinedBooking
     end
   end
 end

@@ -4,6 +4,7 @@ require 'spec_helper'
 describe 'Managing bookings', js: true do
   specify 'Viewing all booking status pages' do
     visit 'bookings/requests'
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:accepted_to_ongoing_booking)
     visit 'bookings/accepted'
     visit 'bookings/ongoing'
@@ -146,6 +147,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can edit my booking' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -155,12 +157,15 @@ describe 'Managing bookings', js: true do
   end
 
   specify "I cannot see bookings made for other users" do
+    FactoryBot.create(:user)
+    FactoryBot.create(:combined_booking_accepted_other)
     FactoryBot.create(:booking_today_all_day)
     visit '/bookings'
     expect(page).to have_content 'No data'
   end
 
   specify "I can see bookings made by me" do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -168,19 +173,66 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can cancel my booking' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:booking_today_all_day, :booking_and_item_belongs_to_same_user)
     visit '/bookings'
     find(:css, ".details-control").click
     click_link 'Cancel Booking'
+    expect(page).to have_content 'cancelled'
   end
 
   specify 'I can reject a booking' do
+    FactoryBot.create(:combined_booking_requested)
     FactoryBot.create(:booking_to_reject)
     visit '/bookings/requests'
-    click_button 'Reject'
+    find(:css, ".details-control").click
+    expect(page).to have_content 'Reject'
+    find(:css, "#reject_single_booking1").click
+    expect(page).to have_content 'No data'
+  end
+
+  specify 'I can reject a combined booking' do
+    FactoryBot.create(:combined_booking_requested)
+    FactoryBot.create(:booking_to_reject)
+    FactoryBot.create(:booking_to_reject_2)
+    visit '/bookings/requests'
+    click_link 'Reject remaining bookings'
+    visit '/bookings/rejected'
+    expect(page).to_not have_content 'No data'
+  end
+
+  specify 'I can accept a combined booking' do
+    FactoryBot.create(:combined_booking_requested)
+    FactoryBot.create(:booking_to_reject)
+    FactoryBot.create(:booking_to_reject_2)
+    visit '/bookings/requests'
+    click_link 'Accept remaining bookings'
+    visit '/bookings/accepted'
+    expect(page).to_not have_content 'No data'
+  end
+
+  specify 'I can return a combined booking' do
+    FactoryBot.create(:combined_booking_ongoing)
+    FactoryBot.create(:ongoing_booking)
+    FactoryBot.create(:ongoing_booking_2)
+    visit '/bookings'
+    click_link 'Return remaining items'
+    visit '/bookings'
+    expect(page).to_not have_content 'Return remaining items'
+  end
+
+  specify 'I can cancel a combined booking' do
+    FactoryBot.create(:combined_booking_accepted)
+    FactoryBot.create(:accepted_to_ongoing_booking)
+    FactoryBot.create(:accepted_to_ongoing_booking_2)
+    visit '/bookings/'
+    click_link 'Cancel remaining items'
+    visit '/bookings/'
+    expect(page).to_not have_content 'Cancel remaining items'
   end
 
   specify 'I can return my item as like new' do
+    FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:ongoing_booking)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -189,6 +241,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can return my item as damaged' do
+    FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:ongoing_booking)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -199,6 +252,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can return item owned by other' do
+    FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:ongoing_booking_other)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -207,6 +261,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can return item owned by other as damaged' do
+    FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:ongoing_booking_other)
     visit '/bookings'
     find(:css, ".details-control").click
@@ -216,6 +271,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'Remind user that their booking ends soon' do
+    FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:due_booking_other)
 
     bookings = Booking.where('status = 3 AND end_datetime < ?', (DateTime.now + 3.days).strftime("%Y-%m-%d %H:%M:%S"))
@@ -225,6 +281,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'Remind user of late booking return' do
+    FactoryBot.create(:combined_booking_late)
     FactoryBot.create(:overdue_booking_other)
 
     bookings = Booking.where('status = 7')
@@ -237,28 +294,35 @@ describe 'Managing bookings', js: true do
 
   # Ajax calls to controller testing
   specify 'single booking multiple day 12am' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:single_booking_multiple_day_12am)
     visit '/items/1/bookings/new'
   end
 
   specify 'single booking multiple day' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:single_booking_multiple_day)
     visit '/items/1/bookings/new'
   end
 
   specify 'fully booked days multi 12am' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:fully_booked_days_multi_12am)
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:fully_booked_days_multi_1)
     visit '/items/1/bookings/new'
   end
 
   specify 'fully booked days multi' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:fully_booked_days_multi_2)
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:fully_booked_days_multi_3)
     visit '/items/1/bookings/new'
   end
 
   specify 'disable start time, selected start date is booked as start date, booking start date != end date' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:disable_start_time)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow
@@ -266,6 +330,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'disable start time, selected start date is booked as start date, booking start date = end date' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:disable_start_time, :start_as_start_and_start_equal_end)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow
@@ -273,6 +338,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'disable start time, selected start date is booked as end date' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:disable_start_time, :start_as_end)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow
@@ -280,6 +346,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'max end time, start date < end date' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:max_end_time)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 10, min: 0})
@@ -290,6 +357,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'max end time, start date = end date' do
+    FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:max_end_time, :start_equal_end)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 10, min: 0})

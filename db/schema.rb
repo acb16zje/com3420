@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
 
   create_table "combined_bookings", force: :cascade do |t|
     t.integer "status"
+    t.integer "owner_id"
     t.bigint "user_id"
     t.index ["user_id"], name: "index_combined_bookings_on_user_id"
   end

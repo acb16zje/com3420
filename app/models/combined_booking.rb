@@ -2,9 +2,10 @@
 #
 # Table name: combined_bookings
 #
-#  id      :integer          not null, primary key
-#  status  :integer
-#  user_id :integer
+#  id       :integer          not null, primary key
+#  status   :integer
+#  owner_id :integer
+#  user_id  :integer
 #
 # Indexes
 #

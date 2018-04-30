@@ -1,8 +1,7 @@
 require 'irb'
 
 class CombinedBookingsController < ApplicationController
-  # before_action :set_user, only: %i[show edit update destroy]
-  # load_and_authorize_resource
+  load_and_authorize_resource
 
   # Set booking as accepted
   def set_booking_accepted
@@ -74,17 +73,5 @@ class CombinedBookingsController < ApplicationController
     if combined_booking.save
       redirect_to bookings_path, notice: 'Remaining items were successfully returned.'
     end
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_user
-    @user = User.find(params[:id])
-  end
-
-  # Only allow a trusted parameter "white list" through.
-  def user_params
-    params.require(:user).except(:bunny).permit!
   end
 end

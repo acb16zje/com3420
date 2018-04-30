@@ -87,11 +87,11 @@
                       .field.is-grouped.is-grouped-centered
                         %p.control
                           = simple_form_for(booking) do |f|
-                            = f.submit 'Accept', class: 'button is-block is-success'
+                            = f.submit 'Accept', class: 'button is-block is-success', id: "accept_single_booking#{booking.id}"
                             = f.hidden_field :status, value: 2
                         %p.control
                           = simple_form_for(booking) do |f|
-                            = f.submit 'Reject', class: 'button is-block is-danger'
+                            = f.submit 'Reject', class: 'button is-block is-danger', id: "reject_single_booking#{booking.id}"
                             = f.hidden_field :status, value: 5
       -# - @bookings.each do |booking|
       -#   %tr

@@ -15,7 +15,7 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @combined_bookings = CombinedBooking.where(user_id: current_user.id,status: 1)
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id,status: 1)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
   end
 
@@ -86,31 +86,19 @@ class BookingsController < ApplicationController
 
     if item.user_id == current_user.id
       @booking.status = 2
-      combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id)
+      combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
     else
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       UserMailer.user_booking_requested(@booking).deliver
       UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
-      combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id)
+      combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
     end
 
     @booking.combined_booking_id = combined_booking.id
     peripherals = params[:booking][:peripherals]
-
-    # Changing the peripherals array into a string to be saved
-    # if peripherals.blank?
-    #   @booking.peripherals = nil
-    # else
-    #   peripherals_string = ''
-    #   peripherals.each do |peripheral|
-    #     next if peripheral == ''
-    #     peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
-    #   end
-    #   @booking.peripherals = peripherals_string[1..-1]
-    # end
 
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
@@ -156,7 +144,16 @@ class BookingsController < ApplicationController
         Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
         UserMailer.booking_rejected(@booking).deliver
       end
-
+      
+      combined_booking = CombinedBooking.find(@booking.combined_booking_id)
+      if combined_booking.bookings.where(status: 1).blank?
+        if combined_booking.bookings.where(status: 2).blank?
+          combined_booking.status = 5
+        else
+          combined_booking.status = 2
+        end
+        combined_booking.save
+      end
       redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
     end
   end
@@ -204,7 +201,7 @@ class BookingsController < ApplicationController
       elsif (item.condition == 'Damaged') || (item.condition == 'Missing')
         redirect_to bookings_path, notice: 'We have logged the issue and your item has been returned'
       else
-        redirect_to ibookings_pathtem, notice: 'Thank you. Your item has been returned'
+        redirect_to bookings_path, notice: 'Thank you. Your item has been returned'
       end
     end
   end
