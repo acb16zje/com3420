@@ -92,7 +92,6 @@ describe 'Managing accounts' do
     click_link('view_user_adm1usr')
     expect(page).to have_content 'adm1usr'
     click_link('Edit Details')
-    expect(page).to have_content 'Delete'
     click_link('Delete')
     expect(page).to have_content 'Transfer'
     click_button 'Save changes'

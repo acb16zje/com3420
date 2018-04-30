@@ -78,6 +78,7 @@ FactoryBot.define do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
+    has_peripheral 0
     association :user, factory: :admin
     association :category, factory: :laptop_category
   end

@@ -2,7 +2,7 @@ require 'irb'
 
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
-  load_and_authorize_resource
+  authorize_resource
 
   # GET /items
   def index
@@ -31,7 +31,6 @@ class ItemsController < ApplicationController
   def show
     @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
     @peripherals = Item.where('items_id = ?', @item.id)
-
   end
 
   # GET /items/1/add_peripheral_option
@@ -163,8 +162,7 @@ class ItemsController < ApplicationController
   def change_manager_multiple_and_delete
     @item = Item.new
     @user = User.find_by_id(params[:id])
-    @allowed_user = User.where('id <> ?', params[:id])
-    @users = User.where('permission_id > ?', 1)
+    @allowed_user = User.where('id <> ? and permission_id > 1', params[:id])
   end
 
   # POST /items/change_manager_multiple

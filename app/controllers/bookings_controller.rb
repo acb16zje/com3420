@@ -21,27 +21,31 @@ class BookingsController < ApplicationController
 
   # GET /bookings/accepted
   def accepted
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 2)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 2', current_user.id)
   end
 
   # GET /bookings/ongoing
   def ongoing
-    # Get current date/time
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 3)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
   end
 
   # GET /bookings/completed
   def completed
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 4)
     @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
   end
 
   # GET /bookings/rejected
   def rejected
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 5)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
   end
 
   # GET /bookings/late
   def late
+    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 7)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
   end
 
@@ -171,7 +175,6 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/booking_returned
   def booking_returned
-    @booking = Booking.find_by_id(params[:id])
     @item = @booking.item
   end
 
