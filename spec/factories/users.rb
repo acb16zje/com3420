@@ -47,7 +47,7 @@ FactoryBot.define do
   end
 
   factory :admin, class: 'User' do
-    sequence(:email) {|n| "exampleadminclear#{n}@sheffield.ac.uk"}
+    sequence(:email) {|n| "exampleadmin#{n}@sheffield.ac.uk"}
     givenname 'Example'
     sn 'Admin'
     permission_id 3

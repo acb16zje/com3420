@@ -321,10 +321,9 @@ $(document).ready(function () {
     });
 
     $("#bookings").DataTable({
-        columnDefs: [
-            { orderable: false, targets: '_all' }
-        ],
-        "order": [[ 1, 'desc' ]],
+        columnDefs: [{
+            orderable: false, targets: '_all'
+        }],
         "drawCallback": function (settings) {
             if (!$(this).parent().hasClass("table-is-responsive")) {
                 $(this).wrap('<div class="table-is-responsive"></div>');
@@ -372,11 +371,11 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 
-    endTime.change(function() {
+    endTime.change(function () {
         $('#peripherals').empty();
     });
 
-    $('#peripherals').change(function() {
+    $('#peripherals').change(function () {
         if (endTime.val()) {
             $.ajax({
                 type: "GET",

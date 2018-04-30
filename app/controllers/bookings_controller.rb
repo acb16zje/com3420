@@ -174,7 +174,6 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/booking_returned
   def booking_returned
-    @booking = Booking.find_by_id(params[:id])
     @item = @booking.item
   end
 

@@ -53,7 +53,7 @@ class CategoriesController < ApplicationController
 
     # Checks whether the category already exists
     if Category.exists?(name: @category.name.titleize.strip)
-      redirect_to request.referrer, alert: 'Category already exists.'
+      redirect_to new_category_path, alert: 'Category already exists.'
     else
       if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
         @category.name = @category.name.titleize.strip
