@@ -310,7 +310,7 @@ $(document).ready(function () {
     });
 
     // Datatable
-    $("#users, #categories, #bookings_other").each(function () {
+    $("#users, #categories").each(function () {
         $(this).DataTable({
             "drawCallback": function (settings) {
                 if (!$(this).parent().hasClass("table-is-responsive")) {
@@ -320,18 +320,21 @@ $(document).ready(function () {
         });
     });
 
-    $("#bookings").DataTable({
-        columnDefs: [{
-            orderable: false, targets: '_all'
-        }],
-        "drawCallback": function (settings) {
-            if (!$(this).parent().hasClass("table-is-responsive")) {
-                $(this).wrap('<div class="table-is-responsive"></div>');
+    $("#bookings, #bookings_other").each(function () {
+        $(this).DataTable({
+            columnDefs: [{
+                orderable: false,
+                targets: '_all'
+            }],
+            "drawCallback": function (settings) {
+                if (!$(this).parent().hasClass("table-is-responsive")) {
+                    $(this).wrap('<div class="table-is-responsive"></div>');
+                }
             }
-        }
+        });
     });
 
-    $("#bookings_other_wrapper").removeClass("container");
+    // $("#bookings_other_wrapper").removeClass("container");
 
     // Datatable details dropdown
     var details = getAll('.details');

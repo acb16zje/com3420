@@ -15,33 +15,37 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @combined_bookings = CombinedBooking.where(user_id: current_user.id,status: 1)
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 1)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 1', current_user.id)
   end
 
   # GET /bookings/accepted
   def accepted
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 2)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 2', current_user.id)
   end
 
   # GET /bookings/ongoing
   def ongoing
-    # Get current date/time
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 3)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 3', current_user.id)
   end
 
   # GET /bookings/completed
   def completed
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 4)
     @bookings = Booking.joins(:item).where('items.user_id = ? and (bookings.status = 4 or bookings.status = 6)', current_user.id)
   end
 
   # GET /bookings/rejected
   def rejected
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 5)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 5', current_user.id)
   end
 
   # GET /bookings/late
   def late
+    @combined_bookings = CombinedBooking.where(user_id: current_user.id, status: 7)
     @bookings = Booking.joins(:item).where('items.user_id = ? and bookings.status = 7', current_user.id)
   end
 

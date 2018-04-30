@@ -18,6 +18,7 @@
         %th Reason
         %th Booked By
         %th Action
+        %th.is-hidden Keywords
     %tbody
       - @combined_bookings.each do |combined_booking|
         %tr
@@ -38,6 +39,34 @@
                 %span.icon
                   %i.fas.fa-ban
                 %span Reject remaining bookings
+          %td.is-hidden
+            - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
+              #{booking.item.name} #{booking.item.serial}
+              - case booking.status
+              - when 1
+                %span.tag.is-warning.is-medium
+                  Pending
+              - when 2
+                %span.tag.is-success.is-medium
+                  Accepted
+              - when 3
+                %span.tag.is-info.is-medium
+                  Ongoing
+              - when 4
+                %span.tag.is-success.is-medium
+                  Completed
+              - when 5
+                %span.tag.is-danger.is-medium
+                  Rejected
+              - when 6
+                %span.tag.is-danger.is-medium
+                  Cancelled
+              - when 7
+                %span.tag.is-danger.is-medium
+                  Late
+              - else
+                %span.tag.is-black.is-medium
+                  Unknown
 
         %tr.is-hidden{id: "row-#{combined_booking.id}"}
           %td.is-hidden
@@ -47,7 +76,8 @@
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td{:colspan => 8}
+          %td.is-hidden
+          %td{:colspan => 9}
             %table.table.is-striped.is-bordered
               %thead
                 %tr
