@@ -10,8 +10,8 @@
   %table#bookings_other.table.is-striped.is-bordered
     %thead
       %tr
+        %th Details
         %th ID
-        %th Asset
         %th Start Date - Start Time
         %th End Date - End Time
         %th Location
@@ -23,20 +23,20 @@
         %tr
           %td.details-control{"data-target" => "row-#{combined_booking.id}"}
           %td.has-text-centered= combined_booking.id
-          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d/%m/%y - %I:%M %p")
-          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d/%m/%y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d %b %Y - %I:%M %p")
+          %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.next_location
           %td.has-text-centered= combined_booking.bookings.first.reason
           %td.has-text-centered= link_to combined_booking.user.givenname, combined_booking.user
           %td
             .buttons.is-centered
-              = link_to set_booking_accepted_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
+              = link_to set_booking_accepted_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-success' do
+                %span.icon
+                  %i.fas.fa-check
+                %span Accept remaining bookings
+              = link_to set_booking_rejected_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
                 %span.icon
                   %i.fas.fa-ban
-                %span Accept remaining bookings
-              = link_to set_booking_rejected_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-link' do
-                %span.icon
-                  %i.fas.fa-redo
                 %span Reject remaining bookings
 
         %tr.is-hidden{id: "row-#{combined_booking.id}"}
@@ -45,8 +45,9 @@
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td.is-hidden  
-          %td{:colspan => 7}
+          %td.is-hidden
+          %td.is-hidden
+          %td{:colspan => 8}
             %table.table.is-striped.is-bordered
               %thead
                 %tr
