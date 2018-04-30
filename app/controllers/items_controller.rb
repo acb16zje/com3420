@@ -2,7 +2,7 @@ require 'irb'
 
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
-  authorize_resource
+  load_and_authorize_resource
 
   # GET /items
   def index
@@ -161,8 +161,8 @@ class ItemsController < ApplicationController
   # GET /items/change_manager_multiple
   def change_manager_multiple_and_delete
     @item = Item.new
-    @user = User.find_by_id(params[:id])
-    @allowed_user = User.where('id <> ? and permission_id > 1', params[:id])
+    @user = User.find_by_id(params[:user_id])
+    @allowed_user = User.where('id <> ? and permission_id > 1', params[:user_id])
   end
 
   # POST /items/change_manager_multiple
@@ -171,22 +171,16 @@ class ItemsController < ApplicationController
 
     @items.each do |item|
       item.user_id = params[:item][:user_id]
-      if !item.save
-        redirect_to manager_items_path(user_id: params[:item][:old_id]), notice: 'Not All Items Could Be Moved'
-      end
+
+      # unless item.save
+      #   redirect_to manager_items_path(user_id: params[:item][:old_id]), alert: 'Not All Items Could Be Moved'
+      # end
     end
-    puts ("Here----------------------------------")
-    puts (params[:item][:user_id])
+
     @user = User.find(params[:item][:old_id])
+
     if @user.destroy
-      puts "DELETED"
       redirect_to users_path, notice: 'User was successfully deleted.'
-
-    else
-      puts "NOT DELETED"
-
-      redirect_to users_path, notice: 'User was not deleted.'
-
     end
   end
 

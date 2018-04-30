@@ -41,7 +41,7 @@ FactoryBot.define do
 
   factory :combined_booking_accepted, class: "CombinedBooking" do
     status 2
-    user_id 1    
+    user_id 1
     owner_id 1
   end
 
@@ -53,14 +53,14 @@ FactoryBot.define do
 
   factory :combined_booking_ongoing, class: "CombinedBooking" do
     status 3
-    user_id 1   
-    owner_id 1 
+    user_id 1
+    owner_id 1
   end
 
   factory :combined_booking_late, class: "CombinedBooking" do
     status 7
-    user_id 1   
-    owner_id 1 
+    user_id 1
+    owner_id 1
   end
 
   factory :booking_today_all_day, class: "Booking" do
@@ -352,9 +352,9 @@ FactoryBot.define do
     start_time {"2000-01-01 13:00:00 UTC"}
     start_datetime {Date.tomorrow.to_s + ' ' + "13:00"}
 
-    end_date {Date.tomorrow + 1}
+    end_date {Date.tomorrow + 2}
     end_time {"20:00"}
-    end_datetime {(Date.tomorrow + 1).to_s + ' ' + "20:00"}
+    end_datetime {(Date.tomorrow + 2).to_s + ' ' + "20:00"}
 
     next_location "Diamond"
     status 2
@@ -369,9 +369,9 @@ FactoryBot.define do
     end
 
     trait :start_as_end do
-      start_date {Date.today - 1}
+      start_date {Date.today - 2}
       start_time {"2000-01-01 00:00:00 UTC"}
-      start_datetime {(Date.today - 1).to_s + ' ' + "00:00"}
+      start_datetime {(Date.today - 2).to_s + ' ' + "00:00"}
 
       end_date {Date.tomorrow}
       end_time {"20:00"}
@@ -385,9 +385,9 @@ FactoryBot.define do
     start_time {"2000-01-01 13:00:00 UTC"}
     start_datetime {Date.tomorrow.to_s + ' ' + "13:00"}
 
-    end_date {Date.tomorrow + 1}
+    end_date {Date.tomorrow + 2}
     end_time {"20:00"}
-    end_datetime {(Date.tomorrow + 1).to_s + ' ' + "20:00"}
+    end_datetime {(Date.tomorrow + 2).to_s + ' ' + "20:00"}
 
     next_location "Diamond"
     status 2
@@ -396,9 +396,9 @@ FactoryBot.define do
     association :item, factory: :gopro
 
     trait :start_equal_end do
-      start_date {Date.tomorrow + 1}
-      start_time {"2000-01-01 13:00:00 UTC"}
-      start_datetime {(Date.tomorrow + 1).to_s + ' ' + "13:00"}
+      start_date {Date.tomorrow + 2}
+      start_time {"2000-01-01 20:00:00 UTC"}
+      start_datetime {(Date.tomorrow + 2).to_s + ' ' + "20:00"}
     end
   end
 end

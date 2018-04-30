@@ -148,7 +148,7 @@ class BookingsController < ApplicationController
         Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
         UserMailer.booking_rejected(@booking).deliver
       end
-      
+
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
       if combined_booking.bookings.where(status: 1).blank?
         if combined_booking.bookings.where(status: 2).blank?
@@ -427,7 +427,7 @@ class BookingsController < ApplicationController
             from: [start_time.hour.to_s, start_time.min.to_s], to: [end_time.hour.to_s, end_time.min.to_s]
           )
         end
-      elsif end_time.day - start_time.day > 0
+      elsif (end_time.day - start_time.day).abs > 0
         # Selected start date is booked as end date
         time_to_disable.append(from: [0, 0], to: [end_time.hour.to_s, end_time.min.to_s])
       end

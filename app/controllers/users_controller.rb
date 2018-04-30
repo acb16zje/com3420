@@ -67,12 +67,10 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @items = Item.where(user_id: @user.id)
-
-    if @items.blank?
+    if @user.items.blank?
       redirect_to users_path, notice: 'User was successfully deleted.' if @user.destroy
     else
-      redirect_to change_manager_multiple_and_delete_items_path(id: @user.id)
+      redirect_to change_manager_multiple_and_delete_items_path(user_id: @user.id)
     end
   end
 

@@ -13,7 +13,7 @@
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.hidden_field :old_id, value: params[:id]
+                    = f.hidden_field :old_id, value: params[:user_id]
                     = f.association :user, label: false, input_html: {class: 'select2'}, collection: @allowed_user.map { |u| [u.givenname, u.id]}, include_blank: false
 
             .field.is-horizontal

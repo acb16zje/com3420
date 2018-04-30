@@ -341,7 +341,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:combined_booking_accepted)
     FactoryBot.create(:disable_start_time, :start_as_end)
     visit '/items/1/bookings/new'
-    test_booking_date_start = DateTime.tomorrow
+    test_booking_date_start = DateTime.tomorrow.change({hour: 10, min: 0})
     page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}')")
   end
 
@@ -361,7 +361,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:max_end_time, :start_equal_end)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 10, min: 0})
-    test_booking_date_end = test_booking_date_start + 1.days
+    test_booking_date_end = DateTime.tomorrow.change({hour: 19, min: 0})
     page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}')")
     page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}')")
     page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}')")
