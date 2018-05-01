@@ -112,7 +112,7 @@
             .field.is-grouped.is-grouped-left
               .control
                 - if @item.items_id.blank?
-                  = link_to 'Edit', edit_item_path(@item, is_peripheral: false), class: 'button is-link'
+                  = link_to 'Edit', edit_item_path, class: 'button is-link'
                 - else
                   = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link'
           .field.is-grouped.is-grouped-right

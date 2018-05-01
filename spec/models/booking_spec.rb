@@ -35,5 +35,30 @@
 require 'rails_helper'
 
 RSpec.describe Booking, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "Validations" do
+    it "is not valid without a user" do
+      uhc = FactoryBot.create :user_home_category
+      uhc.user = nil
+      expect(uhc).to_not be_valid
+    end
+
+    it "is not valid without a category" do
+      uhc = FactoryBot.create :user_home_category
+      uhc.user = nil
+      expect(uhc).to_not be_valid
+    end
+  end
+
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      booking = Booking.new(
+        start_date: '2018-04-28', start_time: '01:00:00', end_date: '2018-04-29', end_time: '03:00:00',
+        start_datetime: '2018-04-28 01:00:00', end_datetime: '2018-04-29 03:00:00', reason: 'None', next_location: 'Diamond',
+        status: 1, peripherals: [""])
+      expect(booking.start_datetime).to eq '2018-04-28 01:00:00'
+      expect(booking.end_datetime).to eq '2018-04-29 03:00:00'
+      expect(booking.reason).to eq 'None'
+      expect(booking.next_location).to eq 'Diamond'
+    end
+  end
 end

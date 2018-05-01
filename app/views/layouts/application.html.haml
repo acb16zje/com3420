@@ -88,7 +88,7 @@
               %a.navbar-link
                 Create
               .navbar-dropdown.is-boxed.is-right
-                = link_to 'Asset', new_item_path(is_peripheral: false), class: "navbar-item #{current_class?(new_item_path(is_peripheral: false))}"
+                = link_to 'Asset', new_item_path, class: "navbar-item #{current_class?(new_item_path)}"
                 = link_to 'Peripheral', new_item_path(is_peripheral: true), class: "navbar-item #{current_class?(new_item_path(is_peripheral: true))}"
                 = link_to 'Category', new_category_path, class: "navbar-item #{current_class?(new_category_path)}"
                 - if can?(:manage, User)

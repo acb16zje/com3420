@@ -4,7 +4,7 @@
 .container.is-fluid
   = render partial: 'layouts/flash'
 
-  %p.title.has-text-centered Current assets
+  %p.title.has-text-centered All Assets
   - if can?(:create, Item)
     .field.is-grouped{style: 'justify-content: center'}
       %p.control

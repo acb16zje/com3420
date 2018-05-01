@@ -81,7 +81,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "keywords"
     t.string "po_number"
     t.string "condition_info"
-    t.boolean "has_peripheral"
     t.string "comment"
     t.date "retired_date"
     t.datetime "created_at", null: false

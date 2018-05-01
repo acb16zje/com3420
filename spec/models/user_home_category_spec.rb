@@ -41,4 +41,11 @@ RSpec.describe UserHomeCategory, type: :model do
     it { should belong_to(:category)}
   end
 
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      uhc = UserHomeCategory.new(user_id: 1, category_id: 1)
+      expect(uhc.user_id).to eq 1
+      expect(uhc.category_id).to eq 1
+    end
+  end
 end

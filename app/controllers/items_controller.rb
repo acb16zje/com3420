@@ -58,9 +58,8 @@ class ItemsController < ApplicationController
     @peripheral = Item.where('serial = ?', params[:peripheral_asset]).first
     @peripheral.items_id = @item.id
     @peripheral.save
-    @item.has_peripheral = true
     @item.save
-    redirect_to @item
+    redirect_to @item, notice: 'Peripheral was successfully added'
   end
 
   # GET /items/new
@@ -99,7 +98,6 @@ class ItemsController < ApplicationController
     # Getting the category for the attached item
     unless @item.items_id.blank?
       parent = Item.where('id = ?', @item.items_id).first
-      parent.has_peripheral = true
       parent.save
       category = Category.where('name = ?', (parent.category.name + ' - Peripherals')).first
       @item.category_id = category.id
@@ -114,8 +112,10 @@ class ItemsController < ApplicationController
 
   # PATCH/PUT /items/1
   def update
-    begin @item.update(item_params)
+    begin
+      @item.update(item_params)
       @item.location = params[:item][:location].titleize.strip
+
 
       if params[:item][:items_id].blank?
         @item.items_id = nil

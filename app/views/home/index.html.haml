@@ -25,22 +25,23 @@
         .columns
           - slice.each do |usercat|
             .column
-              .card
-                .card-content.hero.is-small.is-light
-                  .columns.hero-body
-                    .column.has-text-centered
-                      - if usercat.category.icon?
-                        %span.icon.is-large
-                          = raw "#{usercat.category.icon}"
-                      - else
-                        %span.icon.is-large
-                          %i.far.fa-question-circle.fa-6x
-                %footer.card-footer
-                  %p.card-footer-item
-                    %span
-                      View
-                      = link_to items_path(category_name: usercat.category.name) do
-                        = usercat.category.name
+              = link_to items_path(category_name: usercat.category.name) do
+                .card
+                  .card-content.hero.is-small.is-light
+                    .columns.hero-body
+                      .column.has-text-centered
+                        - if usercat.category.icon?
+                          %span.icon.is-large
+                            = raw "#{usercat.category.icon}"
+                        - else
+                          %span.icon.is-large
+                            %i.far.fa-question-circle.fa-6x
+                  %footer.card-footer
+                    %p.card-footer-item
+                      %span
+                        View
+                        = link_to items_path(category_name: usercat.category.name) do
+                          = usercat.category.name
           .column
             .card
               .card-content.hero.is-small.is-light
@@ -51,22 +52,23 @@
               %footer.card-footer
                 %p.card-footer-item
                   %span
-                    = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
+                    = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
           - for _ in 0...placeholder - 1
             .column
     - else
       .columns
         .column
-          .card
-            .card-content.hero.is-small.is-light
-              .columns.hero-body
-                .column.has-text-centered
-                  %span.icon.is-large
-                    %i.fas.fa-plus.fa-7x
-            %footer.card-footer
-              %p.card-footer-item
-                %span
-                  = link_to 'Add Favourite', new_user_home_category_path, class:'button is-link is-block is-small'
+          = link_to new_user_home_category_path do
+            .card
+              .card-content.hero.is-small.is-light
+                .columns.hero-body
+                  .column.has-text-centered
+                    %span.icon.is-large
+                      %i.fas.fa-plus.fa-7x
+              %footer.card-footer
+                %p.card-footer-item
+                  %span
+                    = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
         - for _ in 0..3
           .column
 

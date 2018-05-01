@@ -23,7 +23,7 @@
                 .field-body
                   .field.is-grouped
                     .control.is-expanded
-                      = f.select :items_id, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, @item.parent.serial), {include_blank: 'None'}, {class: 'select2'}
+                      = f.select :items_id, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.id] }, @item.parent.id), {include_blank: 'None'}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral] == "true"

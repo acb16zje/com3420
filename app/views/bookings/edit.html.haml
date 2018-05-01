@@ -156,7 +156,7 @@
                 .field
                   %p.control.is-expanded
                     = f.input :reason, label: false, placeholder: 'Reason', input_html: {class: 'input', type: 'text'}
-            - if @item.has_peripheral
+            - unless @peripherals.blank?
               .field.is-horizontal
                 .field-label.is-normal
                   %label.label Peripherals

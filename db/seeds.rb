@@ -24,8 +24,7 @@ Item.create!(user_id: 1,
             model: 'Hero 5',
             serial: 'GPH5',
             acquisition_date: '2018-02-09',
-            purchase_price: 100.1,
-            has_peripheral: 1)
+            purchase_price: 100.1)
 
 # 2
 Item.create(user_id: 1,
@@ -38,8 +37,7 @@ Item.create(user_id: 1,
             model: 'Flash Card',
             serial: 'SD322',
             acquisition_date: '2018-03-09',
-            purchase_price: 10.1,
-            has_peripheral: 0)
+            purchase_price: 10.1)
 
 # 3
 Item.create(user_id: 1,
@@ -52,8 +50,7 @@ Item.create(user_id: 1,
             model: 'Flash Card',
             serial: 'SD644',
             acquisition_date: '2018-03-09',
-            purchase_price: 10.1,
-            has_peripheral: 0)
+            purchase_price: 10.1)
 
 # 4
 Item.create(user_id: 1,
@@ -65,8 +62,7 @@ Item.create(user_id: 1,
             model: 'FLIR ONE PRO',
             serial: 'FLR322',
             acquisition_date: '2018-03-22',
-            purchase_price: 349.00,
-            has_peripheral: 0)
+            purchase_price: 349.00)
 
 # 5
 Item.create(user_id: 2,
@@ -78,8 +74,7 @@ Item.create(user_id: 2,
             model: 'MacBookPro14,3',
             serial: 'MPTR212/A',
             acquisition_date: '2018-03-22',
-            purchase_price: 2349.00,
-            has_peripheral: 1)
+            purchase_price: 2349.00)
 
 # 6
 Item.create(user_id: 2,
@@ -92,6 +87,5 @@ Item.create(user_id: 2,
             model: 'Cable',
             serial: 'CC322',
             acquisition_date: '2018-03-22',
-            purchase_price: 9.00,
-            has_peripheral: 0)
+            purchase_price: 9.00)
 

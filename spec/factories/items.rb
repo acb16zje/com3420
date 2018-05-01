@@ -15,7 +15,6 @@
 #  keywords         :string
 #  po_number        :string
 #  condition_info   :string
-#  has_peripheral   :boolean
 #  comment          :string
 #  retired_date     :date
 #  created_at       :datetime         not null
@@ -55,7 +54,6 @@ FactoryBot.define do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
-    has_peripheral 1
     user_id {User.find(1).id}
     association :category, factory: :laptop_category
 
@@ -68,7 +66,6 @@ FactoryBot.define do
     name 'Charging Cable'
     serial 'CC322'
     location 'Diamond'
-    has_peripheral 0
     items_id 1
     user_id {User.find(1).id}
     association :category, factory: :laptop_peripheral_category
@@ -78,7 +75,6 @@ FactoryBot.define do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
-    has_peripheral 0
     association :user, factory: :admin
     association :category, factory: :laptop_category
   end
@@ -87,7 +83,6 @@ FactoryBot.define do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
-    has_peripheral 1
     association :user, factory: :admin
     association :category, factory: :laptop_category
   end
@@ -96,7 +91,6 @@ FactoryBot.define do
     name 'Charging Cable'
     serial 'CC322'
     location 'Diamond'
-    has_peripheral 0
     items_id 1
     association :user, factory: :admin
     association :category, factory: :laptop_peripheral_category

@@ -95,7 +95,7 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1
   def update
     begin @category.update(category_params)
-          redirect_to @category, notice: 'Category was successfully updated.'
+      redirect_to @category, notice: 'Category was successfully updated.'
     rescue
       redirect_to request.referrer, alert: 'Category already exist.'
     end

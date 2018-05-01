@@ -15,7 +15,6 @@
 #  keywords         :string
 #  po_number        :string
 #  condition_info   :string
-#  has_peripheral   :boolean
 #  comment          :string
 #  retired_date     :date
 #  created_at       :datetime         not null

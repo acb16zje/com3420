@@ -15,7 +15,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :keywords
       t.string :po_number
       t.string :condition_info
-      t.boolean :has_peripheral
       t.string :comment
       t.date :retired_date
 
