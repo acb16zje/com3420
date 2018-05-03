@@ -189,7 +189,7 @@ class BookingsController < ApplicationController
         combined_booking.status = 4
         combined_booking.save
       end
-      
+
       Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
       UserMailer.manager_asset_returned(@booking).deliver
 
@@ -483,4 +483,10 @@ class BookingsController < ApplicationController
   def booking_params
     params.require(:booking).permit!
   end
+
+  def get_parent_id(combined_booking_id)
+    return Booking.where(combined_booking_id: combined_booking_id).minimum(:id)
+  end
+
+  helper_method :get_parent_id
 end
