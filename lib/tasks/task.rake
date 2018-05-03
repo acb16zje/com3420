@@ -54,6 +54,7 @@ task update_booking_status_to_late: :environment do
     Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
     UserMailer.asset_overdue(b).deliver_now
     b.status = 7
+    b.save
     combined_booking = CombinedBooking.find(b.combined_booking_id)
     if combined_booking.status == 3
       combined_booking.status = 7

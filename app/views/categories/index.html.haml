@@ -22,7 +22,7 @@
             .field.is-grouped.is-grouped-centered
               - if !category.is_peripheral && !category.has_peripheral
                 %p.control
-                  = link_to new_peripheral_category_path(:id => category.id), method: :post, data: { confirm: 'Are you sure?' }, class: 'button is-primary', id: "new_peripheral_category_#{category.id}" do
+                  = link_to new_peripheral_category_path(id: category.id), method: :post, data: { confirm: 'Are you sure you want to create a Peripheral category for this category?' }, class: 'button is-primary', id: "new_peripheral_category_#{category.id}" do
                     %span.icon
                       %i.fas.fa-plus
                     %span Create Peripheral Category

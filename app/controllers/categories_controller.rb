@@ -55,7 +55,7 @@ class CategoriesController < ApplicationController
     if Category.exists?(name: @category.name.titleize.strip)
       redirect_to new_category_path, alert: 'Category already exists.'
     else
-      if @category.name =~ /^(\w|\s|&|,|;|'){0,20}$/
+      if @category.name =~ /^(\w|\s|&|,|;|'){0,30}$/
         @category.name = @category.name.titleize.strip
 
         # Font awesome icon

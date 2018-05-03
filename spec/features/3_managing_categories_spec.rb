@@ -35,8 +35,7 @@ describe 'Managing categories' do
     click_link('Create Peripheral Category')
   end
 
-  specify 'I cannot create a category that has an invalid name', js: true do
-    page.execute_script("$('#category_name').attr('maxlength', 100)")
+  specify 'I cannot create a category that has an invalid name' do
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
     click_button('Create category')
     expect(page).to have_content 'Category name does not meet requirements.'
@@ -65,19 +64,6 @@ describe 'Managing categories' do
     expect(page).to have_content 'Category was successfully created.'
     expect(page).to have_content 'Cameras'
     expect(page).to have_content 'Cameras - Peripherals'
-  end
-
-  specify 'I can update a category' do
-    create_laptops
-    visit '/categories'
-    expect(page).to have_content 'Laptops'
-    click_link('Edit')
-    expect(page).to have_content 'Editing Laptops'
-    fill_in 'category_name', with: 'Cameras'
-    click_button('Save changes')
-    expect(page).to have_content 'Category was successfully updated'
-    expect(page).to have_content 'Cameras'
-    expect(page).to_not have_content 'Laptops'
   end
 
   specify 'I can update a category' do

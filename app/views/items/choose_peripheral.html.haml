@@ -4,25 +4,24 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Add peripheral for #{@i.name}
+        %h3.title Add peripheral for #{@item.name}
         .box
           = form_tag add_peripheral_item_path, method: :post do
-            %h4.title Assets
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Peripheral Asset
               .field-body
-                .field{style: 'margin: auto'}
+                .field
                   .control
-                    = select_tag 'peripheral_asset', options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }), class: 'select2'
+                    = select_tag 'peripheral_asset', options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }), class: 'select2', include_blank: 'None'
             %br
             %br
             .field.is-horizontal
               .field-label.has-text-left
-                -#Left empty for spacing
+                -# Left empty for spacing
               .field-body
                 .field.is-grouped.is-grouped-right
                   .control
-                    = link_to 'Cancel' , items_path, class: 'button is-light'
+                    = link_to 'Cancel', @item, class: 'button is-light'
                   .control
                     = submit_tag 'Add as Peripheral', class: 'button is-block is-link', id: 'submitButton'

@@ -4,7 +4,11 @@
 .container.is-fluid
   = render partial: 'layouts/flash'
 
-  %p.title.has-text-centered All Assets
+  %p.title.has-text-centered
+    - if params[:category_name].blank?
+      All Assets
+    - else
+      Showing results for search term "#{params[:category_name]}"
   - if can?(:create, Item)
     .field.is-grouped{style: 'justify-content: center'}
       %p.control

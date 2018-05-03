@@ -42,12 +42,12 @@ class ItemsController < ApplicationController
 
   # GET /items/1/choose_peripheral
   def choose_peripheral
-    @i = Item.find_by_id(params[:id])
+    @item = Item.find_by_id(params[:id])
 
-    if !@i.category.has_peripheral
-      render 'errors/error_404'
+    if @item.category.has_peripheral
+      @items = Item.where("(serial <> ?) AND (items_id IS NULL)", @item.serial)
     else
-      @items = Item.where("(serial <> ?) AND (items_id IS NULL) AND (user_id = ?)", @i.serial, current_user.id)
+      render 'errors/error_404'
     end
   end
 
@@ -55,10 +55,13 @@ class ItemsController < ApplicationController
   def add_peripheral
     @item = Item.find_by_id(params[:id])
 
-    @peripheral = Item.where('serial = ?', params[:peripheral_asset]).first
-    @peripheral.items_id = @item.id
-    @peripheral.save
-    @item.save
+    unless params[:peripheral_asset].blank?
+      @peripheral = Item.find_by_serial(params[:peripheral_asset])
+      @peripheral.items_id = @item.id
+      @peripheral.save
+      @item.save
+    end
+
     redirect_to @item, notice: 'Peripheral was successfully added'
   end
 
@@ -91,8 +94,9 @@ class ItemsController < ApplicationController
     @item.user_id = current_user.id
     @item.serial = params[:item][:serial].upcase
     @item.location = params[:item][:location].titleize
-    if !params[:item][:items_id].blank?
-      @item.items_id = Item.where('serial = ?',params[:item][:items_id]).first.id
+
+    unless params[:item][:items_id].blank?
+      @item.items_id = params[:item][:items_id]
     end
 
     # Getting the category for the attached item
@@ -142,7 +146,7 @@ class ItemsController < ApplicationController
   # GET /items/change_manager_multiple
   def change_manager_multiple
     @item = Item.new
-    @users = User.where('permission_id > ?', 1)
+    @allowed_user = User.where('id <> ? and permission_id > 1', current_user.id)
   end
 
   # POST /items/change_manager_multiple

@@ -25,7 +25,7 @@
                 .field-body
                   .field{style: 'margin: auto'}
                     .control
-                      = f.select :items_id, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }, params[:items_id]), {}, {class: 'select2'}
+                      = f.select :items_id, options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.id] }, params[:items_id]), {}, {class: 'select2'}
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral] == "true"
@@ -47,14 +47,13 @@
                   %p.control.is-expanded
                     = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
                   %p.help Put a temporary serial here if the asset has not been purchased yet
-            - unless params[:is_peripheral] == "true"
-              .field.is-horizontal
-                .field-label.is-normal
-                  %label.label Category*
-                .field-body
-                  .field{style: 'margin: auto'}
-                    .control
-                      = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
+            .field.is-horizontal
+              .field-label.is-normal
+                %label.label Category*
+              .field-body
+                .field{style: 'margin: auto'}
+                  .control
+                    = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Storage Location*
