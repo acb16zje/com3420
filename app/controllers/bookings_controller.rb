@@ -180,20 +180,26 @@ class BookingsController < ApplicationController
 
   # PUT /bookings/1/set_booking_returned
   def set_booking_returned
-    @booking = Booking.find(params[:id])
-    @booking.status = 4
+    booking = Booking.find(params[:id])
+    booking.status = 4
 
-    if @booking.save
-      Notification.create(recipient: @booking.user, action: 'returned', notifiable: @booking, context: 'AM')
+    if booking.save
+      combined_booking = CombinedBooking.find(booking.combined_booking_id)
+      if combined_booking.bookings.where(status: 3).blank?
+        combined_booking.status = 4
+        combined_booking.save
+      end
+      
+      Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
       UserMailer.manager_asset_returned(@booking).deliver
 
-      item = @booking.item
+      item = booking.item
       item.condition = params[:item][:condition]
       item.condition_info = params[:item][:condition_info]
 
       if (item.condition == 'Missing') || (item.condition == 'Damaged')
         Notification.create(recipient: item.user, action: 'reported', notifiable: item, context: 'AM')
-        UserMailer.manager_asset_issue(@booking.user, item).deliver
+        UserMailer.manager_asset_issue(booking.user, item).deliver
       end
 
       item.save
