@@ -237,7 +237,7 @@ describe 'Managing bookings', js: true do
     visit '/bookings'
     find(:css, ".details-control").click
     click_link 'Return Item'
-    click_button('Save changes')
+    click_button('Return Item')
   end
 
   specify 'I can return my item as damaged' do
@@ -247,7 +247,7 @@ describe 'Managing bookings', js: true do
     find(:css, ".details-control").click
     click_link 'Return Item'
     select('Damaged', from: 'item_condition')
-    click_button('Save changes')
+    click_button('Return Item')
     find(:css, ".notifications-bell").hover
   end
 
@@ -257,7 +257,7 @@ describe 'Managing bookings', js: true do
     visit '/bookings'
     find(:css, ".details-control").click
     click_link 'Return Item'
-    click_button('Save changes')
+    click_button('Return Item')
   end
 
   specify 'I can return item owned by other as damaged' do
@@ -267,7 +267,7 @@ describe 'Managing bookings', js: true do
     find(:css, ".details-control").click
     click_link 'Return Item'
     select('Damaged', from: 'item_condition')
-    click_button('Save changes')
+    click_button('Return Item')
   end
 
   specify 'Remind user that their booking ends soon' do

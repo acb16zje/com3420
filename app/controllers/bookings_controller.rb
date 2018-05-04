@@ -265,8 +265,8 @@ class BookingsController < ApplicationController
       "(status = 2 OR status = 3)
       AND item_id = '#{item_id}'
       AND (
-        (start_datetime < CAST ('#{start_datetime}' AS TIMESTAMP)
-        AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
+        (start_datetime <= CAST ('#{start_datetime}' AS TIMESTAMP)
+            AND end_datetime > CAST ('#{start_datetime}' AS TIMESTAMP))
         OR (start_datetime > CAST ('#{start_datetime}' AS TIMESTAMP)
             AND start_datetime < CAST ('#{end_datetime}' AS TIMESTAMP))
         OR (start_datetime = CAST ('#{start_datetime}' AS TIMESTAMP)

@@ -70,7 +70,7 @@ describe 'Managing assets' do
     expect(page).to have_content 'Manufacturer Apple'
   end
 
-  specify 'I can set an asset as retired and unset it' do
+  specify 'I can set an asset to retired and unset it' do
     create_cameras
     create_gopro
     click_link 'Edit'
@@ -81,7 +81,7 @@ describe 'Managing assets' do
     click_button 'Save changes'
   end
 
-  specify 'My assets does not show assets that do not belong to me' do
+  specify 'My Assets only show assets that belongs to me' do
     FactoryBot.create :admin
     FactoryBot.create :macbook_pro
     visit '/items/manager?user_id=2'
@@ -97,14 +97,6 @@ describe 'Managing assets' do
     fill_in 'item_serial', with: 'CC322'
     click_button 'Save changes'
     expect(page).to have_content 'Serial already exist'
-  end
-
-  specify 'I cannot edit an asset that does not belong to me' do
-    FactoryBot.create :laptop_admin
-    visit '/items/manager?user_id=2'
-    visit '/items'
-    expect(page).to have_content 'Macbook Pro 15-inch'
-    click_link('Macbook Pro 15-inch')
   end
 
   specify 'I can delete an asset' do
@@ -136,7 +128,7 @@ describe 'Managing assets' do
   specify 'I can transfer the ownership of my asset' do
     FactoryBot.create :laptop_category
     create_macbook_pro
-    create_weikin_user
+    create_weikin_admin
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
     click_link('My Assets')
@@ -179,7 +171,7 @@ describe 'Managing assets' do
     expect(page).to have_content 'Import was successful and no problems occured'
   end
 
-  specify 'I cannot import assets that are not in the correct format sucessfully' do
+  specify 'I cannot import assets that are not in the correct format successfully' do
     FactoryBot.create(:camera_category)
     FactoryBot.create(:camera_peripheral_category)
     FactoryBot.create(:data_logger_category)

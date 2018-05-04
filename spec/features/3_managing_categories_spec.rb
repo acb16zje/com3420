@@ -35,7 +35,8 @@ describe 'Managing categories' do
     click_link('Create Peripheral Category')
   end
 
-  specify 'I cannot create a category that has an invalid name' do
+  specify 'I cannot create a category that has an invalid name', js: true do
+    page.execute_script("$('#category_name').attr('maxlength', 100)")
     fill_in 'category_name', with: 'This category name is too long to meet requirements'
     click_button('Create category')
     expect(page).to have_content 'Category name does not meet requirements.'
