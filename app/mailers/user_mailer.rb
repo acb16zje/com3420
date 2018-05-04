@@ -38,6 +38,8 @@ class UserMailer < ApplicationMailer
 
   #Takes array of bookings - UPDATED
   def manager_booking_requested(bookings)
+    puts "ahsahdshsdahashd"
+    puts bookings
     @booking = bookings[0]
     @user = @booking.user
     @items = bookings.map {|b| b.item}
@@ -48,7 +50,7 @@ class UserMailer < ApplicationMailer
   end
 
   #Takes array of bookings - UPDATED
-  def manager_asset_returned(booking)
+  def manager_asset_returned(bookings)
     @booking = bookings[0]
     @user = @booking.user
     @items = bookings.map {|b| b.item}

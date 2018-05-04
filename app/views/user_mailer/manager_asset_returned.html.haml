@@ -54,7 +54,7 @@
               %tbody
                 - @items.each do |item|
                   %tr
-                    %td.has-text-centered= @item.id
+                    %td.has-text-centered= item.id
                     %td.has-text-centered= link_to item.name, item
                     %td.has-text-centered= item.serial
         %br
