@@ -8,14 +8,14 @@ class UserMailerPreview < ActionMailer::Preview
 
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/asset_due
   def asset_due
-    b = Booking.first
-    UserMailer.asset_due(b)
+    b = CombinedBooking.first
+    UserMailer.manager_booking_requested(b.sorted_bookings[0])
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/asset_overdue
   def asset_overdue
-    b = Booking.first
-    UserMailer.asset_overdue(b)
+    b = CombinedBooking.first
+    UserMailer.user_booking_requested(b)
   end
 
   # Preview this email at http://localhost:3000/rails/mailers/user_mailer/booking_approved

@@ -94,28 +94,23 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
   end
 
+  #Updated to take combined_booking
   def asset_due(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @manager = booking.item.user
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Return Due Soon: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Return Due Soon"
   end
 
   def asset_overdue(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @manager = booking.item.user
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Late For Return: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Late For Return"
   end
 
   def get_peripherals(booking)
