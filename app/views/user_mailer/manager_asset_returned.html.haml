@@ -14,7 +14,7 @@
         %h1.email-header-text
           Booking Returned
         %h2.email-subheading-text
-          #{@user.givenname} #{@user.sn} has returned #{@item.name}. You can view more details about the related booking below.
+          #{@user.givenname} #{@user.sn} has returned some of your items. You can view more details about the related booking below.
         %br
         %hr
         .body-box
@@ -54,7 +54,7 @@
               %tbody
                 - @items.each do |item|
                   %tr
-                    %td.has-text-centered= @item.id
+                    %td.has-text-centered= item.id
                     %td.has-text-centered= link_to item.name, item
                     %td.has-text-centered= item.serial
         %br

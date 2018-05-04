@@ -93,9 +93,6 @@ class BookingsController < ApplicationController
       combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
     else
-      Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
-      UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
       combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
@@ -131,7 +128,12 @@ class BookingsController < ApplicationController
           booking.save
         end
       end
-
+      Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
+      UserMailer.user_booking_requested(combined_booking).deliver
+      puts (combined_booking.sorted_bookings)
+      combined_booking.sorted_bookings.each do |m|
+        UserMailer.manager_booking_requested(m).deliver
+      end
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'
@@ -143,10 +145,10 @@ class BookingsController < ApplicationController
     if @booking.update(booking_params)
       if @booking.status == 2
         Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        UserMailer.booking_approved(@booking).deliver
+        UserMailer.booking_approved([@booking]).deliver
       elsif @booking.status == 5
         Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        UserMailer.booking_rejected(@booking).deliver
+        UserMailer.booking_rejected([@booking]).deliver
       end
 
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
@@ -168,7 +170,7 @@ class BookingsController < ApplicationController
     @booking.status = 6
     if @booking.save
       Notification.create(recipient: @booking.user, action: 'cancelled', notifiable: @booking, context: 'AM')
-      UserMailer.manager_booking_cancelled(@booking).deliver
+      UserMailer.manager_booking_cancelled([@booking]).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     end
   end
@@ -191,7 +193,7 @@ class BookingsController < ApplicationController
       end
 
       Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
-      UserMailer.manager_asset_returned(@booking).deliver
+      UserMailer.manager_asset_returned([@booking]).deliver
 
       item = booking.item
       item.condition = params[:item][:condition]

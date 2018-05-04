@@ -6,59 +6,58 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "AMRC - Welcome: #{user.givenname} #{user.sn}"
   end
 
-  def booking_approved(booking)
-    @booking = booking
-    @user = booking.user
-    @item = booking.item
-    @items = get_peripherals(booking)
+  def booking_approved(bookings)
+    @booking = bookings[0]
+    @user = @booking.user
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Confirmed: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Confirmed"
   end
 
+  #Updated CombinedBooking
   def booking_ongoing(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Started: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Started"
   end
 
+  #Takes CombinedBooking - UPDATED
   def user_booking_requested(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @items = get_peripherals(booking)
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Recieved: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Recieved"
   end
 
-  def manager_booking_requested(booking)
-    @booking = booking
+  #Takes array of bookings - UPDATED
+  def manager_booking_requested(bookings)
+    puts "ahsahdshsdahashd"
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
-    @items = get_peripherals(booking)
 
-    mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
+    mail to: @manager.email, subject: "AMRC - Booking Requested"
   end
 
-  def manager_asset_returned(booking)
-    @booking = booking
+  #Takes array of bookings - UPDATED
+  def manager_asset_returned(bookings)
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
-    @items = get_peripherals(booking)
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @manager.email, subject: "AMRC - Item Returned: #{@item.name}"
+    mail to: @manager.email, subject: "AMRC - Item Returned"
   end
 
   def manager_asset_issue(user, item)
@@ -71,59 +70,48 @@ class UserMailer < ApplicationMailer
     mail to: @manager.email, subject: "AMRC - Item Issue: #{@item.name}"
   end
 
-  def manager_booking_cancelled(booking)
-    @booking = booking
+  #Update list bookings
+  def manager_booking_cancelled(bookings)
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
-    @items = get_peripherals(booking)
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
+
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
+    mail to: @manager.email, subject: "AMRC - Booking Cancelled"
   end
 
-  def booking_rejected(booking)
-    @booking = booking
+  def booking_rejected(bookings)
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
-    @items = get_peripherals(booking)
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Rejected"
   end
 
+  #Updated to take combined_booking
   def asset_due(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @manager = booking.item.user
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Return Due Soon: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Return Due Soon"
   end
 
+  #Updated to take combined_booking
   def asset_overdue(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @manager = booking.item.user
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Late For Return: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Late For Return"
   end
 
-  def get_peripherals(booking)
-    bookingitem = [Item.find(booking.item.id)]
-    # peripherals = Item.where(serial: booking.peripherals.to_s.split)
-    peripherals = Item.where('items_id = ?', @item.id)
-
-    bookingitem + peripherals
-  end
 end
