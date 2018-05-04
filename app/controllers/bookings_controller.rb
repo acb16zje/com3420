@@ -93,9 +93,6 @@ class BookingsController < ApplicationController
       combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
     else
-      Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
-      UserMailer.user_booking_requested(@booking).deliver
-      UserMailer.manager_booking_requested(@booking).deliver
       @booking.status = 1
       combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
@@ -131,7 +128,9 @@ class BookingsController < ApplicationController
           booking.save
         end
       end
-
+      Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
+      UserMailer.user_booking_requested(combined_booking).deliver
+      UserMailer.manager_booking_requested(@booking).deliver
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'

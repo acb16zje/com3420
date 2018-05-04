@@ -71,7 +71,7 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def user_booking_requested
-    b = Booking.first
+    b = CombinedBooking.first
     UserMailer.user_booking_requested(b)
   end
 
