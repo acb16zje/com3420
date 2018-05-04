@@ -130,6 +130,7 @@ class BookingsController < ApplicationController
       end
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       UserMailer.user_booking_requested(combined_booking).deliver
+      puts (combined_booking.sorted_bookings)
       combined_booking.sorted_bookings.each do |m|
         UserMailer.manager_booking_requested(m).deliver
       end

@@ -22,6 +22,6 @@ class CombinedBooking < ApplicationRecord
 
   def sorted_bookings
     managers = self.bookings.map {|b| b.item.user }.uniq
-    booking_list = managers.map {|m| Booking.where(user: m)}
+    booking_list = managers.map {|m| Booking.joins(:item).where("items.user_id = ?", m.id)}
   end
 end
