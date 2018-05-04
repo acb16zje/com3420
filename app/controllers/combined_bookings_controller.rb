@@ -52,7 +52,7 @@ class CombinedBookingsController < ApplicationController
     combined_booking.status = 6
     if combined_booking.save
       combined_booking.sorted_bookings.each do |m|
-        UserMailer.manager_asset_returned(booking).deliver
+        UserMailer.manager_booking_cancelled(m).deliver
       end
       redirect_to bookings_path, notice: 'Remaining bookings were successfully cancelled.'
     end
@@ -73,7 +73,7 @@ class CombinedBookingsController < ApplicationController
     combined_booking.status = 4
     if combined_booking.save
       combined_booking.sorted_bookings.each do |m|
-        UserMailer.manager_asset_returned(booking).deliver
+        UserMailer.manager_asset_returned(m).deliver
       end
       redirect_to bookings_path, notice: 'Remaining items were successfully returned.'
     end
