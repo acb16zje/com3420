@@ -11,12 +11,12 @@ class CombinedBookingsController < ApplicationController
       booking.status = 2
       if booking.save
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
-        UserMailer.booking_approved(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 2
     if combined_booking.save
+      UserMailer.booking_approved(combined_booking.bookings)
       redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
     end
   end

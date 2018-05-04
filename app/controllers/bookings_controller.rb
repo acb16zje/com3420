@@ -144,7 +144,7 @@ class BookingsController < ApplicationController
     if @booking.update(booking_params)
       if @booking.status == 2
         Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        UserMailer.booking_approved(@booking).deliver
+        UserMailer.booking_approved([@booking]).deliver
       elsif @booking.status == 5
         Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
         UserMailer.booking_rejected(@booking).deliver

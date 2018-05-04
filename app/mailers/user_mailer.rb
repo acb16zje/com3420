@@ -7,10 +7,10 @@ class UserMailer < ApplicationMailer
   end
 
   def booking_approved(booking)
-    @booking = booking
-    @user = booking.user
-    @item = booking.item
-    @items = get_peripherals(booking)
+    @booking = bookings[0]
+    @user = @booking.user
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -104,6 +104,7 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Return Due Soon"
   end
 
+  #Updated to take combined_booking
   def asset_overdue(booking)
     @booking = booking
     @user = booking.user
@@ -113,11 +114,4 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Late For Return"
   end
 
-  def get_peripherals(booking)
-    bookingitem = [Item.find(booking.item.id)]
-    # peripherals = Item.where(serial: booking.peripherals.to_s.split)
-    peripherals = Item.where('items_id = ?', @item.id)
-
-    bookingitem + peripherals
-  end
 end
