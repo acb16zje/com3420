@@ -192,7 +192,7 @@ class BookingsController < ApplicationController
       end
 
       Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
-      UserMailer.manager_asset_returned(@booking).deliver
+      UserMailer.manager_asset_returned([@booking]).deliver
 
       item = booking.item
       item.condition = params[:item][:condition]
