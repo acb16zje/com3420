@@ -46,12 +46,14 @@ class CombinedBookingsController < ApplicationController
       booking.status = 6
       if booking.save
         Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'AM')
-        UserMailer.manager_booking_cancelled(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 6
     if combined_booking.save
+      combined_booking.sorted_bookings.each do |m|
+        UserMailer.manager_asset_returned(booking).deliver
+      end
       redirect_to bookings_path, notice: 'Remaining bookings were successfully cancelled.'
     end
   end

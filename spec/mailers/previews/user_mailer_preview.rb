@@ -46,13 +46,13 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def manager_booking_cancelled
-    b = Booking.first
-    UserMailer.manager_booking_cancelled(b)
+    b = CombinedBooking.first
+    UserMailer.manager_booking_cancelled(b.bookings)
   end
 
   def manager_booking_overdue
     b = Booking.first
-    UserMailer.manager_booking_cancelled(b)
+    UserMailer.manager_booking_overdue(b)
   end
 
   def manager_booking_requested

@@ -169,7 +169,7 @@ class BookingsController < ApplicationController
     @booking.status = 6
     if @booking.save
       Notification.create(recipient: @booking.user, action: 'cancelled', notifiable: @booking, context: 'AM')
-      UserMailer.manager_booking_cancelled(@booking).deliver
+      UserMailer.manager_booking_cancelled([@booking]).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
     end
   end
