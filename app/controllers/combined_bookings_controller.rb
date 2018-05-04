@@ -65,12 +65,14 @@ class CombinedBookingsController < ApplicationController
       booking.status = 4
       if booking.save
         Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
-        UserMailer.manager_asset_returned(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 4
     if combined_booking.save
+      combined_booking.sorted_bookings.each do |m|
+        UserMailer.manager_asset_returned(booking).deliver
+      end
       redirect_to bookings_path, notice: 'Remaining items were successfully returned.'
     end
   end

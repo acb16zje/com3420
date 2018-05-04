@@ -41,8 +41,8 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def manager_asset_returned
-    b = Booking.first
-    UserMailer.manager_asset_returned(b)
+    b = CombinedBooking.first
+    UserMailer.user_booking_requested(b)
   end
 
   def manager_booking_cancelled
