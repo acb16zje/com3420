@@ -2,7 +2,11 @@ require 'irb'
 
 class NotificationsController < ApplicationController
   def index
-    @notifications = Notification.where(recipient: current_user).last(5).reverse
+    if current_user.permission_id == 1
+      @notifications = Notification.where(recipient: current_user, context: 'U').last(5).reverse
+    else
+      @notifications = Notification.where(recipient: current_user).last(5).reverse
+    end
   end
 
   def mark_as_read

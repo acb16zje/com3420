@@ -175,10 +175,7 @@ class ItemsController < ApplicationController
 
     @items.each do |item|
       item.user_id = params[:item][:user_id]
-
-      # unless item.save
-      #   redirect_to manager_items_path(user_id: params[:item][:old_id]), alert: 'Not All Items Could Be Moved'
-      # end
+      item.save
     end
 
     @user = User.find(params[:item][:old_id])

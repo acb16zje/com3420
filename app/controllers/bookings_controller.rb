@@ -288,7 +288,9 @@ class BookingsController < ApplicationController
           AND end_time = '2000-01-01 00:00:00 UTC'
           AND DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) = 1)
         OR
-          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) >= 1))", params[:item_id]
+          (DATE_PART('day', to_char(end_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_datetime, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1)
+        OR
+          (DATE_PART('day', to_char(end_date, 'YYYY-MM-DD HH24:MI:SS')::timestamp - to_char(start_date, 'YYYY-MM-DD HH24:MI:SS')::timestamp) > 1))", params[:item_id]
     )
 
     bookings.each do |booking|
