@@ -33,15 +33,19 @@ task update_booking_status_to_ongoing: :environment do
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
-    UserMailer.booking_ongoing(b).deliver
     b.status = 3
     b.save
-    combined_booking = CombinedBooking.find(b.combined_booking_id)
-    if combined_booking.status == 2
-      combined_booking.status = 3
-    end
-    combined_booking.save
   end
+    combined = bookings.map{|b| b.combined_booking}.uniq
+
+    combined.each do |b|
+      if b.status == 2
+        b.status = 3
+        if b.save
+          UserMailer.booking_ongoing(b).deliver
+        end
+      end
+    end
 end
 
 desc 'Update booking status to late'

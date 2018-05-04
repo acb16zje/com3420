@@ -17,15 +17,14 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Booking Confirmed"
   end
 
+  #Updated CombinedBooking
   def booking_ongoing(booking)
     @booking = booking
     @user = booking.user
-    @item = booking.item
-    @items = get_peripherals(booking)
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Started: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Started"
   end
 
   #Takes CombinedBooking - UPDATED
