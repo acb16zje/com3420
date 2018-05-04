@@ -174,8 +174,7 @@ module Importers
         item = Item.new(name: t_name, serial: t_serial, category_id: t_category,
                         condition: t_condition, acquisition_date: t_acquisition_date,
                         purchase_price: t_purchase_price, location: t_location,
-                        manufacturer: t_manufacturer, model: t_model,
-                        items_id: Item.where('serial = ?',t_parent_asset_serial), retired_date: t_retired_date,
+                        manufacturer: t_manufacturer, model: t_model, retired_date: t_retired_date,
                         po_number: t_po_number, comment: t_comment, user_id: t_user_id)
         item.save
       end

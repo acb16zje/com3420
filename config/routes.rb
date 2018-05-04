@@ -40,6 +40,10 @@ Rails.application.routes.draw do
       get 'peripherals', on: :collection
     end
 
+    resources :item_peripherals do
+      post 'add_parents', on: :collection
+    end
+
     get 'import', on: :collection
     post 'import_file', on: :collection
     get 'manager', on: :collection
@@ -51,6 +55,8 @@ Rails.application.routes.draw do
     get 'add_peripheral_option', on: :member
     get 'choose_peripheral', on: :member
     post 'add_peripheral', on: :member
+    get 'add_parents', on: :member
+    post 'add_parents_complete', on: :member
   end
 
   resources :notifications do

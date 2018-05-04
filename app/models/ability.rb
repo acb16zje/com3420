@@ -41,6 +41,7 @@ class Ability
       can :manage, User
       can :manage, Booking, user_id: user.id
       can :update, Booking
+      can :manage, ItemPeripheral
       can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking
     end
 
@@ -52,6 +53,7 @@ class Ability
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
       can :manage, UserHomeCategory
+      can :manage, ItemPeripheral 
       can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking
     end
 
@@ -62,6 +64,7 @@ class Ability
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
       can :manage, UserHomeCategory
+      can :manage, ItemPeripheral 
       can %i[set_booking_returned set_booking_cancelled], CombinedBooking
     end
   end

@@ -121,8 +121,7 @@ class UserMailer < ApplicationMailer
 
   def get_peripherals(booking)
     bookingitem = [Item.find(booking.item.id)]
-    # peripherals = Item.where(serial: booking.peripherals.to_s.split)
-    peripherals = Item.where('items_id = ?', @item.id)
+    peripherals = @item.getItemPeripherals
 
     bookingitem + peripherals
   end

@@ -20,11 +20,12 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.items_id.blank?
+              - unless @parents.blank?
                 %tr
-                  %th Parent Item Name
+                  %th Parent Asset Names
                   %td
-                    = link_to @item.parent.name, @item.parent
+                    - @parents.each do |parent|
+                      = link_to "#{parent.name + ' (' + parent.serial + ')' }", parent, class: 'button'
               %tr
                 %th Name
                 %td

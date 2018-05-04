@@ -54,11 +54,8 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    unless @item.items_id.blank?
-      @parent = Item.find_by_id(@item.items_id)
-    end
-
-    @peripherals = Item.where('items_id = ?', @item.id)
+    @parents = @item.getItemParents
+    @peripherals = @item.getItemPeripherals
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
@@ -67,12 +64,9 @@ class BookingsController < ApplicationController
   # GET /bookings/1/edit
   def edit
     @item = @booking.item
+    @parents = @item.getItemParents
+    @peripherals = @item.getItemPeripherals
 
-    unless @item.items_id.blank?
-      @parent = Item.find_by_id(@item.items_id)
-    end
-
-    @peripherals = Item.where('items_id = ?', @item.id)
   end
 
   # POST /bookings
@@ -235,7 +229,7 @@ class BookingsController < ApplicationController
   def peripherals
     @item = Item.find_by_id(params[:item_id])
 
-    @peripherals = get_allowed_peripherals(params[:start_datetime], params[:end_datetime], params[:item_id])
+    @peripherals = @item.getItemPeripherals
 
     respond_to do |format|
       format.json do
@@ -245,21 +239,6 @@ class BookingsController < ApplicationController
   end
 
   private
-
-  def get_allowed_peripherals(start_datetime, end_datetime, item_id)
-    item = Item.find_by_id(item_id)
-    peripherals = Item.where('items_id = ?', item.id)
-
-    allowed_peripherals = []
-    peripherals.each do |peripheral|
-      if booking_validation(peripheral.id, start_datetime, end_datetime)
-        allowed_peripherals.append(peripheral)
-      end
-    end
-
-    allowed_peripherals
-  end
-
   def booking_validation(item_id, start_datetime, end_datetime)
     query = Booking.where(
       "(status = 2 OR status = 3)

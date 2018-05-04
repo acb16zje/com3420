@@ -1,19 +1,20 @@
-- content_for :title, "Choose an existing asset as peripheral"
+- content_for :title, "Choose an existing asset as parent"
 
 %section.hero
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Add peripheral for #{@item.name} : #{@item.serial}
+        %h3.title Add parent for #{@item.name}
         .box
-          = form_tag add_peripheral_item_path, method: :post do
+          = simple_form_for(@item_peripheral) do |f|
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Peripheral Asset
+                %label.label Parent Assets
               .field-body
-                .field
+                .field{style: 'margin: auto'}
                   .control
-                    = select_tag 'peripheral_asset', options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }), class: 'select2', include_blank: 'None'
+                    = f.select :dummy, @items.map { |i| [i.name + " : " + i.serial, i.id] }, {}, {class: 'select2', multiple: ''}
+                    = f.hidden_field :item_id, value: @item.id
             %br
             %br
             .field.is-horizontal
@@ -24,4 +25,4 @@
                   .control
                     = link_to 'Cancel', @item, class: 'button is-light'
                   .control
-                    = submit_tag 'Add as Peripheral', class: 'button is-block is-link', id: 'submitButton'
+                    = f.submit 'Add as Peripheral', class: 'button is-block is-link', id: 'submitButton'
