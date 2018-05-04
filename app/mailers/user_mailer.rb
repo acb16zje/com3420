@@ -6,7 +6,7 @@ class UserMailer < ApplicationMailer
     mail to: user.email, subject: "AMRC - Welcome: #{user.givenname} #{user.sn}"
   end
 
-  def booking_approved(booking)
+  def booking_approved(bookings)
     @booking = bookings[0]
     @user = @booking.user
     @items = bookings.map {|b| b.item}
@@ -14,7 +14,7 @@ class UserMailer < ApplicationMailer
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Confirmed: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Confirmed"
   end
 
   def booking_ongoing(booking)
@@ -82,16 +82,15 @@ class UserMailer < ApplicationMailer
     mail to: @manager.email, subject: "AMRC - Booking Cancelled: #{@item.name}"
   end
 
-  def booking_rejected(booking)
-    @booking = booking
+  def booking_rejected(bookings)
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
-    @items = get_peripherals(booking)
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Rejected: #{@item.name}"
+    mail to: @user.email, subject: "AMRC - Booking Rejected"
   end
 
   #Updated to take combined_booking

@@ -147,7 +147,7 @@ class BookingsController < ApplicationController
         UserMailer.booking_approved([@booking]).deliver
       elsif @booking.status == 5
         Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        UserMailer.booking_rejected(@booking).deliver
+        UserMailer.booking_rejected([@booking]).deliver
       end
 
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
