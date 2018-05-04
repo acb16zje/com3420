@@ -14,7 +14,7 @@
         %h1.email-header-text
           Booking Request
         %h2.email-subheading-text
-          #{@user.givenname} #{@user.sn} has requested #{@booking.item.name}. You can view more details for this booking below.
+          #{@user.givenname} #{@user.sn} has requested to book your assets. You can view more details for this booking below.
         %br
         %hr
         .body-box
@@ -54,7 +54,7 @@
               %tbody
                 - @items.each do |item|
                   %tr
-                    %td.has-text-centered= @item.id
+                    %td.has-text-centered= item.id
                     %td.has-text-centered= link_to item.name, item
                     %td.has-text-centered= item.serial
         %br

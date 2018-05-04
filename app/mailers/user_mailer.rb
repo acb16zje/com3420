@@ -37,15 +37,15 @@ class UserMailer < ApplicationMailer
     mail to: @user.email, subject: "AMRC - Booking Recieved"
   end
 
-  def manager_booking_requested(booking)
-    @booking = booking
+  #Takes array of bookings
+  def manager_booking_requested(bookings)
+    @booking = bookings[0]
     @user = @booking.user
-    @item = @booking.item
-    @manager = @item.user
+    @items = bookings.map {|b| b.item}
+    @manager = bookings[0].item.user
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
-    @items = get_peripherals(booking)
 
-    mail to: @manager.email, subject: "AMRC - Booking Requested: #{@item.name}"
+    mail to: @manager.email, subject: "AMRC - Booking Requested"
   end
 
   def manager_asset_returned(booking)
