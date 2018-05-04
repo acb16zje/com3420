@@ -11,12 +11,12 @@ class CombinedBookingsController < ApplicationController
       booking.status = 2
       if booking.save
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
-        UserMailer.booking_approved(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 2
     if combined_booking.save
+      UserMailer.booking_approved(combined_booking.bookings)
       redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
     end
   end
@@ -29,12 +29,12 @@ class CombinedBookingsController < ApplicationController
       booking.status = 5
       if booking.save
         Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'AM')
-        UserMailer.booking_rejected(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 5
     if combined_booking.save
+      UserMailer.booking_rejected(combined_booking.bookings).deliver
       redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
     end
   end
@@ -46,12 +46,14 @@ class CombinedBookingsController < ApplicationController
       booking.status = 6
       if booking.save
         Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'AM')
-        UserMailer.manager_booking_cancelled(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 6
     if combined_booking.save
+      combined_booking.sorted_bookings.each do |m|
+        UserMailer.manager_booking_cancelled(m).deliver
+      end
       redirect_to bookings_path, notice: 'Remaining bookings were successfully cancelled.'
     end
   end
@@ -65,12 +67,14 @@ class CombinedBookingsController < ApplicationController
       booking.status = 4
       if booking.save
         Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
-        UserMailer.manager_asset_returned(booking).deliver
       end
     end
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 4
     if combined_booking.save
+      combined_booking.sorted_bookings.each do |m|
+        UserMailer.manager_asset_returned(m).deliver
+      end
       redirect_to bookings_path, notice: 'Remaining items were successfully returned.'
     end
   end

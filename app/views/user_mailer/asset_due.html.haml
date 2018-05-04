@@ -14,7 +14,7 @@
         %h1.email-header-text
           Your Booking Is About To Expire
         %h2.email-subheading-text
-          Your Booking for #{@item.name} will expire at #{@booking.end_datetime.strftime("%H:%M - %e %b %Y")}
+          Your Booking will expire at #{@booking.bookings[0].end_datetime.strftime("%H:%M - %e %b %Y")}
         %br
         %hr
         .body-box
@@ -24,22 +24,22 @@
             %h3.email-body-header
               Start Time:
             .email-body-text
-              #{@booking.start_datetime.strftime("%d/%m/%Y at %H:%M")}
+              #{@booking.bookings[0].start_datetime.strftime("%d/%m/%Y at %H:%M")}
           .email-field
             %h3.email-body-header
               End Time:
             .email-body-text
-              #{@booking.end_datetime.strftime("%d/%m/%Y at %H:%M")}
+              #{@booking.bookings[0].end_datetime.strftime("%d/%m/%Y at %H:%M")}
           .email-field
             %h3.email-body-header
               Location:
             .email-body-text
-              #{@booking.next_location}
+              #{@booking.bookings[0].next_location}
           .email-field
             %h3.email-body-header
               Reason:
             .email-body-text
-              #{@booking.reason}
+              #{@booking.bookings[0].reason}
 
           .email-field
             %h3.email-body-header
@@ -52,11 +52,11 @@
                 %th Asset
                 %th Serial
               %tbody
-                - @items.each do |item|
+                - @booking.bookings.each do |b|
                   %tr
-                    %td.has-text-centered= @item.id
-                    %td.has-text-centered= link_to item.name, item
-                    %td.has-text-centered= item.serial
+                    %td.has-text-centered= b.item.id
+                    %td.has-text-centered= link_to b.item.name, b.item
+                    %td.has-text-centered= b.item.serial
         %br
         %hr
         %h2
