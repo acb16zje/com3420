@@ -11,16 +11,16 @@ Rails.application.routes.draw do
     get 'manager', on: :collection
   end
 
-  resources :user_home_categories
+  resources :user_home_categories, except: [:show, :edit, :update]
 
-  resources :combined_bookings do
+  resources :combined_bookings, only: [] do
     put 'set_booking_rejected', on: :member
     put 'set_booking_accepted', on: :member
     put 'set_booking_returned', on: :member
     put 'set_booking_cancelled', on: :member
   end
 
-  resources :bookings do
+  resources :bookings, except: :new do
     get 'requests', on: :collection
     get 'accepted', on: :collection
     get 'ongoing', on: :collection
@@ -53,7 +53,7 @@ Rails.application.routes.draw do
     post 'add_peripheral', on: :member
   end
 
-  resources :notifications do
+  resources :notifications, only: :index do
     collection do
       post :mark_as_read
     end

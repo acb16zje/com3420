@@ -12,9 +12,19 @@ describe 'Managing bookings', js: true do
     bookings.each do |b|
       Notification.create(recipient: b.user, action: "started", notifiable: b, context: "U")
       Notification.create(recipient: b.item.user, action: "started", notifiable: b, context: "AM")
-      UserMailer.booking_ongoing(b).deliver
       b.status = 3
       b.save
+    end
+
+    combined = bookings.map{|b| b.combined_booking}.uniq
+
+    combined.each do |b|
+      if b.status == 2
+        b.status = 3
+        if b.save
+          UserMailer.booking_ongoing(b).deliver
+        end
+      end
     end
     visit 'bookings/completed'
     visit 'bookings/rejected'
@@ -274,8 +284,13 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:due_booking_other)
 
+    # Get bookings ending soon
     bookings = Booking.where('status = 3 AND end_datetime < ?', (DateTime.now + 3.days).strftime("%Y-%m-%d %H:%M:%S"))
-    bookings.each do |b|
+    # Get their parent bookings
+    combined = bookings.map{|b| b.combined_booking}.uniq
+
+    #Send for each booking
+    combined.each do |b|
       UserMailer.asset_due(b).deliver
     end
   end
@@ -288,6 +303,11 @@ describe 'Managing bookings', js: true do
     bookings.each do |b|
       Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
       Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
+    end
+    # Get their parent bookings
+    combined = bookings.map{|b| b.combined_booking}.uniq
+    #Send for each booking
+    combined.each do |b|
       UserMailer.asset_overdue(b).deliver
     end
   end

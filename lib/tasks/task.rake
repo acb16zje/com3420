@@ -36,16 +36,17 @@ task update_booking_status_to_ongoing: :environment do
     b.status = 3
     b.save
   end
-    combined = bookings.map{|b| b.combined_booking}.uniq
+  
+  combined = bookings.map{|b| b.combined_booking}.uniq
 
-    combined.each do |b|
-      if b.status == 2
-        b.status = 3
-        if b.save
-          UserMailer.booking_ongoing(b).deliver
-        end
+  combined.each do |b|
+    if b.status == 2
+      b.status = 3
+      if b.save
+        UserMailer.booking_ongoing(b).deliver
       end
     end
+  end
 end
 
 desc 'Update booking status to late'

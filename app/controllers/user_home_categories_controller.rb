@@ -7,18 +7,12 @@ class UserHomeCategoriesController < ApplicationController
     @user_home_categories = UserHomeCategory.where(user_id: current_user.id)
   end
 
-  # GET /user_home_categories/1
-  def show; end
-
   # GET /user_home_categories/new
   def new
     @bannedcatid = UserHomeCategory.select(:category_id).where(user_id: current_user.id)
     @allowedcat = Category.where.not(id: @bannedcatid)
     @user_home_category = UserHomeCategory.new
   end
-
-  # GET /user_home_categories/1/edit
-  def edit; end
 
   # POST /user_home_categories
   def create
@@ -28,9 +22,6 @@ class UserHomeCategoriesController < ApplicationController
       redirect_to root_path, notice: 'Favourite category successfully added.'
     end
   end
-
-  # PATCH/PUT /user_home_categories/1
-  def update; end
 
   # DELETE /user_home_categories/1
   def destroy
