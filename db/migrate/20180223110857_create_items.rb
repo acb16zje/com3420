@@ -22,6 +22,6 @@ class CreateItems < ActiveRecord::Migration[5.1]
     end
     add_reference :items, :user, foreign_key: true
     add_reference :items, :category, foreign_key: true
-    add_reference :items, :items, foreign_key: true
+    # add_reference :items, :item_peripheral, foreign_key: true
   end
 end

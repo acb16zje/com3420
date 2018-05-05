@@ -19,11 +19,12 @@
                 %th Owner
                 %td
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
-              - if !@item.items_id.blank?
+              - unless @parents.blank?
                 %tr
-                  %th Parent Asset Name
+                  %th Parent Asset Names
                   %td
-                    = link_to @item.parent.name, @item.parent
+                    - @parents.each do |parent|
+                      = link_to "#{parent.name + ' (' + parent.serial + ')' }", parent, class: 'button'
               %tr
                 %th Name
                 %td
@@ -111,7 +112,7 @@
           - if can?(:manage, Item) || current_user == @item.user
             .field.is-grouped.is-grouped-left
               .control
-                - if @item.items_id.blank?
+                - if @parents.blank?
                   = link_to 'Edit', edit_item_path, class: 'button is-link'
                 - else
                   = link_to 'Edit', edit_item_path(@item, is_peripheral: true), class: 'button is-link'

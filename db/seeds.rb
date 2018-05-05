@@ -29,7 +29,6 @@ Item.create!(user_id: 1,
 # 2
 Item.create(user_id: 1,
             category_id: 2,
-            items_id: 1,
             condition: 'Like New',
             name: 'MicroSD Card',
             location: 'Diamond',
@@ -42,7 +41,6 @@ Item.create(user_id: 1,
 # 3
 Item.create(user_id: 1,
             category_id: 2,
-            items_id: 1,
             condition: 'Like New',
             name: 'MicroSD Card',
             location: 'Diamond',
@@ -79,7 +77,6 @@ Item.create(user_id: 2,
 # 6
 Item.create(user_id: 2,
             category_id: 5,
-            items_id: 5,
             condition: 'Like New',
             name: 'Charging Cable',
             location: 'Diamond',
@@ -89,3 +86,6 @@ Item.create(user_id: 2,
             acquisition_date: '2018-03-22',
             purchase_price: 9.00)
 
+ItemPeripheral.create!(parent_item_id: 1,peripheral_item_id: 2)
+ItemPeripheral.create!(parent_item_id: 1,peripheral_item_id: 3)
+ItemPeripheral.create!(parent_item_id: 5,peripheral_item_id: 6)

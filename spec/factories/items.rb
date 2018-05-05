@@ -21,19 +21,16 @@
 #  updated_at       :datetime         not null
 #  user_id          :integer
 #  category_id      :integer
-#  items_id         :integer
 #
 # Indexes
 #
 #  index_items_on_category_id  (category_id)
-#  index_items_on_items_id     (items_id)
 #  index_items_on_serial       (serial) UNIQUE
 #  index_items_on_user_id      (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (category_id => categories.id)
-#  fk_rails_...  (items_id => items.id)
 #  fk_rails_...  (user_id => users.id)
 #
 

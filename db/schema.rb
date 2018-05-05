@@ -68,6 +68,13 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "item_peripherals", force: :cascade do |t|
+    t.bigint "parent_item_id"
+    t.bigint "peripheral_item_id"
+    t.index ["parent_item_id"], name: "index_item_peripherals_on_parent_item_id"
+    t.index ["peripheral_item_id"], name: "index_item_peripherals_on_peripheral_item_id"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "condition"
@@ -87,9 +94,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "category_id"
-    t.bigint "items_id"
     t.index ["category_id"], name: "index_items_on_category_id"
-    t.index ["items_id"], name: "index_items_on_items_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
@@ -150,7 +155,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   add_foreign_key "bookings", "users"
   add_foreign_key "combined_bookings", "users"
   add_foreign_key "items", "categories"
-  add_foreign_key "items", "items", column: "items_id"
   add_foreign_key "items", "users"
   add_foreign_key "user_home_categories", "categories"
   add_foreign_key "user_home_categories", "users"
