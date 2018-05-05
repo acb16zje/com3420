@@ -5,8 +5,6 @@
 #  id                 :integer          not null, primary key
 #  phone              :string
 #  permission_id      :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #  email              :string           default(""), not null
 #  sign_in_count      :integer          default(0), not null
 #  current_sign_in_at :datetime

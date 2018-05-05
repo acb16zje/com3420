@@ -15,7 +15,7 @@ class AddLdapInfoAndCleanUpUsers < ActiveRecord::Migration[5.1]
     else
       add_column :users, :email, :string
     end
-    add_index :users, :email
+    add_index :users, :email, unique: true
 
     # Cache the ldap attributes
     missing_columns = %w(uid mail ou dn sn givenname) - existing_columns

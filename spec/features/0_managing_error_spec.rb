@@ -8,6 +8,8 @@ describe 'Managing error pages' do
 
     visit '/404'
     expect(page).to have_content('404 Page Not Found')
+    visit '/items/pagedoesnotexist'
+    expect(page).to have_content('404 Page Not Found')
 
     visit '/422'
     expect(page).to have_content('422 Change Rejected')
@@ -18,10 +20,4 @@ describe 'Managing error pages' do
     visit '/javascript_warning'
     expect(page).to have_content('JavaScript Required')
   end
-
-  specify 'When visiting a link that does not exist' do
-    visit '/items/pagedoesnotexist'
-    expect(page).to have_content('404 Page Not Found')
-  end
-
 end

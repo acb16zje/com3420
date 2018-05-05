@@ -18,19 +18,19 @@ class ItemsController < ApplicationController
     else
       @manager = User.find_by_id(params[:user_id])
       if params[:tab] == 'OnLoan'
-        @items = Item.joins(:bookings).where(bookings: { status: '3' }).where(user_id: current_user.id)
+        @bookings = Booking.joins(:item).where(status: %w[3 7], items: {user_id: current_user.id})
       elsif params[:tab] == 'Issue'
-        @items = Item.joins(:bookings).where(user_id: current_user.id, condition: %w[Damaged Missing]).or(Item.joins(:bookings).where('bookings.status = ?', 7))
+        @items = Item.where(user_id: current_user.id, condition: %w[Damaged Missing])
       else
-        @items = Item.where('user_id = ?', params[:user_id])
+        @items = Item.where(user_id: params[:user_id])
       end
     end
   end
 
   # GET /items/1
   def show
-    @bookings = Booking.joins(:user).where('bookings.item_id = ?', @item.id)
-    
+    @bookings = Booking.joins(:user).where(item_id: @item.id)
+
     @parents = @item.getItemParents
     @peripherals = @item.getItemPeripherals
   end
@@ -44,9 +44,9 @@ class ItemsController < ApplicationController
   def choose_peripheral
     @item = Item.find_by_id(params[:id])
 
-    @items = Item.where("(serial <> ?)", @item.serial)
+    @items = Item.where.not(serial: @item.serial)
     Item.all.each do |i|
-      if !i.peripheral_items.where("parent_item_id = ?",@item.id).blank? || !i.parent_items.where("peripheral_item_id = ?",@item.id).blank?
+      if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
         @items = @items - [i]
       end
     end
@@ -58,7 +58,7 @@ class ItemsController < ApplicationController
 
     unless params[:peripheral_asset].blank?
       @peripheral = Item.find_by_serial(params[:peripheral_asset])
-      pair = ItemPeripheral.create(parent_item_id: @item.id,peripheral_item_id: @peripheral.id)
+      pair = ItemPeripheral.create(parent_item_id: @item.id, peripheral_item_id: @peripheral.id)
       pair.save
       @item.save
     end
@@ -67,9 +67,9 @@ class ItemsController < ApplicationController
   end
 
   # GET /items/new
-  def new    
+  def new
     @items = Item.all
-    if !params[:item_id].blank?
+    unless params[:item_id].blank?
       # @item = Item.find(params[:item_id])
     end
 
@@ -77,7 +77,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-    @items = Item.all.where('id <> ?', params[:id]) if params[:is_peripheral] == "true"
+    @items = Item.all.where.not(id: params[:id]) if params[:is_peripheral] == 'true'
     @parents = @item.getItemParents
   end
 
@@ -85,19 +85,18 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @item.user_id = current_user.id
-    @item.serial = params[:item][:serial].upcase
+    @item.serial = params[:item][:serial].upcase.strip
     @item.location = params[:item][:location].titleize
 
-
-
-    begin @item.save
-      if !params[:is_peripheral].blank?
+    begin
+      @item.save
+      unless params[:is_peripheral].blank?
         parents = params[:item][:add_parents]
         peripheral = @item.id
-    
+
         parents.each do |parent|
-          if !(parent.blank?)
-            pair = ItemPeripheral.create(parent_item_id: parent.to_i,peripheral_item_id: peripheral)
+          unless parent.blank?
+            pair = ItemPeripheral.create(parent_item_id: parent.to_i, peripheral_item_id: peripheral)
             pair.save
           end
         end
@@ -110,51 +109,49 @@ class ItemsController < ApplicationController
 
   # PATCH/PUT /items/1
   def update
-    begin
-      @item.update(item_params)
-      @item.location = params[:item][:location].titleize.strip
+    @item.update(item_params)
+    @item.location = params[:item][:location].titleize.strip
 
-      if params[:item][:condition] == 'Retired' && @item.retired_date.blank?
-        @item.retired_date = Date.today
-      elsif params[:item][:condition] != 'Retired' && !@item.retired_date.blank?
-        @item.retired_date = nil
-      end
-      if @item.save
-        if !params[:item][:is_peripheral].blank?
-          parents = params[:item][:add_parents]
-          peripheral = @item.id
-          original_parents = @item.getItemParents
-          deleted_parents = original_parents 
-          parents.each do |parent|
-            if !(parent.blank?)
-              new_parent = Item.find(parent.to_i)
-              if !deleted_parents.blank?
-                deleted_parents = deleted_parents - [new_parent]
-              end
-              if !@item.getItemParents.include? new_parent
-                pair = ItemPeripheral.create(parent_item_id: parent.to_i,peripheral_item_id: peripheral)
-                pair.save
-              end
+    if params[:item][:condition] == 'Retired' && @item.retired_date.blank?
+      @item.retired_date = Date.today
+    elsif params[:item][:condition] != 'Retired' && !@item.retired_date.blank?
+      @item.retired_date = nil
+    end
+    if @item.save
+      unless params[:item][:is_peripheral].blank?
+        parents = params[:item][:add_parents]
+        peripheral = @item.id
+        original_parents = @item.getItemParents
+        deleted_parents = original_parents
+        parents.each do |parent|
+          unless parent.blank?
+            new_parent = Item.find(parent.to_i)
+            unless deleted_parents.blank?
+              deleted_parents -= [new_parent]
+            end
+            unless @item.getItemParents.include? new_parent
+              pair = ItemPeripheral.create(parent_item_id: parent.to_i, peripheral_item_id: peripheral)
+              pair.save
             end
           end
-
-          deleted_parents.each do |deleted_parent|
-            ItemPeripheral.where(parent_item_id: deleted_parent.id,peripheral_item_id: peripheral).first.destroy
-          end
         end
-        redirect_to @item, notice: 'Asset was successfully updated.' 
+
+        deleted_parents.each do |deleted_parent|
+          ItemPeripheral.where(parent_item_id: deleted_parent.id, peripheral_item_id: peripheral).first.destroy
+        end
       end
-    rescue
-      redirect_to request.referrer, alert: 'Serial already exist'
+      redirect_to @item, notice: 'Asset was successfully updated.'
     end
-  end 
+  rescue
+    redirect_to request.referrer, alert: 'Serial already exist'
+  end
 
   def add_parents
     @item = Item.find(params[:id])
 
-    @items = Item.where("(serial <> ?)", @item.serial)
+    @items = Item.where.not(serial: @item.serial)
     Item.all.each do |i|
-      if !i.peripheral_items.where("parent_item_id = ?",@item.id).blank? || !i.parent_items.where("peripheral_item_id = ?",@item.id).blank?
+      if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
         @items = @items - [i]
       end
     end
@@ -173,7 +170,7 @@ class ItemsController < ApplicationController
   # GET /items/change_manager_multiple
   def change_manager_multiple
     @item = Item.new
-    @allowed_user = User.where('id <> ? and permission_id > 1', current_user.id)
+    @allowed_user = User.where.not(id: current_user.id, permission_id: 1)
   end
 
   # POST /items/change_manager_multiple
@@ -193,7 +190,7 @@ class ItemsController < ApplicationController
   def change_manager_multiple_and_delete
     @item = Item.new
     @user = User.find_by_id(params[:user_id])
-    @allowed_user = User.where('id <> ? and permission_id > 1', params[:user_id])
+    @allowed_user = User.where.not(id: params[:user_id], permission_id: 1)
   end
 
   # POST /items/change_manager_multiple

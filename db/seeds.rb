@@ -1,18 +1,43 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
+# 1
+Category.create(
+  name: 'Cameras',
+  icon: '<i class="fas fa-camera fa-6x"></i>',
+  has_peripheral: 1,
+  is_peripheral: 0)
 
-Category.create(name: 'Cameras', icon: '<i class="fas fa-camera fa-6x"></i>', has_peripheral: 1, is_peripheral: 0)
-Category.create(name: 'Cameras - Peripherals', icon: '<i class="fas fa-camera fa-6x">P</i>', has_peripheral: 0, is_peripheral: 1)
-Category.create(name: 'Data Logger', icon: '<i class="material-icons">dock</i>', has_peripheral: 0, is_peripheral: 0)
-Category.create(name: 'Laptops', icon: '<i class="material-icons">computer</i>', has_peripheral: 1, is_peripheral: 0)
-Category.create(name: 'Laptops - Peripherals', icon: '<i class="material-icons">computerP</i>', has_peripheral: 0, is_peripheral: 1)
+# 2
+Category.create(
+  name: 'Cameras - Peripherals',
+  icon: '<i class="fas fa-camera fa-6x"></i><i class="material-icons">P</i>',
+  has_peripheral: 0,
+  is_peripheral: 1)
+
+# 3
+Category.create(
+  name: 'Data Logger',
+  icon: '<i class="material-icons">dock</i>',
+  has_peripheral: 0,
+  is_peripheral: 0)
+
+# 4
+Category.create(
+  name: 'Laptops',
+  icon: '<i class="material-icons">computer</i>',
+  has_peripheral: 1,
+  is_peripheral: 0)
+
+# 5
+Category.create(
+  name: 'Laptops - Peripherals',
+  icon: '<i class="material-icons">computerP</i>',
+  has_peripheral: 0,
+  is_peripheral: 1)
 
 User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
 User.create(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')
 User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Chatterjee', permission_id: 3, username: 'aca16rc')
-# User.create(email: 'erica.smith@sheffield.ac.uk', permission_id: 3)
+User.create(email: 'erica.smith@sheffield.ac.uk', permission_id: 3)
 
 # 1
 Item.create!(user_id: 1,

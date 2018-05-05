@@ -26,8 +26,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "next_location"
     t.integer "status"
     t.string "peripherals"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "item_id"
     t.bigint "combined_booking_id"
     t.bigint "user_id"
@@ -41,8 +39,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "icon"
     t.boolean "has_peripheral"
     t.boolean "is_peripheral"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
@@ -90,8 +86,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "condition_info"
     t.string "comment"
     t.date "retired_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "category_id"
     t.index ["category_id"], name: "index_items_on_category_id"
@@ -106,8 +100,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
     t.string "action"
     t.integer "notifiable_id"
     t.string "notifiable_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -122,8 +114,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   create_table "user_home_categories", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "category_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_user_home_categories_on_category_id"
     t.index ["user_id"], name: "index_user_home_categories_on_user_id"
   end
@@ -131,8 +121,6 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   create_table "users", force: :cascade do |t|
     t.string "phone"
     t.integer "permission_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "email", default: "", null: false
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"

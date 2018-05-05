@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     @item_count = item_list.size
     @options = []
 
-    if ((@user.permission_id > 1 && @item_count == 0) || (@user.permission_id == 1))
+    if (@user.permission_id > 1 && @item_count.zero?) || (@user.permission_id == 1)
       @options << ['User', 1]
     end
 

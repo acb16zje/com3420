@@ -5,8 +5,8 @@ class CreateCategories < ActiveRecord::Migration[5.1]
       t.string :icon
       t.boolean :has_peripheral
       t.boolean :is_peripheral
-
-      t.timestamps
     end
+
+    add_index :categories, :name, unique: true
   end
 end

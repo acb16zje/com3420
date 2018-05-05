@@ -87,11 +87,9 @@
               %tr
                 %th Peripherals
                 %td
-                  - if @peripherals.blank?
-                    None
-                  - else
+                  - unless @peripherals.blank?
                     - @peripherals.each do |peripheral|
-                      = link_to "#{peripheral.name}", peripheral, class: 'button'
+                      = link_to "#{peripheral.name + ' (' + peripheral.serial + ')' }", peripheral, class: 'button'
 
       = simple_form_for @booking do |f|
         .columns

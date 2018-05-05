@@ -8,7 +8,9 @@
   - else
     - content_for :title, "#{@manager.givenname} #{@manager.sn}'s Assets"
     %p.title.has-text-centered #{@manager.givenname} #{@manager.sn}'s Assets
+
   = render "tabs"
+
   = form_tag change_manager_multiple_items_path do
     %table#assets.table.is-striped.is-bordered
       %thead
@@ -19,39 +21,113 @@
           %th Category
           %th Manufacturer
           %th Condition
-          %th Location
+          - if params[:tab] == "OnLoan"
+            %th Booking Location
+            %th Booking Status
+            %th Booked By
+          - else
+            %th Location
       %tbody
-        - @items.each do |item|
-          %tr
-            - if current_user.id == @manager.id
-              %td
-                = check_box_tag "item_ids[]", item.id
-            %td.has-text-centered= link_to item.name, item
-            %td.has-text-centered= item.category.name
-            %td.has-text-centered= item.manufacturer
-            %td.has-text-centered
-              - case item.condition
-              - when 'Like New'
-                %span.tag.is-success.is-medium
-                  = item.condition
-              - when 'Good'
-                %span.tag.is-primary.is-medium
-                  = item.condition
-              - when 'Adequate'
-                %span.tag.is-warning.is-medium
-                  = item.condition
-              - when 'Damaged'
-                %span.tag.is-danger.is-medium
-                  = item.condition
-              - when 'Missing'
-                %span.tag.is-danger.is-medium
-                  = item.condition
+        - if params[:tab] == "OnLoan"
+          - @bookings.each do |booking|
+            %tr
+              - if current_user.id == @manager.id
+                %td
+                  = check_box_tag "item_ids[]", booking.item.id
+              %td.has-text-centered= link_to booking.item.name, booking.item
+              %td.has-text-centered= booking.item.category.name
+              %td.has-text-centered= booking.item.manufacturer
+              %td.has-text-centered
+                - case booking.item.condition
+                - when 'Like New'
+                  %span.tag.is-success.is-medium
+                    = booking.item.condition
+                - when 'Good'
+                  %span.tag.is-primary.is-medium
+                    = booking.item.condition
+                - when 'Adequate'
+                  %span.tag.is-warning.is-medium
+                    = booking.item.condition
+                - when 'Damaged'
+                  %span.tag.is-danger.is-medium
+                    = booking.item.condition
+                - when 'Missing'
+                  %span.tag.is-danger.is-medium
+                    = booking.item.condition
+                - else
+                  %span.tag.is-black.is-medium
+                    Unknown
+              - if params[:tab] == "OnLoan"
+                %td.has-text-centered= booking.next_location
+                %td.has-text-centered
+                  - case booking.status
+                  - when 1
+                    %span.tag.is-warning.is-medium
+                      Pending
+                  - when 2
+                    %span.tag.is-success.is-medium
+                      Accepted
+                  - when 3
+                    %span.tag.is-info.is-medium
+                      Ongoing
+                  - when 4
+                    %span.tag.is-success.is-medium
+                      Completed
+                  - when 5
+                    %span.tag.is-danger.is-medium
+                      Rejected
+                  - when 6
+                    %span.tag.is-danger.is-medium
+                      Cancelled
+                  - when 7
+                    %span.tag.is-danger.is-medium
+                      Late
+                  - else
+                    %span.tag.is-black.is-medium
+                      Unknown
+                %td.has-text-centered= link_to booking.user.givenname, booking.user
               - else
-                %span.tag.is-black.is-medium
-                  Unknown
-            %td.has-text-centered= item.location
-    - if current_user.id == @manager.id && @items.any?
-      .columns
-        .column
-          .buttons.is-centered
-            = submit_tag "Transfer Selection", class:'button is-link is-block'
+                %td.has-text-centered= booking.item.location
+        - else
+          - @items.each do |item|
+            %tr
+              - if current_user.id == @manager.id
+                %td
+                  = check_box_tag "item_ids[]", item.id
+              %td.has-text-centered= link_to item.name, item
+              %td.has-text-centered= item.category.name
+              %td.has-text-centered= item.manufacturer
+              %td.has-text-centered
+                - case item.condition
+                - when 'Like New'
+                  %span.tag.is-success.is-medium
+                    = item.condition
+                - when 'Good'
+                  %span.tag.is-primary.is-medium
+                    = item.condition
+                - when 'Adequate'
+                  %span.tag.is-warning.is-medium
+                    = item.condition
+                - when 'Damaged'
+                  %span.tag.is-danger.is-medium
+                    = item.condition
+                - when 'Missing'
+                  %span.tag.is-danger.is-medium
+                    = item.condition
+                - else
+                  %span.tag.is-black.is-medium
+                    Unknown
+              %td.has-text-centered= item.location
+
+    - if current_user.id == @manager.id
+      - if params[:tab] == "OnLoan"
+        - if @bookings.any?
+          .columns
+            .column
+              .buttons.is-centered
+                = submit_tag "Transfer Selection", class:'button is-link is-block'
+      - elsif @items.any?
+        .columns
+          .column
+            .buttons.is-centered
+              = submit_tag "Transfer Selection", class:'button is-link is-block'

@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     put 'set_booking_cancelled', on: :member
   end
 
-  resources :bookings, except: :new do
+  resources :bookings, except: [:new, :show] do
     get 'requests', on: :collection
     get 'accepted', on: :collection
     get 'ongoing', on: :collection
@@ -34,13 +34,13 @@ Rails.application.routes.draw do
   end
 
   resources :items do
-    resources :bookings do
+    resources :bookings, except: [:index, :new, :show] do
       get 'start_date', on: :collection
       get 'end_date', on: :collection
       get 'peripherals', on: :collection
     end
 
-    resources :item_peripherals do
+    resources :item_peripherals, only: :new do
       post 'add_parents', on: :collection
     end
 

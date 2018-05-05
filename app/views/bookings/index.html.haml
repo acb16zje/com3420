@@ -12,8 +12,8 @@
       %tr
         %th Details
         %th ID
-        %th Start Date - Start Time
-        %th End Date - End Time
+        %th Start Date-Time
+        %th End Date-Time
         %th Location
         %th Reason
         %th Action
@@ -30,7 +30,7 @@
           %td
             .buttons.is-centered
               - if combined_booking.status < 3
-                = link_to set_booking_cancelled_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
+                = link_to set_booking_cancelled_combined_booking_path(combined_booking), data: { confirm: 'Are you sure you want cancel this booking?' }, method: :put, class: 'button is-danger' do
                   %span.icon
                     %i.fas.fa-ban
                   %span Cancel remaining items

@@ -39,9 +39,8 @@
                   %footer.card-footer
                     %p.card-footer-item
                       %span
-                        View
                         = link_to items_path(category_name: usercat.category.name) do
-                          = usercat.category.name
+                          = "#{usercat.category.name}"
           .column
             .card
               .card-content.hero.is-small.is-light

@@ -9,8 +9,6 @@
 #  action          :string
 #  notifiable_id   :integer
 #  notifiable_type :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
 #
 
 require 'rails_helper'

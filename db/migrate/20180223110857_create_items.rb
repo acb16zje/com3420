@@ -17,9 +17,9 @@ class CreateItems < ActiveRecord::Migration[5.1]
       t.string :condition_info
       t.string :comment
       t.date :retired_date
-
-      t.timestamps
     end
+
+    add_index :items, :serial, unique: true
     add_reference :items, :user, foreign_key: true
     add_reference :items, :category, foreign_key: true
     # add_reference :items, :item_peripheral, foreign_key: true

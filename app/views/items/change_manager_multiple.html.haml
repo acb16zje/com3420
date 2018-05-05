@@ -14,7 +14,7 @@
                 .field{style: 'margin: auto'}
                   .control
                     = f.hidden_field :item_id_list, value: params[:item_ids]
-                    = f.association :user, label: false, input_html: {class: 'select2'}, collection: @allowed_user.map { |u| [u.givenname, u.id]}, include_blank: false
+                    = f.association :user, label: false, input_html: {class: 'select2'}, collection: @allowed_user.map { |u| [u.givenname, u.id] }, include_blank: false
 
             .field.is-horizontal
               .field-body

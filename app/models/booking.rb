@@ -13,8 +13,6 @@
 #  next_location       :string
 #  status              :integer
 #  peripherals         :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
 #  item_id             :integer
 #  combined_booking_id :integer
 #  user_id             :integer

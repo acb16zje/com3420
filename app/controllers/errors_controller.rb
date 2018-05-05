@@ -23,5 +23,4 @@ class ErrorsController < ApplicationController
   def javascript_warning
     render layout: false
   end
-
 end

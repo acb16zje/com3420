@@ -13,11 +13,12 @@ class CombinedBookingsController < ApplicationController
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
       end
     end
+
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 2
     if combined_booking.save
       UserMailer.booking_approved(combined_booking.bookings)
-      redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
+      redirect_to bookings_path, notice: 'Remaining bookings were successfully accepted.'
     end
   end
 
@@ -31,6 +32,7 @@ class CombinedBookingsController < ApplicationController
         Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'AM')
       end
     end
+
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 5
     if combined_booking.save
@@ -48,6 +50,7 @@ class CombinedBookingsController < ApplicationController
         Notification.create(recipient: booking.user, action: 'cancelled', notifiable: booking, context: 'AM')
       end
     end
+
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 6
     if combined_booking.save
@@ -69,6 +72,7 @@ class CombinedBookingsController < ApplicationController
         Notification.create(recipient: booking.user, action: 'returned', notifiable: booking, context: 'AM')
       end
     end
+    
     combined_booking = CombinedBooking.find(params[:id])
     combined_booking.status = 4
     if combined_booking.save

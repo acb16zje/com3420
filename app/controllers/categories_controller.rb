@@ -54,8 +54,7 @@ class CategoriesController < ApplicationController
     # Checks whether the category already exists
     if Category.exists?(name: @category.name.titleize.strip)
       redirect_to new_category_path, alert: 'Category already exists.'
-    else
-      if @category.name =~ /^(\w|\s|&|,|;|'){0,30}$/
+    elsif @category.name =~ /^(\w|\s|&|,|;|'){0,30}$/
         @category.name = @category.name.titleize.strip
 
         # Font awesome icon
@@ -78,6 +77,7 @@ class CategoriesController < ApplicationController
           else
             category.icon = @category.icon.chomp('</i>') + 'P</i>'
           end
+
           category.is_peripheral = 1
           category.has_peripheral = 0
           category.save
@@ -94,19 +94,18 @@ class CategoriesController < ApplicationController
 
   # PATCH/PUT /categories/1
   def update
-    begin @category.update(category_params)
-      redirect_to @category, notice: 'Category was successfully updated.'
-    rescue
-      redirect_to request.referrer, alert: 'Category already exist.'
-    end
+    @category.update(category_params)
+    redirect_to @category, notice: 'Category was successfully updated.'
+  rescue
+    redirect_to request.referrer, alert: 'Category already exist.'
   end
 
   # DELETE /categories/1
   def destroy
-    items = Item.where('category_id = ?', @category.id)
+    items = Item.where(category_id: @category.id)
 
     if items.blank?
-      UserHomeCategory.where('category_id = ?', @category.id).destroy_all
+      UserHomeCategory.where(category_id: @category.id).destroy_all
 
       begin
         @category.destroy
