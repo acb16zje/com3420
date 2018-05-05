@@ -66,6 +66,10 @@ class BookingsController < ApplicationController
     @item = @booking.item
     @parents = @item.getItemParents
     @peripherals = @item.getItemPeripherals
+
+    unless @booking.peripherals.blank?
+      @booking.peripherals = @booking.peripherals.tr('[]"', '')
+    end
   end
 
   # POST /bookings
@@ -94,6 +98,18 @@ class BookingsController < ApplicationController
     @booking.combined_booking_id = combined_booking.id
     peripherals = params[:booking][:peripherals]
 
+    # Changing the peripherals array into a string to be saved
+    if peripherals.blank?
+      @booking.peripherals = nil
+    else
+      peripherals_string = ''
+      peripherals.each do |peripheral|
+        next if peripheral == ''
+        peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
+      end
+      @booking.peripherals = peripherals_string[1..-1]
+    end
+
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
     unless peripherals.nil?
@@ -105,7 +121,7 @@ class BookingsController < ApplicationController
 
     if query && @booking.save
       # Making a booking for any peripheral selected
-      unless peripherals.nil?
+      unless peripherals.blank?
         peripherals.each do |peripheral|
           next if peripheral == ''
           booking = Booking.new(booking_params)
@@ -115,7 +131,7 @@ class BookingsController < ApplicationController
           booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
           booking.next_location = params[:booking][:next_location].titleize
           booking.reason = 'None' if params[:booking][:reason].blank?
-          # booking.peripherals = nil
+          booking.peripherals = nil
           booking.combined_booking_id = combined_booking.id
           booking.status = item.user_id == current_user.id ? 2 : 1
           booking.save
@@ -124,7 +140,7 @@ class BookingsController < ApplicationController
 
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       UserMailer.user_booking_requested(combined_booking).deliver
-      puts (combined_booking.sorted_bookings)
+
       combined_booking.sorted_bookings.each do |m|
         UserMailer.manager_booking_requested(m).deliver
       end
@@ -136,26 +152,30 @@ class BookingsController < ApplicationController
 
   # PATCH/PUT /bookings/1
   def update
-    if @booking.update(booking_params)
-      if @booking.status == 2
-        Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
-        UserMailer.booking_approved([@booking]).deliver
-      elsif @booking.status == 5
-        Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
-        UserMailer.booking_rejected([@booking]).deliver
-      end
+    @booking.update(params.require(:booking).permit(:next_location, :reason, :item_id, :user_id))
 
-      combined_booking = CombinedBooking.find(@booking.combined_booking_id)
-      if combined_booking.bookings.where(status: 1).blank?
-        if combined_booking.bookings.where(status: 2).blank?
-          combined_booking.status = 5
-        else
-          combined_booking.status = 2
-        end
-        combined_booking.save
-      end
-      redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
+    return redirect_to bookings_path, notice: 'Booking was successfully updated.'
+  rescue
+    @booking.update(booking_params)
+    if @booking.status == 2
+      Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
+      UserMailer.booking_approved([@booking]).deliver
+    elsif @booking.status == 5
+      Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
+      UserMailer.booking_rejected([@booking]).deliver
     end
+
+    combined_booking = CombinedBooking.find(@booking.combined_booking_id)
+    if combined_booking.bookings.where(status: 1).blank?
+      if combined_booking.bookings.where(status: 2).blank?
+        combined_booking.status = 5
+      else
+        combined_booking.status = 2
+      end
+      combined_booking.save
+    end
+
+    redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
   end
 
   # Set booking as cancelled
@@ -305,7 +325,7 @@ class BookingsController < ApplicationController
   def fully_booked_days_multi
     date_to_disable = []
 
-    bookings = Booking.find_by_sql[
+    bookings = Booking.find_by_sql [
       "WITH RECURSIVE linked_bookings AS (
           SELECT A.start_date AS start_date,
           A.start_datetime AS start_datetime,
@@ -453,10 +473,4 @@ class BookingsController < ApplicationController
   def booking_params
     params.require(:booking).permit!
   end
-
-  def get_parent_id(combined_booking_id)
-    return Booking.where(combined_booking_id: combined_booking_id).minimum(:item_id)
-  end
-
-  helper_method :get_parent_id
 end

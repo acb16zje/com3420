@@ -34,11 +34,11 @@
               = link_to set_booking_accepted_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-success' do
                 %span.icon
                   %i.fas.fa-check
-                %span Accept remaining bookings
+                %span Accept all
               = link_to set_booking_rejected_combined_booking_path(combined_booking), data: { confirm: 'Are you sure?' }, method: :put, class: 'button is-danger' do
                 %span.icon
                   %i.fas.fa-ban
-                %span Reject remaining bookings
+                %span Reject all
           %td.is-hidden
             - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
               #{booking.item.name} #{booking.item.serial}

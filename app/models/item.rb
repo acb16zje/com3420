@@ -34,12 +34,12 @@
 
 class Item < ApplicationRecord
   belongs_to :category
-  has_many :bookings
   belongs_to :user
+  has_many :bookings
   mount_uploader :image, ImageUploader
 
-  has_many :parent_items, :class_name => 'ItemPeripheral', foreign_key: :parent_item_id
-  has_many :peripheral_items, :class_name => 'ItemPeripheral', foreign_key: :peripheral_item_id
+  has_many :parent_items, class_name: 'ItemPeripheral', foreign_key: :parent_item_id
+  has_many :peripheral_items, class_name: 'ItemPeripheral', foreign_key: :peripheral_item_id
 
   attr_accessor :add_parents
   attr_accessor :is_peripheral
@@ -53,5 +53,4 @@ class Item < ApplicationRecord
     parents_for_item = ItemPeripheral.where(peripheral_item: self)
     parents_for_item.map(&:parent_item)
   end
-
 end

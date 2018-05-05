@@ -16,23 +16,14 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  describe "Validations" do
-    describe "name" do
-      it { should validate_presence_of(:name) }
-    end
+  describe 'Validations' do
+    it { should validate_presence_of(:name) }
   end
 
-  describe "Associations" do
-    it { should have_many(:users).through(:user_home_category) }
+  describe 'Associations' do
     it { should have_many(:items) }
-  end
-
-  describe "Scopes" do
-
-  end
-
-  describe "Instance Methods" do
-
+    it { should have_many(:user_home_categories) }
+    it { should have_many(:users).through(:user_home_categories) }
   end
 
   describe 'Insert into database' do

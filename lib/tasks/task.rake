@@ -36,7 +36,7 @@ task update_booking_status_to_ongoing: :environment do
     b.status = 3
     b.save
   end
-  
+
   combined = bookings.map{|b| b.combined_booking}.uniq
 
   combined.each do |b|
@@ -53,7 +53,6 @@ desc 'Update booking status to late'
 task update_booking_status_to_late: :environment do
   # Get current date/time
   bookings = Booking.where('status = 3 AND end_datetime < ?', DateTime.now.strftime("%Y-%m-%d %H:%M:%S"))
-  puts DateTime.now
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")

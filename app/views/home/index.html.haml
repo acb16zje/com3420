@@ -38,9 +38,7 @@
                             %i.far.fa-question-circle.fa-6x
                   %footer.card-footer
                     %p.card-footer-item
-                      %span
-                        = link_to items_path(category_name: usercat.category.name) do
-                          = "#{usercat.category.name}"
+                      %span View #{usercat.category.name}
           .column
             .card
               .card-content.hero.is-small.is-light

@@ -17,7 +17,6 @@ describe 'Managing bookings', js: true do
     end
 
     combined = bookings.map{|b| b.combined_booking}.uniq
-
     combined.each do |b|
       if b.status == 2
         b.status = 3
@@ -26,6 +25,7 @@ describe 'Managing bookings', js: true do
         end
       end
     end
+
     visit 'bookings/completed'
     visit 'bookings/rejected'
     visit 'bookings/late'
@@ -206,7 +206,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:booking_to_reject)
     FactoryBot.create(:booking_to_reject_2)
     visit '/bookings/requests'
-    click_link 'Reject remaining bookings'
+    click_link 'Reject all'
     visit '/bookings/rejected'
     expect(page).to_not have_content 'No data'
   end
@@ -216,7 +216,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:booking_to_reject)
     FactoryBot.create(:booking_to_reject_2)
     visit '/bookings/requests'
-    click_link 'Accept remaining bookings'
+    click_link 'Accept all'
     visit '/bookings/accepted'
     expect(page).to_not have_content 'No data'
   end
@@ -226,9 +226,9 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:ongoing_booking)
     FactoryBot.create(:ongoing_booking_2)
     visit '/bookings'
-    click_link 'Return remaining items'
+    click_link 'Return all'
     visit '/bookings'
-    expect(page).to_not have_content 'Return remaining items'
+    expect(page).to_not have_content 'Return all'
   end
 
   specify 'I can cancel a combined booking' do
@@ -236,9 +236,9 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:accepted_to_ongoing_booking)
     FactoryBot.create(:accepted_to_ongoing_booking_2)
     visit '/bookings/'
-    click_link 'Cancel remaining items'
+    click_link 'Cancel all'
     visit '/bookings/'
-    expect(page).to_not have_content 'Cancel remaining items'
+    expect(page).to_not have_content 'Cancel all'
   end
 
   specify 'I can return my item as like new' do

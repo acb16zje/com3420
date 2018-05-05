@@ -58,7 +58,7 @@ module Importers
           incorrect_rows.append(["#{index}, 1"])
           exit = true
           # Checking if the serial has already been used in another item
-        elsif Item.exists?(:serial => t_serial)
+        elsif Item.exists?(serial: t_serial)
           incorrect_rows.append(["#{index}, 2"])
           exit = true
         end
@@ -69,7 +69,7 @@ module Importers
           incorrect_rows.append(["#{index}, 3"])
           exit = true
           # Checking if the category exists within the database
-        elsif (t_category.instance_of? String) && !Category.exists?(:name => t_category.strip)
+        elsif (t_category.instance_of? String) && !Category.exists?(name: t_category.strip)
           category_name = t_category
           incorrect_rows.append(["#{index}, 4"])
           exit = true
@@ -130,7 +130,7 @@ module Importers
         t_parent_asset_serial = row[9].value if !row[9].nil? && !row[9].value.nil?
         # Checking if the parent_asset_serial exists in the database
         if !t_parent_asset_serial.nil?
-          if !Item.exists?(:serial => t_parent_asset_serial)
+          if !Item.exists?(serial: t_parent_asset_serial)
             incorrect_rows.append(["#{index}, 11"])
             exit = true
           else

@@ -47,7 +47,7 @@ class ItemsController < ApplicationController
     @items = Item.where.not(serial: @item.serial)
     Item.all.each do |i|
       if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
-        @items = @items - [i]
+        @items -= [i]
       end
     end
   end
@@ -72,7 +72,6 @@ class ItemsController < ApplicationController
     unless params[:item_id].blank?
       # @item = Item.find(params[:item_id])
     end
-
   end
 
   # GET /items/1/edit

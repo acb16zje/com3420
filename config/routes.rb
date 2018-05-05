@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   end
 
   resources :items do
-    resources :bookings, except: [:index, :new, :show] do
+    resources :bookings, except: [:index, :show] do
       get 'start_date', on: :collection
       get 'end_date', on: :collection
       get 'peripherals', on: :collection

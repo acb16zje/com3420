@@ -15,7 +15,7 @@
           %h3.title Create asset
         .box
           = simple_form_for(@item) do |f|
-            - if params[:is_peripheral] == "false" || params[:is_peripheral].blank?
+            - if params[:is_peripheral].blank?
               %h4.title Asset Information
             - else
               %h4.title Peripheral Information

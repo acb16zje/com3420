@@ -41,22 +41,8 @@ describe 'Managing assets' do
     click_button 'Save changes'
   end
 
-  specify "I cannot add peripherals to a category which doesn't have peripheral category" do
-    create_cameras
-    create_gopro
-    visit '/items/1/add_peripheral_option'
-    expect(page).to have_content '404'
-  end
-
-  specify "I cannot choose peripherals to a category which doesn't have peripheral category" do
-    create_cameras
-    create_gopro
-    visit '/items/1/choose_peripheral'
-    expect(page).to have_content '404'
-  end
-
   specify 'I can edit an asset that belongs to me' do
-    FactoryBot.create(:macbook_pro, :item_belongs_to_existing_user)
+    FactoryBot.create :macbook_pro
     visit '/items'
     expect(page).to have_content 'Macbook Pro 15-inch'
     click_link('Macbook Pro 15-inch')
@@ -91,6 +77,7 @@ describe 'Managing assets' do
   specify 'I cannot edit an asset serial to the one already exist' do
     FactoryBot.create :macbook_pro
     FactoryBot.create :charging_cable
+    FactoryBot.create :peripheral
     visit '/items'
     click_link('Macbook Pro 15-inch')
     click_link('Edit')
@@ -155,7 +142,7 @@ describe 'Managing assets' do
   end
 
   specify 'I cannot import excel sheets with the wrong header formats' do
-    FactoryBot.create(:camera_category)
+    FactoryBot.create :camera_category
     visit '/items/import'
     attach_file("import_file_file", Rails.root + 'public/test1.xlsx')
     click_button 'Import assets'
@@ -163,8 +150,8 @@ describe 'Managing assets' do
   end
 
   specify 'I can import assets that are in the correct format successfully' do
-    FactoryBot.create(:camera_category)
-    FactoryBot.create(:camera_peripheral_category)
+    FactoryBot.create :camera_category
+    FactoryBot.create :camera_peripheral_category
     visit '/items/import'
     attach_file("import_file_file", Rails.root + 'public/test.xlsx')
     click_button 'Import assets'
@@ -172,9 +159,9 @@ describe 'Managing assets' do
   end
 
   specify 'I cannot import assets that are not in the correct format successfully' do
-    FactoryBot.create(:camera_category)
-    FactoryBot.create(:camera_peripheral_category)
-    FactoryBot.create(:data_logger_category)
+    FactoryBot.create :camera_category
+    FactoryBot.create :camera_peripheral_category
+    FactoryBot.create :data_logger_category
     visit '/items/import'
     attach_file("import_file_file", Rails.root + 'public/test2.xlsx')
     click_button 'Import assets'

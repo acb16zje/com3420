@@ -12,7 +12,3 @@
 #  index_item_peripherals_on_peripheral_item_id  (peripheral_item_id)
 #
 
-class ItemPeripheral < ApplicationRecord
-  belongs_to :parent_item, class_name: 'Item'
-  belongs_to :peripheral_item, class_name: 'Item'
-end

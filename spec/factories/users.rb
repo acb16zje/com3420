@@ -32,7 +32,6 @@ FactoryBot.define do
     sn 'User'
     permission_id 1
     sequence(:username) {|n| "std#{n}usr"}
-    phone '07070707070'
   end
 
   factory :assetmanager, class: 'User' do
@@ -41,7 +40,6 @@ FactoryBot.define do
     sn 'Manager'
     permission_id 2
     sequence(:username) {|n| "ama#{n}usr"}
-    phone ''
   end
 
   factory :admin, class: 'User' do
@@ -50,6 +48,5 @@ FactoryBot.define do
     sn 'Admin'
     permission_id 3
     sequence(:username) {|n| "adm#{n}usr"}
-    phone ''
   end
 end

@@ -37,32 +37,23 @@ FactoryBot.define do
     name 'GoPro Hero 5'
     serial 'GPH5'
     location 'Diamond'
-    user_id {User.find(1).id}
+    user_id 1
     association :category, factory: :camera_category
-
-    trait :item_belongs_to_existing_user do
-      user {User.find(1)}
-    end
   end
 
   factory :macbook_pro, class: 'Item' do
     name 'Macbook Pro 15-inch'
     serial 'MPTR212/A'
     location 'Western Bank Library'
-    user_id {User.find(1).id}
+    user_id 1
     association :category, factory: :laptop_category
-
-    trait :item_belongs_to_existing_user do
-      user {User.find(1)}
-    end
   end
 
   factory :charging_cable, class: 'Item' do
     name 'Charging Cable'
     serial 'CC322'
     location 'Diamond'
-    items_id 1
-    user_id {User.find(1).id}
+    user_id 1
     association :category, factory: :laptop_peripheral_category
   end
 
@@ -86,7 +77,6 @@ FactoryBot.define do
     name 'Charging Cable'
     serial 'CC322'
     location 'Diamond'
-    items_id 1
     association :user, factory: :admin
     association :category, factory: :laptop_peripheral_category
   end

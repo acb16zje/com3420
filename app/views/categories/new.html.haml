@@ -23,8 +23,8 @@
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input'}
-                  %p.help Under 20 characters, characters allowed: alpha-numeric & , ; '
+                    = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input', maxlength: 30}
+                  %p.help Under 30 characters, characters allowed: alpha-numeric & , ; '
 
             .field.is-horizontal
               .field-label.is-normal
