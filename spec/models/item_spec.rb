@@ -32,25 +32,30 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-class Item < ApplicationRecord
-  belongs_to :category
-  belongs_to :user
-  has_many :bookings
-  mount_uploader :image, ImageUploader
+require 'rails_helper'
 
-  has_many :parent_items, class_name: 'ItemPeripheral', foreign_key: :parent_item_id
-  has_many :peripheral_items, class_name: 'ItemPeripheral', foreign_key: :peripheral_item_id
-
-  attr_accessor :add_parents
-  attr_accessor :is_peripheral
-
-  def get_item_peripherals
-    peripherals_for_item = ItemPeripheral.where(parent_item: self)
-    peripherals_for_item.map(&:peripheral_item)
+RSpec.describe ItemPeripheral, type: :model do
+  describe 'Associations' do
+    it { should belong_to :category }
+    it { should belong_to :user }
+    it { should have_many :bookings }
   end
 
-  def get_item_parents
-    parents_for_item = ItemPeripheral.where(peripheral_item: self)
-    parents_for_item.map(&:parent_item)
+  describe 'Methods' do
+    it 'check for get item peripherals' do
+
+    end
+
+    it 'check for get item parents' do
+
+    end
   end
+
+  # describe 'Insert into database' do
+  #   it 'check for valid field values in the database' do
+  #     item_peripheral = ItemPeripheral.new(parent_item_id: 1, peripheral_item_id: 2)
+  #     expect(item_peripheral.parent_item_id).to eq 1.to_i
+  #     expect(item_peripheral.peripheral_item_id).to eq 2.to_i
+  #   end
+  # end
 end

@@ -17,3 +17,20 @@
 #  fk_rails_...  (parent_item_id => items.id)
 #  fk_rails_...  (peripheral_item_id => items.id)
 #
+
+require 'rails_helper'
+
+RSpec.describe ItemPeripheral, type: :model do
+  describe 'Associations' do
+    it { should belong_to :parent_item }
+    it { should belong_to :peripheral_item }
+  end
+
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      item_peripheral = ItemPeripheral.new(parent_item_id: 1, peripheral_item_id: 2)
+      expect(item_peripheral.parent_item_id).to eq 1.to_i
+      expect(item_peripheral.peripheral_item_id).to eq 2.to_i
+    end
+  end
+end

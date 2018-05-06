@@ -31,8 +31,8 @@ class ItemsController < ApplicationController
   def show
     @bookings = Booking.joins(:user).where(item_id: @item.id)
 
-    @parents = @item.getItemParents
-    @peripherals = @item.getItemPeripherals
+    @parents = @item.get_item_parents
+    @peripherals = @item.get_item_peripherals
   end
 
   # GET /items/1/add_peripheral_option
@@ -70,14 +70,20 @@ class ItemsController < ApplicationController
   def new
     @items = Item.all
     unless params[:item_id].blank?
-      # @item = Item.find(params[:item_id])
+      gon.parent_id = params[:item_id]
     end
   end
 
   # GET /items/1/edit
   def edit
     @items = Item.all.where.not(id: params[:id]) if params[:is_peripheral] == 'true'
-    @parents = @item.getItemParents
+    @parents = @item.get_item_parents
+
+    gon.parent_id = []
+
+    @parents.each do |parent|
+      gon.parent_id.append(parent.id)
+    end
   end
 
   # POST /items
@@ -119,7 +125,7 @@ class ItemsController < ApplicationController
       unless params[:item][:is_peripheral].blank?
         parents = params[:item][:add_parents]
         peripheral = @item.id
-        original_parents = @item.getItemParents
+        original_parents = @item.get_item_parents
         deleted_parents = original_parents
         parents.each do |parent|
           unless parent.blank?
@@ -127,7 +133,7 @@ class ItemsController < ApplicationController
             unless deleted_parents.blank?
               deleted_parents -= [new_parent]
             end
-            unless @item.getItemParents.include? new_parent
+            unless @item.get_item_parents.include? new_parent
               pair = ItemPeripheral.create(parent_item_id: parent.to_i, peripheral_item_id: peripheral)
               pair.save
             end
@@ -159,6 +165,7 @@ class ItemsController < ApplicationController
 
   def add_parents_complete
   end
+
   # DELETE /items/1
   def destroy
     @item.destroy

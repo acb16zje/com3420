@@ -54,8 +54,8 @@ class BookingsController < ApplicationController
     @booking = Booking.new
     @item = Item.find_by_id(params[:item_id])
 
-    @parents = @item.getItemParents
-    @peripherals = @item.getItemPeripherals
+    @parents = @item.get_item_parents
+    @peripherals = @item.get_item_peripherals
 
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
@@ -64,8 +64,8 @@ class BookingsController < ApplicationController
   # GET /bookings/1/edit
   def edit
     @item = @booking.item
-    @parents = @item.getItemParents
-    @peripherals = @item.getItemPeripherals
+    @parents = @item.get_item_parents
+    @peripherals = @item.get_item_peripherals
 
     unless @booking.peripherals.blank?
       @booking.peripherals = @booking.peripherals.tr('[]"', '')
@@ -144,7 +144,7 @@ class BookingsController < ApplicationController
       combined_booking.sorted_bookings.each do |m|
         UserMailer.manager_booking_requested(m).deliver
       end
-      
+
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'
@@ -252,7 +252,7 @@ class BookingsController < ApplicationController
   def peripherals
     @item = Item.find_by_id(params[:item_id])
 
-    @peripherals = @item.getItemPeripherals
+    @peripherals = @item.get_item_peripherals
 
     respond_to do |format|
       format.json do

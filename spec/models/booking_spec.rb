@@ -50,6 +50,7 @@ RSpec.describe Booking, type: :model do
       expect(booking.end_datetime).to eq '2018-04-29 03:00:00'
       expect(booking.reason).to eq 'None'
       expect(booking.next_location).to eq 'Diamond'
+      expect(booking.status).to eq 1.to_i
     end
   end
 end

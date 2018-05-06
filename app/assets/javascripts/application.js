@@ -374,6 +374,12 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("width", "100%");
     $('.select2').select2();
 
+    // Preselect parent assets
+    if (gon.parent_id != undefined) {
+        $('#item_add_parents').val(gon.parent_id).trigger('change');
+    }
+
+    // Peripherals ajax
     endTime.change(function () {
         $('#peripherals').empty();
     });
