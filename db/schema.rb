@@ -142,6 +142,8 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   add_foreign_key "bookings", "items"
   add_foreign_key "bookings", "users"
   add_foreign_key "combined_bookings", "users"
+  add_foreign_key "item_peripherals", "items", column: "parent_item_id"
+  add_foreign_key "item_peripherals", "items", column: "peripheral_item_id"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "users"
   add_foreign_key "user_home_categories", "categories"

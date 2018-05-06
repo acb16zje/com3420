@@ -144,6 +144,7 @@ class BookingsController < ApplicationController
       combined_booking.sorted_bookings.each do |m|
         UserMailer.manager_booking_requested(m).deliver
       end
+      
       redirect_to bookings_path, notice: 'Booking was successfully created.'
     else
       redirect_to new_item_booking_path(item_id: @booking.item_id), alert: 'Chosen timeslot conflicts with other bookings.'

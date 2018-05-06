@@ -75,9 +75,7 @@ describe 'Managing assets' do
   end
 
   specify 'I cannot edit an asset serial to the one already exist' do
-    FactoryBot.create :macbook_pro
-    FactoryBot.create :charging_cable
-    FactoryBot.create :peripheral
+    FactoryBot.create :macbook_pro_charging_cable
     visit '/items'
     click_link('Macbook Pro 15-inch')
     click_link('Edit')

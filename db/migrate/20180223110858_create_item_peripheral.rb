@@ -5,7 +5,7 @@ class CreateItemPeripheral < ActiveRecord::Migration[5.1]
       t.references :peripheral_item
     end
 
-    # add_foreign_key :item_peripherals, :items, column: :parent_id, primary_key: :id
-    # add_foreign_key :item_peripherals, :items, column: :peripheral_id, primary_key: :id
+    add_foreign_key :item_peripherals, :items, column: :parent_item_id, primary_key: :id
+    add_foreign_key :item_peripherals, :items, column: :peripheral_item_id, primary_key: :id
   end
 end

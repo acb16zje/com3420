@@ -11,10 +11,15 @@
 #  index_item_peripherals_on_parent_item_id      (parent_item_id)
 #  index_item_peripherals_on_peripheral_item_id  (peripheral_item_id)
 #
+# Foreign Keys
+#
+#  fk_rails_...  (parent_item_id => items.id)
+#  fk_rails_...  (peripheral_item_id => items.id)
+#
 
 FactoryBot.define do
-  factory :peripheral, class: 'ItemPeripheral' do
-    parent_item_id 1
-    peripheral_item_id 2
+  factory :macbook_pro_charging_cable, class: 'ItemPeripheral' do
+    association :parent_item, factory: :macbook_pro
+    association :peripheral_item, factory: :charging_cable
   end
 end
