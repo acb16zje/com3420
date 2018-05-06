@@ -209,6 +209,16 @@ describe 'Managing bookings', js: true do
     expect(page).to_not have_content 'No data'
   end
 
+  specify 'I can accept a booking' do
+    FactoryBot.create(:combined_booking_requested)
+    FactoryBot.create(:booking_to_reject)
+    visit '/bookings/requests'
+    find(:css, ".details-control").click
+    expect(page).to have_content 'Accept'
+    find(:css, "#accept_single_booking1").click
+    expect(page).to have_content 'No data'
+  end
+
   specify 'I can accept a combined booking' do
     FactoryBot.create(:combined_booking_requested)
     FactoryBot.create(:booking_to_reject)

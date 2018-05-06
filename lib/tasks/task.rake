@@ -40,7 +40,7 @@ task update_booking_status_to_ongoing: :environment do
   combined = bookings.map{|b| b.combined_booking}.uniq
 
   combined.each do |b|
-    if b.status == 2
+    if b.status == 2 && b.status != 7
       b.status = 3
       if b.save
         UserMailer.booking_ongoing(b).deliver
@@ -60,9 +60,7 @@ task update_booking_status_to_late: :environment do
     b.status = 7
     b.save
     combined_booking = CombinedBooking.find(b.combined_booking_id)
-    if combined_booking.status == 3
-      combined_booking.status = 7
-    end
+    combined_booking.status = 7
     combined_booking.save
   end
 end

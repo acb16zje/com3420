@@ -165,14 +165,10 @@ class BookingsController < ApplicationController
       UserMailer.booking_approved([@booking]).deliver
       
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
-      if combined_booking.bookings.where(status: 1).blank?
-        if combined_booking.bookings.where(status: 2).blank?
-          combined_booking.status = 5
-        else
-          combined_booking.status = 2
-        end
-        combined_booking.save
+      if combined_booking.bookings.where(status: %w[3 7]).blank?
+        combined_booking.status = 2
       end
+      combined_booking.save
     end
 
     redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
@@ -186,14 +182,10 @@ class BookingsController < ApplicationController
       UserMailer.booking_rejected([@booking]).deliver
       
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
-      if combined_booking.bookings.where(status: 1).blank?
-        if combined_booking.bookings.where(status: 2).blank?
-          combined_booking.status = 5
-        else
-          combined_booking.status = 2
-        end
-        combined_booking.save
+      if combined_booking.bookings.where(status: %w[1 2 3 4 7]).blank?
+        combined_booking.status = 5
       end
+      combined_booking.save
     end
 
     redirect_to requests_bookings_path, notice: 'Booking was successfully rejected.'
@@ -204,6 +196,11 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @booking.status = 6
     if @booking.save
+      combined_booking = CombinedBooking.find(@booking.combined_booking_id)
+      if combined_booking.bookings.where(status: %w[1 2 3 4 5 7]).blank?
+        combined_booking.status = 6
+        combined_booking.save
+      end
       Notification.create(recipient: @booking.user, action: 'cancelled', notifiable: @booking, context: 'AM')
       UserMailer.manager_booking_cancelled([@booking]).deliver
       redirect_to bookings_path, notice: 'Booking was successfully cancelled.'
@@ -222,7 +219,7 @@ class BookingsController < ApplicationController
 
     if booking.save
       combined_booking = CombinedBooking.find(booking.combined_booking_id)
-      if combined_booking.bookings.where(status: 3).blank?
+      if combined_booking.bookings.where(status: %w[3  7]).blank?
         combined_booking.status = 4
         combined_booking.save
       end
