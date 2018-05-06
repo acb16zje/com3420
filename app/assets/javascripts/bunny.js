@@ -1120,7 +1120,7 @@ var ValidationValidators = {
         return new Promise(function (valid, invalid) {
             if (input.value.length > 0 && input.getAttribute('type') === 'tel') {
                 // input is tel, parse string to match tel regexp
-                var Regex = /^[0-9\-\+\(\)\#\ \*]{10,10}$/;
+                var Regex = /^[0-9\-\+\(\)\#\ \*]{10}$/;
                 if (Regex.test(input.value)) {
                     valid();
                 } else {

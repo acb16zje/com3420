@@ -54,11 +54,9 @@ describe 'Managing accounts' do
 
   specify 'I can edit my profile details' do
     visit '/users'
-    view_link = page.find("#view_user_#{@username}", visible: :all)
-    view_link.click
+    page.find("#view_user_#{@username}", visible: :all).click
     expect(page).to have_content 'Edit Details'
     click_link('Edit Details')
-    details_title = page.find('#DetailsTitle', visible: :all)
     fill_in 'number', with: '05050505050'
     click_button('Save changes')
     expect(page).to have_content 'User was successfully updated'
