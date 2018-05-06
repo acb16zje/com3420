@@ -9,54 +9,54 @@ class UserMailer < ApplicationMailer
   def booking_approved(bookings)
     @booking = bookings[0]
     @user = @booking.user
-    @items = bookings.map {|b| b.item}
+    @items = bookings.map(&:item)
     @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Confirmed"
+    mail to: @user.email, subject: 'AMRC - Booking Confirmed'
   end
 
-  #Updated CombinedBooking
+  # Updated CombinedBooking
   def booking_ongoing(booking)
     @booking = booking
     @user = booking.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Started"
+    mail to: @user.email, subject: 'AMRC - Booking Started'
   end
 
-  #Takes CombinedBooking - UPDATED
+  # Takes CombinedBooking - UPDATED
   def user_booking_requested(booking)
     @booking = booking
     @user = booking.user
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Recieved"
+    mail to: @user.email, subject: 'AMRC - Booking Recieved'
   end
 
-  #Takes array of bookings - UPDATED
+  # Takes array of bookings - UPDATED
   def manager_booking_requested(bookings)
     @booking = bookings[0]
     @user = @booking.user
-    @items = bookings.map {|b| b.item}
+    @items = bookings.map(&:item)
     @manager = bookings[0].item.user
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @manager.email, subject: "AMRC - Booking Requested"
+    mail to: @manager.email, subject: 'AMRC - Booking Requested'
   end
 
-  #Takes array of bookings - UPDATED
+  # Takes array of bookings - UPDATED
   def manager_asset_returned(bookings)
     @booking = bookings[0]
     @user = @booking.user
-    @items = bookings.map {|b| b.item}
+    @items = bookings.map(&:item)
     @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @manager.email, subject: "AMRC - Item Returned"
+    mail to: @manager.email, subject: 'AMRC - Item Returned'
   end
 
   def manager_asset_issue(user, item)
@@ -69,48 +69,46 @@ class UserMailer < ApplicationMailer
     mail to: @manager.email, subject: "AMRC - Item Issue: #{@item.name}"
   end
 
-  #Update list bookings
+  # Update list bookings
   def manager_booking_cancelled(bookings)
     @booking = bookings[0]
     @user = @booking.user
-    @items = bookings.map {|b| b.item}
+    @items = bookings.map(&:item)
     @manager = bookings[0].item.user
-
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @manager.email, subject: "AMRC - Booking Cancelled"
+    mail to: @manager.email, subject: 'AMRC - Booking Cancelled'
   end
 
   def booking_rejected(bookings)
     @booking = bookings[0]
     @user = @booking.user
-    @items = bookings.map {|b| b.item}
+    @items = bookings.map(&:item)
     @manager = bookings[0].item.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Booking Rejected"
+    mail to: @user.email, subject: 'AMRC - Booking Rejected'
   end
 
-  #Updated to take combined_booking
+  # Updated to take combined_booking
   def asset_due(booking)
     @booking = booking
     @user = booking.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Return Due Soon"
+    mail to: @user.email, subject: 'AMRC - Return Due Soon'
   end
 
-  #Updated to take combined_booking
+  # Updated to take combined_booking
   def asset_overdue(booking)
     @booking = booking
     @user = booking.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
-    mail to: @user.email, subject: "AMRC - Late For Return"
+    mail to: @user.email, subject: 'AMRC - Late For Return'
   end
-
 end

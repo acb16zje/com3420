@@ -19,6 +19,7 @@
 class CombinedBooking < ApplicationRecord
   belongs_to :user
   has_many :bookings
+  has_many :items, through: :bookings
 
   def sorted_bookings
     managers = bookings.map { |b| b.item.user }.uniq

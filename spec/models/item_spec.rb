@@ -43,8 +43,8 @@ RSpec.describe Item, type: :model do
 
   describe 'Methods' do
     it 'check for get item peripherals' do
-      item = Item.new(name: 'Macbook Pro', condition: 'Like New', location: 'Diamond',
-                      user_id: 1, category_id: 1)
+        item = Item.new(name: 'Macbook Pro', condition: 'Like New', location: 'Diamond',
+                        user_id: 1, category_id: 1)
       item.get_item_peripherals
     end
 

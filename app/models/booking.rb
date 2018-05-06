@@ -31,7 +31,16 @@
 #
 
 class Booking < ApplicationRecord
-  belongs_to :item
+  belongs_to :item, dependent: :destroy
   belongs_to :user
   belongs_to :combined_booking
+  after_destroy :destroy_combined_booking
+
+  private
+
+  def destroy_combined_booking
+    if self.combined_booking.bookings.blank?
+      self.combined_booking.destroy
+    end
+  end
 end

@@ -85,9 +85,9 @@ class ItemsController < ApplicationController
         end
       end
       @parents = @item.get_item_parents
-  
+
       gon.parent_id = []
-  
+
       @parents.each do |parent|
         gon.parent_id.append(parent.id)
       end

@@ -38,7 +38,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'Methods' do
-    it 'generate ldap info' do
+    it 'generate attributes from ldap info' do
       user = User.new(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng')
       user.generate_attributes_from_ldap_info
     end
