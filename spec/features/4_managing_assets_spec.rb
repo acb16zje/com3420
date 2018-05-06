@@ -57,6 +57,22 @@ describe 'Managing assets' do
     unselect('GoPro Hero 5 : GPH5', from: 'item_add_parents')
     select('Macbook Pro 15-inch : MPTR212/A', from: 'item_add_parents')
     click_button 'Save changes'
+    visit '/items/3'
+    find(:css, '#add_peripheral').click
+    click_link 'Choose'
+  end
+
+  specify "I cannot add the peripheral of an asset as it's parent" do
+    create_peripheral_for_gopro
+    create_laptops
+    create_macbook_pro
+    visit '/items/2'
+    find(:css, '#add_peripheral').click
+    click_link 'Choose'
+    select('MPTR212/A (Macbook Pro 15-inch)', from: 'peripheral_asset')
+    click_button 'Add as Peripheral'
+    visit '/items/2'
+    click_link 'Edit'
   end
 
   specify 'I can edit an asset that belongs to me' do
