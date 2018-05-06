@@ -34,28 +34,36 @@
 
 require 'rails_helper'
 
-RSpec.describe ItemPeripheral, type: :model do
+RSpec.describe Item, type: :model do
   describe 'Associations' do
-    it { should belong_to :category }
-    it { should belong_to :user }
-    it { should have_many :bookings }
+    it {should belong_to :category}
+    it {should belong_to :user}
+    it {should have_many :bookings}
   end
 
   describe 'Methods' do
     it 'check for get item peripherals' do
-
+      item = Item.new(name: 'Macbook Pro', condition: 'Like New', location: 'Diamond',
+                      user_id: 1, category_id: 1)
+      item.get_item_peripherals
     end
 
     it 'check for get item parents' do
-
+      item = Item.new(name: 'Macbook Pro', condition: 'Like New', location: 'Diamond',
+                      user_id: 1, category_id: 1)
+      item.get_item_parents
     end
   end
 
-  # describe 'Insert into database' do
-  #   it 'check for valid field values in the database' do
-  #     item_peripheral = ItemPeripheral.new(parent_item_id: 1, peripheral_item_id: 2)
-  #     expect(item_peripheral.parent_item_id).to eq 1.to_i
-  #     expect(item_peripheral.peripheral_item_id).to eq 2.to_i
-  #   end
-  # end
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      item = Item.new(name: 'Macbook Pro', condition: 'Like New', location: 'Diamond',
+                      user_id: 1, category_id: 1)
+      expect(item.name).to eq 'Macbook Pro'
+      expect(item.condition).to eq 'Like New'
+      expect(item.location).to eq 'Diamond'
+      expect(item.user_id).to eq 1.to_i
+      expect(item.category_id).to eq 1.to_i
+    end
+  end
 end

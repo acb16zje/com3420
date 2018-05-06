@@ -34,17 +34,17 @@ require 'rails_helper'
 
 RSpec.describe Booking, type: :model do
   describe 'Associations' do
-    it { should belong_to :item }
-    it { should belong_to :user }
-    it { should belong_to :combined_booking }
+    it {should belong_to :item}
+    it {should belong_to :user}
+    it {should belong_to :combined_booking}
   end
 
   describe 'Insert into database' do
     it 'check for valid field values in the database' do
       booking = Booking.new(
-        start_date: '2018-04-28', start_time: '01:00:00', end_date: '2018-04-29', end_time: '03:00:00',
-        start_datetime: '2018-04-28 01:00:00', end_datetime: '2018-04-29 03:00:00', reason: 'None', next_location: 'Diamond',
-        status: 1, peripherals: ['']
+          start_date: '2018-04-28', start_time: '01:00:00', end_date: '2018-04-29', end_time: '03:00:00',
+          start_datetime: '2018-04-28 01:00:00', end_datetime: '2018-04-29 03:00:00', reason: 'None', next_location: 'Diamond',
+          status: 1, peripherals: ['']
       )
       expect(booking.start_datetime).to eq '2018-04-28 01:00:00'
       expect(booking.end_datetime).to eq '2018-04-29 03:00:00'

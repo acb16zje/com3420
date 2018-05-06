@@ -1,4 +1,3 @@
-
 # == Schema Information
 #
 # Table name: item_peripherals
@@ -22,8 +21,8 @@ require 'rails_helper'
 
 RSpec.describe ItemPeripheral, type: :model do
   describe 'Associations' do
-    it { should belong_to :parent_item }
-    it { should belong_to :peripheral_item }
+    it {should belong_to :parent_item}
+    it {should belong_to :peripheral_item}
   end
 
   describe 'Insert into database' do

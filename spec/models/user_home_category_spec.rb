@@ -20,23 +20,23 @@
 require 'rails_helper'
 
 RSpec.describe UserHomeCategory, type: :model do
-  describe "Validations" do
-    it "is not valid without a user" do
+  describe 'Validations' do
+    it 'is not valid without a user' do
       uhc = FactoryBot.create :user_home_category
       uhc.user = nil
       expect(uhc).to_not be_valid
     end
 
-    it "is not valid without a category" do
+    it 'is not valid without a category' do
       uhc = FactoryBot.create :user_home_category
       uhc.user = nil
       expect(uhc).to_not be_valid
     end
   end
 
-  describe "Associations" do
-    it { should belong_to(:user)}
-    it { should belong_to(:category)}
+  describe 'Associations' do
+    it { should belong_to(:user) }
+    it { should belong_to(:category) }
   end
 
   describe 'Insert into database' do

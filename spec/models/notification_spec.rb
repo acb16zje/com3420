@@ -15,8 +15,8 @@ require 'rails_helper'
 
 RSpec.describe Notification, type: :model do
   describe 'Associations' do
-    it { should belong_to(:recipient) }
-    it { should belong_to(:notifiable) }
+    it {should belong_to(:recipient)}
+    it {should belong_to(:notifiable)}
   end
 
   describe 'Scope' do
