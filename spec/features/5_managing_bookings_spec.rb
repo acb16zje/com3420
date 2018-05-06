@@ -103,8 +103,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can create a booking without time conflict, item owned by other with peripherals' do
-    FactoryBot.create(:laptop_admin_has_peripheral)
-    FactoryBot.create(:charging_cable_admin)
+    FactoryBot.create(:macbook_pro_admin_charging_cable)
     visit '/items/1/bookings/new'
     expect(page).to have_content 'MPTR212/A'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
@@ -124,8 +123,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can create a booking with peripherals without time conflict' do
-    FactoryBot.create(:macbook_pro)
-    FactoryBot.create(:charging_cable)
+    FactoryBot.create(:macbook_pro_charging_cable)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
     test_booking_date_end = test_booking_date_start + 1.days

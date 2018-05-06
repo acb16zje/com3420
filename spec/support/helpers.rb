@@ -113,7 +113,7 @@ module Helpers
   end
 
   def create_microsd_gopro
-    select("GPH5 (GoPro Hero 5)", from: 'item_items_id')
+    select("GoPro Hero 5 : GPH5", from: 'item_add_parents')
     fill_in 'item_name', with: 'MicroSD Card'
     fill_in 'item_serial', with: 'SD322'
     fill_in 'item_location', with: 'Diamond'

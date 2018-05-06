@@ -154,29 +154,49 @@ class BookingsController < ApplicationController
   # PATCH/PUT /bookings/1
   def update
     @booking.update(params.require(:booking).permit(:next_location, :reason, :item_id, :user_id))
+    redirect_to bookings_path, notice: 'Booking was successfully updated.'
+  end
 
-    return redirect_to bookings_path, notice: 'Booking was successfully updated.'
-  rescue
-    @booking.update(booking_params)
-    if @booking.status == 2
+  def set_booking_accepted
+    booking = Booking.find(params[:id])
+    booking.status = 2
+    if booking.save
       Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
       UserMailer.booking_approved([@booking]).deliver
-    elsif @booking.status == 5
+      
+      combined_booking = CombinedBooking.find(@booking.combined_booking_id)
+      if combined_booking.bookings.where(status: 1).blank?
+        if combined_booking.bookings.where(status: 2).blank?
+          combined_booking.status = 5
+        else
+          combined_booking.status = 2
+        end
+        combined_booking.save
+      end
+    end
+
+    redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
+  end
+  
+  def set_booking_rejected
+    booking = Booking.find(params[:id])
+    booking.status = 5
+    if booking.save
       Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
       UserMailer.booking_rejected([@booking]).deliver
-    end
-
-    combined_booking = CombinedBooking.find(@booking.combined_booking_id)
-    if combined_booking.bookings.where(status: 1).blank?
-      if combined_booking.bookings.where(status: 2).blank?
-        combined_booking.status = 5
-      else
-        combined_booking.status = 2
+      
+      combined_booking = CombinedBooking.find(@booking.combined_booking_id)
+      if combined_booking.bookings.where(status: 1).blank?
+        if combined_booking.bookings.where(status: 2).blank?
+          combined_booking.status = 5
+        else
+          combined_booking.status = 2
+        end
+        combined_booking.save
       end
-      combined_booking.save
     end
 
-    redirect_to requests_bookings_path, notice: 'Booking was successfully updated.'
+    redirect_to requests_bookings_path, notice: 'Booking was successfully rejected.'
   end
 
   # Set booking as cancelled
@@ -409,8 +429,8 @@ class BookingsController < ApplicationController
     start_date = Date.parse(start_date)
 
     bookings = Booking.where(status: %w[2 3], item_id: params[:item_id]).where(
-      "start_date = CAST('#{start_date}' AS DATE
-      OR end_date = CAST('#{start_date}' AS DATE)"
+      "(start_date = CAST('#{start_date}' AS DATE))
+      OR (end_date = CAST('#{start_date}' AS DATE))"
     ).select(:start_datetime, :end_datetime)
 
     bookings.each do |booking|

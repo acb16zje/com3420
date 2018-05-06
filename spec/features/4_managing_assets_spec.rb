@@ -34,10 +34,28 @@ describe 'Managing assets' do
     click_button 'Add as Peripheral'
   end
 
-  specify 'I can remove a peripheral for an asset' do
+  specify 'I cannot choose the parent asset to be a peripheral for an asset ' do
+    create_cameras
+    visit '/categories'
+    click_link 'Create Peripheral Category'
+    create_microsd_gopro_choose
+    create_gopro
+    find(:css, '#add_peripheral').click
+    click_link 'Choose'
+    select("SD322 (MicroSD Card)", from: 'peripheral_asset')
+    click_button 'Add as Peripheral'
+    visit '/items/2'
+    find(:css, '#add_peripheral').click
+    click_link 'Choose'
+  end
+
+  specify 'I can remove a parent and add a new parent for an asset' do
+    create_laptops
+    create_macbook_pro
     create_peripheral_for_gopro
     click_link 'Edit'
-    select('None', from: 'item_items_id')
+    unselect('GoPro Hero 5 : GPH5', from: 'item_add_parents')
+    select('Macbook Pro 15-inch : MPTR212/A', from: 'item_add_parents')
     click_button 'Save changes'
   end
 

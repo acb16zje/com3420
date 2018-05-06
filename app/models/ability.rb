@@ -40,6 +40,7 @@ class Ability
       can :manage, UserHomeCategory
       can :manage, User
       can :manage, Booking, user_id: user.id
+      can %i[set_booking_accepted set_booking_rejected], Booking
       can :update, Booking
       can :manage, ItemPeripheral
       can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking

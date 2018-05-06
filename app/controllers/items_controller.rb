@@ -76,7 +76,15 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-    @items = Item.all.where.not(id: params[:id]) if params[:is_peripheral] == 'true'
+    if params[:is_peripheral] == 'true'
+      @items = Item.where.not(id: @item.id)
+      Item.all.each do |i|
+        # if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
+        if !i.parent_items.where(peripheral_item_id: @item.id).blank?
+          @items = @items - [i]
+        end
+      end
+    end
     @parents = @item.getItemParents
   end
 
@@ -144,21 +152,6 @@ class ItemsController < ApplicationController
     redirect_to request.referrer, alert: 'Serial already exist'
   end
 
-  def add_parents
-    @item = Item.find(params[:id])
-
-    @items = Item.where.not(serial: @item.serial)
-    Item.all.each do |i|
-      if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
-        @items = @items - [i]
-      end
-    end
-
-    @item_peripheral = ItemPeripheral.new
-  end
-
-  def add_parents_complete
-  end
   # DELETE /items/1
   def destroy
     @item.destroy

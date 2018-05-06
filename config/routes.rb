@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     get 'late', on: :collection
 
     get 'booking_returned', on: :member
+    put 'set_booking_rejected', on: :member
+    put 'set_booking_accepted', on: :member
     put 'set_booking_returned', on: :member
     put 'set_booking_cancelled', on: :member
   end
@@ -39,11 +41,7 @@ Rails.application.routes.draw do
       get 'end_date', on: :collection
       get 'peripherals', on: :collection
     end
-
-    resources :item_peripherals, only: :new do
-      post 'add_parents', on: :collection
-    end
-
+    
     get 'import', on: :collection
     post 'import_file', on: :collection
     get 'manager', on: :collection
