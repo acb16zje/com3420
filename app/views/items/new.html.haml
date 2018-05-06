@@ -26,6 +26,7 @@
                   .field{style: 'margin: auto'}
                     .control
                       = f.select :add_parents, @items.map { |i| [i.name + " : " + i.serial, i.id] }, {}, {class: 'select2', multiple: ''}
+                      = f.hidden_field :is_peripheral, value: true
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral] == "true"

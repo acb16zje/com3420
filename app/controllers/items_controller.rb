@@ -89,10 +89,9 @@ class ItemsController < ApplicationController
 
     begin
       @item.save
-      unless params[:is_peripheral].blank?
+      unless params[:item][:is_peripheral].blank?
         parents = params[:item][:add_parents]
         peripheral = @item.id
-
         parents.each do |parent|
           unless parent.blank?
             pair = ItemPeripheral.create(parent_item_id: parent.to_i, peripheral_item_id: peripheral)
