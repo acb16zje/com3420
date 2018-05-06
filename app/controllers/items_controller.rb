@@ -31,8 +31,8 @@ class ItemsController < ApplicationController
   def show
     @bookings = Booking.joins(:user).where(item_id: @item.id)
 
-    @parents = @item.getItemParents
-    @peripherals = @item.getItemPeripherals
+    @parents = @item.get_item_parents
+    @peripherals = @item.get_item_peripherals
   end
 
   # GET /items/1/add_peripheral_option
@@ -70,7 +70,7 @@ class ItemsController < ApplicationController
   def new
     @items = Item.all
     unless params[:item_id].blank?
-      # @item = Item.find(params[:item_id])
+      gon.parent_id = params[:item_id]
     end
   end
 
@@ -80,12 +80,18 @@ class ItemsController < ApplicationController
       @items = Item.where.not(id: @item.id)
       Item.all.each do |i|
         # if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
-        if !i.parent_items.where(peripheral_item_id: @item.id).blank?
+        unless i.peripheral_items.where(parent_item_id: @item.id).blank?
           @items = @items - [i]
         end
       end
+      @parents = @item.get_item_parents
+  
+      gon.parent_id = []
+  
+      @parents.each do |parent|
+        gon.parent_id.append(parent.id)
+      end
     end
-    @parents = @item.getItemParents
   end
 
   # POST /items
@@ -127,7 +133,7 @@ class ItemsController < ApplicationController
       unless params[:item][:is_peripheral].blank?
         parents = params[:item][:add_parents]
         peripheral = @item.id
-        original_parents = @item.getItemParents
+        original_parents = @item.get_item_parents
         deleted_parents = original_parents
         parents.each do |parent|
           unless parent.blank?
@@ -135,7 +141,7 @@ class ItemsController < ApplicationController
             unless deleted_parents.blank?
               deleted_parents -= [new_parent]
             end
-            unless @item.getItemParents.include? new_parent
+            unless @item.get_item_parents.include? new_parent
               pair = ItemPeripheral.create(parent_item_id: parent.to_i, peripheral_item_id: peripheral)
               pair.save
             end

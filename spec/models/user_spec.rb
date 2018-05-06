@@ -25,3 +25,31 @@
 #  index_users_on_username  (username)
 #
 
+require 'rails_helper'
+
+RSpec.describe User, type: :model do
+  describe 'Associations' do
+    it {should have_many(:combined_bookings)}
+    it {should have_many(:bookings)}
+    it {should have_many(:items)}
+    it {should have_many(:user_home_categories)}
+    it {should have_many(:categories).through(:user_home_categories)}
+    it {should have_many(:notifications)}
+  end
+
+  describe 'Methods' do
+    it 'generate ldap info' do
+      user = User.new(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng')
+      user.generate_attributes_from_ldap_info
+    end
+  end
+
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      user = User.new(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng')
+      expect(user.email).to eq 'zjeng1@sheffield.ac.uk'
+      expect(user.givenname).to eq 'Zer Jun'
+      expect(user.sn).to eq 'Eng'
+    end
+  end
+end

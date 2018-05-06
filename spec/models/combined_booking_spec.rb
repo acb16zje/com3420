@@ -31,17 +31,13 @@ RSpec.describe CombinedBooking, type: :model do
     end
   end
 
-  # describe 'Insert into database' do
-  #   it 'check for valid field values in the database' do
-  #     booking = Booking.new(
-  #         start_date: '2018-04-28', start_time: '01:00:00', end_date: '2018-04-29', end_time: '03:00:00',
-  #         start_datetime: '2018-04-28 01:00:00', end_datetime: '2018-04-29 03:00:00', reason: 'None', next_location: 'Diamond',
-  #         status: 1, peripherals: ['']
-  #     )
-  #     expect(booking.start_datetime).to eq '2018-04-28 01:00:00'
-  #     expect(booking.end_datetime).to eq '2018-04-29 03:00:00'
-  #     expect(booking.reason).to eq 'None'
-  #     expect(booking.next_location).to eq 'Diamond'
-  #   end
-  # end
+  describe 'Insert into database' do
+    it 'check for valid field values in the database' do
+      combined_booking = CombinedBooking.new(id: 1, status: 2, owner_id: 2, user_id: 2)
+      expect(combined_booking.id).to eq 1.to_i
+      expect(combined_booking.status).to eq 2.to_i
+      expect(combined_booking.owner_id).to eq 2.to_i
+      expect(combined_booking.user_id).to eq 2.to_i
+    end
+  end
 end

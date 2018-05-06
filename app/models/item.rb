@@ -44,12 +44,12 @@ class Item < ApplicationRecord
   attr_accessor :add_parents
   attr_accessor :is_peripheral
 
-  def getItemPeripherals
+  def get_item_peripherals
     peripherals_for_item = ItemPeripheral.where(parent_item: self)
     peripherals_for_item.map(&:peripheral_item)
   end
 
-  def getItemParents
+  def get_item_parents
     parents_for_item = ItemPeripheral.where(peripheral_item: self)
     parents_for_item.map(&:parent_item)
   end
