@@ -74,7 +74,7 @@ FactoryBot.define do
     reason "Reason 1"
     next_location "Diamond"
     status 2
-    peripherals ""
+    peripherals "[CC322]"
 
     association :user, factory: :user
     association :item, factory: :gopro

@@ -132,6 +132,17 @@ describe 'Managing assets' do
     expect(page).to_not have_content 'Macbook Pro 15-inch'
   end
 
+  specify 'I can delete an asset after booking it' do
+    FactoryBot.create :combined_booking_accepted
+    FactoryBot.create :booking_today_all_day
+    visit '/items'
+    click_link('GoPro Hero 5')
+    click_link('Edit')
+    click_link('Delete')
+    expect(page).to have_content 'Asset was successfully deleted'
+    expect(page).to_not have_content 'GoPro Hero 5'
+  end
+
   specify 'I can view the list of my assets' do
     FactoryBot.create :laptop_category
     create_macbook_pro

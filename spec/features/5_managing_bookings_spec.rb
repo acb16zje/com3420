@@ -139,8 +139,7 @@ describe 'Managing bookings', js: true do
   end
 
   specify 'I can edit booking of a peripheral' do
-    FactoryBot.create(:macbook_pro)
-    FactoryBot.create(:charging_cable)
+    FactoryBot.create(:macbook_pro_charging_cable)
     visit '/items/2/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
     test_booking_date_end = test_booking_date_start + 1.days
@@ -149,7 +148,7 @@ describe 'Managing bookings', js: true do
     page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}')")
     page.execute_script("$('#endTime').pickatime('picker').set('select', '#{test_booking_date_end.strftime("%I:%M %p")}')")
     fill_in 'booking_next_location', with: 'pam liversidge building'
-    click_button('Confirm booking')
+    click_button 'Confirm booking'
     visit '/bookings/1/edit'
     click_button 'Save changes'
   end
@@ -249,7 +248,7 @@ describe 'Managing bookings', js: true do
     expect(page).to_not have_content 'Cancel all'
   end
 
-  specify 'I can return my item as like new' do
+  specify 'I can return my item as like new as a user' do
     FactoryBot.create(:combined_booking_ongoing)
     FactoryBot.create(:ongoing_booking)
     visit '/bookings'
