@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @user_home_categories = UserHomeCategory.where(user_id: current_user.id)
-    @categories = Category.all
+    @user_home_categories = UserHomeCategory.where(user: current_user)
     render layout: 'application'
   end
 end

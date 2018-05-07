@@ -21,8 +21,19 @@ class CombinedBooking < ApplicationRecord
   has_many :bookings
   has_many :items, through: :bookings
 
+  scope :find_by_owner, ->(user) { where owner_id: user.id }
+  scope :find_by_user, ->(user) { where user_id: user.id }
+  scope :item_owned_by, ->(user) { joins(:item).where(items: {user: user}) }
+  scope :pending, -> { where status: 1 }
+  scope :accepted, -> { where status: 2 }
+  scope :ongoing, -> { where status: 3 }
+  scope :completed, -> { where status: %w[4 6] }
+  scope :rejected, -> { where status: 5 }
+  scope :cancelled, -> { where status: 6 }
+  scope :late, -> { where status: 7 }
+
   def sorted_bookings
     managers = bookings.map { |b| b.item.user }.uniq
-    booking_list = managers.map { |m| Booking.joins(:item).where('items.user_id = ? AND combined_booking_id = ?', m.id, id) }
+    managers.map { |m| Booking.joins(:item).where('items.user_id = ? AND combined_booking_id = ?', m.id, id) }
   end
 end

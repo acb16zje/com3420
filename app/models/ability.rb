@@ -34,7 +34,7 @@ class Ability
     user ||= User.new
 
     # Admin
-    if user.permission_id == 3
+    if user.admin?
       can :manage, Item
       can :manage, Category
       can :manage, UserHomeCategory
@@ -47,25 +47,25 @@ class Ability
     end
 
     # Asset Manager
-    if user.permission_id == 2
+    if user.asset_manager?
       can %i[edit update], Item, user_id: user.id
       can %i[read create], Item
       can :manage, Booking, user_id: user.id
       can :manage, Category
       can %i[show edit update manager], User, id: user.id
       can :manage, UserHomeCategory
-      can :manage, ItemPeripheral 
+      can :manage, ItemPeripheral
       can %i[set_booking_accepted set_booking_rejected set_booking_returned set_booking_cancelled], CombinedBooking
     end
 
     # User
-    if user.permission_id == 1
+    if user.user?
       can %i[read manager], Item
       can %i[read new create edit update set_booking_cancelled booking_returned set_booking_returned start_date end_date peripherals], Booking, user_id: user.id
       can %i[show edit update manager], User, id: user.id
       can :filter, Category
       can :manage, UserHomeCategory
-      can :manage, ItemPeripheral 
+      can :manage, ItemPeripheral
       can %i[set_booking_returned set_booking_cancelled], CombinedBooking
     end
   end

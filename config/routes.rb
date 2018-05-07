@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount EpiCas::Engine, at: '/'
   devise_for :users
 
-  resources :categories do
+  resources :categories, except: :show do
     get 'filter', on: :collection
     post 'new_peripheral', on: :member
   end
@@ -11,50 +11,62 @@ Rails.application.routes.draw do
     get 'manager', on: :collection
   end
 
-  resources :user_home_categories, except: [:show, :edit, :update]
+  resources :user_home_categories, except: %i[show edit update]
 
   resources :combined_bookings, only: [] do
-    put 'set_booking_rejected', on: :member
-    put 'set_booking_accepted', on: :member
-    put 'set_booking_returned', on: :member
-    put 'set_booking_cancelled', on: :member
+    member do
+      put 'set_booking_rejected'
+      put 'set_booking_accepted'
+      put 'set_booking_returned'
+      put 'set_booking_cancelled'
+    end
   end
 
-  resources :bookings, except: [:new, :show] do
-    get 'requests', on: :collection
-    get 'accepted', on: :collection
-    get 'ongoing', on: :collection
-    get 'completed', on: :collection
-    get 'rejected', on: :collection
-    get 'late', on: :collection
+  resources :bookings, except: %i[new show] do
+    collection do
+      get 'requests'
+      get 'accepted'
+      get 'ongoing'
+      get 'completed'
+      get 'rejected'
+      get 'late'
+    end
 
-    get 'booking_returned', on: :member
-    put 'set_booking_rejected', on: :member
-    put 'set_booking_accepted', on: :member
-    put 'set_booking_returned', on: :member
-    put 'set_booking_cancelled', on: :member
+    member do
+      get 'booking_returned'
+      put 'set_booking_rejected'
+      put 'set_booking_accepted'
+      put 'set_booking_returned'
+      put 'set_booking_cancelled'
+    end
   end
 
   resources :items do
-    resources :bookings, except: [:index, :show] do
-      get 'start_date', on: :collection
-      get 'end_date', on: :collection
-      get 'peripherals', on: :collection
+    resources :bookings, except: %i[index show] do
+      collection do
+        get 'start_date'
+        get 'end_date'
+        get 'peripherals'
+      end
     end
-    
-    get 'import', on: :collection
-    post 'import_file', on: :collection
-    get 'manager', on: :collection
-    put 'update_manager_multiple', on: :collection
-    post 'change_manager_multiple', on: :collection
-    put 'update_manager_multiple_and_delete', on: :collection
-    get 'change_manager_multiple_and_delete', on: :collection
 
-    get 'add_peripheral_option', on: :member
-    get 'choose_peripheral', on: :member
-    post 'add_peripheral', on: :member
-    get 'add_parents', on: :member
-    post 'add_parents_complete', on: :member
+    collection do
+      get 'import'
+      post 'import_file'
+      get 'manager'
+      put 'update_manager_multiple'
+      post 'change_manager_multiple'
+      put 'update_manager_multiple_and_delete'
+      get 'change_manager_multiple_and_delete'
+    end
+
+    member do
+      get 'add_peripheral_option'
+      get 'choose_peripheral'
+      post 'add_peripheral'
+      get 'add_parents'
+      post 'add_parents_complete'
+    end
   end
 
   resources :notifications, only: :index do

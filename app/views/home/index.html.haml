@@ -19,7 +19,7 @@
                 Search
 
     %br
-    - if @user_home_categories.any?
+    - unless @user_home_categories.blank?
       - placeholder = 5 - (@user_home_categories.length % 5)
       - @user_home_categories.each_slice(5) do |slice|
         .columns

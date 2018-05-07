@@ -36,6 +36,16 @@ class Booking < ApplicationRecord
   belongs_to :combined_booking
   after_destroy :destroy_combined_booking
 
+  scope :find_by_user, ->(user) { where user: user }
+  scope :item_owned_by, ->(user) { joins(:item).where(items: { user: user }) }
+  scope :pending, -> { where status: 1 }
+  scope :accepted, -> { where status: 2 }
+  scope :ongoing, -> { where status: 3 }
+  scope :completed, -> { where status: %w[4 6] }
+  scope :rejected, -> { where status: 5 }
+  scope :cancelled, -> { where status: 6 }
+  scope :late, -> { where status: 7 }
+
   private
 
   def destroy_combined_booking

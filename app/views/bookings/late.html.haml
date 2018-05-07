@@ -12,6 +12,7 @@
       %tr
         %th Details
         %th ID
+        %th Main Asset
         %th Start Date-Time
         %th End Date-Time
         %th Location
@@ -23,6 +24,7 @@
         %tr
           %td.details-control{"data-target" => "row-#{combined_booking.id}"}
           %td.has-text-centered= combined_booking.id
+          %td.has-text-centered= link_to combined_booking.bookings.first.item.name, combined_booking.bookings.first.item
           %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.next_location
@@ -66,7 +68,8 @@
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td{colspan: 8}
+          %td.is-hidden
+          %td{colspan: 9}
             %table.table.is-striped.is-bordered
               %thead
                 %tr

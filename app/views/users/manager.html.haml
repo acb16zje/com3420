@@ -13,7 +13,7 @@
         %th Action
     %tbody
       - @users.each do |user|
-        - if user.permission_id > 1
+        - unless user.user?
           %tr
             %td.has-text-centered= user.givenname.to_s + ' ' + user.sn.to_s
             %td.has-text-centered= user.email

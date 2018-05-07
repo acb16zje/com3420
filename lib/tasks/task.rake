@@ -56,12 +56,18 @@ task update_booking_status_to_late: :environment do
   bookings.each do |b|
     Notification.create(recipient: b.user, action: "overdue", notifiable: b, context: "U")
     Notification.create(recipient: b.item.user, action: "overdue", notifiable: b, context: "AM")
-    UserMailer.asset_overdue(b).deliver_now
     b.status = 7
     b.save
-    combined_booking = CombinedBooking.find(b.combined_booking_id)
-    combined_booking.status = 7
-    combined_booking.save
+  end
+
+  combined = bookings.map{|b| b.combined_booking}.uniq
+  combined.each do |b|
+    if b.status == 3 && b.status != 7
+      b.status = 7
+      if b.save
+        UserMailer.asset_overdue(b).deliver_now
+      end
+    end
   end
 end
 

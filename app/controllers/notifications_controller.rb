@@ -2,7 +2,7 @@ require 'irb'
 
 class NotificationsController < ApplicationController
   def index
-    @context = current_user.permission_id > 1 ? "AM" : "U"
+    @context = current_user.user? ? "U" : "AM"
     @notifications = Notification.where(recipient: current_user, context: @context).last(5).reverse
   end
 

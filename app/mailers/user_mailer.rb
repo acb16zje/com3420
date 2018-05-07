@@ -93,9 +93,9 @@ class UserMailer < ApplicationMailer
   end
 
   # Updated to take combined_booking
-  def asset_due(bookings)
-    @booking = bookings[0]
-    @user = @booking.user
+  def asset_due(booking)
+    @booking = booking
+    @user = booking.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 
@@ -103,9 +103,9 @@ class UserMailer < ApplicationMailer
   end
 
   # Updated to take combined_booking
-  def asset_overdue(bookings)
-    @booking = bookings[0]
-    @user = @booking.user
+  def asset_overdue(booking)
+    @booking = booking
+    @user = booking.user
 
     attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
 

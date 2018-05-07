@@ -9,44 +9,44 @@ class BookingsController < ApplicationController
 
   # GET /bookings
   def index
-    @combined_bookings = CombinedBooking.where(user_id: current_user.id)
-    @bookings = Booking.where(user_id: current_user.id)
+    @combined_bookings = CombinedBooking.find_by_user(current_user)
+    @bookings = Booking.find_by_user(current_user)
   end
 
   # GET /bookings/requests
   def requests
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 1)
-    @bookings = Booking.joins(:item).where(status: 1, items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.pending.find_by_owner(current_user)
+    @bookings = Booking.pending.item_owned_by(current_user)
   end
 
   # GET /bookings/accepted
   def accepted
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 2)
-    @bookings = Booking.joins(:item).where(status: 2, items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.accepted.find_by_owner(current_user)
+    @bookings = Booking.accepted.item_owned_by(current_user)
   end
 
   # GET /bookings/ongoing
   def ongoing
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 3)
-    @bookings = Booking.joins(:item).where(status: 3, items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.ongoing.find_by_owner(current_user)
+    @bookings = Booking.ongoing.item_owned_by(current_user)
   end
 
   # GET /bookings/completed
   def completed
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 4)
-    @bookings = Booking.joins(:item).where(status: %w[4 6], items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.completed.find_by_owner(current_user)
+    @bookings = Booking.completed.item_owned_by(current_user)
   end
 
   # GET /bookings/rejected
   def rejected
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 5)
-    @bookings = Booking.joins(:item).where(status: 5, items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.rejected.find_by_owner(current_user)
+    @bookings = Booking.rejected.item_owned_by(current_user)
   end
 
   # GET /bookings/late
   def late
-    @combined_bookings = CombinedBooking.where(owner_id: current_user.id, status: 7)
-    @bookings = Booking.joins(:item).where(status: 7, items: {user_id: current_user.id})
+    @combined_bookings = CombinedBooking.late.find_by_owner(current_user)
+    @bookings = Booking.late.item_owned_by(current_user)
   end
 
   # GET /bookings/new
@@ -163,7 +163,7 @@ class BookingsController < ApplicationController
     if booking.save
       Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
       UserMailer.booking_approved([@booking]).deliver
-      
+
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
       if combined_booking.bookings.where(status: %w[3 7]).blank?
         combined_booking.status = 2
@@ -173,14 +173,14 @@ class BookingsController < ApplicationController
 
     redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
   end
-  
+
   def set_booking_rejected
     booking = Booking.find(params[:id])
     booking.status = 5
     if booking.save
       Notification.create(recipient: @booking.user, action: 'rejected', notifiable: @booking, context: 'U')
       UserMailer.booking_rejected([@booking]).deliver
-      
+
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
       if combined_booking.bookings.where(status: %w[1 2 3 4 7]).blank?
         combined_booking.status = 5

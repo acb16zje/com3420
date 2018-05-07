@@ -7,11 +7,6 @@ class CategoriesController < ApplicationController
     @categories = Category.all
   end
 
-  # GET /categories/1
-  def show
-    redirect_to categories_path
-  end
-
   # GET /categories/filter
   def filter
     @categories = Category.all
@@ -94,7 +89,7 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1
   def update
     @category.update(category_params)
-    redirect_to @category, notice: 'Category was successfully updated.'
+    redirect_to categories_path, notice: 'Category was successfully updated.'
   rescue
     redirect_to request.referrer, alert: 'Category already exist.'
   end

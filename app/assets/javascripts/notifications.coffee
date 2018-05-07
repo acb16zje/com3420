@@ -12,7 +12,7 @@ class Notifications
       success: @handleSuccess
     )
 
-  handleHover: (e) =>
+  handleHover: () =>
     $.ajax(
       url: "/notifications/mark_as_read"
       dataType: "JSON"

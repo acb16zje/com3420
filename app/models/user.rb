@@ -40,4 +40,16 @@ class User < ApplicationRecord
   has_many :user_home_categories, dependent: :destroy
   has_many :categories, through: :user_home_categories
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+
+  def user?
+    self.permission_id == 1
+  end
+
+  def asset_manager?
+    self.permission_id == 2
+  end
+
+  def admin?
+    self.permission_id == 3
+  end
 end
