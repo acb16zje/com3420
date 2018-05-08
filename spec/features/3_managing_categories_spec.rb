@@ -57,6 +57,21 @@ describe 'Managing categories' do
     expect(page).to have_content 'Cameras - Peripherals'
   end
 
+  specify 'I can delete a peripheral category then recreate it' do
+    fill_in 'category_name', with: 'Cameras'
+    find(:css, "#want_peripheral[value='1']").set(true)
+    click_button('Create category')
+    expect(page).to have_content 'Category was successfully created.'
+    expect(page).to have_content 'Cameras'
+    expect(page).to have_content 'Cameras - Peripherals'
+    find(:css, '#delete_category_1').click
+    expect(page).to have_content 'Category was successfully deleted.'
+    expect(page).to_not have_content 'Cameras - Peripherals'
+    click_link('Create Peripheral Category')
+    expect(page).to have_content 'Peripheral category successfully created'
+    expect(page).to have_content 'Cameras - Peripherals'
+  end
+
   specify 'I can create a category with a peripheral category with a font awesome icon' do
     fill_in 'category_name', with: 'Cameras'
     fill_in 'category_icon', with: '<i class="fas fa-camera"></i>'

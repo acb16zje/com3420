@@ -49,7 +49,7 @@ class CategoriesController < ApplicationController
     # Checks whether the category already exists
     if Category.exists?(name: @category.name.titleize.strip)
       redirect_to new_category_path, alert: 'Category already exists.'
-    elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"@$#%*-]{4,}$/
+    elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"&@$#%*-]{4,}$/
       @category.name = @category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip
 
       # Font awesome icon
