@@ -25,7 +25,7 @@ module Importers
         header += head.value + ","
       end
       # Checks whether the header is in the right order and format
-      if header[0..-2] != "name,serial,category,condition,acquisition_date,purchase_price,location,manufacturer,model,parent_asset_serial,retired_date,po_number,comment"
+      if header[0..-2] != "name,serial,category,condition,acquisition_date,purchase_price,location,manufacturer,model,peripherals,retired_date,po_number,comment,keywords"
         return [1, []]
       end
       worksheet.delete_row(0) #Delete row of headers so it does not interfere with item creation
@@ -40,10 +40,11 @@ module Importers
         t_purchase_price = nil
         t_manufacturer = nil
         t_model = nil
-        t_parent_asset_serial = nil
+        t_peripherals = nil
         t_retired_date = nil
         t_po_number = nil
         t_comment = nil
+        t_keywords = nil
 
         t_name = row[0].value if !row[0].nil? && !row[0].value.nil?
         # Checking if the name cell is in the correct format
@@ -94,7 +95,9 @@ module Importers
           incorrect_rows.append(["#{index}, 6"])
           exit = true
         else
-          t_acquisition_date = Date.parse(t_acquisition_date.to_s)
+          if !t_acquisition_date.nil?
+            t_acquisition_date = Date.parse(t_acquisition_date.to_s)
+          end
         end
 
         t_purchase_price = row[5].value if !row[5].nil? && !row[5].value.nil?
@@ -108,7 +111,7 @@ module Importers
 
         t_location = row[6].value if !row[6].nil? && !row[6].value.nil?
         # Checking if the location cell is in the correct format
-        if t_location.nil? || !(t_location.instance_of? String)
+        if !t_location.nil? && !(t_location.instance_of? String)
           incorrect_rows.append(["#{index}, 8"])
           exit = true
         end
@@ -127,28 +130,29 @@ module Importers
           exit = true
         end
 
-        t_parent_asset_serial = row[9].value if !row[9].nil? && !row[9].value.nil?
-        # Checking if the parent_asset_serial exists in the database
-        if !t_parent_asset_serial.nil?
-          if !Item.exists?(serial: t_parent_asset_serial)
-            incorrect_rows.append(["#{index}, 11"])
+        t_peripherals = row[9].value if !row[9].nil? && !row[9].value.nil?
+        peripheral_error = 0
+        allowed_peripheral = []
+        # Checking if the peripheral serials exists in the database
+        if !t_peripherals.nil?
+          peripherals = t_peripherals.split(',')
+          peripherals.each do |peripheral|
+            if !Item.exists?(serial: peripheral)
+              peripheral_error = 11
+              break
+            end
+            allowed_peripheral.append(peripheral)
+          end
+          if peripheral_error > 0
+            incorrect_rows.append(["#{index}, 11"]) 
             exit = true
-          else
-            if !(Item.where("serial = ?", t_parent_asset_serial).first.category.has_peripheral)
-              incorrect_rows.append(["#{index}, 12"])
-              exit = true
-            end
-            if !t_category.nil? && category_name != (Item.where("serial = ?", t_parent_asset_serial).first.category.name + " - Peripherals")
-              incorrect_rows.append(["#{index}, 16"])
-              exit = true
-            end
           end
         end
 
         t_retired_date = row[10].value if !row[10].nil? && !row[10].value.nil?
         # Checking if the retired_date cell is in the correct format and if retired_date is filled, condition must be set as Retired
         if !t_retired_date.nil? && !(t_retired_date.instance_of? DateTime) && t_condition != "Retired"
-          incorrect_rows.append(["#{index}, 13"])
+          incorrect_rows.append(["#{index}, 12"])
           exit = true
         elsif !t_retired_date.nil?
           t_retired_date = Date.parse(t_retired_date.to_s)
@@ -157,13 +161,20 @@ module Importers
         t_po_number = row[11].value if !row[11].nil? && !row[11].value.nil?
         # Checking if the po_number cell is in the correct format
         if !t_po_number.nil? && !(t_po_number.instance_of? String)
-          incorrect_rows.append(["#{index}, 14"])
+          incorrect_rows.append(["#{index}, 13"])
           exit = true
         end
 
         t_comment = row[12].value if !row[12].nil? && !row[12].value.nil?
         # Checking if the comment cell is in the correct format
         if !t_comment.nil? && !(t_comment.instance_of? String)
+          incorrect_rows.append(["#{index}, 14"])
+          exit = true
+        end
+
+        t_keywords = row[13].value if !row[13].nil? && !row[13].value.nil?
+        # Checking if the PERIPHERAL cell is in the correct format
+        if !t_keywords.nil? && !(t_keywords.instance_of? String)
           incorrect_rows.append(["#{index}, 15"])
           exit = true
         end
@@ -176,7 +187,18 @@ module Importers
                         purchase_price: t_purchase_price, location: t_location,
                         manufacturer: t_manufacturer, model: t_model, retired_date: t_retired_date,
                         po_number: t_po_number, comment: t_comment, user_id: t_user_id)
-        item.save
+        
+        if item.save
+          unless allowed_peripheral.blank?
+            allowed_peripheral.each do |peripheral|
+              # Creating the parent and peripheral relationship for each peripheral
+              item_id = Item.where(serial: t_serial).first.id
+              peripheral_id = Item.where(serial: peripheral).first.id
+              pair = ItemPeripheral.create(parent_item_id: item_id, peripheral_item_id: peripheral_id)
+              pair.save
+            end
+          end
+        end
       end
 
       return [2, incorrect_rows]

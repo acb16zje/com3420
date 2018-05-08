@@ -23,7 +23,7 @@ class CategoriesController < ApplicationController
     parent_category.has_peripheral = 1
 
     category = Category.find_by_id(params[:id]).dup
-    category.name = category.name.titleize.strip + ' - Peripherals'
+    category.name = category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip + ' - Peripherals'
 
     if (!category.icon.include? 'material-icons') && !category.icon.empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
@@ -49,8 +49,8 @@ class CategoriesController < ApplicationController
     # Checks whether the category already exists
     if Category.exists?(name: @category.name.titleize.strip)
       redirect_to new_category_path, alert: 'Category already exists.'
-    elsif @category.name =~ /^(\w|\s|&|,|;|'){0,30}$/
-      @category.name = @category.name.titleize.strip
+    elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"@$#%*-]{4,}$/
+      @category.name = @category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip
 
       # Font awesome icon
       if (!@category.icon.include? 'material-icons') && !@category.icon.empty?
@@ -65,7 +65,7 @@ class CategoriesController < ApplicationController
         @category.has_peripheral = 1
 
         category = Category.new(category_params)
-        category.name = category.name.titleize.strip + ' - Peripherals'
+        category.name = category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip + ' - Peripherals'
 
         if (!category.icon.include? 'material-icons') && !category.icon.empty?
           category.icon = @category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
@@ -102,6 +102,11 @@ class CategoriesController < ApplicationController
       UserHomeCategory.where(category_id: @category.id).destroy_all
 
       begin
+        if @category.is_peripheral
+          parent_category = Category.where(name: @category.name[0..-15]).first
+          parent_category.has_peripheral = 0
+          parent_category.save
+        end
         @category.destroy
         redirect_to categories_url, notice: 'Category was successfully deleted.'
       end

@@ -68,7 +68,7 @@
                   - when 5
                     This row's CONDITION cell is either empty or does not follow the correct format
                   - when 6
-                    This row's ACQUISITION_DATE cell is either empty or does not follow the correct format
+                    This row's ACQUISITION_DATE cell does not follow the correct format
                   - when 7
                     This row's PURCHASE_PRICE cell does not follow the correct format
                   - when 8
@@ -78,17 +78,15 @@
                   - when 10
                     This row's MODEL cell does not follow the correct format
                   - when 11
-                    This row's PARENT_ASSET_SERIAL cell does not exist in the database
+                    One of the peripheral assets in this row's PERIPHERALS cell does not exist in the database
                   - when 12
-                    The selected parent asset's category does not have a peripheral category
-                  - when 13
                     This row's RETIRED_DATE cell either does not follow the correct format or CONDITION is not set to Retired
+                  - when 13
+                    This row's PO_NUMBER cell does not follow the correct format
                   - when 14
-                    This row's PO_NUMBER cell is either empty or does not follow the correct format
+                    This row's COMMENT cell does not follow the correct format
                   - when 15
-                    This row's COMMENT cell is either empty or does not follow the correct format
-                  - when 16
-                    This row's CATEGORY cell should be a peripheral category of the parent category
+                    This row's KEYWORDS cell does not follow the correct format
                   - else
                     Unknown
                 %td.has-text-centered
@@ -106,7 +104,7 @@
                   - when 5
                     An appropriate NAME should be one of the following: Like New/Good/Adequate/Damaged/Missing/Retired
                   - when 6
-                    An appropriate ACQUIRED_DATE should be a legit DATE
+                    An appropriate ACQUISITION_DATE should be a legit DATE
                   - when 7
                     An appropriate PURCHASE_PRICE should be a FLOAT or INTEGER
                   - when 8
@@ -116,16 +114,14 @@
                   - when 10
                     An appropriate MODEL should be a STRING or TEXT
                   - when 11
-                    Please check if the parent asset exists in the database or if there is any typos
-                  - when 12
-                    Please either choose another parent asset or create a peripheral category for the parent asset's category
+                    Please check if all the peripheral asset exists in the database or if there is any typos
                   - when 13
-                    An appropriate ACQUIRED_DATE should be in the DATE format and the CONDITION should be 'Retired'
+                    An appropriate RETIRED_DATE should be in the DATE format and the CONDITION should be 'Retired'
                   - when 14
                     An appropriate PO_NUMBER should be a STRING or TEXT
                   - when 15
                     An appropriate COMMENT should be a STRING or TEXT
-                  - when 16
-                    Change the category of the item to the peripheral category name of the parent asset
+                  - when 15
+                    Appropriate KEYWORDS should be STRING or TEXT separated by spaces
                   - else
                     Unknown
