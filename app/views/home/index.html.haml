@@ -9,11 +9,12 @@
         = image_tag("amrc_main.svg", width: "1000")
     .columns
       .column.is-half.is-offset-one-quarter
+        %span.badge.is-badge-danger.is-badge-large{"data-badge" => "New Autocomplete Feature!"}
         %br
         = form_tag items_path, enforce_utf8: false, method: :get do
           .field.has-addons
             .control.is-expanded
-              %input.input{type:'text', name: 'category_name', placeholder: 'Search for an asset category, serial, manufacturer...', autofocus: ''}
+              %input.input.awesomplete#awesomplete{type:'text', name: 'category_name', placeholder: 'Search for asset, category, serial, manufacturer', autofocus: '', "data-list" => @autocomplete, 'data-minchars' => 1}
             .control
               %button.button.is-info{type:'submit'}
                 Search
@@ -40,16 +41,17 @@
                     %p.card-footer-item
                       %span View #{usercat.category.name}
           .column
-            .card
-              .card-content.hero.is-small.is-light
-                .columns.hero-body
-                  .column.has-text-centered
-                    %span.icon.is-large
-                      %i.fas.fa-plus.fa-6x
-              %footer.card-footer
-                %p.card-footer-item
-                  %span
-                    = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
+            = link_to new_user_home_category_path do
+              .card
+                .card-content.hero.is-small.is-light
+                  .columns.hero-body
+                    .column.has-text-centered
+                      %span.icon.is-large
+                        %i.fas.fa-plus.fa-6x
+                %footer.card-footer
+                  %p.card-footer-item
+                    %span
+                      = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
           - for _ in 0...placeholder - 1
             .column
     - else

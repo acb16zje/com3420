@@ -1,4 +1,5 @@
 //= require jquery_ujs
+//= require awesomplete
 //= require bulma.datatables
 //= require bunny
 //= require inputTypeNumberPolyfill
