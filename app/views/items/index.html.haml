@@ -33,7 +33,7 @@
           %td.has-text-centered= link_to item.name, item
           %td.has-text-centered
             - if item.image?
-              = link_to image_tag(item.image.url, width: '50', height: '50', alt: 'Image', style: 'vertical-align: middle'), '#', 'data-target' => "modal-#{item.serial}", class: 'modal-button'
+              = image_tag(item.image.url, width: '50', height: '50', alt: 'Image', style: 'vertical-align: middle; cursor: pointer', class: 'modal-button', data: {target: "modal-#{item.serial}"})
               .modal{id: "modal-#{item.serial}"}
                 .modal-background
                 .modal-content

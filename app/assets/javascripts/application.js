@@ -342,18 +342,16 @@ $(document).ready(function () {
     var detailsButtons = getAll('.details-control');
 
     if (detailsButtons.length > 0) {
-        detailsButtons.forEach(function ($el) {
-            $el.addEventListener('click', function () {
-                var target = $el.dataset.target;
-                var $target = document.getElementById(target);
-                if ($target.classList.contains('is-hidden')) {
-                    $target.previousSibling.classList.add('shown');
-                    $target.classList.remove('is-hidden');
-                } else {
-                    $target.previousSibling.classList.remove('shown');
-                    $target.classList.add('is-hidden');
-                }
-            });
+        $('#bookings tbody').on('click', '.details-control', function () {
+            var target = $(this).data('target');
+            var $target = document.getElementById(target);
+            if ($target.classList.contains('is-hidden')) {
+                $target.previousSibling.classList.add('shown');
+                $target.classList.remove('is-hidden');
+            } else {
+                $target.previousSibling.classList.remove('shown');
+                $target.classList.add('is-hidden');
+            }
         });
     }
 
@@ -428,7 +426,7 @@ $(document).ready(function () {
 
     // Zoom.js config
     $('#zoom').zoom({
-        magnify: 0.8
+        magnify: 1.15
     });
 
     // Launch and close the modal
@@ -442,21 +440,17 @@ $(document).ready(function () {
 
     // Open the modal
     if (modalButtons.length > 0) {
-        modalButtons.forEach(function ($el) {
-            $el.addEventListener('click', function () {
-                var target = $el.dataset.target;
-                var $target = document.getElementById(target);
-                $target.classList.add('is-active');
-            });
+        $('#assets tbody').on('click', '.modal-button', function () {
+            var target = $(this).data('target');
+            var $target = document.getElementById(target);
+            $target.classList.add('is-active');
         });
     }
 
     // Close modal button
     if (modalCloses.length > 0) {
-        modalCloses.forEach(function ($el) {
-            $el.addEventListener('click', function () {
-                closeModals();
-            });
+        $(document).on('click', '.modal-close', function () {
+            closeModals();
         });
     }
 
@@ -477,8 +471,6 @@ $(document).ready(function () {
 
     // closeModals function
     function closeModals() {
-        modals.forEach(function ($el) {
-            $el.classList.remove('is-active');
-        });
+        $('.modal').removeClass('is-active');
     }
 });
