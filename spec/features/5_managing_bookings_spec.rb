@@ -192,9 +192,9 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:combined_booking_requested)
     FactoryBot.create(:booking_to_reject)
     visit '/bookings/requests'
-    find(:css, ".details-control").click
+    page.execute_script("$('.details-control').trigger('click')")
     expect(page).to have_content 'Reject'
-    find(:css, "#reject_single_booking1").click
+    page.execute_script("$('#reject_single_booking1').trigger('click')")
     expect(page).to have_content 'No data'
   end
 
@@ -212,9 +212,9 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:combined_booking_requested)
     FactoryBot.create(:booking_to_reject)
     visit '/bookings/requests'
-    find(:css, ".details-control").click
+    page.execute_script("$('.details-control').trigger('click')")
     expect(page).to have_content 'Accept'
-    find(:css, "#accept_single_booking1").click
+    page.execute_script("$('#accept_single_booking1').trigger('click')")
     expect(page).to have_content 'No data'
   end
 

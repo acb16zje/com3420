@@ -29,7 +29,7 @@ class CategoriesController < ApplicationController
     # Add peripherals to end of name
     category.name = category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip + ' - Peripherals'
 
-    #Format icon tag correctly for database and set in record
+    # Format icon tag correctly for database and set in record
     if (!category.icon.include? 'material-icons') && !category.icon.empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
     else
@@ -58,7 +58,7 @@ class CategoriesController < ApplicationController
       redirect_to new_category_path, alert: 'Category already exists.'
 
     # If category doesn't exist
-    elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"&@$#%*-]{4,}$/
+    elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"&@$#%*-]{4,50}$/
 
       # Set its name and format
       @category.name = @category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip
@@ -73,7 +73,7 @@ class CategoriesController < ApplicationController
       @category.has_peripheral = 0
 
       # Create a duplicate category for the new category's peripherals
-      if params[:want_peripheral].to_i == 1]
+      if params[:want_peripheral].to_i == 1
 
         # Set category as having a peripheral category
         @category.has_peripheral = 1

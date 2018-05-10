@@ -70,10 +70,9 @@
           .field.is-horizontal
             .field-body
               -# If user viewing his/her own details, unable to delete their own account
-              - unless current_user.id == @user.id
-                .field.is-grouped.is-grouped-left
+              .field.is-grouped.is-grouped-left
+                - unless current_user.id == @user.id
                   %p.control
-                    -# = link_to change_manager_multiple_and_delete_items_path(:id => @user.id), method: :post , class: 'button is-danger', :id => "delete-account" do
                     = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
                       %span.icon
                         %i.fas.fa-trash

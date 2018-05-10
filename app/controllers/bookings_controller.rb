@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'irb'
 
+# Handles the booking system
 class BookingsController < ApplicationController
   before_action :set_booking, only: %i[show edit update destroy]
   load_and_authorize_resource
@@ -57,6 +60,7 @@ class BookingsController < ApplicationController
     @parents = @item.get_item_parents
     @peripherals = @item.get_item_peripherals
 
+    # Disable the unavaliable dates for an asset
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
     gon.max_end_date = max_end_date
   end
@@ -67,22 +71,21 @@ class BookingsController < ApplicationController
     @parents = @item.get_item_parents
     @peripherals = @item.get_item_peripherals
 
-    unless @booking.peripherals.blank?
-      @booking.peripherals = @booking.peripherals.tr('[]"', '')
-    end
+    # Show the peripherals booked with parent asset
+    @booking.peripherals = @booking.peripherals.tr('[]"', '') unless @booking.peripherals.blank?
   end
 
   # POST /bookings
   def create
-    # ActiveRecord::Base.connection.execute("LOCK TABLES table_name WRITE")
-    # ActiveRecord::Base.connection.execute("UNLOCK TABLES")
-
     @booking = Booking.new(booking_params)
+
+    # Converting the format
     @booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
     @booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
     @booking.next_location = params[:booking][:next_location].titleize
     @booking.reason = 'None' if params[:booking][:reason].blank?
 
+    # Creating a combined booking
     item = @booking.item
 
     if item.user_id == current_user.id
@@ -96,6 +99,8 @@ class BookingsController < ApplicationController
     end
 
     @booking.combined_booking_id = combined_booking.id
+
+    # Create bookings for the chosen peripherals
     peripherals = params[:booking][:peripherals]
 
     # Changing the peripherals array into a string to be saved
@@ -105,14 +110,14 @@ class BookingsController < ApplicationController
       peripherals_string = ''
       peripherals.each do |peripheral|
         next if peripheral == ''
-        peripherals_string = peripherals_string + ',' + Item.find_by_id(peripheral).serial
+        peripherals_string += ',' + Item.find_by_id(peripheral).serial
       end
       @booking.peripherals = peripherals_string[1..-1]
     end
 
     # Server side validation
     query = booking_validation(@booking.item_id, @booking.start_datetime, @booking.end_datetime)
-    unless peripherals.nil?
+    unless peripherals.blank?
       peripherals.each do |peripheral|
         next if peripheral == ''
         query &&= booking_validation(peripheral, @booking.start_datetime, @booking.end_datetime)
@@ -127,8 +132,8 @@ class BookingsController < ApplicationController
           booking = Booking.new(booking_params)
 
           booking.item_id = peripheral
-          booking.start_datetime = @booking.start_date.to_s + ' ' + @booking.start_time.to_s
-          booking.end_datetime = @booking.end_date.to_s + ' ' + @booking.end_time.to_s
+          booking.start_datetime = @booking.start_datetime
+          booking.end_datetime = @booking.end_datetime
           booking.next_location = params[:booking][:next_location].titleize
           booking.reason = 'None' if params[:booking][:reason].blank?
           booking.peripherals = nil
@@ -138,6 +143,7 @@ class BookingsController < ApplicationController
         end
       end
 
+      # Create notifications and send out the required emails
       Notification.create(recipient: item.user, action: 'requested', notifiable: @booking, context: 'AM')
       UserMailer.user_booking_requested(combined_booking).deliver
 
@@ -161,6 +167,7 @@ class BookingsController < ApplicationController
     booking = Booking.find(params[:id])
     booking.status = 2
     if booking.save
+      # Create notifications and send our emails
       Notification.create(recipient: @booking.user, action: 'approved', notifiable: @booking, context: 'U')
       UserMailer.booking_approved([@booking]).deliver
 
@@ -239,9 +246,8 @@ class BookingsController < ApplicationController
       item.save
 
       if item.user_id == current_user.id
-        # redirect_to manager_items_path(user_id: current_user.id)
         redirect_to bookings_path
-      elsif (item.condition == 'Damaged') || (item.condition == 'Missing')
+      elsif %w[Damaged Missing].include? item.condition.to_s
         redirect_to bookings_path, notice: 'We have logged the issue and your item has been returned'
       else
         redirect_to bookings_path, notice: 'Thank you. Your item has been returned'
@@ -249,6 +255,7 @@ class BookingsController < ApplicationController
     end
   end
 
+  # Start date ajax call from /bookings/new
   def start_date
     data = {
       max_end_date: max_end_date(params[:start_date]),
@@ -258,6 +265,7 @@ class BookingsController < ApplicationController
     render json: data
   end
 
+  # End date ajax call from /bookings/new
   def end_date
     data = {
       max_end_time: max_end_time(params[:start_date], params[:end_date], params[:start_time])
@@ -266,6 +274,7 @@ class BookingsController < ApplicationController
     render json: data
   end
 
+  # Peripherals list ajax call from /bookings/new
   def peripherals
     @item = Item.find_by_id(params[:item_id])
 
@@ -317,14 +326,12 @@ class BookingsController < ApplicationController
       # Single booking multiple days
       if date_array.length > 1
         # Include the start date if start time is 12:00 AM
-        if (start_time.hour.eql? 0) && (start_time.min.eql? 0) ||
+        date_array = if (start_time.hour.eql? 0) && (start_time.min.eql? 0) ||
            (DateTime.now > booking.start_datetime)
-          #  (DateTime.now.hour > start_time.hour) ||
-          #  (DateTime.now.hour == start_time.hour && DateTime.now.min > start_time.min)
-          date_array = date_array[0..-1]
+          date_array[0..-1]
         else
-          date_array = date_array[1..-1]
-        end
+          date_array[1..-1]
+                     end
       end
 
       # Split into [year, month, day]
@@ -437,7 +444,7 @@ class BookingsController < ApplicationController
       # Selected start date is booked as start date
       if start_time.strftime('%Y-%m-%d').eql? start_date.to_s
         # Start date not equal to end date
-        if end_time.day - start_time.day > 0
+        if (end_time.day - start_time.day).positive?
           time_to_disable.append(from: [start_time.hour.to_s, start_time.min.to_s], to: [23, 50])
         else
           # Start and end on the same day
@@ -445,7 +452,7 @@ class BookingsController < ApplicationController
             from: [start_time.hour.to_s, start_time.min.to_s], to: [end_time.hour.to_s, end_time.min.to_s]
           )
         end
-      elsif (end_time.day - start_time.day).abs > 0
+      elsif (end_time.day - start_time.day).abs.positive?
         # Selected start date is booked as end date
         time_to_disable.append(from: [0, 0], to: [end_time.hour.to_s, end_time.min.to_s])
       end
@@ -459,24 +466,25 @@ class BookingsController < ApplicationController
     time_array = []
 
     start_time = DateTime.parse(start_time).strftime('%H:%M')
-
     start_date = Date.parse(start_date)
     end_date = Date.parse(end_date)
 
+    # If the user selected a different start and end date
     if start_date < end_date
       booking = Booking.where(status: %w[2 3], item_id: params[:item_id]).where(
         "start_date = CAST('#{end_date}' AS DATE)"
       ).minimum(:start_time)
 
+      # The maximum selectable end_time should be the earliest booking on the selected end_date
       time_array = [booking.hour, booking.min] unless booking.blank?
     else
+      # The user selected a same start and end date
       booking = Booking.where(status: %w[2 3], item_id: params[:item_id]).where(
         "start_date = CAST('#{start_date}' AS DATE)"
       ).minimum(:start_time)
 
-      if !booking.blank? && start_time < booking.strftime('%H:%M')
-        time_array = [booking.hour, booking.min]
-      end
+      # The maximum selectable end time should be the earliest booking on the selected start_date
+      time_array = [booking.hour, booking.min] if booking.present? && start_time < booking.strftime('%H:%M')
     end
 
     time_array

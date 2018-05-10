@@ -24,7 +24,7 @@
                 .field
                   %p.control.is-expanded
                     = f.input :name, label: false, required: '', placeholder: 'Category', input_html: {class: 'input', maxlength: 50}
-                  %p.help Under 50 characters, characters allowed: alpha-numeric &_.,!()+=`,"@$#%*-
+                  %p.help Between 4-50 characters, characters allowed: alpha-numeric &_.,!()+=`,"@$#%*-
 
             .field.is-horizontal
               .field-label.is-normal
@@ -39,9 +39,9 @@
                       <i class="fas fa-edit"></i>
                     </strong>
                   %p.help
-                    = link_to 'Font Awesome', 'https://fontawesome.com/icons?d=gallery'
+                    = link_to 'Font Awesome', 'https://fontawesome.com/icons?d=gallery', target: :_blank
                     or
-                    = link_to 'Material icons', 'https://material.io/icons/'
+                    = link_to 'Material icons', 'https://material.io/icons/', target: :_blank
 
 
             .field.is-horizontal

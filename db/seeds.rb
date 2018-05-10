@@ -37,7 +37,7 @@ User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', 
 User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
 User.create(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')
 User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Chatterjee', permission_id: 3, username: 'aca16rc')
-User.create(email: 'erica.smith@sheffield.ac.uk', permission_id: 3)
+User.create(email: 'erica.smith@sheffield.ac.uk', givenname: 'Erica', sn: 'Smith', permission_id: 3)
 
 # 1
 Item.create(user_id: 1,
