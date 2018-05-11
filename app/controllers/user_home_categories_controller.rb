@@ -4,24 +4,17 @@ class UserHomeCategoriesController < ApplicationController
 
   # GET /user_home_categories
   def index
-    @user_home_categories = UserHomeCategory.where(user_id: current_user.id)
+    @user_home_categories = UserHomeCategory.where(user: current_user)
   end
 
   # GET /user_home_categories/new
   def new
-    # Get categories which are already favourites
-    @bannedcatid = UserHomeCategory.select(:category_id).where(user_id: current_user.id
     # Get categories that can be set as a favourite
-    @allowedcat = Category.where.not(id: @bannedcatid)
-    # Create UserHomeCategory object for simpleform
-    @user_home_category = UserHomeCategory.new
+    @allowed = UserHomeCategory.allowed_categories(current_user)
   end
 
   # POST /user_home_categories
   def create
-    # Create the category from form parameters
-    @user_home_category = UserHomeCategory.new(user_home_category_params)
-
     # Save and redirect back to homepage
     if @user_home_category.save
       redirect_to root_path, notice: 'Favourite category successfully added.'

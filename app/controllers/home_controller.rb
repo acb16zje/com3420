@@ -1,3 +1,5 @@
+require 'irb'
+
 class HomeController < ApplicationController
   def index
     # Load the user's favourites

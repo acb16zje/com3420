@@ -20,4 +20,8 @@
 class UserHomeCategory < ApplicationRecord
   belongs_to :user
   belongs_to :category
+
+  def self.allowed_categories(user)
+    Category.where.not(id: UserHomeCategory.select(:category_id).where(user: user))
+  end
 end

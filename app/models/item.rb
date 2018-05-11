@@ -33,17 +33,19 @@
 #
 
 class Item < ApplicationRecord
+  attr_accessor :add_parents
+  attr_accessor :is_peripheral
+
   belongs_to :category
   belongs_to :user
   has_many :bookings, dependent: :destroy
   has_many :combined_bookings, through: :bookings, dependent: :destroy
-  mount_uploader :image, ImageUploader
-
   has_many :parent_items, class_name: 'ItemPeripheral', foreign_key: :parent_item_id, dependent: :destroy
   has_many :peripheral_items, class_name: 'ItemPeripheral', foreign_key: :peripheral_item_id, dependent: :destroy
 
-  attr_accessor :add_parents
-  attr_accessor :is_peripheral
+  validates :serial, presence: true
+
+  mount_uploader :image, ImageUploader
 
   def get_item_peripherals
     peripherals_for_item = ItemPeripheral.where(parent_item: self)

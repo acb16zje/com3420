@@ -7,7 +7,6 @@
   .columns
     .column.is-4.is-offset-4
       .box
-        = @user_home_categories
         = simple_form_for(@user_home_category) do |f|
           %h4.title
             Add Favourite Category
@@ -18,7 +17,7 @@
               .field
                 %p.control.is-expanded
                   = f.hidden_field :user_id, value: current_user.id
-                  = f.association :category, label: false, input_html: {class: 'select2'},  selected: '', collection: @allowedcat
+                  = f.association :category, label: false, input_html: {class: 'select2'},  selected: '', collection: @allowed
           %br
           .field.is-horizontal
             .field-label.has-text-left

@@ -1,10 +1,12 @@
 - content_for :title, "Editing #{@user.givenname} #{@user.sn}"
 
 %section.section
+  = render partial: 'layouts/flash'
+
   .columns
     .column.is-4.is-offset-4
       %h1.title.has-text-centered{:id => "DetailsTitle"}
-        - if current_user.uid.eql? @user.uid
+        - if current_user.eql? @user
           Edit My Details
         - else
           Edit #{@user.givenname} #{@user.sn}'s Details
@@ -70,14 +72,17 @@
           .field.is-horizontal
             .field-body
               -# If user viewing his/her own details, unable to delete their own account
-              .field.is-grouped.is-grouped-left
-                - unless current_user.id == @user.id
+              - unless current_user.eql? @user
+                .field.is-grouped.is-grouped-left
                   %p.control
                     = link_to @user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger' do
                       %span.icon
                         %i.fas.fa-trash
                       %span Delete
                     = f.hidden_field :bunny, value: '0'
+              - else
+                .field-label.has-text-left
+                  -#Left empty for spacing
               .buttons.is-right
                 = link_to 'Back', users_path, class: 'button is-block is-light'
                 = f.submit 'Save changes', class: 'button is-block is-success'

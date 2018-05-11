@@ -204,7 +204,7 @@ class ItemsController < ApplicationController
             end
           end
         end
-        
+
         deleted_parents.each do |deleted_parent|
           ItemPeripheral.where(parent_item_id: deleted_parent.id, peripheral_item_id: peripheral).first.destroy
         end

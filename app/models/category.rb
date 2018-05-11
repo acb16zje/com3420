@@ -14,9 +14,9 @@
 #
 
 class Category < ApplicationRecord
-  validates :name, presence: true
-
   has_many :items
   has_many :user_home_categories
   has_many :users, through: :user_home_categories
+
+  validates :name, presence: true, length: { minimum: 2, maximum: 50 }
 end

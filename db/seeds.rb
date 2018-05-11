@@ -1,46 +1,46 @@
 # 1
-Category.create(
+Category.create!(
   name: 'Cameras',
   icon: '<i class="fas fa-camera fa-6x"></i>',
   has_peripheral: 1,
   is_peripheral: 0)
 
 # 2
-Category.create(
+Category.create!(
   name: 'Cameras - Peripherals',
   icon: '<i class="fas fa-camera fa-6x"></i><i class="material-icons">P</i>',
   has_peripheral: 0,
   is_peripheral: 1)
 
 # 3
-Category.create(
+Category.create!(
   name: 'Data Logger',
   icon: '<i class="material-icons">dock</i>',
   has_peripheral: 0,
   is_peripheral: 0)
 
 # 4
-Category.create(
+Category.create!(
   name: 'Laptops',
   icon: '<i class="material-icons">computer</i>',
   has_peripheral: 1,
   is_peripheral: 0)
 
 # 5
-Category.create(
+Category.create!(
   name: 'Laptops - Peripherals',
   icon: '<i class="material-icons">computerP</i>',
   has_peripheral: 0,
   is_peripheral: 1)
 
-User.create(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
-User.create(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
-User.create(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')
-User.create(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Chatterjee', permission_id: 3, username: 'aca16rc')
-User.create(email: 'erica.smith@sheffield.ac.uk', givenname: 'Erica', sn: 'Smith', permission_id: 3)
+User.create!(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
+User.create!(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
+User.create!(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')
+User.create!(email: 'rchatterjee1@sheffield.ac.uk', givenname: 'Ritwesh', sn: 'Chatterjee', permission_id: 3, username: 'aca16rc')
+User.create!(email: 'erica.smith@sheffield.ac.uk', givenname: 'Erica', sn: 'Smith', permission_id: 3)
 
 # 1
-Item.create(user_id: 1,
+Item.create!(user_id: 1,
             category_id: 1,
             condition: 'Like New',
             name: 'GoPro Hero 5',
@@ -53,7 +53,7 @@ Item.create(user_id: 1,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/gopro.jpg')))
 
 # 2
-Item.create(user_id: 1,
+Item.create!(user_id: 1,
             category_id: 2,
             condition: 'Like New',
             name: 'MicroSD Card',
@@ -66,7 +66,7 @@ Item.create(user_id: 1,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/microsd.jpg')))
 
 # 3
-Item.create(user_id: 1,
+Item.create!(user_id: 1,
             category_id: 2,
             condition: 'Like New',
             name: 'MicroSD Card',
@@ -79,7 +79,7 @@ Item.create(user_id: 1,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/microsd.jpg')))
 
 # 4
-Item.create(user_id: 1,
+Item.create!(user_id: 1,
             category_id: 3,
             condition: 'Like New',
             name: 'Flir Thermal Camera',
@@ -92,7 +92,7 @@ Item.create(user_id: 1,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/flir.jpg')))
 
 # 5
-Item.create(user_id: 2,
+Item.create!(user_id: 2,
             category_id: 4,
             condition: 'Like New',
             name: 'MacBook Pro 15-inch',
@@ -105,7 +105,7 @@ Item.create(user_id: 2,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/macbook.jpg')))
 
 # 6
-Item.create(user_id: 2,
+Item.create!(user_id: 2,
             category_id: 5,
             condition: 'Like New',
             name: 'Charging Cable',
@@ -117,6 +117,6 @@ Item.create(user_id: 2,
             purchase_price: 9.00,
             image:  File.open(File.join(Rails.root, 'app/assets/images/assets/charging_cable.jpg')))
 
-ItemPeripheral.create!(parent_item_id: 1,peripheral_item_id: 2)
-ItemPeripheral.create!(parent_item_id: 1,peripheral_item_id: 3)
-ItemPeripheral.create!(parent_item_id: 5,peripheral_item_id: 6)
+ItemPeripheral.create!(parent_item_id: 1, peripheral_item_id: 2)
+ItemPeripheral.create!(parent_item_id: 1, peripheral_item_id: 3)
+ItemPeripheral.create!(parent_item_id: 5, peripheral_item_id: 6)

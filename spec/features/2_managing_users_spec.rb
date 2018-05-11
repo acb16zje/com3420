@@ -57,10 +57,17 @@ describe 'Managing accounts' do
     page.find("#view_user_#{@username}", visible: :all).click
     expect(page).to have_content 'Edit Details'
     click_link('Edit Details')
-    fill_in 'number', with: '05050505050'
+    fill_in 'number', with: '5050505050'
     click_button('Save changes')
     expect(page).to have_content 'User was successfully updated'
-    expect(page).to have_content '05050505050'
+    expect(page).to have_content '5050505050'
+    visit '/users'
+    page.find("#view_user_#{@username}", visible: :all).click
+    click_link('Edit Details')
+    fill_in 'number', with: '0505050505'
+    click_button('Save changes')
+    expect(page).to have_content 'User could not be updated'
+    expect(page).to_not have_content '0505050505'
   end
 
   specify 'I can delete a different user' do

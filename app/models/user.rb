@@ -28,18 +28,21 @@
 class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
-  def generate_attributes_from_ldap_info
-    self.username = uid
-    self.email = mail
-    super # This needs to be left in so the default fields are also set
-  end
-
   has_many :combined_bookings, dependent: :destroy
   has_many :bookings, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :user_home_categories, dependent: :destroy
   has_many :categories, through: :user_home_categories
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
+
+  validates_format_of :phone, with: /\A([1-9])([0-9]{9})\z/, allow_blank: true
+  validates :email, presence: true
+
+  def generate_attributes_from_ldap_info
+    self.username = uid
+    self.email = mail
+    super # This needs to be left in so the default fields are also set
+  end
 
   def user?
     self.permission_id == 1
@@ -51,5 +54,9 @@ class User < ApplicationRecord
 
   def admin?
     self.permission_id == 3
+  end
+
+  def no_asset?
+    self.items.blank?
   end
 end

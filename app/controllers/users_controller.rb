@@ -49,8 +49,6 @@ class UsersController < ApplicationController
       if @user.uid.blank?
         redirect_to new_user_path, alert: 'Not a valid email.'
       else
-        @user.phone = '-' if @user.phone.blank?
-
         if @user.save
           # email new user their details
           UserMailer.welcome(@user).deliver
@@ -62,12 +60,16 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    redirect_to @user, notice: 'User was successfully updated.' if @user.update(user_params)
+    if @user.update(user_params)
+      redirect_to @user, notice: 'User was successfully updated.'
+    else
+      redirect_to request.referrer, alert: 'User could not be updated.'
+    end
   end
 
   # DELETE /users/1
   def destroy
-    if @user.items.blank?
+    if @user.no_asset?
       redirect_to users_path, notice: 'User was successfully deleted.' if @user.destroy
     else
       redirect_to change_manager_multiple_and_delete_items_path(user_id: @user.id)

@@ -80,7 +80,7 @@ class CategoriesController < ApplicationController
 
         # Create the child/peripheral category
         category = Category.new(category_params)
-        category.name = category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip + ' - Peripherals'
+        category.name = @category.name + ' - Peripherals'
 
         # Format icon tag
         if (!category.icon.include? 'material-icons') && !category.icon.empty?

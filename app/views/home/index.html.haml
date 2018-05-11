@@ -21,7 +21,7 @@
 
     %br
     - unless @user_home_categories.blank?
-      - placeholder = 5 - (@user_home_categories.length % 5)
+      - placeholder = 4 - (@user_home_categories.length % 5)
       - @user_home_categories.each_slice(5) do |slice|
         .columns
           - slice.each do |usercat|
@@ -40,6 +40,23 @@
                   %footer.card-footer
                     %p.card-footer-item
                       %span View #{usercat.category.name}
+          - unless slice.length == 5
+            .column
+              = link_to new_user_home_category_path do
+                .card
+                  .card-content.hero.is-small.is-light
+                    .columns.hero-body
+                      .column.has-text-centered
+                        %span.icon.is-large
+                          %i.fas.fa-plus.fa-6x
+                  %footer.card-footer
+                    %p.card-footer-item
+                      %span
+                        = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
+            - for _ in 0...placeholder
+              .column
+      - if (@user_home_categories.length % 5).zero?
+        .columns
           .column
             = link_to new_user_home_category_path do
               .card
@@ -52,7 +69,7 @@
                   %p.card-footer-item
                     %span
                       = link_to 'Add Favourite', new_user_home_category_path, class: 'button is-link is-block is-small'
-          - for _ in 0...placeholder - 1
+          - for _ in 0...placeholder
             .column
     - else
       .columns
