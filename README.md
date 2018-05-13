@@ -1,3 +1,9 @@
+# COM3420 Team 29 - Old
+
+## Client E: Asset Management System
+
+#### Zer Jun Eng, Alex Chapman, Wei Kin Khaw, Ritwesh
+
 # Minimum System Requirements - Users
 
 Operating System:
@@ -165,86 +171,3 @@ Under the list of automatically created users, you can add or remove user’s wh
 `User.create(email: '{MUSE Email}'', givenname: '{First Name}', sn: '{Surname}', permission_id: {Permission Level 1/2/3}, username: '{Muse Username}')`
 ## Creating Administrators
 Now that the system has been configured you should be able to access it at your designated web server address. Please refer to the user manual for guidance on how to create user accounts for other administrators or other types of user. There are designated sections within the user manual for each of these.
-
-
-
-
-# COM3420 Team 29 - Old
-
-## Client E: Asset Management System
-
-#### Zer Jun Eng, Alex Chapman, Wei Kin Khaw, Ritwesh
-
-<!-- ![D O N O T W A N T](https://media1.tenor.com/images/a136bc5f7e7c57ba0297fe3ce8aefeca/tenor.gif?itemid=10533630) -->
-![D O N O T W A N T](https://static.boredpanda.com/blog/wp-content/uploads/2017/04/cute-dog-shiba-inu-ryuji-japan-29.jpg)
-
----
-
-### Requirements
-* Ruby 2.3.1
-* Rails 5.1.4
-* Linux (recommended)
-
----
-
-### Installation
-Clone the repository
-
-`git clone git@git.shefcompsci.org.uk:com3420-2017-18/team29/project.git`
-
-Change your directory to the repository
-
-`cd project`
-
-**If you do not have the bundler gem installed yet, then run the follwing command**
-
-`gem install bundler`
-
-Run the following command to install the required gems
-
-`bundle install`
-
-Create a `database.yml` file inside the `config` folder, and copy the following code into your `database.yml`, replacing the `username, password and database` field with your own given configurations in https://info.shefcompsci.org.uk/hut/database/
-
-```
-development: &defaults
-  adapter: postgresql
-  min_messages: warning
-  host: epi-stu-hut-dev-dbs2.shef.ac.uk
-  username: YOUR USERNAME
-  password: YOUR PASSWORD
-  database: YOUR DEVELOPMENT DATABASE
-
-test:
-  <<: *defaults
-  database: YOUR TEST DATABASE
-```
-
----
-
-### Significant Features/Technology
-The system has the following:
-
-* Search asset
-* Book asset
-* Booking history
-* Favourite category
-* Complex time-conflict checking mechanisim for assets booking system
-* Asset ownership transfer
-
----
-
-### Special Development Pre-requisites
-None.
-
----
-
-### Deployment
-*QA -> Demo -> Production* using the `epi-deploy` gem.
-
-[Demo Server](https://team29.demo4.hut.shefcompsci.org.uk/)
-
----
-
-### Customer Contact
-Some Customer <some.customer@epigenesys.co.uk>
