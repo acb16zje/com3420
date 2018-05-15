@@ -18,7 +18,7 @@ class CombinedBookingsController < ApplicationController
     combined_booking.status = 2
     if combined_booking.save
       UserMailer.booking_approved(combined_booking.bookings)
-      redirect_to bookings_path, notice: 'Remaining bookings were successfully accepted.'
+      redirect_to requests_bookings_path, notice: 'Remaining bookings were successfully accepted.'
     end
   end
 
@@ -37,7 +37,7 @@ class CombinedBookingsController < ApplicationController
     combined_booking.status = 5
     if combined_booking.save
       UserMailer.booking_rejected(combined_booking.bookings).deliver
-      redirect_to bookings_path, notice: 'Remaining bookings were successfully rejected.'
+      redirect_to requests_bookings_path, notice: 'Remaining bookings were successfully rejected.'
     end
   end
 

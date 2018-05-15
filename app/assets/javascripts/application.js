@@ -342,7 +342,7 @@ $(document).ready(function () {
     var detailsButtons = getAll('.details-control');
 
     if (detailsButtons.length > 0) {
-        $('#bookings tbody').on('click', '.details-control', function () {
+        $('#bookings tbody, #bookings_other tbody').on('click', '.details-control', function () {
             var target = $(this).data('target');
             var $target = document.getElementById(target);
             if ($target.classList.contains('is-hidden')) {
