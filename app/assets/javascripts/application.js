@@ -464,7 +464,7 @@ $(document).ready(function () {
 
     // Close modal when click outside of image
     $(document).click(function (e) {
-        if (!$(e.target).closest(".image-modal").length && !$(e.target).closest(".modal-button").length) {
+        if (!$(e.target).closest(".image-modal-image").length && !$(e.target).closest(".modal-button").length) {
             closeModals();
         }
     });

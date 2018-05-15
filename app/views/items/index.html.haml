@@ -38,7 +38,7 @@
                 .modal-background
                 .modal-content
                   %p.image-modal
-                    = image_tag(item.image.url, width: '600', alt: 'Image')
+                    = image_tag(item.image.url, width: '600', alt: 'Image', class: 'image-modal-image')
                 %button.modal-close.is-large{"aria-label" => "close"}
             - else
               = image_tag("amrc.svg", width: "50", alt: 'Default Image, AMRC', style: 'vertical-align: middle')
