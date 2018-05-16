@@ -172,13 +172,35 @@ class BookingsController < ApplicationController
       UserMailer.booking_approved([@booking]).deliver
 
       combined_booking = CombinedBooking.find(@booking.combined_booking_id)
-      if combined_booking.bookings.where(status: %w[3 7]).blank?
+      if combined_booking.bookings.where(status: %w[1 3 7]).blank?
         combined_booking.status = 2
       end
       combined_booking.save
     end
 
-    redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
+    # Rejects other bookings that have conflicts with the accepted booking
+    item_id = booking.item.id
+    item_bookings = Booking.where(item_id: item_id,status: 1)
+    rejected = false
+    item_bookings.each do |b|
+      if !booking_validation(item_id,b.start_datetime,b.end_datetime)
+        b.status = 5
+        b.save
+        reject_combined_booking = CombinedBooking.find(b.combined_booking_id)
+        if reject_combined_booking.bookings.where(status: %w[1 2 3 4 7]).blank?
+          reject_combined_booking.status = 5
+        end
+        reject_combined_booking.save
+        rejected = true
+      end
+    end
+
+    if rejected
+      redirect_to requests_bookings_path, notice: 'Booking was successfully accepted, 
+        but another booking has been rejected as a result due to time conflicts.'
+    else
+      redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
+    end
   end
 
   def set_booking_rejected

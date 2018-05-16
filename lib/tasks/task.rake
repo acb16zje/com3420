@@ -79,7 +79,6 @@ task update_booking_status_to_late: :environment do
       UserMailer.asset_overdue(b).deliver_now
     end
   end
-  end
 
   combined = bookings.map{|b| b.combined_booking}.uniq
   combined.each do |b|
