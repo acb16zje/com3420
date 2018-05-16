@@ -52,7 +52,7 @@ task update_booking_status_to_ongoing: :environment do
   combined = bookings.map{|b| b.combined_booking}.uniq
 
   combined.each do |b|
-    if b.status == 2 && b.status != 7
+    if b.status == 2
       b.status = 3
       if b.save
         UserMailer.booking_ongoing(b).deliver
@@ -74,11 +74,18 @@ task update_booking_status_to_late: :environment do
 
   combined = bookings.map{|b| b.combined_booking}.uniq
   combined.each do |b|
-    if b.status == 3 && b.status != 7
-      b.status = 7
-      if b.save
-        UserMailer.asset_overdue(b).deliver_now
-      end
+    b.status = 7
+    if b.save
+      UserMailer.asset_overdue(b).deliver_now
+    end
+  end
+  end
+
+  combined = bookings.map{|b| b.combined_booking}.uniq
+  combined.each do |b|
+    b.status = 7
+    if b.save
+      UserMailer.asset_overdue(b).deliver_now
     end
   end
 end
