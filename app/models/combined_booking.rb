@@ -21,6 +21,8 @@ class CombinedBooking < ApplicationRecord
   has_many :bookings
   has_many :items, through: :bookings
 
+  validates :bookings, presence: true
+
   scope :find_by_owner, ->(user) { where owner_id: user.id }
   scope :find_by_user, ->(user) { where user_id: user.id }
   scope :item_owned_by, ->(user) { joins(:item).where(items: {user: user}) }

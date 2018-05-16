@@ -31,6 +31,7 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (user_id => users.id)
 #
+require 'irb'
 
 class Item < ApplicationRecord
   attr_accessor :add_parents
@@ -43,7 +44,7 @@ class Item < ApplicationRecord
   has_many :parent_items, class_name: 'ItemPeripheral', foreign_key: :parent_item_id, dependent: :destroy
   has_many :peripheral_items, class_name: 'ItemPeripheral', foreign_key: :peripheral_item_id, dependent: :destroy
 
-  validates :serial, presence: true
+  validates :location, :serial, :category, :user, presence: true
 
   mount_uploader :image, ImageUploader
 

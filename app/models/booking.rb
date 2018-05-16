@@ -36,6 +36,13 @@ class Booking < ApplicationRecord
   belongs_to :combined_booking
   after_destroy :destroy_combined_booking
 
+  validates :start_date,
+            :start_time,
+            :end_date,
+            :end_time
+            :item,
+            :user, presence: true
+
   scope :find_by_user, ->(user) { where user: user }
   scope :item_owned_by, ->(user) { joins(:item).where(items: { user: user }) }
   scope :pending, -> { where status: 1 }

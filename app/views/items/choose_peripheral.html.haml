@@ -4,7 +4,7 @@
   .hero-body
     .container.has-text-centered
       .column.is-10.is-offset-1
-        %h3.title Add peripheral for #{@item.name} : #{@item.serial}
+        %h3.title Add peripheral for #{@item.name} (#{@item.serial})
         .box
           = form_tag add_peripheral_item_path, method: :post do
             .field.is-horizontal

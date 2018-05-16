@@ -94,6 +94,7 @@ class ItemsController < ApplicationController
 
     # Pass parent item id to javascript where creating a peripheral
     unless params[:item_id].blank?
+      @parent = Item.find_by(id: params[:item_id])
       gon.parent_id = params[:item_id]
     end
   end
@@ -132,9 +133,8 @@ class ItemsController < ApplicationController
     @item.serial = params[:item][:serial].upcase.strip
     @item.location = params[:item][:location].titleize
 
-    # try/catch for saving to database
-    begin
-      @item.save
+    # try / catch for saving to database
+    if @item.save
       # Add peripheral items
       unless params[:item][:is_peripheral].blank?
         # Get parent items
@@ -151,9 +151,10 @@ class ItemsController < ApplicationController
           end
         end
       end
+
       redirect_to @item, notice: 'Asset was successfully created.'
-    rescue
-      redirect_to request.referrer, alert: 'The serial is already in use'
+    else
+      redirect_to request.referrer, alert: 'The serial is already in use or invalid information provided.'
     end
   end
 
@@ -212,7 +213,7 @@ class ItemsController < ApplicationController
       redirect_to @item, notice: 'Asset was successfully updated.'
     end
   rescue
-    redirect_to request.referrer, alert: 'Serial already exist'
+    redirect_to request.referrer, alert: 'Serial already exist or invalid information provided'
   end
 
   # DELETE /items/1
