@@ -24,9 +24,9 @@
             .field.is-horizontal
               .field-label.is-normal
                 - if params[:is_peripheral] == "true"
-                  %label.label Peripheral Name
+                  %label.label Peripheral Name*
                 - else
-                  %label.label Asset Name
+                  %label.label Asset Name*
               .field-body
                 .field
                   %p.control.is-expanded
@@ -36,11 +36,11 @@
                       = f.input :name, label: false, required: '', placeholder: 'Asset Name', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Serial
+                %label.label Serial*
               .field-body
                 .field
                   %p.control.is-expanded
-                    = f.input :serial, label: false, placeholder: 'Serial', input_html: {class: 'input'}
+                    = f.input :serial, label: false, required: '', placeholder: 'Serial', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Category
@@ -50,11 +50,11 @@
                     = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Storage Location
+                %label.label Storage Location*
               .field-body
                 .field{style: 'margin: auto'}
                   .control
-                    = f.input :location, label: false, placeholder: 'Storage location', input_html: {class: 'input'}
+                    = f.input :location, label: false, required: '', placeholder: 'Storage location', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Manufacturer

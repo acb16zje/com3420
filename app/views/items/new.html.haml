@@ -57,11 +57,11 @@
                     = f.association :category, label: false, input_html: {class: 'select2'}, label_method: lambda{|category| "#{category.name}"}, selected: ''
             .field.is-horizontal
               .field-label.is-normal
-                %label.label Storage Location
+                %label.label Storage Location*
               .field-body
                 .field
                   .control
-                    = f.input :location, label: false, placeholder: 'Storage location', input_html: {class: 'input'}
+                    = f.input :location, label: false, required: '', placeholder: 'Storage location', input_html: {class: 'input'}
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Manufacturer

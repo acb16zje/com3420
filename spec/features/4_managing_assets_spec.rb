@@ -216,7 +216,7 @@ describe 'Managing assets' do
     expect(page).to have_content "6 This row's CONDITION cell is either empty or does not follow the correct format"
     expect(page).to have_content "7 This row's ACQUISITION_DATE cell does not follow the correct format"
     expect(page).to have_content "8 This row's PURCHASE_PRICE cell does not follow the correct format"
-    expect(page).to have_content "9 This row's LOCATION cell does not follow the correct format"
+    expect(page).to have_content "9 This row's LOCATION cell is either empty or does not follow the correct format"
     expect(page).to have_content "10 This row's MANUFACTURER cell does not follow the correct format"
     expect(page).to have_content "11 This row's MODEL cell does not follow the correct format"
     expect(page).to have_content "12 One of the peripheral assets in this row's PERIPHERALS cell does not exist in the database"

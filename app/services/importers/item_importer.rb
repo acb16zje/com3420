@@ -111,7 +111,7 @@ module Importers
 
         t_location = row[6].value if !row[6].nil? && !row[6].value.nil?
         # Checking if the location cell is in the correct format
-        if !t_location.nil? && !(t_location.instance_of? String)
+        if t_location.nil? || !(t_location.instance_of? String)
           incorrect_rows.append(["#{index}, 8"])
           exit = true
         end
