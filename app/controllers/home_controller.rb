@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'irb'
 
+# Home controller
 class HomeController < ApplicationController
   def index
     # Load the user's favourites
@@ -9,7 +12,8 @@ class HomeController < ApplicationController
     @autocomplete = [
       Item.pluck(:name, :serial),
       Item.pluck(:manufacturer).uniq,
-      Category.pluck(:name)].reduce([], :concat).to_s.tr('[]"', '')
+      Category.pluck(:name)
+    ].reduce([], :concat).to_s.tr('[]"', '')
 
     render layout: 'application'
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: user_home_categories
@@ -17,9 +19,12 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
+# User home category model
 class UserHomeCategory < ApplicationRecord
   belongs_to :user
   belongs_to :category
+
+  validates :user, :category, presence: true
 
   def self.allowed_categories(user)
     Category.where.not(id: UserHomeCategory.select(:category_id).where(user: user))

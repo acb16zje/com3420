@@ -12,7 +12,7 @@ describe 'Managing assets' do
     expect(page).to have_content 'Book or Reserve'
   end
 
-  specify 'I cannot two assets with same serial' do
+  specify 'I cannot create two assets with same serial' do
     FactoryBot.create :laptop_category
     create_macbook_pro
     create_macbook_pro
@@ -133,7 +133,6 @@ describe 'Managing assets' do
   end
 
   specify 'I can delete an asset after booking it' do
-    FactoryBot.create :combined_booking_accepted
     FactoryBot.create :booking_today_all_day
     visit '/items'
     click_link('GoPro Hero 5')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: items
@@ -31,8 +33,8 @@
 #  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (user_id => users.id)
 #
-require 'irb'
 
+# Item model
 class Item < ApplicationRecord
   attr_accessor :add_parents
   attr_accessor :is_peripheral
@@ -44,7 +46,8 @@ class Item < ApplicationRecord
   has_many :parent_items, class_name: 'ItemPeripheral', foreign_key: :parent_item_id, dependent: :destroy
   has_many :peripheral_items, class_name: 'ItemPeripheral', foreign_key: :peripheral_item_id, dependent: :destroy
 
-  validates :location, :serial, :category, :user, presence: true
+  validates :name, :condition, :location, :category, :user, presence: true
+  validates :serial, presence: true, uniqueness: true
 
   mount_uploader :image, ImageUploader
 

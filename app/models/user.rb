@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -25,6 +27,7 @@
 #  index_users_on_username  (username)
 #
 
+# User model
 class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
@@ -36,7 +39,8 @@ class User < ApplicationRecord
   has_many :notifications, foreign_key: :recipient_id, dependent: :destroy
 
   validates_format_of :phone, with: /\A([1-9])([0-9]{9})\z/, allow_blank: true
-  validates :email, presence: true
+  validates :email, :username, presence: true, uniqueness: true
+  validates :permission_id, presence: true
 
   def generate_attributes_from_ldap_info
     self.username = uid
@@ -45,18 +49,18 @@ class User < ApplicationRecord
   end
 
   def user?
-    self.permission_id == 1
+    permission_id == 1
   end
 
   def asset_manager?
-    self.permission_id == 2
+    permission_id == 2
   end
 
   def admin?
-    self.permission_id == 3
+    permission_id == 3
   end
 
   def no_asset?
-    self.items.blank?
+    items.blank?
   end
 end

@@ -151,7 +151,7 @@
               .field-body
                 .field.is-grouped.is-grouped-left
                   .control
-                    = link_to item_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button is-danger', id: "delete_item_#{@item.id}" do
+                    = link_to item_path, method: :delete, data: { confirm: "Are you sure you want to delete #{@item.name}?" }, class: 'button is-danger', id: "delete_item_#{@item.id}" do
                       %span.icon
                         %i.fas.fa-trash
                       %span Delete

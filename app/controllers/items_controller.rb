@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'irb'
 
+# Item controller
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[show edit update destroy]
   load_and_authorize_resource
@@ -131,7 +134,7 @@ class ItemsController < ApplicationController
     # Set fields from form
     @item.user_id = current_user.id
     @item.serial = params[:item][:serial].upcase.strip
-    @item.location = params[:item][:location].titleize
+    @item.location = params[:item][:location].titleize.strip
 
     # try / catch for saving to database
     if @item.save
@@ -162,7 +165,8 @@ class ItemsController < ApplicationController
   def update
     @item.update(item_params)
 
-    #Format location input on form
+    # Format location input on form
+    @item.serial = params[:item][:serial].upcase.strip
     @item.location = params[:item][:location].titleize.strip
 
     # Update semi-dependent fields if item marked as retired
@@ -211,9 +215,9 @@ class ItemsController < ApplicationController
         end
       end
       redirect_to @item, notice: 'Asset was successfully updated.'
+    else
+      redirect_to request.referrer, alert: 'Serial already exist or invalid information provided'
     end
-  rescue
-    redirect_to request.referrer, alert: 'Serial already exist or invalid information provided'
   end
 
   # DELETE /items/1

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: item_peripherals
@@ -17,7 +19,10 @@
 #  fk_rails_...  (peripheral_item_id => items.id)
 #
 
+# Item Peripheral model
 class ItemPeripheral < ApplicationRecord
   belongs_to :parent_item, class_name: 'Item'
   belongs_to :peripheral_item, class_name: 'Item'
+
+  validates :parent_item, :peripheral_item, presence: true
 end

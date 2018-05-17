@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: combined_bookings
@@ -16,12 +18,13 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
+# Combined booking model
 class CombinedBooking < ApplicationRecord
   belongs_to :user
   has_many :bookings
   has_many :items, through: :bookings
 
-  validates :bookings, presence: true
+  validates :user, presence: true
 
   scope :find_by_owner, ->(user) { where owner_id: user.id }
   scope :find_by_user, ->(user) { where user_id: user.id }

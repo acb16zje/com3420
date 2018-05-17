@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Categories controller
 class CategoriesController < ApplicationController
   before_action :set_category, only: %i[show edit update destroy]
   load_and_authorize_resource
@@ -27,7 +30,7 @@ class CategoriesController < ApplicationController
     # Deep copy category
     category = Category.find_by_id(params[:id]).dup
     # Add peripherals to end of name
-    category.name = category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip + ' - Peripherals'
+    category.name = category.name.humanize.gsub(/\b('?[a-z])/) { Regexp.last_match(1).capitalize }.strip + ' - Peripherals'
 
     # Format icon tag correctly for database and set in record
     if (!category.icon.include? 'material-icons') && !category.icon.empty?
@@ -61,7 +64,7 @@ class CategoriesController < ApplicationController
     elsif @category.name =~ /^[a-zA-Z0-9 _.,!()+=`,"&@$#%*-]{4,50}$/
 
       # Set its name and format
-      @category.name = @category.name.humanize.gsub(/\b('?[a-z])/) { $1.capitalize }.strip
+      @category.name = @category.name.humanize.gsub(/\b('?[a-z])/) { Regexp.last_match(1).capitalize }.strip
 
       # Font awesome icon
       if (!@category.icon.include? 'material-icons') && !@category.icon.empty?
@@ -110,7 +113,7 @@ class CategoriesController < ApplicationController
   def update
     @category.update(category_params)
     redirect_to categories_path, notice: 'Category was successfully updated.'
-  rescue
+  rescue StandardError
     redirect_to request.referrer, alert: 'Category already exist.'
   end
 

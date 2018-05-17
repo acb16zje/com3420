@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: bookings
@@ -30,18 +32,17 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
+# Booking model
 class Booking < ApplicationRecord
   belongs_to :item, dependent: :destroy
   belongs_to :user
   belongs_to :combined_booking
   after_destroy :destroy_combined_booking
 
-  validates :start_date,
-            :start_time,
-            :end_date,
-            :end_time
-            :item,
-            :user, presence: true
+  validates :start_date, :start_time,
+            :end_date, :end_time,
+            :next_location,
+            :item, :user, :combined_booking, presence: true
 
   scope :find_by_user, ->(user) { where user: user }
   scope :item_owned_by, ->(user) { joins(:item).where(items: { user: user }) }
@@ -56,8 +57,6 @@ class Booking < ApplicationRecord
   private
 
   def destroy_combined_booking
-    if self.combined_booking.bookings.blank?
-      self.combined_booking.destroy
-    end
+    combined_booking.destroy if combined_booking.bookings.blank?
   end
 end

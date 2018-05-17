@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: notifications
@@ -11,9 +13,12 @@
 #  notifiable_type :string
 #
 
+# Notification model
 class Notification < ApplicationRecord
   belongs_to :recipient, class_name: 'User'
   belongs_to :notifiable, polymorphic: true
+
+  validates :recipient, :notifiable, presence: true
 
   scope :unread, -> { where read_at: nil }
 end

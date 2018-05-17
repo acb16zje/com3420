@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# User mailer class
 class UserMailer < ApplicationMailer
   def welcome(user)
     @user = user

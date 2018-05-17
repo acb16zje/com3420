@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'irb'
 
+# Combined booking controller
 class CombinedBookingsController < ApplicationController
   load_and_authorize_resource
 
@@ -13,12 +16,12 @@ class CombinedBookingsController < ApplicationController
       if booking.save
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
       end
-      
+
       # Rejects other bookings that have conflicts with the accepted booking
       item_id = booking.item.id
-      item_bookings = Booking.where(item_id: item_id,status: 1)
+      item_bookings = Booking.where(item_id: item_id, status: 1)
       item_bookings.each do |b|
-        if !booking_validation(item_id,b.start_datetime,b.end_datetime)
+        unless booking_validation(item_id, b.start_datetime, b.end_datetime)
           b.status = 5
           b.save
           reject_combined_booking = CombinedBooking.find(b.combined_booking_id)
@@ -38,8 +41,8 @@ class CombinedBookingsController < ApplicationController
 
       if rejected
         # Change to yellow
-        redirect_to requests_bookings_path, notice: 'Remaining bookings were successfully accepted, 
-          but another booking has been rejected as a result due to time conflicts.'
+        redirect_to requests_bookings_path, warning: 'Remaining bookings were successfully accepted,
+          but another bookings has been rejected as a result due to time conflicts.'
       else
         redirect_to requests_bookings_path, notice: 'Remaining bookings were successfully accepted.'
       end

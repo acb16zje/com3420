@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'rubyXL'
 
@@ -12,23 +14,21 @@ module Importers
 
     def import(current_user)
       # To check whether uploaded file is an excel sheet
-      if file[-5..-1] != ".xlsx"
-        return [0, []]
-      end
+      return [0, []] if file[-5..-1] != '.xlsx'
 
       workbook = RubyXL::Parser.parse(file)
       worksheet = workbook[0]
 
       # Gets all the cells of the header into a string
-      header = ""
+      header = ''
       worksheet[0].cells.each do |head|
-        header += head.value + ","
+        header += head.value + ','
       end
       # Checks whether the header is in the right order and format
-      if header[0..-2] != "name,serial,category,condition,acquisition_date,purchase_price,location,manufacturer,model,peripherals,retired_date,po_number,comment,keywords"
+      if header[0..-2] != 'name,serial,category,condition,acquisition_date,purchase_price,location,manufacturer,model,peripherals,retired_date,po_number,comment,keywords'
         return [1, []]
       end
-      worksheet.delete_row(0) #Delete row of headers so it does not interfere with item creation
+      worksheet.delete_row(0) # Delete row of headers so it does not interfere with item creation
 
       incorrect_rows = []
 
@@ -71,11 +71,9 @@ module Importers
           exit = true
           # Checking if the category exists within the database
         elsif (t_category.instance_of? String) && !Category.exists?(name: t_category.strip)
-          category_name = t_category
           incorrect_rows.append(["#{index}, 4"])
           exit = true
         else
-          category_name = t_category
           t_category = Category.where('name = ?', t_category).first.id
         end
 
@@ -95,7 +93,7 @@ module Importers
           incorrect_rows.append(["#{index}, 6"])
           exit = true
         else
-          if !t_acquisition_date.nil?
+          unless t_acquisition_date.nil?
             t_acquisition_date = Date.parse(t_acquisition_date.to_s)
           end
         end
@@ -134,24 +132,24 @@ module Importers
         peripheral_error = 0
         allowed_peripheral = []
         # Checking if the peripheral serials exists in the database
-        if !t_peripherals.nil?
+        unless t_peripherals.nil?
           peripherals = t_peripherals.split(',')
           peripherals.each do |peripheral|
-            if !Item.exists?(serial: peripheral)
+            unless Item.exists?(serial: peripheral)
               peripheral_error = 11
               break
             end
             allowed_peripheral.append(peripheral)
           end
-          if peripheral_error > 0
-            incorrect_rows.append(["#{index}, 11"]) 
+          if peripheral_error.positive?
+            incorrect_rows.append(["#{index}, 11"])
             exit = true
           end
         end
 
         t_retired_date = row[10].value if !row[10].nil? && !row[10].value.nil?
         # Checking if the retired_date cell is in the correct format and if retired_date is filled, condition must be set as Retired
-        if !t_retired_date.nil? && !(t_retired_date.instance_of? DateTime) && t_condition != "Retired"
+        if !t_retired_date.nil? && !(t_retired_date.instance_of? DateTime) && t_condition != 'Retired'
           incorrect_rows.append(["#{index}, 12"])
           exit = true
         elsif !t_retired_date.nil?
@@ -187,21 +185,19 @@ module Importers
                         purchase_price: t_purchase_price, location: t_location,
                         manufacturer: t_manufacturer, model: t_model, retired_date: t_retired_date,
                         po_number: t_po_number, comment: t_comment, user_id: t_user_id)
-        
-        if item.save
-          unless allowed_peripheral.blank?
-            allowed_peripheral.each do |peripheral|
-              # Creating the parent and peripheral relationship for each peripheral
-              item_id = Item.where(serial: t_serial).first.id
-              peripheral_id = Item.where(serial: peripheral).first.id
-              pair = ItemPeripheral.create(parent_item_id: item_id, peripheral_item_id: peripheral_id)
-              pair.save
-            end
-          end
+
+        next unless item.save
+        next if allowed_peripheral.blank?
+        allowed_peripheral.each do |peripheral|
+          # Creating the parent and peripheral relationship for each peripheral
+          item_id = Item.where(serial: t_serial).first.id
+          peripheral_id = Item.where(serial: peripheral).first.id
+          pair = ItemPeripheral.create(parent_item_id: item_id, peripheral_item_id: peripheral_id)
+          pair.save
         end
       end
 
-      return [2, incorrect_rows]
+      [2, incorrect_rows]
     end
   end
 end

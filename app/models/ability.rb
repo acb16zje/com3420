@@ -1,5 +1,6 @@
-require 'irb'
+# frozen_string_literal: true
 
+# CanCanCan
 class Ability
   include CanCan::Ability
 

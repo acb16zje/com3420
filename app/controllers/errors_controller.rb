@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Errors controller
 class ErrorsController < ApplicationController
   skip_before_action :ie_warning
   skip_before_action :verify_authenticity_token, only: [:error_422]

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# User home categories controller
 class UserHomeCategoriesController < ApplicationController
   before_action :set_user_home_category, only: %i[show edit update destroy]
   load_and_authorize_resource
@@ -16,9 +19,7 @@ class UserHomeCategoriesController < ApplicationController
   # POST /user_home_categories
   def create
     # Save and redirect back to homepage
-    if @user_home_category.save
-      redirect_to root_path, notice: 'Favourite category successfully added.'
-    end
+    redirect_to root_path, notice: 'Favourite category successfully added.' if @user_home_category.save
   end
 
   # DELETE /user_home_categories/1

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: categories
@@ -13,6 +15,7 @@
 #  index_categories_on_name  (name) UNIQUE
 #
 
+# Category model
 class Category < ApplicationRecord
   has_many :items
   has_many :user_home_categories
