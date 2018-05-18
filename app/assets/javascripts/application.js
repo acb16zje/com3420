@@ -548,6 +548,8 @@ $(document).ready(function () {
                             return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " has " + notification.action + "</a> <hr class='navbar-divider>";
                         } else if (notification.action === "overdue") {
                             return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " is " + notification.action + "</a> <hr class='navbar-divider>";
+                        } else if (notification.action === "itemdeleted") {
+                            return "<a class='navbar-item'>" + notification.notifiable.itemname + "is no longer available, your" + notification.notifiable.type + " has been cancelled. </a> <hr class='navbar-divider>"; 
                         }
                     }
                 });

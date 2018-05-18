@@ -59,6 +59,7 @@ class Booking < ApplicationRecord
 
   def send_email_to_user
     UserMailer.user_booking_cancelled(self).deliver
+    Notification.create(recipient: self.user, action: 'itemdeleted', notifiable: self, context: 'U')
   end
 
   def destroy_combined_booking
