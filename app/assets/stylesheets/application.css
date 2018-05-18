@@ -1,12 +1,8 @@
 /*
   *= require epi_utilities
-  *= require awesomplete
-  *= require bulma-badge.min
-  *= require classic
-  *= require classic.date
-  *= require classic.time
-  *= require is-awesome
   *= require select2
+  *= require_tree .
+  *= stub email
 */
 
 /* Hide vertical scrollbar if not needed */

@@ -24,7 +24,7 @@ FactoryBot.define do
   end
 
   factory :macbook_pro_admin_charging_cable, class: 'ItemPeripheral' do
-    association :parent_item, factory: :laptop_admin_has_peripheral
+    association :parent_item, factory: :laptop_admin
     association :peripheral_item, factory: :charging_cable_admin
   end
 end

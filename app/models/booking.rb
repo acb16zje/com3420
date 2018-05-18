@@ -37,6 +37,7 @@ class Booking < ApplicationRecord
   belongs_to :item, dependent: :destroy
   belongs_to :user
   belongs_to :combined_booking
+  before_destroy :send_email_to_user
   after_destroy :destroy_combined_booking
 
   validates :start_date, :start_time,
@@ -55,6 +56,11 @@ class Booking < ApplicationRecord
   scope :late, -> { where status: 7 }
 
   private
+
+  def send_email_to_user
+    # Alex start here, send the email to the user when the booking is destroyed
+    # UserMailer.item_deleted().deliver
+  end
 
   def destroy_combined_booking
     combined_booking.destroy if combined_booking.bookings.blank?

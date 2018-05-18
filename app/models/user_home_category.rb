@@ -26,6 +26,8 @@ class UserHomeCategory < ApplicationRecord
 
   validates :user, :category, presence: true
 
+  scope :find_by_user, ->(user) { where user: user }
+
   def self.allowed_categories(user)
     Category.where.not(id: UserHomeCategory.select(:category_id).where(user: user))
   end

@@ -62,7 +62,12 @@ class BookingsController < ApplicationController
 
     # Disable the unavaliable dates for an asset
     gon.initial_disable_dates = [fully_booked_days_single, fully_booked_days_multi].reduce([], :concat)
-    gon.max_end_date = max_end_date
+
+    # Select the defaut date and time
+    unless gon.initial_disable_dates.blank?
+      gon.initial_disable_dates.sort!
+      gon.initial_start_date = initial_start_date
+    end
   end
 
   # GET /bookings/1/edit
@@ -180,10 +185,10 @@ class BookingsController < ApplicationController
 
     # Rejects other bookings that have conflicts with the accepted booking
     item_id = booking.item.id
-    item_bookings = Booking.where(item_id: item_id,status: 1)
+    item_bookings = Booking.where(item_id: item_id, status: 1)
     rejected = false
     item_bookings.each do |b|
-      if !booking_validation(item_id,b.start_datetime,b.end_datetime)
+      unless booking_validation(item_id, b.start_datetime, b.end_datetime)
         b.status = 5
         b.save
         reject_combined_booking = CombinedBooking.find(b.combined_booking_id)
@@ -196,7 +201,7 @@ class BookingsController < ApplicationController
     end
 
     if rejected
-      redirect_to requests_bookings_path, notice: 'Booking was successfully accepted, 
+      redirect_to requests_bookings_path, warning: 'Booking was successfully accepted,
         but another booking has been rejected as a result due to time conflicts.'
     else
       redirect_to requests_bookings_path, notice: 'Booking was successfully accepted.'
@@ -280,7 +285,6 @@ class BookingsController < ApplicationController
   # Start date ajax call from /bookings/new
   def start_date
     data = {
-      max_end_date: max_end_date(params[:start_date]),
       disable_start_time: disable_start_time(params[:start_date])
     }
 
@@ -289,9 +293,16 @@ class BookingsController < ApplicationController
 
   # End date ajax call from /bookings/new
   def end_date
-    data = {
-      max_end_time: max_end_time(params[:start_date], params[:end_date], params[:start_time])
-    }
+    if params[:end_date].blank?
+      data = {
+        max_end_date: max_end_date(params[:start_date], params[:start_time])
+      }
+    else
+      data = {
+        max_end_date: max_end_date(params[:start_date], params[:start_time]),
+        max_end_time: max_end_time(params[:start_date], params[:end_date], params[:start_time])
+      }
+    end
 
     render json: data
   end
@@ -311,6 +322,7 @@ class BookingsController < ApplicationController
 
   private
 
+  # Server-side validation for booking time slot
   def booking_validation(item_id, start_datetime, end_datetime)
     query = Booking.where(status: %w[2 3], item_id: item_id).where(
       "(start_datetime <= CAST ('#{start_datetime}' AS TIMESTAMP)
@@ -348,12 +360,11 @@ class BookingsController < ApplicationController
       # Single booking multiple days
       if date_array.length > 1
         # Include the start date if start time is 12:00 AM
-        date_array = if (start_time.hour.eql? 0) && (start_time.min.eql? 0) ||
-           (DateTime.now > booking.start_datetime)
-          date_array[0..-1]
+        if (start_time.hour.eql? 0) || (DateTime.now > booking.start_datetime)
+          date_array = date_array[0..-1]
         else
-          date_array[1..-1]
-                     end
+          date_array = date_array[1..-1]
+        end
       end
 
       # Split into [year, month, day]
@@ -397,12 +408,12 @@ class BookingsController < ApplicationController
       start_time = DateTime.parse(booking.start_datetime.to_s)
 
       # Multiple booking across many days or Multiple bookings on single day
-      next unless (end_date - start_date).to_i > 1 || ((start_time.hour.eql? 0) && (start_time.min.eql? 0))
+      next unless (end_date - start_date).to_i > 1 || (start_time.hour.eql? 0)
       date_array = (start_date...end_date).map(&:to_s)
 
       if date_array.length > 1
         # Include the start date if start time is 12:00 AM
-        date_array = if (start_time.hour.eql? 0) && (start_time.min.eql? 0)
+        date_array = if (start_time.hour.eql? 0) || (DateTime.now.hour + 1.hour >= start_time.hour)
                        date_array[0..-1]
                      else
                        date_array[1..-1]
@@ -422,17 +433,16 @@ class BookingsController < ApplicationController
   end
 
   # Maximum selectable end date
-  def max_end_date(start_date = nil)
+  def max_end_date(start_date, start_time)
     date_array = []
 
-    start_date = if start_date.nil?
-                   Date.today.strftime('%Y-%m-%d')
-                 else
-                   Date.parse(start_date)
-                 end
+    start_date = Date.parse(start_date)
+    start_time = DateTime.parse(start_time).strftime('%H:%M')
 
     booking = Booking.where(status: %w[2 3], item_id: params[:item_id]).where(
-      "start_date >= CAST('#{start_date}' AS DATE)", params[:item_id]
+      "(start_date >= CAST('#{start_date}' AS DATE)
+        AND start_time > CAST('#{start_time}' AS TIME))
+      OR (start_date > CAST('#{start_date}' AS DATE))", params[:item_id]
     ).minimum(:start_date)
 
     unless booking.blank?
@@ -461,13 +471,13 @@ class BookingsController < ApplicationController
 
     bookings.each do |booking|
       start_time = DateTime.parse(booking.start_datetime.to_s)
-      end_time = DateTime.parse(booking.end_datetime.to_s) - 10.minutes
+      end_time = DateTime.parse(booking.end_datetime.to_s) - 1.hour
 
       # Selected start date is booked as start date
       if start_time.strftime('%Y-%m-%d').eql? start_date.to_s
         # Start date not equal to end date
         if (end_time.day - start_time.day).positive?
-          time_to_disable.append(from: [start_time.hour.to_s, start_time.min.to_s], to: [23, 50])
+          time_to_disable.append(from: [start_time.hour.to_s, start_time.min.to_s], to: [23, 00])
         else
           # Start and end on the same day
           time_to_disable.append(
@@ -502,7 +512,8 @@ class BookingsController < ApplicationController
     else
       # The user selected a same start and end date
       booking = Booking.where(status: %w[2 3], item_id: params[:item_id]).where(
-        "start_date = CAST('#{start_date}' AS DATE)"
+        "start_date = CAST('#{start_date}' AS DATE)
+        AND start_time > CAST('#{start_time}' AS TIME)"
       ).minimum(:start_time)
 
       # The maximum selectable end time should be the earliest booking on the selected start_date
@@ -510,6 +521,38 @@ class BookingsController < ApplicationController
     end
 
     time_array
+  end
+
+  # Select the initial start date
+  def initial_start_date
+    date_start = Date.parse(
+      gon.initial_disable_dates[0][0].to_s + '-' +
+      gon.initial_disable_dates[0][1].to_s + '-' +
+      gon.initial_disable_dates[0][2].to_s
+    )
+
+    date_end = Date.parse(
+      gon.initial_disable_dates[-1][0].to_s + '-' +
+      gon.initial_disable_dates[-1][1].to_s + '-' +
+      gon.initial_disable_dates[-1][2].to_s
+    )
+
+    # Range of disabled dates
+    date_array = (date_start..date_end).map(&:to_s)
+
+    # List of disabled dates
+    initial_disable_dates = gon.initial_disable_dates.map { |n| Date.parse(n[0].to_s + '-' + n[1].to_s + '-' + n[2].to_s).to_s }
+
+    available_dates = date_array - initial_disable_dates
+
+    # Get the set difference between the range and list, the first date is the initial start date
+    if available_dates.blank?
+      available_dates
+    elsif DateTime.now.hour >= 23 && Date.parse(available_dates[0]) == Date.today - 1.month
+      Date.parse(available_dates[1]) + 1.month
+    else
+      Date.parse(available_dates[0]) + 1.month
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.

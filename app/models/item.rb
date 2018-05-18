@@ -49,6 +49,9 @@ class Item < ApplicationRecord
   validates :name, :condition, :location, :category, :user, presence: true
   validates :serial, presence: true, uniqueness: true
 
+  scope :name_serial, -> { pluck(:name, :serial) }
+  scope :manufacturer_uniq, -> { pluck(:manufacturer).uniq }
+
   mount_uploader :image, ImageUploader
 
   def get_item_peripherals

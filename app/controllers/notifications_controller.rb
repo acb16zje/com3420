@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'irb'
+require 'json'
 
 # Notifications controller
 class NotificationsController < ApplicationController
@@ -17,6 +18,7 @@ class NotificationsController < ApplicationController
   def mark_as_read
     # Get all user's unread notifications
     @notifications = Notification.where(recipient: current_user).unread
+
     # Set read time as now
     @notifications.update_all(read_at: DateTime.now.strftime('%d %B %Y %I:%M %p'))
 

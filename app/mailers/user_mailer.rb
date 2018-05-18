@@ -114,4 +114,13 @@ class UserMailer < ApplicationMailer
 
     mail to: @user.email, subject: 'AMRC - Late For Return'
   end
+
+  # def item_deleted(booking)
+  #   @booking = booking
+  #   @user = booking.user
+
+  #   attachments.inline['amrc_main.png'] = File.read("#{Rails.root}/app/assets/images/amrc_main.png")
+
+  #   mail to: @user.email, subject: 'AMRC - Asset Removed From System'
+  # end
 end

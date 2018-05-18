@@ -69,15 +69,6 @@ FactoryBot.define do
     association :category, factory: :laptop_category
   end
 
-  factory :laptop_admin_has_peripheral, class: 'Item' do
-    name 'Macbook Pro 15-inch'
-    serial 'MPTR212/A'
-    condition 'Like New'
-    location 'Western Bank Library'
-    association :user, factory: :admin
-    association :category, factory: :laptop_category
-  end
-
   factory :charging_cable_admin, class: 'Item' do
     name 'Charging Cable'
     serial 'CC322'

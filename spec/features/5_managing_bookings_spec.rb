@@ -88,10 +88,10 @@ describe 'Managing bookings', js: true do
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
     test_booking_date_end = test_booking_date_start + 1.days
-    page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}')")
-    page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}')")
-    page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}')")
-    page.execute_script("$('#endTime').pickatime('picker').set('select', '#{test_booking_date_end.strftime("%I:%M %p")}')")
+    page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}');")
+    page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}');")
+    page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}');")
+    page.execute_script("$('#endTime').pickatime('picker').set('select', '#{test_booking_date_end.strftime("%I:%M %p")}');")
     fill_in 'booking_next_location', with: 'pam liversidge building'
     click_button('Confirm booking')
     expect(page).to have_content 'Booking was successfully created'
@@ -105,12 +105,12 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:macbook_pro_admin_charging_cable)
     visit '/items/1/bookings/new'
     expect(page).to have_content 'MPTR212/A'
-    test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
-    test_booking_date_end = test_booking_date_start + 1.days
-    page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}')")
-    page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}')")
-    page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}')")
-    page.execute_script("$('#endTime').pickatime('picker').set('select', '#{test_booking_date_end.strftime("%I:%M %p")}')")
+    test_booking_date_start = DateTime.tomorrow
+    test_booking_date_end = DateTime.tomorrow + 1.days
+    page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}');")
+    page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}');")
+    page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}');")
+    page.execute_script("$('#endTime').pickatime('picker').set('select', '#{test_booking_date_end.strftime("%I:%M %p")}');")
     fill_in 'booking_next_location', with: 'pam liversidge building'
     select('CC322', from: 'peripherals')
     click_button('Confirm booking')
@@ -125,7 +125,7 @@ describe 'Managing bookings', js: true do
     FactoryBot.create(:macbook_pro_charging_cable)
     visit '/items/1/bookings/new'
     test_booking_date_start = DateTime.tomorrow.change({hour: 9, min: 0})
-    test_booking_date_end = test_booking_date_start + 1.days
+    test_booking_date_end = test_booking_date_start + 2.days
     page.execute_script("$('#startDate').pickadate('picker').set('select', '#{test_booking_date_start.strftime("%d %B %Y")}');")
     page.execute_script("$('#startTime').pickatime('picker').set('select', '#{test_booking_date_start.strftime("%I:%M %p")}');")
     page.execute_script("$('#endDate').pickadate('picker').set('select', '#{test_booking_date_end.strftime("%d %B %Y")}');")

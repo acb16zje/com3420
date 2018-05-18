@@ -1,14 +1,6 @@
 //= require jquery_ujs
-//= require awesomplete
-//= require bulma.datatables
-//= require bunny
-//= require inputTypeNumberPolyfill
-//= require notifications
-//= require picker
-//= require picker.date
-//= require picker.time
 //= require select2
-//= require zoom
+//= require_tree .
 
 $(document).ready(function () {
     // Dropdowns
@@ -69,16 +61,24 @@ $(document).ready(function () {
         clear: '',
         max: gon.max_start_date,
         onStart: function () {
-            if (gon.initial_disable_dates.length !== 0) {
+            if (gon.initial_disable_dates != null && gon.initial_disable_dates.length !== 0) {
                 this.set('disable', gon.initial_disable_dates);
             }
 
-            if (moment().hour() == 23 && moment().minute() >= 50) {
-                // this.set('select', moment().add(1, 'd').toDate());
+            // If it is after 11:00 PM, then mininum start date is tomorrow
+            if (moment().hour() == 23) {
                 this.set('min', moment().add(1, 'd').toDate());
             } else {
-                // this.set('select', moment());
                 this.set('min', moment());
+            }
+
+            // Initial earliest available start date
+            if (gon.initial_start_date != null) {
+                this.set('select', gon.initial_start_date, {
+                    format: 'yyyy-mm-dd'
+                });
+            } else {
+                this.set('select', this.get('highlight'));
             }
         }
     });
@@ -89,13 +89,13 @@ $(document).ready(function () {
         clear: '',
         min: moment(),
         onStart: function () {
-            if (gon.max_end_date.length !== 0) {
-                this.set('max', gon.max_end_date)
-            }
+            // if (gon.max_end_date.length !== 0) {
+            //     this.set('max', gon.max_end_date)
+            // }
 
-            if (gon.initial_disable_dates.length !== 0) {
-                this.set('disable', gon.initial_disable_dates);
-            }
+            // if (gon.initial_disable_dates.length !== 0) {
+            //     this.set('disable', gon.initial_disable_dates);
+            // }
 
             endDate.prop('disabled', true);
         }
@@ -105,17 +105,14 @@ $(document).ready(function () {
     startTime.pickatime({
         clear: '',
         min: moment(),
-        interval: 10,
-        onStart: function () {
-            startTime.prop('disabled', true);
-        }
+        interval: 60
     });
 
     // Timepicker endTime on creating booking
     endTime.pickatime({
         clear: '',
         min: moment(),
-        interval: 10,
+        interval: 60,
         onStart: function () {
             endTime.prop('disabled', true);
         }
@@ -140,7 +137,6 @@ $(document).ready(function () {
                 startTime.pickatime('picker').set('min', false);
             }
 
-            startTime.prop('disabled', false);
             startTime.pickatime('picker').clear();
 
             // Dynamic disable startTime when startDate is changed
@@ -156,11 +152,8 @@ $(document).ready(function () {
                     startTime.pickatime('picker').set('enable', true);
                     startTime.pickatime('picker').set('disable', data.disable_start_time);
 
-                    if (data.max_end_date.length > 0) {
-                        endDate.pickadate('picker').set('max', data.max_end_date);
-                    } else {
-                        endDate.pickadate('picker').set('max', false);
-                    }
+                    // Pre-select earliest start time, TESTING WILL BREAK
+                    startTime.pickatime('picker').set('select', 0);
                 }
             });
         } else {
@@ -176,6 +169,7 @@ $(document).ready(function () {
                     },
                     dataType: 'json',
                     success: function (data) {
+
                         if (data.max_end_time.length > 0) {
                             endTime.pickatime('picker').set('max', data.max_end_time)
                         } else {
@@ -191,6 +185,8 @@ $(document).ready(function () {
         checkTimes();
     });
 
+    startDate.trigger('change');
+
     // Prevent endTime smaller than startTime on the same date
     startTime.change(function () {
         disableEndInput();
@@ -198,6 +194,25 @@ $(document).ready(function () {
 
         if (endDate.val()) {
             endDate.pickadate('picker').clear();
+        }
+
+        if (startTime.val()) {
+            $.ajax({
+                type: "GET",
+                url: "end_date",
+                data: {
+                    start_date: new Date(startDate.val()),
+                    start_time: new Date(startDate.val() + ' ' + startTime.val())
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.max_end_date.length > 0) {
+                        endDate.pickadate('picker').set('max', data.max_end_date);
+                    } else {
+                        endDate.pickadate('picker').set('max', false);
+                    }
+                }
+            });
         }
     });
 
@@ -223,8 +238,8 @@ $(document).ready(function () {
             var start_time = new Date(start_date + ' ' + startTime.val());
             var end_time = new Date(end_date + ' ' + endTime.val());
 
-            // If start time is 11:50 PM, then end date must be the next day
-            if (startTime.val() === "11:50 PM") {
+            // If start time is 11:00 PM, then end date must be the next day
+            if (startTime.val() === "11:00 PM") {
                 end_date = moment(new Date(start_date)).add(1, 'd');
                 endDate.pickadate('picker').set('min', moment(end_date).toDate());
 
@@ -249,7 +264,7 @@ $(document).ready(function () {
 
             // If end date is empty, then end time has no minimum
             if (endDate.val()) {
-                endTime.pickatime('picker').set('min', moment(start_time).add(10, 'm').toDate());
+                endTime.pickatime('picker').set('min', moment(start_time).add(1, 'h').toDate());
             } else {
                 endTime.pickatime('picker').set('min', false);
             }
@@ -257,8 +272,8 @@ $(document).ready(function () {
             // Start date is larger than end date
             endTime.pickatime('picker').set('min', false);
 
-            // If start time is 11:50 PM, disable the option for end date to be start date
-            if (startTime.val() !== "11:50 PM") {
+            // If start time is 11:00 PM, disable the option for end date to be start date
+            if (startTime.val() !== "11:00 PM") {
                 endDate.pickadate('picker').set('min', moment(new Date(start_date)).toDate());
 
                 if (endDate.val() === '') {
@@ -311,28 +326,29 @@ $(document).ready(function () {
     });
 
     // Datatable
-    $("#users, #categories").each(function () {
-        $(this).DataTable({
-            "drawCallback": function (settings) {
-                if (!$(this).parent().hasClass("table-is-responsive")) {
-                    $(this).wrap('<div class="table-is-responsive"></div>');
+    $("#users, #categories, #bookings, #bookings_other").each(function () {
+        if ($(this).attr('id') === 'bookings' || $(this).attr('id') === 'bookings_other') {
+            $(this).DataTable({
+                columnDefs: [{
+                    orderable: false,
+                    targets: '_all'
+                }],
+                "drawCallback": function (settings) {
+                    if (!$(this).parent().hasClass("table-is-responsive")) {
+                        $(this).wrap('<div class="table-is-responsive"></div>');
+                    }
                 }
-            }
-        });
-    });
+            });
+        } else {
+            $(this).DataTable({
+                "drawCallback": function (settings) {
+                    if (!$(this).parent().hasClass("table-is-responsive")) {
+                        $(this).wrap('<div class="table-is-responsive"></div>');
+                    }
+                }
+            });
+        }
 
-    $("#bookings, #bookings_other").each(function () {
-        $(this).DataTable({
-            columnDefs: [{
-                orderable: false,
-                targets: '_all'
-            }],
-            "drawCallback": function (settings) {
-                if (!$(this).parent().hasClass("table-is-responsive")) {
-                    $(this).wrap('<div class="table-is-responsive"></div>');
-                }
-            }
-        });
     });
 
     // $("#bookings_other_wrapper").removeClass("container");
@@ -374,7 +390,7 @@ $(document).ready(function () {
     $('.select2').select2();
 
     // Preselect parent assets
-    if (gon.parent_id != undefined) {
+    if (gon.parent_id !== undefined) {
         $('#item_add_parents').val(gon.parent_id).trigger('change');
     }
 
@@ -394,10 +410,6 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data, page) {
-                    // console.log('Peripherals ajax');
-                    // console.log(data);
-                    // console.log(data.name);
-
                     $('#peripherals').select2({
                         data: $.map(data, function (item, i) {
                             return {
@@ -473,4 +485,100 @@ $(document).ready(function () {
     function closeModals() {
         $('.modal').removeClass('is-active');
     }
+
+    // Notifications
+    (function () {
+        var Notifications,
+            bind = function (fn, me) {
+                return function () {
+                    return fn.apply(me, arguments);
+                };
+            };
+
+        Notifications = (function () {
+            function Notifications() {
+                this.handleSuccess = bind(this.handleSuccess, this);
+                this.handleHover = bind(this.handleHover, this);
+                this.notifications = $("[data-behavior='notifications']");
+                if (this.notifications.length > 0) {
+                    this.setup();
+                }
+            }
+
+            Notifications.prototype.setup = function () {
+                $("[data-behavior='notification-link']").mouseenter(this.handleHover);
+                return $.ajax({
+                    url: "/notifications.json",
+                    dataType: "JSON",
+                    method: "GET",
+                    success: this.handleSuccess
+                });
+            };
+
+            Notifications.prototype.handleHover = function () {
+                if ($("[data-behavior='unread-count']").attr('data-badge') !== void 0) {
+                    return $.ajax({
+                        url: "/notifications/mark_as_read",
+                        dataType: "JSON",
+                        method: "PUT",
+                        success: function () {
+                            return $("[data-behavior='unread-count']").removeAttr('data-badge');
+                        }
+                    });
+                }
+            };
+
+            Notifications.prototype.handleSuccess = function (data) {
+                var items, items_mobile, unread_count;
+                items = $.map(data, function (notification) {
+                    if (notification.context === "AM") {
+                        if ((notification.action === "returned") || (notification.action === "requested")) {
+                            return "<a class='navbar-item'>" + notification.notifiable.booker + " has " + notification.action + ": " + notification.notifiable.itemname + "</a> <hr class='navbar-divider>";
+                        } else if (notification.action === "overdue") {
+                            return "<a class='navbar-item'>" + notification.notifiable.booker + " has not returned " + notification.notifiable.itemname + " on time</a> <hr class='navbar-divider>";
+                        } else if ((notification.action === "started") || (notification.action === "cancelled")) {
+                            return "<a class='navbar-item'>" + notification.notifiable.booker + "'s booking for " + notification.notifiable.itemname + " has been " + notification.action + "</a> <hr class='navbar-divider>";
+                        } else if (notification.action === "reported") {
+                            return "<a class='navbar-item'>An issue has been reported with " + notification.notifiable.itemname + "</a> <hr class='navbar-divider>";
+                        }
+                    } else if (notification.context === "U") {
+                        if ((notification.action === "approved") || (notification.action === "rejected")) {
+                            return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " has been " + notification.action + "</a> <hr class='navbar-divider>";
+                        } else if (notification.action === "started") {
+                            return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " has " + notification.action + "</a> <hr class='navbar-divider>";
+                        } else if (notification.action === "overdue") {
+                            return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " is " + notification.action + "</a> <hr class='navbar-divider>";
+                        }
+                    }
+                });
+
+                unread_count = $.map(data, function (notification) {
+                    if (!notification.read) {
+                        return "1";
+                    }
+                });
+
+                if (items.length === 0) {
+                    $("[data-behavior='notification-items']").html("<a class='navbar-item'>No new notifications</a>");
+                    $("[data-behavior='notification-items-mobile']").html("<a class='dropdown-item'>No new notifications</a>");
+                    return $("[data-behavior='unread-count']").removeAttr('data-badge');
+                } else {
+                    $("[data-behavior='notification-items'], [data-behavior='notification-items-mobile']").html(items);
+                    if (unread_count.length === 0) {
+                        return $("[data-behavior='unread-count']").removeAttr('data-badge');
+                    } else {
+                        return $("[data-behavior='unread-count']").attr('data-badge', unread_count.length);
+                    }
+                }
+            };
+
+            return Notifications;
+
+        })();
+
+        jQuery(function () {
+            return new Notifications;
+        });
+
+    }).call(this);
 });

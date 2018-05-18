@@ -1,6 +1,6 @@
 
 json.array! @notifications do |notification|
-    json.recipient  "#{notification.recipient.givenname} #{notification.recipient.sn}"
+    json.recipient "#{notification.recipient.givenname} #{notification.recipient.sn}"
     json.action notification.action
     json.context notification.context
     json.read !notification.read_at.blank?
