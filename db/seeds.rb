@@ -33,6 +33,55 @@ Category.create!(
   has_peripheral: 0,
   is_peripheral: 1)
 
+# 6
+Category.create!(
+  name: 'Tooling',
+  icon: '<i class="fas fa-wrench"></i>',
+  has_peripheral: 0,
+  is_peripheral: 0)  
+
+# 7
+Category.create!(
+  name: 'Accessories',
+  icon: '<i class="fas fa-gem"></i>',
+  has_peripheral: 0,
+  is_peripheral: 0)  
+
+# 8
+Category.create!(
+  name: 'Data Logger (Voltage) - Module',
+  icon: '<i class="material-icons">offline_bolt</i>',
+  has_peripheral: 1,
+  is_peripheral: 0)  
+
+# 9
+Category.create!(
+  name: 'Data Logger (Voltage) - Module - Peripherals',
+  icon: '<i class="material-icons">offline_boltP</i>',
+  has_peripheral: 0,
+  is_peripheral: 1)  
+
+# 10
+Category.create!(
+  name: 'Data Logger (Power)',
+  icon: '<i class="fas fa-power-off"></i>',
+  has_peripheral: 0,
+  is_peripheral: 0)  
+
+# 11
+Category.create!(
+  name: 'Data Logger (Temperature) - Module',
+  icon: '<i class="fas fa-thermometer"></i>',
+  has_peripheral: 0,
+  is_peripheral: 0)  
+
+# 12
+Category.create!(
+  name: 'Data Logger - Chassis',
+  icon: '',
+  has_peripheral: 0,
+  is_peripheral: 0)  
+
 User.create!(email: 'wkkhaw1@sheffield.ac.uk', givenname: 'Wei Kin', sn: 'Khaw', permission_id: 3, username: 'aca16wkk')
 User.create!(email: 'zjeng1@sheffield.ac.uk', givenname: 'Zer Jun', sn: 'Eng', permission_id: 3, username: 'acb16zje')
 User.create!(email: 'atchapman1@sheffield.ac.uk', givenname: 'Alex', sn: 'Chapman', permission_id: 3, username: 'aca16atc')
