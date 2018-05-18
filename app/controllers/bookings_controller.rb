@@ -191,6 +191,8 @@ class BookingsController < ApplicationController
       unless booking_validation(item_id, b.start_datetime, b.end_datetime)
         b.status = 5
         b.save
+        Notification.create(recipient: b.user, action: 'rejected', notifiable: b, context: 'U')
+        UserMailer.booking_rejected([b]).deliver
         reject_combined_booking = CombinedBooking.find(b.combined_booking_id)
         if reject_combined_booking.bookings.where(status: %w[1 2 3 4 7]).blank?
           reject_combined_booking.status = 5
