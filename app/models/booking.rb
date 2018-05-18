@@ -58,7 +58,7 @@ class Booking < ApplicationRecord
   private
 
   def send_email_to_user
-    UserMailer.item_deleted().deliver
+    UserMailer.user_booking_cancelled(self).deliver
   end
 
   def destroy_combined_booking
