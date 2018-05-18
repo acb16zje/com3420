@@ -58,8 +58,7 @@ class Booking < ApplicationRecord
   private
 
   def send_email_to_user
-    # Alex start here, send the email to the user when the booking is destroyed
-    # UserMailer.item_deleted().deliver
+    UserMailer.item_deleted().deliver
   end
 
   def destroy_combined_booking
