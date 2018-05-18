@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
   # end
 
   layout :layout
+  add_flash_types :warning
 
   private
 
