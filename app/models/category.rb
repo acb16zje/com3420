@@ -21,7 +21,7 @@ class Category < ApplicationRecord
   has_many :user_home_categories
   has_many :users, through: :user_home_categories
 
-  validates :name, presence: true, uniqueness: true, length: { minimum: 2, maximum: 50 }
+  validates :name, presence: true, length: { minimum: 2, maximum: 50 }
 
   scope :all_name, -> { pluck(:name) }
 end

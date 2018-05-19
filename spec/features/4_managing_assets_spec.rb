@@ -30,7 +30,7 @@ describe 'Managing assets' do
     create_gopro
     find(:css, '#add_peripheral').click
     click_link 'Choose'
-    select("SD322 (MicroSD Card)", from: 'peripheral_asset')
+    select("MicroSD Card (SD322)", from: 'item_add_peripherals')
     click_button 'Add as Peripheral'
   end
 
@@ -42,7 +42,7 @@ describe 'Managing assets' do
     create_gopro
     find(:css, '#add_peripheral').click
     click_link 'Choose'
-    select("SD322 (MicroSD Card)", from: 'peripheral_asset')
+    select("MicroSD Card (SD322)", from: 'item_add_peripherals')
     click_button 'Add as Peripheral'
     visit '/items/2'
     find(:css, '#add_peripheral').click
@@ -54,8 +54,8 @@ describe 'Managing assets' do
     create_macbook_pro
     create_peripheral_for_gopro
     click_link 'Edit'
-    unselect('GoPro Hero 5 : GPH5', from: 'item_add_parents')
-    select('Macbook Pro 15-inch : MPTR212/A', from: 'item_add_parents')
+    unselect('GoPro Hero 5 (GPH5)', from: 'item_add_parents')
+    select('Macbook Pro 15-inch (MPTR212/A)', from: 'item_add_parents')
     click_button 'Save changes'
     visit '/items/3'
     find(:css, '#add_peripheral').click
@@ -69,7 +69,7 @@ describe 'Managing assets' do
     visit '/items/2'
     find(:css, '#add_peripheral').click
     click_link 'Choose'
-    select('MPTR212/A (Macbook Pro 15-inch)', from: 'peripheral_asset')
+    select('Macbook Pro 15-inch (MPTR212/A)', from: 'item_add_peripherals')
     click_button 'Add as Peripheral'
     visit '/items/2'
     click_link 'Edit'

@@ -497,26 +497,24 @@ $(document).ready(function () {
             };
 
         Notifications = (function () {
-            class Notifications {
-                constructor() {
-                    this.handleSuccess = bind(this.handleSuccess, this);
-                    this.handleHover = bind(this.handleHover, this);
-                    this.notifications = $("[data-behavior='notifications']");
-                    if (this.notifications.length > 0) {
-                        this.setup();
-                    }
-                }
-                setup() {
-                    $("[data-behavior='notification-link']").mouseenter(this.handleHover);
-                    return $.ajax({
-                        url: "/notifications.json",
-                        dataType: "JSON",
-                        method: "GET",
-                        success: this.handleSuccess
-                    });
+            function Notifications() {
+                this.handleSuccess = bind(this.handleSuccess, this);
+                this.handleHover = bind(this.handleHover, this);
+                this.notifications = $("[data-behavior='notifications']");
+                if (this.notifications.length > 0) {
+                    this.setup();
                 }
             }
 
+            Notifications.prototype.setup = function () {
+                $("[data-behavior='notification-link']").mouseenter(this.handleHover);
+                return $.ajax({
+                    url: "/notifications.json",
+                    dataType: "JSON",
+                    method: "GET",
+                    success: this.handleSuccess
+                });
+            };
 
             Notifications.prototype.handleHover = function () {
                 if ($("[data-behavior='unread-count']").attr('data-badge') !== void 0) {
@@ -586,4 +584,5 @@ $(document).ready(function () {
         });
 
     }).call(this);
+
 });
