@@ -6,14 +6,14 @@
       .column.is-10.is-offset-1
         %h3.title Add peripheral for #{@item.name} (#{@item.serial})
         .box
-          = form_tag add_peripheral_item_path, method: :post do
+          = simple_form_for @item, url: add_peripheral_item_path, method: :post do |f|
             .field.is-horizontal
               .field-label.is-normal
                 %label.label Peripheral Asset
               .field-body
                 .field
                   .control
-                    = select_tag 'peripheral_asset', options_for_select(@items.map { |i| [i.serial + ' (' + i.name + ')', i.serial] }), class: 'select2', include_blank: 'None'
+                    = f.select :add_peripherals, @items.map { |i| [i.name + ' (' + i.serial + ')', i.id] }, {}, {class: 'select2', multiple: ''}
             %br
             %br
             .field.is-horizontal
@@ -24,4 +24,4 @@
                   .control
                     = link_to 'Cancel', @item, class: 'button is-light'
                   .control
-                    = submit_tag 'Add as Peripheral', class: 'button is-block is-link', id: 'submitButton'
+                    = f.submit 'Add as Peripheral', class: 'button is-block is-link', id: 'submitButton'

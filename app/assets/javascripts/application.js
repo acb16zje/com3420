@@ -351,7 +351,7 @@ $(document).ready(function () {
 
     });
 
-    // $("#bookings_other_wrapper").removeClass("container");
+    $("#bookings_wrapper").removeClass("container");
 
     // Datatable details dropdown
     var details = getAll('.details');
@@ -476,7 +476,8 @@ $(document).ready(function () {
 
     // Close modal when click outside of image
     $(document).click(function (e) {
-        if (!$(e.target).closest(".image-modal-image").length && !$(e.target).closest(".modal-button").length) {
+        if (!$(e.target).closest(".image-modal-image").length &&
+            !$(e.target).closest(".modal-button").length) {
             closeModals();
         }
     });
@@ -496,24 +497,26 @@ $(document).ready(function () {
             };
 
         Notifications = (function () {
-            function Notifications() {
-                this.handleSuccess = bind(this.handleSuccess, this);
-                this.handleHover = bind(this.handleHover, this);
-                this.notifications = $("[data-behavior='notifications']");
-                if (this.notifications.length > 0) {
-                    this.setup();
+            class Notifications {
+                constructor() {
+                    this.handleSuccess = bind(this.handleSuccess, this);
+                    this.handleHover = bind(this.handleHover, this);
+                    this.notifications = $("[data-behavior='notifications']");
+                    if (this.notifications.length > 0) {
+                        this.setup();
+                    }
+                }
+                setup() {
+                    $("[data-behavior='notification-link']").mouseenter(this.handleHover);
+                    return $.ajax({
+                        url: "/notifications.json",
+                        dataType: "JSON",
+                        method: "GET",
+                        success: this.handleSuccess
+                    });
                 }
             }
 
-            Notifications.prototype.setup = function () {
-                $("[data-behavior='notification-link']").mouseenter(this.handleHover);
-                return $.ajax({
-                    url: "/notifications.json",
-                    dataType: "JSON",
-                    method: "GET",
-                    success: this.handleSuccess
-                });
-            };
 
             Notifications.prototype.handleHover = function () {
                 if ($("[data-behavior='unread-count']").attr('data-badge') !== void 0) {
@@ -549,7 +552,7 @@ $(document).ready(function () {
                         } else if (notification.action === "overdue") {
                             return "<a class='navbar-item'>Your " + notification.notifiable.type + " for " + notification.notifiable.itemname + " is " + notification.action + "</a> <hr class='navbar-divider>";
                         } else if (notification.action === "itemdeleted") {
-                            return "<a class='navbar-item'>" + notification.notifiable.itemname + "is no longer available, your" + notification.notifiable.type + " has been cancelled. </a> <hr class='navbar-divider>"; 
+                            return "<a class='navbar-item'>" + notification.notifiable.itemname + "is no longer available, your" + notification.notifiable.type + " has been cancelled. </a> <hr class='navbar-divider>";
                         }
                     }
                 });

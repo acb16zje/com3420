@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20180320144252) do
   create_table "item_peripherals", force: :cascade do |t|
     t.bigint "parent_item_id"
     t.bigint "peripheral_item_id"
+    t.index ["parent_item_id", "peripheral_item_id"], name: "index_item_peripherals_on_parent_item_id_and_peripheral_item_id", unique: true
     t.index ["parent_item_id"], name: "index_item_peripherals_on_parent_item_id"
     t.index ["peripheral_item_id"], name: "index_item_peripherals_on_peripheral_item_id"
   end

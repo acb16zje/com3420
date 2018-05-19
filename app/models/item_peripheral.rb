@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: item_peripherals
@@ -10,8 +9,9 @@
 #
 # Indexes
 #
-#  index_item_peripherals_on_parent_item_id      (parent_item_id)
-#  index_item_peripherals_on_peripheral_item_id  (peripheral_item_id)
+#  index_item_peripherals_on_parent_item_id                         (parent_item_id)
+#  index_item_peripherals_on_parent_item_id_and_peripheral_item_id  (parent_item_id,peripheral_item_id) UNIQUE
+#  index_item_peripherals_on_peripheral_item_id                     (peripheral_item_id)
 #
 # Foreign Keys
 #
@@ -25,4 +25,5 @@ class ItemPeripheral < ApplicationRecord
   belongs_to :peripheral_item, class_name: 'Item'
 
   validates :parent_item, :peripheral_item, presence: true
+  validates_uniqueness_of :parent_item, scope: :peripheral_item
 end

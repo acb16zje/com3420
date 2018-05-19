@@ -62,7 +62,8 @@ class ItemsController < ApplicationController
 
     # Get all items ellegible to have a peripheral added
     @items = Item.where.not(serial: @item.serial)
-    #Validate these choices
+
+    # Validate these choices
     Item.all.each do |i|
       if !i.peripheral_items.where(parent_item_id: @item.id).blank? || !i.parent_items.where(peripheral_item_id: @item.id).blank?
         @items -= [i]
@@ -76,18 +77,27 @@ class ItemsController < ApplicationController
     @item = Item.find_by_id(params[:id])
 
     # Check a peripheral was selected
-    unless params[:peripheral_asset].blank?
-      # Find the selected peripheral item
-      @peripheral = Item.find_by_serial(params[:peripheral_asset])
-      # Create the allowed pair of peripheral and item
-      pair = ItemPeripheral.create(parent_item_id: @item.id, peripheral_item_id: @peripheral.id)
+    if params[:item][:add_peripherals].length == 1
+      redirect_to @item, warning: 'No peripheral was added.'
+    else
+      peripherals = params[:item][:add_peripherals]
 
-      # Save the pair and changes to the item.
-      pair.save
+      peripherals.each do |peripheral|
+        unless peripheral.blank?
+          # Find the selected peripheral item
+          new_peripheral = Item.find_by_id(peripheral.to_i)
+          # Create the allowed pair of peripheral and item
+          pair = ItemPeripheral.create(parent_item_id: @item.id, peripheral_item_id: new_peripheral.id)
+
+          # Save the pair and changes to the item.
+          pair.save
+        end
+      end
+
       @item.save
-    end
 
-    redirect_to @item, notice: 'Peripheral was successfully added'
+      redirect_to @item, notice: 'Peripheral was successfully added'
+    end
   end
 
   # GET /items/new

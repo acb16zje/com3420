@@ -8,8 +8,9 @@
 #
 # Indexes
 #
-#  index_item_peripherals_on_parent_item_id      (parent_item_id)
-#  index_item_peripherals_on_peripheral_item_id  (peripheral_item_id)
+#  index_item_peripherals_on_parent_item_id                         (parent_item_id)
+#  index_item_peripherals_on_parent_item_id_and_peripheral_item_id  (parent_item_id,peripheral_item_id) UNIQUE
+#  index_item_peripherals_on_peripheral_item_id                     (peripheral_item_id)
 #
 # Foreign Keys
 #

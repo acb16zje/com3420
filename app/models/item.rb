@@ -37,6 +37,7 @@
 # Item model
 class Item < ApplicationRecord
   attr_accessor :add_parents
+  attr_accessor :add_peripherals
   attr_accessor :is_peripheral
 
   belongs_to :category
@@ -53,6 +54,10 @@ class Item < ApplicationRecord
   scope :manufacturer_uniq, -> { pluck(:manufacturer).uniq }
 
   mount_uploader :image, ImageUploader
+
+  def available?
+    bookings.ongoing.blank?
+  end
 
   def get_item_peripherals
     peripherals_for_item = ItemPeripheral.where(parent_item: self)

@@ -1,4 +1,4 @@
-- if current_user.id == @manager.id
+- if @manager.eql? current_user
   .tabs.is-centered
     %ul
       %li{class: "#{current_class?(manager_items_path(user_id: current_user.id))}"}

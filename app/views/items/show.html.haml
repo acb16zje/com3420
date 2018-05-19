@@ -21,7 +21,7 @@
                   = @item.user.givenname.to_s + ' ' + @item.user.sn.to_s
               - unless @parents.blank?
                 %tr
-                  %th Parent Asset Names
+                  %th Parent Assets
                   %td
                     - @parents.each do |parent|
                       = link_to "#{parent.name + ' (' + parent.serial + ')' }", parent, class: 'button'
@@ -60,28 +60,7 @@
               %tr
                 %th Condition
                 %td
-                  - case @item.condition
-                  - when 'Like New'
-                    %span.tag.is-success.is-medium
-                      = @item.condition
-                  - when 'Good'
-                    %span.tag.is-primary.is-medium
-                      = @item.condition
-                  - when 'Adequate'
-                    %span.tag.is-warning.is-medium
-                      = @item.condition
-                  - when 'Damaged'
-                    %span.tag.is-danger.is-medium
-                      = @item.condition
-                  - when 'Missing'
-                    %span.tag.is-danger.is-medium
-                      = @item.condition
-                  - when 'Retired'
-                    %span.tag.is-danger.is-medium
-                      = @item.condition
-                  - else
-                    %span.tag.is-black.is-medium
-                      Unknown
+                  = render 'item_condition', item: @item
               %tr
                 %th Storage Location
                 %td
@@ -89,13 +68,14 @@
               %tr
                 %th Peripherals
                 %td
-                  - unless @peripherals.blank?
-                    - @peripherals.each do |peripheral|
-                      = link_to "#{peripheral.name + ' (' + peripheral.serial + ')' }", peripheral, class: 'button'
-                  - if (current_user == @item.user && @item.category.has_peripheral ) || can?(:manage, Item)
-                    = link_to add_peripheral_option_item_path, class: 'button is-link', id: 'add_peripheral' do
-                      %span.icon
-                        %i.fas.fa-plus
+                  .buttons
+                    - unless @peripherals.blank?
+                      - @peripherals.each do |peripheral|
+                        = link_to "#{peripheral.name + ' (' + peripheral.serial + ')' }", peripheral, class: 'button'
+                    - if (current_user == @item.user && @item.category.has_peripheral ) || can?(:manage, Item)
+                      = link_to add_peripheral_option_item_path, class: 'button is-link', id: 'add_peripheral' do
+                        %span.icon
+                          %i.fas.fa-plus
               %tr
                 %th Comments
                 %td
@@ -148,28 +128,4 @@
               %td.has-text-centered= booking.reason
               %td.has-text-centered= link_to booking.user.givenname, booking.user
               %td.has-text-centered
-                - case booking.status
-                - when 1
-                  %span.tag.is-warning.is-medium
-                    Pending
-                - when 2
-                  %span.tag.is-success.is-medium
-                    Accepted
-                - when 3
-                  %span.tag.is-info.is-medium
-                    Ongoing
-                - when 4
-                  %span.tag.is-success.is-medium
-                    Completed
-                - when 5
-                  %span.tag.is-danger.is-medium
-                    Rejected
-                - when 6
-                  %span.tag.is-danger.is-medium
-                    Cancelled
-                - when 7
-                  %span.tag.is-danger.is-medium
-                    Late
-                - else
-                  %span.tag.is-black.is-medium
-                    Unknown
+                = render 'bookings/booking_status', booking: booking

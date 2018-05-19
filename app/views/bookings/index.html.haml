@@ -13,6 +13,7 @@
         %th Details
         %th ID
         %th Main Asset
+        %th Peripherals
         %th Start Date-Time
         %th End Date-Time
         %th Location
@@ -24,12 +25,18 @@
         %tr
           %td.details-control{"data-target" => "row-#{combined_booking.id}"}
           %td.has-text-centered= combined_booking.id
-          %td.has-text-centered= link_to combined_booking.bookings.first.item.name, combined_booking.bookings.first.item
+          %td.has-text-centered
+            = link_to combined_booking.bookings.first.item.name, combined_booking.bookings.first.item
+          %td.has-text-centered
+            - if combined_booking.bookings.length > 1
+              - combined_booking.bookings[1..-2].each do |booking|
+                = link_to booking.item.name + ', ', booking.item
+              = link_to combined_booking.bookings[-1].item.name, combined_booking.bookings[-1].item
           %td.has-text-centered= combined_booking.bookings.first.start_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.end_datetime.strftime("%d %b %Y - %I:%M %p")
           %td.has-text-centered= combined_booking.bookings.first.next_location
           %td.has-text-centered= combined_booking.bookings.first.reason
-          %td
+          %td.has-text-centered
             .buttons.is-centered
               - if combined_booking.status < 3
                 = link_to set_booking_cancelled_combined_booking_path(combined_booking), data: { confirm: 'Are you sure you want cancel this booking?' }, method: :put, class: 'button is-danger' do
@@ -47,33 +54,7 @@
                     %i.fas.fa-sync
                   %span Book Again
           %td.is-hidden
-            - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
-              #{booking.item.name} #{booking.item.serial}
-              - case booking.status
-              - when 1
-                %span.tag.is-warning.is-medium
-                  Pending
-              - when 2
-                %span.tag.is-success.is-medium
-                  Accepted
-              - when 3
-                %span.tag.is-info.is-medium
-                  Ongoing
-              - when 4
-                %span.tag.is-success.is-medium
-                  Completed
-              - when 5
-                %span.tag.is-danger.is-medium
-                  Rejected
-              - when 6
-                %span.tag.is-danger.is-medium
-                  Cancelled
-              - when 7
-                %span.tag.is-danger.is-medium
-                  Late
-              - else
-                %span.tag.is-black.is-medium
-                  Unknown
+            = render 'keywords', id: combined_booking.id
 
         %tr.is-hidden{id: "row-#{combined_booking.id}"}
           %td.is-hidden
@@ -85,7 +66,9 @@
           %td.is-hidden
           %td.is-hidden
           %td.is-hidden
-          %td{:colspan => 9}
+          %td.is-hidden
+            = render 'keywords', id: combined_booking.id
+          %td{:colspan => 10}
             %table.table.is-striped.is-bordered
               %thead
                 %tr
@@ -99,32 +82,8 @@
                     %td.has-text-centered= link_to booking.item.name, booking.item
                     %td.has-text-centered= link_to booking.item.serial, booking.item
                     %td.has-text-centered
-                      - case booking.status
-                      - when 1
-                        %span.tag.is-warning.is-medium
-                          Pending
-                      - when 2
-                        %span.tag.is-success.is-medium
-                          Accepted
-                      - when 3
-                        %span.tag.is-info.is-medium
-                          Ongoing
-                      - when 4
-                        %span.tag.is-success.is-medium
-                          Completed
-                      - when 5
-                        %span.tag.is-danger.is-medium
-                          Rejected
-                      - when 6
-                        %span.tag.is-danger.is-medium
-                          Cancelled
-                      - when 7
-                        %span.tag.is-danger.is-medium
-                          Late
-                      - else
-                        %span.tag.is-black.is-medium
-                          Unknown
-                    %td
+                      = render 'booking_status', booking: booking
+                    %td.has-text-centered
                       .buttons.is-centered
                         - if booking.status < 3
                           = link_to 'Edit', edit_booking_path(booking.id), class: 'button is-link'

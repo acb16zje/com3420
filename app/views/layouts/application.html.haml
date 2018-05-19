@@ -20,9 +20,10 @@
     %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
     %meta{:content => "#ffffff", :name => "theme-color"}/
 
-    / Bulma CSS, Pikaday, DataTable
+    / Bulma CSS, Material Icons, Font Awesome
     = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
     = stylesheet_link_tag '//fonts.googleapis.com/icon?family=Material+Icons'
+    = stylesheet_link_tag '//use.fontawesome.com/releases/v5.0.13/css/all.css'
     = stylesheet_link_tag 'application'
 
     %title #{content_for(:title)} - AMRC Asset Management System
@@ -34,7 +35,7 @@
     %nav.navbar.is-fixed-top.is-light
       .navbar-brand
         = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
-          = image_tag("amrc.svg", width: "50")
+          = image_tag("amrc_home.svg", width: "75")
         .dropdown.is-active.is-hidden-desktop#mobile_notification_dropdown
           .dropdown-trigger{"data-behavior" => "notification-link"}
             %button.button{"aria-haspopup" => "true", "aria-controls" => "dropdown-menu"}
@@ -114,9 +115,8 @@
               = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "navbar-item", id: "sign_out"
     = yield
 
-    / jQuery, Font Awesome, Datatable, bunnyJS, momentJS
+    / jQuery, Datatable, bunnyJS, momentJS
     = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-    = javascript_include_tag "//use.fontawesome.com/releases/v5.0.10/js/all.js"
     = javascript_include_tag "//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"
     = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/element.min.js"
     = javascript_include_tag "//unpkg.com/bunnyjs@0.14.41/dist/validation.min.js"

@@ -7,7 +7,7 @@
   .columns
     .column.is-4.is-offset-4
       %h1.title.has-text-centered
-        - if current_user.uid.eql? @user.uid
+        - if current_user.eql? @user
           My Details
         - else
           #{@user.givenname} #{@user.sn}'s Details

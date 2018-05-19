@@ -14,9 +14,18 @@ body {
   background: #fefefe;
 }
 
-/*  */
+table.dataTable .button {
+  height: 24px;
+}
+
+/* Home page Material icons */
 .material-icons {
   font-size: 96px !important;
+}
+
+/* Category index page material icons */
+.icon.is-normal .material-icons {
+  font-size: 26px !important;
 }
 
 /* Mobile notification style */
@@ -48,7 +57,7 @@ td.has-text-centered {
 
 /* Set the datatable to max width, for responsive */
 table.is-striped.is-bordered {
-  width: 100%;
+  width: 100% !important;
 }
 
 /* Show details in all bookings related table */

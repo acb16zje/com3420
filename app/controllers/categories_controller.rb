@@ -36,7 +36,7 @@ class CategoriesController < ApplicationController
     if (!category.icon.include? 'material-icons') && !category.icon.empty?
       category.icon = category.icon.chomp('"></i>') + ' fa-6x"></i><i class="material-icons">P</i>'
     else
-      category.icon = category.icon.chomp('</i>') + 'P</i>'
+      category.icon = category.icon.chomp('</i>') + 'P</i>' unless category.icon.empty?
     end
 
     # Set whether categories have peripheral categories

@@ -20,10 +20,11 @@
     %meta{:content => "#{asset_path 'favicon/browserconfig.xml'}", :name => "msapplication-config"}/
     %meta{:content => "#ffffff", :name => "theme-color"}/
 
-    / Bulma CSS, Pikaday, DataTable, Select 2
-    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
-    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css"
-    = stylesheet_link_tag "application"
+    / Bulma CSS, Material Icons, Font Awesome
+    = stylesheet_link_tag "//cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css"
+    = stylesheet_link_tag '//fonts.googleapis.com/icon?family=Material+Icons'
+    = stylesheet_link_tag '//use.fontawesome.com/releases/v5.0.13/css/all.css'
+    = stylesheet_link_tag 'application'
 
     %title JavaScript Required - AMRC Asset Management System
 
@@ -31,7 +32,7 @@
     %nav.navbar.is-fixed-top.is-light
       .navbar-brand
         = link_to root_path, class: "navbar-item #{current_class?(root_path)}" do
-          = image_tag("amrc.svg", width: "50")
+          = image_tag("amrc_home.svg", width: "75")
 
     %section.hero
       .hero-body

@@ -36,7 +36,7 @@
             .field-body
               .field
                 %p.control.is-expanded
-                  - if current_user.uid.eql? @user.uid
+                  - if current_user.eql? @user
                     = f.input :phone, label: false, placeholder: 'Phone', input_html: {class: 'input', type:'tel', id: 'number', maxlength: '10', value: "#{@user.phone}"}
                   - else
                     = f.input :phone, label: false, placeholder: 'Phone', input_html: {class: 'input', type:'tel', id: 'number', maxlength: '10', value: "#{@user.phone}", disabled: ''}
@@ -46,7 +46,7 @@
 
           %label.label Department / Company:
           %p
-            - if current_user.uid.eql? @user.uid
+            - if current_user.eql? @user
               = f.input :ou, label: false, input_html: {class: 'input', value: "#{@user.ou}"}
             - else
               #{@user.ou}

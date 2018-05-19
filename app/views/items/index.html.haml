@@ -26,6 +26,7 @@
         %th Manufacturer
         %th Condition
         %th Location
+        %th Status
         %th.is-hidden Keywords
     %tbody
       - @items.each do |item|
@@ -37,8 +38,7 @@
               .modal{id: "modal-#{item.serial}"}
                 .modal-background
                 .modal-content
-                  %p.image-modal
-                    = image_tag(item.image.url, width: '600', alt: 'Image', class: 'image-modal-image')
+                  = image_tag(item.image.url, width: '600', alt: 'Image', class: 'image-modal-image')
                 %button.modal-close.is-large{"aria-label" => "close"}
             - else
               = image_tag("amrc.svg", width: "50", alt: 'Default Image, AMRC', style: 'vertical-align: middle')
@@ -46,27 +46,11 @@
           %td.has-text-centered= item.category.name
           %td.has-text-centered= item.manufacturer
           %td.has-text-centered
-            - case item.condition
-            - when 'Like New'
-              %span.tag.is-success.is-medium
-                = item.condition
-            - when 'Good'
-              %span.tag.is-primary.is-medium
-                = item.condition
-            - when 'Adequate'
-              %span.tag.is-warning.is-medium
-                = item.condition
-            - when 'Damaged'
-              %span.tag.is-danger.is-medium
-                = item.condition
-            - when 'Missing'
-              %span.tag.is-danger.is-medium
-                = item.condition
-            - when 'Retired'
-              %span.tag.is-danger.is-medium
-                = item.condition
-            - else
-              %span.tag.is-black.is-medium
-                Unknown
+            = render 'item_condition', item: item
           %td.has-text-centered= item.location
+          %td.has-text-centered
+            - if item.available?
+              %span.tag.is-success.is-medium Available
+            - else
+              %span.tag.is-danger.is-medium Booked
           %td.has-text-centered.is-hidden= item.keywords
