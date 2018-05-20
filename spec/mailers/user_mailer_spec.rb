@@ -168,4 +168,19 @@ RSpec.describe UserMailer, type: :mailer do
     end
   end
 
+  describe "asset_deleted" do
+
+    let(:mail) { UserMailer.user_booking_cancelled(b)}
+
+    it "renders the headers" do
+      expect(mail.subject).to eq("AMRC - Asset Removed From System")
+      expect(mail.to).to eq(["#{b.user.email}"])
+      expect(mail.from).to eq(["no-reply@sheffield.ac.uk"])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to include("#{b.item.name}")
+    end
+  end
+
 end
