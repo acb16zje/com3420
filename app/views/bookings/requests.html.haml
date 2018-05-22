@@ -63,6 +63,7 @@
                   %th Asset Name
                   %th Serial
                   %th Status
+                  %th Owner
                   %th Action
               %tbody
                 - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
@@ -72,10 +73,15 @@
                     %td.has-text-centered
                       = render 'booking_status', booking: booking
                     %td.has-text-centered
+                      = booking.item.user.givenname + " " + booking.item.user.sn
+                    %td.has-text-centered
                       .field.is-grouped.is-grouped-centered
-                        %p.control
-                          = form_tag set_booking_accepted_booking_path(booking), method: :put do
-                            = submit_tag 'Accept', class: 'button is-block is-success', id: "accept_single_booking#{booking.id}"
-                        %p.control
-                          = form_tag set_booking_rejected_booking_path(booking), method: :put do
-                            = submit_tag 'Reject', class: 'button is-block is-danger', id: "reject_single_booking#{booking.id}"
+                        - if (booking.item.user_id == current_user.id) && (booking.status = 1)
+                          %p.control
+                            = form_tag set_booking_accepted_booking_path(booking), method: :put do
+                              = submit_tag 'Accept', class: 'button is-block is-success', id: "accept_single_booking#{booking.id}"
+                          %p.control
+                            = form_tag set_booking_rejected_booking_path(booking), method: :put do
+                              = submit_tag 'Reject', class: 'button is-block is-danger', id: "reject_single_booking#{booking.id}"
+                        - else
+                          %h5 No Actions

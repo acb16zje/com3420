@@ -51,6 +51,8 @@
                   %th Asset Name
                   %th Serial
                   %th Status
+                  %th Owner
+
               %tbody
                 - @bookings.where(combined_booking_id: combined_booking.id).each do |booking|
                   %tr
@@ -58,3 +60,5 @@
                     %td.has-text-centered= link_to booking.item.serial, booking.item
                     %td.has-text-centered
                       = render 'booking_status', booking: booking
+                    %td.has-text-centered
+                      = booking.item.user.givenname + " " + booking.item.user.sn

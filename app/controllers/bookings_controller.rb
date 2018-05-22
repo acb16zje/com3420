@@ -18,38 +18,99 @@ class BookingsController < ApplicationController
 
   # GET /bookings/requests
   def requests
-    @combined_bookings = CombinedBooking.pending.find_by_owner(current_user)
-    @bookings = Booking.pending.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.pending.find_by_owner(current_user)
+    #@bookings = Booking.pending.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.pending.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
+
   end
 
   # GET /bookings/accepted
   def accepted
-    @combined_bookings = CombinedBooking.accepted.find_by_owner(current_user)
-    @bookings = Booking.accepted.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.accepted.find_by_owner(current_user)
+    #@bookings = Booking.accepted.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.accepted.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
   end
 
   # GET /bookings/ongoing
   def ongoing
-    @combined_bookings = CombinedBooking.ongoing.find_by_owner(current_user)
-    @bookings = Booking.ongoing.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.ongoing.find_by_owner(current_user)
+    #@bookings = Booking.ongoing.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.ongoing.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
   end
 
   # GET /bookings/completed
   def completed
-    @combined_bookings = CombinedBooking.completed.find_by_owner(current_user)
-    @bookings = Booking.completed.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.completed.find_by_owner(current_user)
+    #@bookings = Booking.completed.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.completed.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
   end
 
   # GET /bookings/rejected
   def rejected
-    @combined_bookings = CombinedBooking.rejected.find_by_owner(current_user)
-    @bookings = Booking.rejected.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.rejected.find_by_owner(current_user)
+    #@bookings = Booking.rejected.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.rejected.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
   end
 
   # GET /bookings/late
   def late
-    @combined_bookings = CombinedBooking.late.find_by_owner(current_user)
-    @bookings = Booking.late.item_owned_by(current_user)
+    #@combined_bookings = CombinedBooking.late.find_by_owner(current_user)
+    #@bookings = Booking.late.item_owned_by(current_user)
+
+    #Get bookings with items belonging to AM
+    my_bookings = Booking.item_owned_by(current_user)
+
+    #Get the parent combined bookings
+    @combined_bookings = CombinedBooking.late.where(id: my_bookings.uniq{|b| b.combined_booking_id})
+    combined_bookings_on_bookings= @combined_bookings.map{|cb| cb.bookings}.flatten
+
+    # Get assets belonging to these combined bookings
+    @bookings = Booking.where(id: combined_bookings_on_bookings)
   end
 
   # GET /bookings/new

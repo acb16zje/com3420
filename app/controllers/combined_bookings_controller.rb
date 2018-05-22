@@ -11,7 +11,7 @@ class CombinedBookingsController < ApplicationController
     @bookings = Booking.where(combined_booking_id: params[:id])
     rejected = false
     @bookings.each do |booking|
-      next if booking.status != 1
+      next if booking.status != 1 || booking.item.user_id != current_user
       booking.status = 2
       if booking.save
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
@@ -37,10 +37,13 @@ class CombinedBookingsController < ApplicationController
     end
 
     combined_booking = CombinedBooking.find(params[:id])
-    combined_booking.status = 2
+
+    if (@bookings.all?{|b| b.status == 2})
+      combined_booking.status = 2
+    end
+
     if combined_booking.save
       UserMailer.booking_approved(combined_booking.bookings).deliver
-
       if rejected
         # Change to yellow
         redirect_to requests_bookings_path, warning: 'Remaining bookings were successfully accepted,
@@ -55,7 +58,7 @@ class CombinedBookingsController < ApplicationController
   def set_booking_rejected
     @bookings = Booking.where(combined_booking_id: params[:id])
     @bookings.each do |booking|
-      next if booking.status != 1
+      next if booking.status != 1 || booking.item.user_id != current_user
       booking.status = 5
       if booking.save
         Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'AM')
@@ -63,7 +66,11 @@ class CombinedBookingsController < ApplicationController
     end
 
     combined_booking = CombinedBooking.find(params[:id])
-    combined_booking.status = 5
+
+    if (@bookings.all?{|b| b.status == 5})
+      combined_booking.status = 5
+    end
+
     if combined_booking.save
       UserMailer.booking_rejected(combined_booking.bookings).deliver
       redirect_to requests_bookings_path, notice: 'Remaining bookings were successfully rejected.'
