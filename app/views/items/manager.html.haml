@@ -18,6 +18,7 @@
           - if @manager.eql? current_user
             %th
           %th Name
+          %th Serial
           %th Category
           %th Manufacturer
           %th Condition
@@ -53,6 +54,7 @@
                 %td
                   = check_box_tag "item_ids[]", item.id
               %td.has-text-centered= link_to item.name, item
+              %td.has-text-centered= link_to item.serial, item
               %td.has-text-centered= item.category.name
               %td.has-text-centered= item.manufacturer
               %td.has-text-centered

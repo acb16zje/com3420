@@ -379,7 +379,7 @@ class BookingsController < ApplicationController
   def peripherals
     @item = Item.find_by_id(params[:item_id])
 
-    @peripherals = @item.get_item_peripherals
+    @peripherals = get_allowed_peripherals(params[:start_datetime], params[:end_datetime], params[:item_id])
 
     respond_to do |format|
       format.json do
@@ -389,6 +389,20 @@ class BookingsController < ApplicationController
   end
 
   private
+
+  def get_allowed_peripherals(start_datetime, end_datetime, item_id)
+    item = Item.find_by_id(item_id)
+    peripherals = item.get_item_peripherals
+
+    allowed_peripherals = []
+    peripherals.each do |peripheral|
+      if booking_validation(peripheral.id, start_datetime, end_datetime)
+        allowed_peripherals.append(peripheral)
+      end
+    end
+
+    allowed_peripherals
+  end
 
   # Server-side validation for booking time slot
   def booking_validation(item_id, start_datetime, end_datetime)
