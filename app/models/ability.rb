@@ -49,7 +49,7 @@ class Ability
 
     # Asset Manager
     if user.asset_manager?
-      can %i[edit update], Item, user_id: user.id
+      can %i[edit update manager change_manager_multiple update_manager_multiple add_peripheral_option choose_peripheral add_peripheral], Item, user_id: user.id
       can %i[read create], Item
       can :manage, Booking, user_id: user.id
       can :manage, Category
