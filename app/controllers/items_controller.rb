@@ -19,7 +19,7 @@ class ItemsController < ApplicationController
   # GET /items/manager
   def manager
     # Failsafe for errors. Ensures a standard a standard user cannot see their "items" page.
-    if params[:user_id].to_i == current_user.id && current_user.permission_id == 1
+    if params[:user_id].to_i == current_user.id && current_user.user?
       render 'errors/error_404'
     else
       # Get the user object for the given manager

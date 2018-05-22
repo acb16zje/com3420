@@ -157,7 +157,7 @@ class BookingsController < ApplicationController
 
       if combined_booking.bookings.blank?
         combined_booking.destroy
-        redirect_to bookings_path, notice: 'Error occurred in the booking process. Please try again.'
+        redirect_to bookings_path, alert: 'Error occurred in the booking process. Please try again.'
       else
         # Check if all items on booking are the current user.
         if (combined_booking.bookings.all? { |b| b.status == 2})
@@ -273,7 +273,7 @@ class BookingsController < ApplicationController
 
     if booking.save
       combined_booking = CombinedBooking.find(booking.combined_booking_id)
-      if combined_booking.bookings.where(status: %w[3  7]).blank?
+      if combined_booking.bookings.where(status: %w[3 7]).blank?
         combined_booking.status = 4
         combined_booking.save
       end
@@ -292,8 +292,8 @@ class BookingsController < ApplicationController
 
       item.save
 
-      if item.user_id == current_user.id
-        redirect_to bookings_path
+      if item.user == current_user
+        redirect_to bookings_path, notice: 'Thank you. Your item has been returned'
       elsif %w[Damaged Missing].include? item.condition.to_s
         redirect_to bookings_path, notice: 'We have logged the issue and your item has been returned'
       else

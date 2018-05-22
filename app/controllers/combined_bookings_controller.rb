@@ -58,7 +58,7 @@ class CombinedBookingsController < ApplicationController
   def set_booking_rejected
     @bookings = Booking.where(combined_booking_id: params[:id])
     @bookings.each do |booking|
-      next if booking.status != 1 || booking.item.user_id != current_user
+      next if booking.status != 1 || booking.item.user != current_user
       booking.status = 5
       if booking.save
         Notification.create(recipient: booking.user, action: 'rejected', notifiable: booking, context: 'AM')
