@@ -76,7 +76,7 @@
                       = booking.item.user.givenname + " " + booking.item.user.sn
                     %td.has-text-centered
                       .field.is-grouped.is-grouped-centered
-                        - if (booking.item.user_id == current_user.id) && (booking.status = 1)
+                        - if (booking.item.user == current_user) && (booking.status == 1)
                           %p.control
                             = form_tag set_booking_accepted_booking_path(booking), method: :put do
                               = submit_tag 'Accept', class: 'button is-block is-success', id: "accept_single_booking#{booking.id}"
@@ -84,4 +84,4 @@
                             = form_tag set_booking_rejected_booking_path(booking), method: :put do
                               = submit_tag 'Reject', class: 'button is-block is-danger', id: "reject_single_booking#{booking.id}"
                         - else
-                          %h5 No Actions
+                          No Actions

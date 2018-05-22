@@ -11,7 +11,7 @@ class CombinedBookingsController < ApplicationController
     @bookings = Booking.where(combined_booking_id: params[:id])
     rejected = false
     @bookings.each do |booking|
-      next if booking.status != 1 || booking.item.user_id != current_user
+      next if booking.status != 1 || booking.item.user != current_user
       booking.status = 2
       if booking.save
         Notification.create(recipient: booking.user, action: 'accepted', notifiable: booking, context: 'AM')
