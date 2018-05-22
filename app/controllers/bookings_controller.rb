@@ -95,7 +95,7 @@ class BookingsController < ApplicationController
 
     if item.user_id == current_user.id
       @booking.status = 2
-      combined_booking = CombinedBooking.create(status: 2, user_id: current_user.id, owner_id: item.user_id)
+      combined_booking = CombinedBooking.create(status: 1, user_id: current_user.id, owner_id: item.user_id)
       combined_booking.save
     else
       @booking.status = 1
@@ -143,9 +143,15 @@ class BookingsController < ApplicationController
           booking.reason = 'None' if params[:booking][:reason].blank?
           booking.peripherals = nil
           booking.combined_booking_id = combined_booking.id
-          booking.status = item.user_id == current_user.id ? 2 : 1
+          booking.status = booking.item.user_id == current_user.id ? 2 : 1
           booking.save
         end
+      end
+
+      # Check if all items on booking are the current user.
+      if (combined_booking.bookings.all? { |b| b.status == 2})
+        combined_booking.status = 2
+        combined_booking.save
       end
 
       # Create notifications and send out the required emails
